@@ -1,0 +1,5 @@
+vo_ippbx_real_time:
+    resource: "@VoIPPBXRealTimeBundle/Controller/"
+    type:     annotation
+    prefix:   /
+
