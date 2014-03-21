@@ -1,0 +1,56 @@
+{% extends '::base.html.twig' %}
+
+{% block body -%}
+    <h1>Extension</h1>
+
+    <table class="record_properties">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ entity.id }}</td>
+            </tr>
+            <tr>
+                <th>Createdat</th>
+                <td>{{ entity.createdAt|date('Y-m-d H:i:s') }}</td>
+            </tr>
+            <tr>
+                <th>Updatedat</th>
+                <td>{{ entity.updatedAt|date('Y-m-d H:i:s') }}</td>
+            </tr>
+            <tr>
+                <th>Context</th>
+                <td>{{ entity.context }}</td>
+            </tr>
+            <tr>
+                <th>Exten</th>
+                <td>{{ entity.exten }}</td>
+            </tr>
+            <tr>
+                <th>Priority</th>
+                <td>{{ entity.priority }}</td>
+            </tr>
+            <tr>
+                <th>App</th>
+                <td>{{ entity.app }}</td>
+            </tr>
+            <tr>
+                <th>Appdata</th>
+                <td>{{ entity.appdata }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+        <ul class="record_actions">
+    <li>
+        <a href="{{ path('extension') }}">
+            Back to the list
+        </a>
+    </li>
+    <li>
+        <a href="{{ path('extension_edit', { 'id': entity.id }) }}">
+            Edit
+        </a>
+    </li>
+    <li>{{ form(delete_form) }}</li>
+</ul>
+{% endblock %}
