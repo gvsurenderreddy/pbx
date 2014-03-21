@@ -1,0 +1,80 @@
+{% extends '::base.html.twig' %}
+
+{% block body -%}
+    <h1>SipPeer</h1>
+
+    <table class="record_properties">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ entity.id }}</td>
+            </tr>
+            <tr>
+                <th>Createdat</th>
+                <td>{{ entity.createdAt|date('Y-m-d H:i:s') }}</td>
+            </tr>
+            <tr>
+                <th>Updatedat</th>
+                <td>{{ entity.updatedAt|date('Y-m-d H:i:s') }}</td>
+            </tr>
+            <tr>
+                <th>Name</th>
+                <td>{{ entity.name }}</td>
+            </tr>
+            <tr>
+                <th>Secret</th>
+                <td>{{ entity.secret }}</td>
+            </tr>
+            <tr>
+                <th>Context</th>
+                <td>{{ entity.context }}</td>
+            </tr>
+            <tr>
+                <th>Host</th>
+                <td>{{ entity.host }}</td>
+            </tr>
+            <tr>
+                <th>Nat</th>
+                <td>{{ entity.nat }}</td>
+            </tr>
+            <tr>
+                <th>Type</th>
+                <td>{{ entity.type }}</td>
+            </tr>
+            <tr>
+                <th>Canreinvite</th>
+                <td>{{ entity.canreinvite }}</td>
+            </tr>
+            <tr>
+                <th>Directrtpsetup</th>
+                <td>{{ entity.directrtpsetup }}</td>
+            </tr>
+            <tr>
+                <th>Qualify</th>
+                <td>{{ entity.qualify }}</td>
+            </tr>
+            <tr>
+                <th>Disallow</th>
+                <td>{{ entity.disallow }}</td>
+            </tr>
+            <tr>
+                <th>Allow</th>
+                <td>{{ entity.allow }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+        <ul class="record_actions">
+    <li>
+        <a href="{{ path('sippeer') }}">
+            Back to the list
+        </a>
+    </li>
+    <li>
+        <a href="{{ path('sippeer_edit', { 'id': entity.id }) }}">
+            Edit
+        </a>
+    </li>
+    <li>{{ form(delete_form) }}</li>
+</ul>
+{% endblock %}
