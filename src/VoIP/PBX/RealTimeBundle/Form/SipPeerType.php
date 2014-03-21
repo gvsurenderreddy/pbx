@@ -16,6 +16,7 @@ class SipPeerType extends AbstractType
     {
         $builder
             ->add('name')
+			->add('username')
             ->add('secret')
             ->add('context')
             ->add('host')

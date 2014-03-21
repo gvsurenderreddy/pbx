@@ -46,6 +46,13 @@ class SipPeer
     /**
      * @var string
      *
+     * @ORM\Column(name="username", type="string", length=255)
+     */
+    private $username;
+	
+    /**
+     * @var string
+     *
      * @ORM\Column(name="secret", type="string", length=255)
      */
     private $secret;
@@ -431,5 +438,28 @@ class SipPeer
     public function getSecret()
     {
         return $this->secret;
+    }
+
+    /**
+     * Set username
+     *
+     * @param string $username
+     * @return SipPeer
+     */
+    public function setUsername($username)
+    {
+        $this->username = $username;
+
+        return $this;
+    }
+
+    /**
+     * Get username
+     *
+     * @return string 
+     */
+    public function getUsername()
+    {
+        return $this->username;
     }
 }
