@@ -23,7 +23,6 @@ class SipPeerType extends AbstractType
             ->add('type')
             ->add('canreinvite')
             ->add('directrtpsetup')
-            ->add('qualify')
             ->add('disallow')
             ->add('allow')
         ;

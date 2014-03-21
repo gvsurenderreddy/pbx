@@ -95,13 +95,6 @@ class SipPeer
     /**
      * @var string
      *
-     * @ORM\Column(name="qualify", type="string", length=10)
-     */
-    private $qualify = 'yes';
-
-    /**
-     * @var string
-     *
      * @ORM\Column(name="disallow", type="string", length=255)
      */
     private $disallow = 'all';
