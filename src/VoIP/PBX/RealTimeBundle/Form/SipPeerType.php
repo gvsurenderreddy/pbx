@@ -24,6 +24,8 @@ class SipPeerType extends AbstractType
             ->add('allow')
             ->add('disallow')
             ->add('dynamic')
+			->add('qualify')
+			->add('directmedia')
         ;
     }
     
