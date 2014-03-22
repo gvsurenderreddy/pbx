@@ -113,6 +113,13 @@ class SipPeer
      */
     private $allow = 'gsm';
 	
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="lastms", type="string", length=255, nullable=true)
+     */
+    private $lastms;
+	
 	/**
 	 * @ORM\PrePersist
 	 */
@@ -461,5 +468,28 @@ class SipPeer
     public function getUsername()
     {
         return $this->username;
+    }
+
+    /**
+     * Set lastms
+     *
+     * @param string $lastms
+     * @return SipPeer
+     */
+    public function setLastms($lastms)
+    {
+        $this->lastms = $lastms;
+
+        return $this;
+    }
+
+    /**
+     * Get lastms
+     *
+     * @return string 
+     */
+    public function getLastms()
+    {
+        return $this->lastms;
     }
 }
