@@ -16,16 +16,14 @@ class SipPeerType extends AbstractType
     {
         $builder
             ->add('name')
-			->add('username')
-            ->add('secret')
-            ->add('context')
             ->add('host')
-            ->add('nat')
             ->add('type')
-            ->add('canreinvite')
-            ->add('directrtpsetup')
-            ->add('disallow')
+            ->add('context')
+            ->add('secret')
+            ->add('nat')
             ->add('allow')
+            ->add('disallow')
+            ->add('dynamic')
         ;
     }
     

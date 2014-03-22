@@ -9,7 +9,6 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\Table(name="ast_sippeers")
  * @ORM\Entity
- * @ORM\HasLifecycleCallbacks()
  */
 class SipPeer
 {
@@ -23,20 +22,6 @@ class SipPeer
     private $id;
 
     /**
-     * @var \DateTime
-     *
-     * @ORM\Column(name="created_at", type="datetime")
-     */
-    private $createdAt;
-
-    /**
-     * @var \DateTime
-     *
-     * @ORM\Column(name="updated_at", type="datetime")
-     */
-    private $updatedAt;
-
-    /**
      * @var string
      *
      * @ORM\Column(name="name", type="string", length=255)
@@ -46,72 +31,44 @@ class SipPeer
     /**
      * @var string
      *
-     * @ORM\Column(name="username", type="string", length=255)
+     * @ORM\Column(name="ipaddr", type="text", length=15, nullable=true)
      */
-    private $username;
+    private $ipaddr;
+	
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="port", type="integer", nullable=true)
+     */
+    private $port;
+	
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="regseconds", type="integer", nullable=true)
+     */
+    private $regseconds;
 	
     /**
      * @var string
      *
-     * @ORM\Column(name="secret", type="string", length=255)
+     * @ORM\Column(name="fullcontact", type="text", length=35, nullable=true)
      */
-    private $secret;
+    private $fullcontact;
 	
     /**
      * @var string
      *
-     * @ORM\Column(name="context", type="string", length=255)
+     * @ORM\Column(name="regserver", type="text", length=20, nullable=true)
      */
-    private $context = 'from-internal';
-
+    private $regserver;
+	
     /**
      * @var string
      *
-     * @ORM\Column(name="host", type="string", length=255)
+     * @ORM\Column(name="useragent", type="text", length=20, nullable=true)
      */
-    private $host = 'dynamic';
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="nat", type="string", length=255)
-     */
-    private $nat = 'route';
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="type", type="string", length=255)
-     */
-    private $type = 'friend';
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="canreinvite", type="string", length=10)
-     */
-    private $canreinvite = 'no';
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="directrtpsetup", type="string", length=10)
-     */
-    private $directrtpsetup = 'no';
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="disallow", type="string", length=255)
-     */
-    private $disallow = 'all';
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="allow", type="string", length=255)
-     */
-    private $allow = 'gsm';
+    private $useragent;
 	
     /**
      * @var string
@@ -120,23 +77,166 @@ class SipPeer
      */
     private $lastms;
 	
-	/**
-	 * @ORM\PrePersist
-	 */
-	public function prePersist()
-	{
-		$this->createdAt = new \DateTime();
-	    $this->updatedAt = new \DateTime();
-	}
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="host", type="string", length=255)
+     */
+    private $host = 'dynamic';
 	
-	/**
-	 * @ORM\PreUpdate
-	 */
-	public function preUpdate()
-	{
-	    $this->updatedAt = new \DateTime();
-	}
-
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="type", type="string", length=10)
+     */
+    private $type = 'friend';
+	
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="context", type="string", length=40, nullable=true)
+     */
+    private $context = 'from-internal';
+	
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="permit", type="string", length=40, nullable=true)
+     */
+    private $permit;
+	
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="deny", type="string", length=40, nullable=true)
+     */
+    private $deny;
+	
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="secret", type="string", length=40, nullable=true)
+     */
+    private $secret;
+	
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="md5", type="string", length=40, nullable=true)
+     */
+    private $md5;
+	
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="remotesecret", type="string", length=40, nullable=true)
+     */
+    private $remotesecret;
+	
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="transport", type="string", length=10, nullable=true)
+     */
+    private $transport;
+	
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="dtmfmode", type="string", length=20, nullable=true)
+     */
+    private $dtmfmode;
+	
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="directmedia", type="string", length=10, nullable=true)
+     */
+    private $directmedia;
+	
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="nat", type="string", length=10, nullable=true)
+     */
+    private $nat = 'route';
+	
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="callgroup", type="string", length=10, nullable=true)
+     */
+    private $callgroup;
+	
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="pickupgroup", type="string", length=10, nullable=true)
+     */
+    private $pickupgroup;
+	
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="language", type="string", length=10, nullable=true)
+     */
+    private $language;
+	
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="allow", type="string", length=40, nullable=true)
+     */
+    private $allow;
+	
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="disallow", type="string", length=40, nullable=true)
+     */
+    private $disallow;
+	
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="insecure", type="string", length=40, nullable=true)
+     */
+    private $insecure;
+	
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="trustrpid", type="string", length=10, nullable=true)
+     */
+    private $trustrpid;
+	
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="progressinband", type="string", length=10, nullable=true)
+     */
+    private $progressinband;
+	
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="qualify", type="string", length=40, nullable=true)
+     */
+    private $qualify;
+	
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="callbackextension", type="string", length=40, nullable=true)
+     */
+    private $callbackextension;
+	
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="dynamic", type="string", length=10, nullable=true)
+     */
+    private $dynamic;
 
     /**
      * Get id
@@ -147,53 +247,7 @@ class SipPeer
     {
         return $this->id;
     }
-
-    /**
-     * Set createdAt
-     *
-     * @param \DateTime $createdAt
-     * @return SipPeer
-     */
-    public function setCreatedAt($createdAt)
-    {
-        $this->createdAt = $createdAt;
-
-        return $this;
-    }
-
-    /**
-     * Get createdAt
-     *
-     * @return \DateTime 
-     */
-    public function getCreatedAt()
-    {
-        return $this->createdAt;
-    }
-
-    /**
-     * Set updatedAt
-     *
-     * @param \DateTime $updatedAt
-     * @return SipPeer
-     */
-    public function setUpdatedAt($updatedAt)
-    {
-        $this->updatedAt = $updatedAt;
-
-        return $this;
-    }
-
-    /**
-     * Get updatedAt
-     *
-     * @return \DateTime 
-     */
-    public function getUpdatedAt()
-    {
-        return $this->updatedAt;
-    }
-
+	
     /**
      * Set name
      *
@@ -215,6 +269,167 @@ class SipPeer
     public function getName()
     {
         return $this->name;
+    }
+
+    /**
+     * Set ipaddr
+     *
+     * @param string $ipaddr
+     * @return SipPeer
+     */
+    public function setIpaddr($ipaddr)
+    {
+        $this->ipaddr = $ipaddr;
+
+        return $this;
+    }
+
+    /**
+     * Get ipaddr
+     *
+     * @return string 
+     */
+    public function getIpaddr()
+    {
+        return $this->ipaddr;
+    }
+
+    /**
+     * Set port
+     *
+     * @param integer $port
+     * @return SipPeer
+     */
+    public function setPort($port)
+    {
+        $this->port = $port;
+
+        return $this;
+    }
+
+    /**
+     * Get port
+     *
+     * @return integer 
+     */
+    public function getPort()
+    {
+        return $this->port;
+    }
+
+    /**
+     * Set regseconds
+     *
+     * @param integer $regseconds
+     * @return SipPeer
+     */
+    public function setRegseconds($regseconds)
+    {
+        $this->regseconds = $regseconds;
+
+        return $this;
+    }
+
+    /**
+     * Get regseconds
+     *
+     * @return integer 
+     */
+    public function getRegseconds()
+    {
+        return $this->regseconds;
+    }
+
+    /**
+     * Set fullcontact
+     *
+     * @param string $fullcontact
+     * @return SipPeer
+     */
+    public function setFullcontact($fullcontact)
+    {
+        $this->fullcontact = $fullcontact;
+
+        return $this;
+    }
+
+    /**
+     * Get fullcontact
+     *
+     * @return string 
+     */
+    public function getFullcontact()
+    {
+        return $this->fullcontact;
+    }
+
+    /**
+     * Set regserver
+     *
+     * @param string $regserver
+     * @return SipPeer
+     */
+    public function setRegserver($regserver)
+    {
+        $this->regserver = $regserver;
+
+        return $this;
+    }
+
+    /**
+     * Get regserver
+     *
+     * @return string 
+     */
+    public function getRegserver()
+    {
+        return $this->regserver;
+    }
+
+    /**
+     * Set useragent
+     *
+     * @param string $useragent
+     * @return SipPeer
+     */
+    public function setUseragent($useragent)
+    {
+        $this->useragent = $useragent;
+
+        return $this;
+    }
+
+    /**
+     * Get useragent
+     *
+     * @return string 
+     */
+    public function getUseragent()
+    {
+        return $this->useragent;
+    }
+
+    /**
+     * Set lastms
+     *
+     * @param string $lastms
+     * @return SipPeer
+     */
+    public function setLastms($lastms)
+    {
+        $this->lastms = $lastms;
+
+        return $this;
+    }
+
+    /**
+     * Get lastms
+     *
+     * @return string 
+     */
+    public function getLastms()
+    {
+        return $this->lastms;
     }
 
     /**
@@ -241,6 +456,236 @@ class SipPeer
     }
 
     /**
+     * Set type
+     *
+     * @param string $type
+     * @return SipPeer
+     */
+    public function setType($type)
+    {
+        $this->type = $type;
+
+        return $this;
+    }
+
+    /**
+     * Get type
+     *
+     * @return string 
+     */
+    public function getType()
+    {
+        return $this->type;
+    }
+
+    /**
+     * Set context
+     *
+     * @param string $context
+     * @return SipPeer
+     */
+    public function setContext($context)
+    {
+        $this->context = $context;
+
+        return $this;
+    }
+
+    /**
+     * Get context
+     *
+     * @return string 
+     */
+    public function getContext()
+    {
+        return $this->context;
+    }
+
+    /**
+     * Set permit
+     *
+     * @param string $permit
+     * @return SipPeer
+     */
+    public function setPermit($permit)
+    {
+        $this->permit = $permit;
+
+        return $this;
+    }
+
+    /**
+     * Get permit
+     *
+     * @return string 
+     */
+    public function getPermit()
+    {
+        return $this->permit;
+    }
+
+    /**
+     * Set deny
+     *
+     * @param string $deny
+     * @return SipPeer
+     */
+    public function setDeny($deny)
+    {
+        $this->deny = $deny;
+
+        return $this;
+    }
+
+    /**
+     * Get deny
+     *
+     * @return string 
+     */
+    public function getDeny()
+    {
+        return $this->deny;
+    }
+
+    /**
+     * Set secret
+     *
+     * @param string $secret
+     * @return SipPeer
+     */
+    public function setSecret($secret)
+    {
+        $this->secret = $secret;
+
+        return $this;
+    }
+
+    /**
+     * Get secret
+     *
+     * @return string 
+     */
+    public function getSecret()
+    {
+        return $this->secret;
+    }
+
+    /**
+     * Set md5
+     *
+     * @param string $md5
+     * @return SipPeer
+     */
+    public function setMd5($md5)
+    {
+        $this->md5 = $md5;
+
+        return $this;
+    }
+
+    /**
+     * Get md5
+     *
+     * @return string 
+     */
+    public function getMd5()
+    {
+        return $this->md5;
+    }
+
+    /**
+     * Set remotesecret
+     *
+     * @param string $remotesecret
+     * @return SipPeer
+     */
+    public function setRemotesecret($remotesecret)
+    {
+        $this->remotesecret = $remotesecret;
+
+        return $this;
+    }
+
+    /**
+     * Get remotesecret
+     *
+     * @return string 
+     */
+    public function getRemotesecret()
+    {
+        return $this->remotesecret;
+    }
+
+    /**
+     * Set transport
+     *
+     * @param string $transport
+     * @return SipPeer
+     */
+    public function setTransport($transport)
+    {
+        $this->transport = $transport;
+
+        return $this;
+    }
+
+    /**
+     * Get transport
+     *
+     * @return string 
+     */
+    public function getTransport()
+    {
+        return $this->transport;
+    }
+
+    /**
+     * Set dtmfmode
+     *
+     * @param string $dtmfmode
+     * @return SipPeer
+     */
+    public function setDtmfmode($dtmfmode)
+    {
+        $this->dtmfmode = $dtmfmode;
+
+        return $this;
+    }
+
+    /**
+     * Get dtmfmode
+     *
+     * @return string 
+     */
+    public function getDtmfmode()
+    {
+        return $this->dtmfmode;
+    }
+
+    /**
+     * Set directmedia
+     *
+     * @param string $directmedia
+     * @return SipPeer
+     */
+    public function setDirectmedia($directmedia)
+    {
+        $this->directmedia = $directmedia;
+
+        return $this;
+    }
+
+    /**
+     * Get directmedia
+     *
+     * @return string 
+     */
+    public function getDirectmedia()
+    {
+        return $this->directmedia;
+    }
+
+    /**
      * Set nat
      *
      * @param string $nat
@@ -264,26 +709,256 @@ class SipPeer
     }
 
     /**
-     * Set type
+     * Set callgroup
      *
-     * @param string $type
+     * @param string $callgroup
      * @return SipPeer
      */
-    public function setType($type)
+    public function setCallgroup($callgroup)
     {
-        $this->type = $type;
+        $this->callgroup = $callgroup;
 
         return $this;
     }
 
     /**
-     * Get type
+     * Get callgroup
      *
      * @return string 
      */
-    public function getType()
+    public function getCallgroup()
     {
-        return $this->type;
+        return $this->callgroup;
+    }
+
+    /**
+     * Set pickupgroup
+     *
+     * @param string $pickupgroup
+     * @return SipPeer
+     */
+    public function setPickupgroup($pickupgroup)
+    {
+        $this->pickupgroup = $pickupgroup;
+
+        return $this;
+    }
+
+    /**
+     * Get pickupgroup
+     *
+     * @return string 
+     */
+    public function getPickupgroup()
+    {
+        return $this->pickupgroup;
+    }
+
+    /**
+     * Set language
+     *
+     * @param string $language
+     * @return SipPeer
+     */
+    public function setLanguage($language)
+    {
+        $this->language = $language;
+
+        return $this;
+    }
+
+    /**
+     * Get language
+     *
+     * @return string 
+     */
+    public function getLanguage()
+    {
+        return $this->language;
+    }
+
+    /**
+     * Set allow
+     *
+     * @param string $allow
+     * @return SipPeer
+     */
+    public function setAllow($allow)
+    {
+        $this->allow = $allow;
+
+        return $this;
+    }
+
+    /**
+     * Get allow
+     *
+     * @return string 
+     */
+    public function getAllow()
+    {
+        return $this->allow;
+    }
+
+    /**
+     * Set disallow
+     *
+     * @param string $disallow
+     * @return SipPeer
+     */
+    public function setDisallow($disallow)
+    {
+        $this->disallow = $disallow;
+
+        return $this;
+    }
+
+    /**
+     * Get disallow
+     *
+     * @return string 
+     */
+    public function getDisallow()
+    {
+        return $this->disallow;
+    }
+
+    /**
+     * Set insecure
+     *
+     * @param string $insecure
+     * @return SipPeer
+     */
+    public function setInsecure($insecure)
+    {
+        $this->insecure = $insecure;
+
+        return $this;
+    }
+
+    /**
+     * Get insecure
+     *
+     * @return string 
+     */
+    public function getInsecure()
+    {
+        return $this->insecure;
+    }
+
+    /**
+     * Set trustrpid
+     *
+     * @param string $trustrpid
+     * @return SipPeer
+     */
+    public function setTrustrpid($trustrpid)
+    {
+        $this->trustrpid = $trustrpid;
+
+        return $this;
+    }
+
+    /**
+     * Get trustrpid
+     *
+     * @return string 
+     */
+    public function getTrustrpid()
+    {
+        return $this->trustrpid;
+    }
+
+    /**
+     * Set progressinband
+     *
+     * @param string $progressinband
+     * @return SipPeer
+     */
+    public function setProgressinband($progressinband)
+    {
+        $this->progressinband = $progressinband;
+
+        return $this;
+    }
+
+    /**
+     * Get progressinband
+     *
+     * @return string 
+     */
+    public function getProgressinband()
+    {
+        return $this->progressinband;
+    }
+
+    /**
+     * Set qualify
+     *
+     * @param string $qualify
+     * @return SipPeer
+     */
+    public function setQualify($qualify)
+    {
+        $this->qualify = $qualify;
+
+        return $this;
+    }
+
+    /**
+     * Get qualify
+     *
+     * @return string 
+     */
+    public function getQualify()
+    {
+        return $this->qualify;
+    }
+
+    /**
+     * Set callbackextension
+     *
+     * @param string $callbackextension
+     * @return SipPeer
+     */
+    public function setCallbackextension($callbackextension)
+    {
+        $this->callbackextension = $callbackextension;
+
+        return $this;
+    }
+
+    /**
+     * Get callbackextension
+     *
+     * @return string 
+     */
+    public function getCallbackextension()
+    {
+        return $this->callbackextension;
+    }
+
+    /**
+     * Set dynamic
+     *
+     * @param string $dynamic
+     * @return SipPeer
+     */
+    public function setDynamic($dynamic)
+    {
+        $this->dynamic = $dynamic;
+
+        return $this;
+    }
+
+    /**
+     * Get dynamic
+     *
+     * @return string 
+     */
+    public function getDynamic()
+    {
+        return $this->dynamic;
     }
 
     /**
@@ -330,166 +1005,5 @@ class SipPeer
     public function getDirectrtpsetup()
     {
         return $this->directrtpsetup;
-    }
-
-    /**
-     * Set qualify
-     *
-     * @param string $qualify
-     * @return SipPeer
-     */
-    public function setQualify($qualify)
-    {
-        $this->qualify = $qualify;
-
-        return $this;
-    }
-
-    /**
-     * Get qualify
-     *
-     * @return string 
-     */
-    public function getQualify()
-    {
-        return $this->qualify;
-    }
-
-    /**
-     * Set disallow
-     *
-     * @param string $disallow
-     * @return SipPeer
-     */
-    public function setDisallow($disallow)
-    {
-        $this->disallow = $disallow;
-
-        return $this;
-    }
-
-    /**
-     * Get disallow
-     *
-     * @return string 
-     */
-    public function getDisallow()
-    {
-        return $this->disallow;
-    }
-
-    /**
-     * Set allow
-     *
-     * @param string $allow
-     * @return SipPeer
-     */
-    public function setAllow($allow)
-    {
-        $this->allow = $allow;
-
-        return $this;
-    }
-
-    /**
-     * Get allow
-     *
-     * @return string 
-     */
-    public function getAllow()
-    {
-        return $this->allow;
-    }
-
-    /**
-     * Set context
-     *
-     * @param string $context
-     * @return SipPeer
-     */
-    public function setContext($context)
-    {
-        $this->context = $context;
-
-        return $this;
-    }
-
-    /**
-     * Get context
-     *
-     * @return string 
-     */
-    public function getContext()
-    {
-        return $this->context;
-    }
-
-    /**
-     * Set secret
-     *
-     * @param string $secret
-     * @return SipPeer
-     */
-    public function setSecret($secret)
-    {
-        $this->secret = $secret;
-
-        return $this;
-    }
-
-    /**
-     * Get secret
-     *
-     * @return string 
-     */
-    public function getSecret()
-    {
-        return $this->secret;
-    }
-
-    /**
-     * Set username
-     *
-     * @param string $username
-     * @return SipPeer
-     */
-    public function setUsername($username)
-    {
-        $this->username = $username;
-
-        return $this;
-    }
-
-    /**
-     * Get username
-     *
-     * @return string 
-     */
-    public function getUsername()
-    {
-        return $this->username;
-    }
-
-    /**
-     * Set lastms
-     *
-     * @param string $lastms
-     * @return SipPeer
-     */
-    public function setLastms($lastms)
-    {
-        $this->lastms = $lastms;
-
-        return $this;
-    }
-
-    /**
-     * Get lastms
-     *
-     * @return string 
-     */
-    public function getLastms()
-    {
-        return $this->lastms;
     }
 }
