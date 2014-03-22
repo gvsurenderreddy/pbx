@@ -157,7 +157,7 @@ class SipPeer
     /**
      * @var string
      *
-     * @ORM\Column(name="nat", type="string", length=10, nullable=true)
+     * @ORM\Column(name="nat", type="string", length=20, nullable=true)
      */
     private $nat = 'route';
 	
