@@ -19,6 +19,8 @@ class AppKernel extends Kernel
             new VoIP\PBX\RealTimeBundle\VoIPPBXRealTimeBundle(),
             new VoIP\DynamicIP\DaemonBundle\VoIPDynamicIPDaemonBundle(),
 			new Cybernox\AmazonWebServicesBundle\CybernoxAmazonWebServicesBundle(),
+			new FOS\UserBundle\FOSUserBundle(),
+            new Management\Session\UserBundle\ManagementSessionUserBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

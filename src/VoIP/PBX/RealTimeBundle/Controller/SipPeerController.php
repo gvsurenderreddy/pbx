@@ -13,7 +13,7 @@ use VoIP\PBX\RealTimeBundle\Form\SipPeerType;
 /**
  * SipPeer controller.
  *
- * @Route("/sippeer")
+ * @Route("/admin/sippeer")
  */
 class SipPeerController extends Controller
 {

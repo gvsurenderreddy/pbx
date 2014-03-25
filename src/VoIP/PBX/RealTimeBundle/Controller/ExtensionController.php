@@ -13,7 +13,7 @@ use VoIP\PBX\RealTimeBundle\Form\ExtensionType;
 /**
  * Extension controller.
  *
- * @Route("/extension")
+ * @Route("/admin/extension")
  */
 class ExtensionController extends Controller
 {
