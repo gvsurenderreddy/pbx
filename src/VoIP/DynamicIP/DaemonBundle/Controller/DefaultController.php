@@ -61,7 +61,7 @@ class DefaultController extends Controller
 					)
 				));
 				$dynamicIP->setAuthorizeSuccess($authorizeResp->isOK());
-				if ($authorizeResp->isOK()) $dynamicIP->setPreviousIP($dynamicIP->setCurrentIP($currentIP););
+				if ($authorizeResp->isOK()) $dynamicIP->setPreviousIP($dynamicIP->setCurrentIP($currentIP));
 			}
 			$em->flush();
 		}
