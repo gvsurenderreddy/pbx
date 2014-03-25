@@ -33,10 +33,10 @@ class DefaultController extends Controller
 			if ($previousIP != $currentIP || !$dynamicIP->getAuthorizeSuccess()) {
 				
 				$ec2 = $this->container->get('aws_ec2');
-				$ec2->set_region(\AmazonEC2::REGION_APAC_SE1);
+				$ec2->set_region(\AmazonEC2::REGION_SINGAPORE);
 				if ($previousIP) {
 					$revokeResp = $ec2->revoke_security_group_ingress(array(
-						'GroupId' => 'sg-47a67b2c',
+						'GroupId' => 'sg-2f4a8b7a',
 						'IpPermissions' => array(
 							'IpProtocol' => 'udp',
 							'FromPort' => '0',
@@ -49,8 +49,9 @@ class DefaultController extends Controller
 					$dynamicIP->setRevokeSuccess($revokeResp->isOK());
 					if ($revokeResp->isOK()) $dynamicIP->setPreviousIP($previousIP);
 				}
+				$ec2->set_region(\AmazonEC2::REGION_SINGAPORE);
 				$authorizeResp = $ec2->authorize_security_group_ingress(array(
-					'GroupId' => 'sg-47a67b2c',
+					'GroupId' => 'sg-2f4a8b7a',
 					'IpPermissions' => array(
 						'IpProtocol' => 'udp',
 						'FromPort' => '0',
@@ -71,8 +72,7 @@ class DefaultController extends Controller
 			'updated_at' => $dynamicIP->getUpdatedAt()->format('Y-m-d H:i:s'),
 			'ip' => $currentIP,
 			'test_ip' => $testIP,
-			'auth_ok' => $authorizeResp->isOK(),
-			'rev_ok' => $revokeResp->isOK(),
+			'message' => $authorizeResp,
 		));
         return $response;
     }
