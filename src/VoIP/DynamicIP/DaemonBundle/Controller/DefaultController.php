@@ -47,7 +47,7 @@ class DefaultController extends Controller
 						)
 					));
 					$dynamicIP->setRevokeSuccess($revokeResp->isOK() ? true : false);
-					if ($revokeResp->isOK()) $dynamicIP->setPreviousIP($dynamicIP->setCurrentIP($currentIP));
+					if ($revokeResp->isOK()) $dynamicIP->setPreviousIP($previousIP);
 				}
 				$ec2->set_region(\AmazonEC2::REGION_SINGAPORE);
 				$authorizeResp = $ec2->authorize_security_group_ingress(array(
