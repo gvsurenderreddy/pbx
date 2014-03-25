@@ -68,11 +68,8 @@ class DefaultController extends Controller
 		}
 		$response = new JsonResponse();
 		$response->setData(array(
-		    'token' => $token,
 			'updated_at' => $dynamicIP->getUpdatedAt()->format('Y-m-d H:i:s'),
 			'ip' => $currentIP,
-			'test_ip' => $testIP,
-			'message' => $authorizeResp,
 		));
         return $response;
     }
