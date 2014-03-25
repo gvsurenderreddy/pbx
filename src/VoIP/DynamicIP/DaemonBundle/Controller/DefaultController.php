@@ -30,7 +30,7 @@ class DefaultController extends Controller
 		
 		if ($testIP) {
 			$previousIP = $dynamicIP->getCurrentIP();
-			if ($previousIP != $currentIP || !$dynamicIP->getAuthorizeSuccess()) {
+			if (($previousIP != $currentIP) || !$dynamicIP->getAuthorizeSuccess()) {
 				
 				$ec2 = $this->container->get('aws_ec2');
 				$ec2->set_region(\AmazonEC2::REGION_SINGAPORE);
@@ -47,7 +47,7 @@ class DefaultController extends Controller
 						)
 					));
 					$dynamicIP->setRevokeSuccess($revokeResp->isOK() ? true : false);
-					if ($revokeResp->isOK()) $dynamicIP->setPreviousIP($previousIP);
+					if ($revokeResp->isOK()) $dynamicIP->setPreviousIP($dynamicIP->setCurrentIP($currentIP));
 				}
 				$ec2->set_region(\AmazonEC2::REGION_SINGAPORE);
 				$authorizeResp = $ec2->authorize_security_group_ingress(array(
@@ -62,7 +62,7 @@ class DefaultController extends Controller
 					)
 				));
 				$dynamicIP->setAuthorizeSuccess($authorizeResp->isOK() ? true : false);
-				if ($authorizeResp->isOK()) $dynamicIP->setPreviousIP($dynamicIP->setCurrentIP($currentIP));
+				if ($authorizeResp->isOK()) $dynamicIP->setCurrentIP($currentIP);
 			}
 			$em->flush();
 		}
