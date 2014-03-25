@@ -1,3 +1,8 @@
+vo_ip_dynamic_ip_daemon:
+    resource: "@VoIPDynamicIPDaemonBundle/Controller/"
+    type:     annotation
+    prefix:   /
+
 vo_ippbx_real_time:
     resource: "@VoIPPBXRealTimeBundle/Controller/"
     type:     annotation
