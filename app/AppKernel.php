@@ -18,6 +18,7 @@ class AppKernel extends Kernel
             new Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
             new VoIP\PBX\RealTimeBundle\VoIPPBXRealTimeBundle(),
             new VoIP\DynamicIP\DaemonBundle\VoIPDynamicIPDaemonBundle(),
+			new Cybernox\AmazonWebServicesBundle\CybernoxAmazonWebServicesBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

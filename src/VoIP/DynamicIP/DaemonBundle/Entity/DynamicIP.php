@@ -57,6 +57,20 @@ class DynamicIP
      */
     private $currentIp;
 	
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="authorize_success", type="boolean", nullable=true)
+     */
+    private $authorizeSuccess;
+	
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="revoke_success", type="boolean", nullable=true)
+     */
+    private $revokeSuccess;
+	
 	/**
 	 * @ORM\PrePersist
 	 */
@@ -198,5 +212,51 @@ class DynamicIP
     public function getCurrentIp()
     {
         return $this->currentIp;
+    }
+
+    /**
+     * Set authorizeSuccess
+     *
+     * @param boolean $authorizeSuccess
+     * @return DynamicIP
+     */
+    public function setAuthorizeSuccess($authorizeSuccess)
+    {
+        $this->authorizeSuccess = $authorizeSuccess;
+
+        return $this;
+    }
+
+    /**
+     * Get authorizeSuccess
+     *
+     * @return boolean 
+     */
+    public function getAuthorizeSuccess()
+    {
+        return $this->authorizeSuccess;
+    }
+
+    /**
+     * Set revokeSuccess
+     *
+     * @param boolean $revokeSuccess
+     * @return DynamicIP
+     */
+    public function setRevokeSuccess($revokeSuccess)
+    {
+        $this->revokeSuccess = $revokeSuccess;
+
+        return $this;
+    }
+
+    /**
+     * Get revokeSuccess
+     *
+     * @return boolean 
+     */
+    public function getRevokeSuccess()
+    {
+        return $this->revokeSuccess;
     }
 }
