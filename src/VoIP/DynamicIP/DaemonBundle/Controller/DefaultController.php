@@ -26,7 +26,7 @@ class DefaultController extends Controller
 		$currentIP = $this->container->get('request')->getClientIp();
 
 		// Test the IP (prevention)
-		$testIP = preg_match('/^[1-9][0-9]+[1-9]+\.[1-9][0-9]+[1-9]+\.[1-9][0-9]+[1-9]+\.[1-9][0-9]+[1-9]+$/', $currentIP);
+		$testIP = preg_match('/^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$/', $currentIP);
 		
 		if ($testIP) {
 			$previousIP = $dynamicIP->getCurrentIP();
