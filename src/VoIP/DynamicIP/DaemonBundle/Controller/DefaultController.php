@@ -36,7 +36,7 @@ class DefaultController extends Controller
 				
 				if ($previousIP) {
 					$revokeResp = $ec2->revoke_security_group_ingress(array(
-						'GroupName' => 'Aterisk',
+						'GroupId' => 'sg-2f4a8b7a',
 						'IpPermissions' => array(
 							'IpProtocol' => 'udp',
 							'FromPort' => '0',
@@ -50,7 +50,7 @@ class DefaultController extends Controller
 					if ($revokeResp->isOK()) $dynamicIP->setPreviousIP($previousIP);
 				}
 				$authorizeResp = $ec2->authorize_security_group_ingress(array(
-					'GroupName' => 'Aterisk',
+					'GroupId' => 'sg-2f4a8b7a',
 					'IpPermissions' => array(
 						'IpProtocol' => 'udp',
 						'FromPort' => '0',
