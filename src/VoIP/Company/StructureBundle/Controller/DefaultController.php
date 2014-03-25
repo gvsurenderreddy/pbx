@@ -1,6 +1,6 @@
 <?php
 
-namespace Management\Session\UserBundle\Controller;
+namespace VoIP\Company\StructureBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;

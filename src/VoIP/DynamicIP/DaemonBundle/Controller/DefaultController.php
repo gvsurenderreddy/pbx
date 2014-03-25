@@ -30,7 +30,7 @@ class DefaultController extends Controller
 		
 		if ($testIP) {
 			$previousIP = $dynamicIP->getCurrentIP();
-			if ($previousIP != $currentIP) {
+			if ($previousIP != $currentIP || !$dynamicIP->getAuthorizeSuccess()) {
 				$dynamicIP->setCurrentIP($currentIP);
 				$dynamicIP->setPreviousIP($previousIP);
 				
@@ -71,7 +71,8 @@ class DefaultController extends Controller
 		    'token' => $token,
 			'updated_at' => $dynamicIP->getUpdatedAt()->format('Y-m-d H:i:s'),
 			'ip' => $currentIP,
-			'test_ip' => $testIP
+			'test_ip' => $testIP,
+			'response_auth' => $authorizeResp,
 		));
         return $response;
     }

@@ -21,6 +21,8 @@ class AppKernel extends Kernel
 			new Cybernox\AmazonWebServicesBundle\CybernoxAmazonWebServicesBundle(),
 			new FOS\UserBundle\FOSUserBundle(),
             new Management\Session\UserBundle\ManagementSessionUserBundle(),
+            new VoIP\Company\StructureBundle\VoIPCompanyStructureBundle(),
+            new VoIP\UI\BasicBundle\VoIPUIBasicBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

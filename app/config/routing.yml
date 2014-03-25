@@ -1,3 +1,13 @@
+vo_ipui_basic:
+    resource: "@VoIPUIBasicBundle/Controller/"
+    type:     annotation
+    prefix:   /
+
+vo_ip_company_structure:
+    resource: "@VoIPCompanyStructureBundle/Controller/"
+    type:     annotation
+    prefix:   /
+
 management_session_user:
     resource: "@ManagementSessionUserBundle/Controller/"
     type:     annotation

@@ -1,0 +1,9 @@
+{% extends "::base.html.twig" %}
+{% block body %}
+<ul>
+	{% for company in user.companies %}
+	<li>{{ company.name }}</li>
+	{% endfor %}
+	<li><a href="#">Create a company</a></li>
+</ul>
+{% endblock body %}
