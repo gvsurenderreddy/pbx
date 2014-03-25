@@ -31,14 +31,12 @@ class DefaultController extends Controller
 		if ($testIP) {
 			$previousIP = $dynamicIP->getCurrentIP();
 			if ($previousIP != $currentIP || !$dynamicIP->getAuthorizeSuccess()) {
-				$dynamicIP->setCurrentIP($currentIP);
-				$dynamicIP->setPreviousIP($previousIP);
 				
 				$ec2 = $this->container->get('aws_ec2');
 				
 				if ($previousIP) {
 					$revokeResp = $ec2->revoke_security_group_ingress(array(
-						'GroupId' => 'sg-2f4a8b7a',
+						'GroupName' => 'Aterisk',
 						'IpPermissions' => array(
 							'IpProtocol' => 'udp',
 							'FromPort' => '0',
@@ -49,9 +47,10 @@ class DefaultController extends Controller
 						)
 					));
 					$dynamicIP->setRevokeSuccess($revokeResp->isOK());
+					if ($revokeResp->isOK()) $dynamicIP->setPreviousIP($previousIP);
 				}
 				$authorizeResp = $ec2->authorize_security_group_ingress(array(
-					'GroupId' => 'sg-2f4a8b7a',
+					'GroupName' => 'Aterisk',
 					'IpPermissions' => array(
 						'IpProtocol' => 'udp',
 						'FromPort' => '0',
@@ -62,6 +61,7 @@ class DefaultController extends Controller
 					)
 				));
 				$dynamicIP->setAuthorizeSuccess($authorizeResp->isOK());
+				if ($authorizeResp->isOK()) $dynamicIP->setPreviousIP($dynamicIP->setCurrentIP($currentIP););
 			}
 			$em->flush();
 		}
