@@ -28,6 +28,17 @@ class DefaultController extends Controller
 		// Test the IP (prevention)
 		$testIP = preg_match('/^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$/', $currentIP);
 		
+		$data = array(
+			'ip' => array(
+				'current' => $previousIP,
+				'new' => $currentIP
+			),
+			'security' => array(
+				'auth' => null,
+				'rev' => null,
+			) 
+		);
+		
 		if ($testIP) {
 			$previousIP = $dynamicIP->getCurrentIP();
 			if (($previousIP != $currentIP) || !$dynamicIP->getAuthorizeSuccess()) {
@@ -48,6 +59,7 @@ class DefaultController extends Controller
 					));
 					$dynamicIP->setRevokeSuccess($revokeResp->isOK() ? true : false);
 					if ($revokeResp->isOK()) $dynamicIP->setPreviousIP($previousIP);
+					$data['security']['rev'] = $revokeResp->isOK() ? true : false;
 				}
 				$ec2->set_region(\AmazonEC2::REGION_SINGAPORE);
 				$authorizeResp = $ec2->authorize_security_group_ingress(array(
@@ -63,14 +75,13 @@ class DefaultController extends Controller
 				));
 				$dynamicIP->setAuthorizeSuccess($authorizeResp->isOK() ? true : false);
 				if ($authorizeResp->isOK()) $dynamicIP->setCurrentIP($currentIP);
+				$data['security']['auth'] = $authorizeResp->isOK() ? true : false;
 			}
 			$em->flush();
 		}
 		$response = new JsonResponse();
-		$response->setData(array(
-			'updated_at' => $dynamicIP->getUpdatedAt()->format('Y-m-d H:i:s'),
-			'ip' => $currentIP,
-		));
+		$data['updated_at'] = $dynamicIP->getUpdatedAt()->format('Y-m-d H:i:s');
+		$response->setData($data);
         return $response;
     }
 }
