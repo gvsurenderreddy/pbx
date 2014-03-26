@@ -46,7 +46,7 @@ class Company
     /**
      * @var string
      *
-     * @ORM\Column(name="context", type="string", length=255)
+     * @ORM\Column(name="context", type="string", length=255, unique=true)
      */
     private $context;
 	
@@ -85,8 +85,8 @@ class Company
 	{
 		$this->createdAt = new \DateTime();
 	    $this->updatedAt = new \DateTime();
-		$this->generateContext();
-		$this->generateHash();
+		if (!$this->context) $this->generateContext();
+		if (!$this->hash) $this->generateHash();
 	}
 	
 	/**
@@ -95,8 +95,8 @@ class Company
 	public function preUpdate()
 	{
 	    $this->updatedAt = new \DateTime();
-		if ($this->context) $this->generateContext();
-		if ($this->hash) $this->generateHash();
+		if (!$this->context) $this->generateContext();
+		if (!$this->hash) $this->generateHash();
 	}
 	
 	public function generateContext()

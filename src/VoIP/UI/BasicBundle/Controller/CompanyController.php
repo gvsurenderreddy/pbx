@@ -109,7 +109,7 @@ class CompanyController extends Controller
 			}
 			$em->remove($office);
 		}
-		
+		$em->remove($company->getAstContextExtensionConf());
 		$em->remove($company);
 		$em->flush();
 		

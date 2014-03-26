@@ -89,7 +89,7 @@ class Phone
 	{
 		$this->createdAt = new \DateTime();
 	    $this->updatedAt = new \DateTime();
-		$this->generateHash();
+		if (!$this->hash) $this->generateHash();
 	}
 	
 	/**
@@ -98,7 +98,7 @@ class Phone
 	public function preUpdate()
 	{
 	    $this->updatedAt = new \DateTime();
-		if ($this->hash) $this->generateHash();
+		if (!$this->hash) $this->generateHash();
 	}
 	
 	public function generateHash()
