@@ -237,6 +237,13 @@ class SipPeer
      * @ORM\Column(name="dynamic", type="string", length=10, nullable=true)
      */
     private $dynamic;
+	
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="fromuser", type="string", length=80, nullable=true)
+     */
+    private $fromuser;
 
     /**
      * Get id
@@ -1005,5 +1012,28 @@ class SipPeer
     public function getDirectrtpsetup()
     {
         return $this->directrtpsetup;
+    }
+
+    /**
+     * Set fromuser
+     *
+     * @param string $fromuser
+     * @return SipPeer
+     */
+    public function setFromuser($fromuser)
+    {
+        $this->fromuser = $fromuser;
+
+        return $this;
+    }
+
+    /**
+     * Get fromuser
+     *
+     * @return string 
+     */
+    public function getFromuser()
+    {
+        return $this->fromuser;
     }
 }
