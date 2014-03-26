@@ -244,6 +244,13 @@ class SipPeer
      * @ORM\Column(name="fromuser", type="string", length=80, nullable=true)
      */
     private $fromuser;
+	
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="defaultuser", type="string", length=80, nullable=true)
+     */
+    private $defaultuser;
 
     /**
      * Get id
@@ -1035,5 +1042,28 @@ class SipPeer
     public function getFromuser()
     {
         return $this->fromuser;
+    }
+
+    /**
+     * Set defaultuser
+     *
+     * @param string $defaultuser
+     * @return SipPeer
+     */
+    public function setDefaultuser($defaultuser)
+    {
+        $this->defaultuser = $defaultuser;
+
+        return $this;
+    }
+
+    /**
+     * Get defaultuser
+     *
+     * @return string 
+     */
+    public function getDefaultuser()
+    {
+        return $this->defaultuser;
     }
 }
