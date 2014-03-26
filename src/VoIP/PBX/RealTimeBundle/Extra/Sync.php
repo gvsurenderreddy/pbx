@@ -27,7 +27,7 @@ class Sync {
 	public function phoneToPeer($phone)
 	{
 		if (!$sippeer = $phone->getAstPeer()) $sippeer = new SipPeer();
-		$sippeer->setName($phone->getName());
+		$sippeer->setName($phone->getHash());
 		$sippeer->setSecret($sippeer->getSecret() ? $sippeer->getSecret() : hash('sha1', uniqid('', true)));
 		$sippeer->setContext('internal');
 		$sippeer->setHost('dynamic');
