@@ -29,7 +29,7 @@ class Sync {
 		if (!$sippeer = $phone->getAstPeer()) $sippeer = new SipPeer();
 		$sippeer->setName($phone->getHash());
 		$sippeer->setSecret($sippeer->getSecret() ? $sippeer->getSecret() : hash('sha1', uniqid('', true)));
-		$sippeer->setContext($phone->getOffice()->getCompany()->getContext());
+		$sippeer->setContext('internal');
 		$sippeer->setHost('dynamic');
 		$sippeer->setNat('force_rport,comedia');
 		$sippeer->setType('friend');
