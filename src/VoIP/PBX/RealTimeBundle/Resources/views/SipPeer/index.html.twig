@@ -1,63 +1,50 @@
 {% extends '::base.html.twig' %}
 
-{% block body -%}
-    <h1>SipPeer list</h1>
-
-    <table class="records_list">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Createdat</th>
-                <th>Updatedat</th>
-                <th>Name</th>
-                <th>Secret</th>
-                <th>Context</th>
-                <th>Host</th>
-                <th>Nat</th>
-                <th>Type</th>
-                <th>Canreinvite</th>
-                <th>Directrtpsetup</th>
-                <th>Disallow</th>
-                <th>Allow</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for entity in entities %}
-            <tr>
-                <td><a href="{{ path('sippeer_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
-                <td>{% if entity.createdAt %}{{ entity.createdAt|date('Y-m-d H:i:s') }}{% endif %}</td>
-                <td>{% if entity.updatedAt %}{{ entity.updatedAt|date('Y-m-d H:i:s') }}{% endif %}</td>
-                <td>{{ entity.name }}</td>
-                <td>{{ entity.secret }}</td>
-                <td>{{ entity.context }}</td>
-                <td>{{ entity.host }}</td>
-                <td>{{ entity.nat }}</td>
-                <td>{{ entity.type }}</td>
-                <td>{{ entity.canreinvite }}</td>
-                <td>{{ entity.directrtpsetup }}</td>
-                <td>{{ entity.disallow }}</td>
-                <td>{{ entity.allow }}</td>
-                <td>
-                <ul>
-                    <li>
-                        <a href="{{ path('sippeer_show', { 'id': entity.id }) }}">show</a>
-                    </li>
-                    <li>
-                        <a href="{{ path('sippeer_edit', { 'id': entity.id }) }}">edit</a>
-                    </li>
-                </ul>
-                </td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
-
+{% block container -%}
+<h1>Real Time Peers</h1>
+<table class="table table-hover table-condensed">
+    <tr>
+        <th>Id</th>
+        <th>Createdat</th>
+        <th>Updatedat</th>
+        <th>Name</th>
+        <th>Secret</th>
+        <th>Context</th>
+        <th>Host</th>
+        <th>Nat</th>
+        <th>Type</th>
+        <th>Canreinvite</th>
+        <th>Directrtpsetup</th>
+        <th>Disallow</th>
+        <th>Allow</th>
+        <th>Actions</th>
+    </tr>
+    {% for entity in entities %}
+    <tr>
+        <td><a href="{{ path('sippeer_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
+        <td>{% if entity.createdAt %}{{ entity.createdAt|date('Y-m-d H:i:s') }}{% endif %}</td>
+        <td>{% if entity.updatedAt %}{{ entity.updatedAt|date('Y-m-d H:i:s') }}{% endif %}</td>
+        <td>{{ entity.name }}</td>
+        <td>{{ entity.secret }}</td>
+        <td>{{ entity.context }}</td>
+        <td>{{ entity.host }}</td>
+        <td>{{ entity.nat }}</td>
+        <td>{{ entity.type }}</td>
+        <td>{{ entity.canreinvite }}</td>
+        <td>{{ entity.directrtpsetup }}</td>
+        <td>{{ entity.disallow }}</td>
+        <td>{{ entity.allow }}</td>
+        <td>
         <ul>
-        <li>
-            <a href="{{ path('sippeer_new') }}">
-                Create a new entry
-            </a>
-        </li>
-    </ul>
-    {% endblock %}
+            <li>
+                <a href="{{ path('sippeer_show', { 'id': entity.id }) }}">show</a>
+            </li>
+            <li>
+                <a href="{{ path('sippeer_edit', { 'id': entity.id }) }}">edit</a>
+            </li>
+        </ul>
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+{% endblock container %}
