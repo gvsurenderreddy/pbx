@@ -69,7 +69,7 @@ class Office
 	{
 		$this->createdAt = new \DateTime();
 	    $this->updatedAt = new \DateTime();
-		if ($this->hash) $this->generateHash();
+		if (!$this->hash) $this->generateHash();
 	}
 	
 	/**
