@@ -73,6 +73,12 @@ class Company
 	protected $users;
 	
 	/**
+     * @ORM\ManyToOne(targetEntity="\VoIP\PBX\RealTimeBundle\Entity\Conf", inversedBy="companies")
+	 * @ORM\JoinColumn(name="ast_context_extension_conf_id", referencedColumnName="id", onDelete="CASCADE")
+     */
+    private $astContextExtensionConf;
+	
+	/**
 	 * @ORM\PrePersist
 	 */
 	public function prePersist()
@@ -325,5 +331,28 @@ class Company
     public function getHash()
     {
         return $this->hash;
+    }
+
+    /**
+     * Set astContextExtensionConf
+     *
+     * @param \VoIP\PBX\RealTimeBundle\Entity\Conf $astContextExtensionConf
+     * @return Company
+     */
+    public function setAstContextExtensionConf(\VoIP\PBX\RealTimeBundle\Entity\Conf $astContextExtensionConf = null)
+    {
+        $this->astContextExtensionConf = $astContextExtensionConf;
+
+        return $this;
+    }
+
+    /**
+     * Get astContextExtensionConf
+     *
+     * @return \VoIP\PBX\RealTimeBundle\Entity\Conf 
+     */
+    public function getAstContextExtensionConf()
+    {
+        return $this->astContextExtensionConf;
     }
 }

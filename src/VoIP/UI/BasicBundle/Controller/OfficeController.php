@@ -91,4 +91,34 @@ class OfficeController extends Controller
 			'hash' => $company->getHash()
 		)));
     }
+	
+    /**
+     * @Route("/{hash}/delete", name="ui_office_delete")
+     * @Template()
+	 * @Method("GET")
+     */
+    public function deleteAction($hash)
+    {
+		$user = $this->getUser();
+		$em = $this->getDoctrine()->getManager();
+		$office = $em->getRepository('VoIPCompanyStructureBundle:Office')->findOneBy(array(
+			'hash' => $hash
+		));
+        if (!$office) throw $this->createNotFoundException('Unable to find Office entity.');
+		$company = $office->getCompany();
+		if (!$user->hasCompany($company)) throw $this->createNotFoundException('No authorization.');
+		
+		foreach ($office->getPhones() as $phone) {
+			if ($phone->getAstPeer()) $em->remove($phone->getAstPeer());
+			if ($phone->getAstExtension()) $em->remove($phone->getAstExtension());
+			$em->remove($phone);
+		}
+		
+		$em->remove($office);
+		$em->flush();
+		
+		return $this->redirect($this->generateUrl('ui_company', array(
+			'hash' => $company->getHash()
+		)));
+    }
 }

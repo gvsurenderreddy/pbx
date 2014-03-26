@@ -7,6 +7,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use VoIP\Company\StructureBundle\Entity\Company;
+use VoIP\PBX\RealTimeBundle\Extra\Sync;
 
 /**
  * @Route("/private")
@@ -23,7 +24,7 @@ class DefaultController extends Controller
 		$user = $this->getUser();
 		$companies = $user->getCompanies();
 		if (count($companies)) {
-			$company = current($companies);
+			$company = $companies[0];
 			return $this->redirect($this->generateUrl('ui_company', array(
 				'hash' => $company->getHash()
 			)));
@@ -59,6 +60,11 @@ class DefaultController extends Controller
 		$user->addCompany($company);
 		$company->addUser($user);
 		$em->persist($company);
+		$em->flush();
+		$sync = new Sync();
+		$astConf = $sync->companyToContextExtensionConf($company);
+		$em->persist($astConf);
+		$company->setAstContextExtensionConf($astConf);
 		$em->flush();
 		return $this->redirect($this->generateUrl('ui_company', array(
 			'hash' => $company->getHash()

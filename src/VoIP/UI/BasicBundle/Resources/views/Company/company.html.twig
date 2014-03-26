@@ -1,15 +1,15 @@
 {% extends "::base.html.twig" %}
 {% block container %}
 <div class="page-header">
-	<h1>{{ company.name }} <small>{{ company.hash }}</small></h1>
+	<h1>{{ company.name }} <small>{{ company.hash }} <a href="{{ path('ui_company_delete', {'hash': company.hash}) }}">delete</a></small></h1>
 </div>
 <ul>
 	{% for office in company.offices %}
 	<li>
-		{{ office.name}}
+		{{ office.name}} <a href="{{ path('ui_office_delete', {'hash': office.hash}) }}">delete</a>
 		<ul>
 			{% for phone in office.phones %}
-			<li>{{ phone.extension }} ({{ phone.name }})</li>
+			<li>{{ phone.extension }} ({{ phone.name }}) <a href="{{ path('ui_phone_delete', {'hash': phone.hash}) }}">delete</a></li>
 			{% endfor %}
 			<li><a href="{{ path('ui_office_newphone', {'hash': office.hash}) }}">New phone to {{ office.name }}</a></li>
 		</ul>

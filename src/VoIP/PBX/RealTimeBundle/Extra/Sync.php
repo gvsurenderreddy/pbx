@@ -4,11 +4,24 @@ namespace VoIP\PBX\RealTimeBundle\Extra;
 
 use VoIP\PBX\RealTimeBundle\Entity\SipPeer;
 use VoIP\PBX\RealTimeBundle\Entity\Extension;
+use VoIP\PBX\RealTimeBundle\Entity\Conf;
 
 class Sync {
 	
 	function __construct() {
 		// Construction
+	}
+	
+	public function companyToContextExtensionConf($company)
+	{
+		if (!$conf = $company->getAstContextExtensionConf()) $conf = new Conf();
+		$conf->setCatMetric(0);
+		$conf->setVarMetric(0);
+		$conf->setFilename('extensions.conf');
+		$conf->setCategory($company->getContext());
+		$conf->setVarName('switch');
+		$conf->setVarVal('Realtime/@');
+		return $conf;
 	}
 	
 	public function phoneToPeer($phone)
