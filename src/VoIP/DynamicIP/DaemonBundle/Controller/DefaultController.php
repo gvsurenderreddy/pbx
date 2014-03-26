@@ -30,7 +30,7 @@ class DefaultController extends Controller
 		
 		$data = array(
 			'ip' => array(
-				'current' => $previousIP,
+				'current' => 'n/a',
 				'new' => $currentIP
 			),
 			'security' => array(
@@ -41,6 +41,8 @@ class DefaultController extends Controller
 		
 		if ($testIP) {
 			$previousIP = $dynamicIP->getCurrentIP();
+			$data['ip']['current'] = $previousIP;
+			
 			if (($previousIP != $currentIP) || !$dynamicIP->getAuthorizeSuccess()) {
 				
 				$ec2 = $this->container->get('aws_ec2');
