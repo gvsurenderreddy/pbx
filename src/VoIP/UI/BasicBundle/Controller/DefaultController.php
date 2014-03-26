@@ -21,6 +21,13 @@ class DefaultController extends Controller
     public function indexAction()
     {
 		$user = $this->getUser();
+		$companies = $user->getCompanies();
+		if (count($companies)) {
+			$company = current($companies);
+			return $this->redirect($this->generateUrl('ui_company', array(
+				'hash' => $company->getHash()
+			)));
+		}
         return array(
 			'user' => $user
 		);
@@ -53,6 +60,8 @@ class DefaultController extends Controller
 		$company->addUser($user);
 		$em->persist($company);
 		$em->flush();
-        return $this->redirect($this->generateUrl('ui_index'));
+		return $this->redirect($this->generateUrl('ui_company', array(
+			'hash' => $company->getHash()
+		)));
     }
 }

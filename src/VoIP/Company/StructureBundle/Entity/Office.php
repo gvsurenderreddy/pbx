@@ -43,6 +43,13 @@ class Office
      */
     private $name;
 	
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="hash", type="string", length=8, unique=true)
+     */
+    private $hash;
+	
 	/**
      * @ORM\ManyToOne(targetEntity="\VoIP\Company\StructureBundle\Entity\Company", inversedBy="offices")
 	 * @ORM\JoinColumn(name="company_id", referencedColumnName="id", onDelete="CASCADE")
@@ -62,6 +69,7 @@ class Office
 	{
 		$this->createdAt = new \DateTime();
 	    $this->updatedAt = new \DateTime();
+		$this->generateHash();
 	}
 	
 	/**
@@ -70,6 +78,12 @@ class Office
 	public function preUpdate()
 	{
 	    $this->updatedAt = new \DateTime();
+		if ($this->hash) $this->generateHash();
+	}
+	
+	public function generateHash()
+	{
+		$this->hash = hash('crc32b', uniqid('', true));
 	}
 
 
@@ -213,5 +227,28 @@ class Office
     public function getPhones()
     {
         return $this->phones;
+    }
+
+    /**
+     * Set hash
+     *
+     * @param string $hash
+     * @return Office
+     */
+    public function setHash($hash)
+    {
+        $this->hash = $hash;
+
+        return $this;
+    }
+
+    /**
+     * Get hash
+     *
+     * @return string 
+     */
+    public function getHash()
+    {
+        return $this->hash;
     }
 }

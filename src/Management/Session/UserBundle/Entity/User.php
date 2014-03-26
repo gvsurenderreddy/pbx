@@ -33,6 +33,15 @@ class User extends BaseUser
     {
         parent::__construct();
     }
+	
+	public function hasCompany($company)
+	{
+		$test = false;
+		foreach ($this->companies as $c) {
+			$test = $test || ($c->getId() == $company->getId());
+		}
+		return $test;
+	}
 
     /**
      * Get id

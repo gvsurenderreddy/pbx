@@ -57,11 +57,30 @@ class Phone
      */
     private $type;
 	
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="hash", type="string", length=8, unique=true)
+     */
+    private $hash;
+	
 	/**
      * @ORM\ManyToOne(targetEntity="\VoIP\Company\StructureBundle\Entity\Office", inversedBy="phones")
 	 * @ORM\JoinColumn(name="office_id", referencedColumnName="id", onDelete="CASCADE")
      */
     private $office;
+	
+	/**
+     * @ORM\ManyToOne(targetEntity="\VoIP\PBX\RealTimeBundle\Entity\SipPeer", inversedBy="phones")
+	 * @ORM\JoinColumn(name="ast_sippeer_id", referencedColumnName="id", onDelete="CASCADE")
+     */
+    private $astPeer;
+	
+	/**
+     * @ORM\ManyToOne(targetEntity="\VoIP\PBX\RealTimeBundle\Entity\Extension", inversedBy="phones")
+	 * @ORM\JoinColumn(name="ast_extension_id", referencedColumnName="id", onDelete="CASCADE")
+     */
+    private $astExtension;
 	
 	/**
 	 * @ORM\PrePersist
@@ -70,6 +89,7 @@ class Phone
 	{
 		$this->createdAt = new \DateTime();
 	    $this->updatedAt = new \DateTime();
+		$this->generateHash();
 	}
 	
 	/**
@@ -78,6 +98,12 @@ class Phone
 	public function preUpdate()
 	{
 	    $this->updatedAt = new \DateTime();
+		if ($this->hash) $this->generateHash();
+	}
+	
+	public function generateHash()
+	{
+		$this->hash = hash('crc32b', uniqid('', true));
 	}
 
 
@@ -227,5 +253,74 @@ class Phone
     public function getOffice()
     {
         return $this->office;
+    }
+
+    /**
+     * Set hash
+     *
+     * @param string $hash
+     * @return Phone
+     */
+    public function setHash($hash)
+    {
+        $this->hash = $hash;
+
+        return $this;
+    }
+
+    /**
+     * Get hash
+     *
+     * @return string 
+     */
+    public function getHash()
+    {
+        return $this->hash;
+    }
+
+    /**
+     * Set astPeer
+     *
+     * @param \VoIP\PBX\RealTimeBundle\Entity\SipPeer $astPeer
+     * @return Phone
+     */
+    public function setAstPeer(\VoIP\PBX\RealTimeBundle\Entity\SipPeer $astPeer = null)
+    {
+        $this->astPeer = $astPeer;
+
+        return $this;
+    }
+
+    /**
+     * Get astPeer
+     *
+     * @return \VoIP\PBX\RealTimeBundle\Entity\SipPeer 
+     */
+    public function getAstPeer()
+    {
+        return $this->astPeer;
+    }
+
+    /**
+     * Set astExtension
+     *
+     * @param \VoIP\PBX\RealTimeBundle\Entity\Extension $astExtension
+     * @return Phone
+     */
+    public function setAstExtension(\VoIP\PBX\RealTimeBundle\Entity\Extension $astExtension = null)
+    {
+        $this->astExtension = $astExtension;
+
+        return $this;
+    }
+
+    /**
+     * Get astExtension
+     *
+     * @return \VoIP\PBX\RealTimeBundle\Entity\Extension 
+     */
+    public function getAstExtension()
+    {
+        return $this->astExtension;
     }
 }

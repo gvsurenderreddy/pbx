@@ -50,6 +50,13 @@ class Company
      */
     private $context;
 	
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="hash", type="string", length=8, unique=true)
+     */
+    private $hash;
+	
 	/**
      * @ORM\OneToMany(targetEntity="\VoIP\Company\StructureBundle\Entity\Office", mappedBy="company")
 	 * @ORM\OrderBy({"name" = "ASC"})
@@ -73,6 +80,7 @@ class Company
 		$this->createdAt = new \DateTime();
 	    $this->updatedAt = new \DateTime();
 		$this->generateContext();
+		$this->generateHash();
 	}
 	
 	/**
@@ -81,11 +89,18 @@ class Company
 	public function preUpdate()
 	{
 	    $this->updatedAt = new \DateTime();
+		if ($this->context) $this->generateContext();
+		if ($this->hash) $this->generateHash();
 	}
 	
 	public function generateContext()
 	{
 		$this->context = hash('crc32b', uniqid('', true));
+	}
+	
+	public function generateHash()
+	{
+		$this->hash = hash('crc32b', uniqid('', true));
 	}
 	
 
@@ -287,5 +302,28 @@ class Company
     public function getUsers()
     {
         return $this->users;
+    }
+
+    /**
+     * Set hash
+     *
+     * @param string $hash
+     * @return Company
+     */
+    public function setHash($hash)
+    {
+        $this->hash = $hash;
+
+        return $this;
+    }
+
+    /**
+     * Get hash
+     *
+     * @return string 
+     */
+    public function getHash()
+    {
+        return $this->hash;
     }
 }
