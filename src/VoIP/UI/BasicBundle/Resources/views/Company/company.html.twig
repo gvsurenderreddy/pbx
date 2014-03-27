@@ -17,4 +17,12 @@
 	{% endfor %}
 	<li><a href="{{ path('ui_company_newoffice', {'hash': company.hash}) }}">New office</a></li>
 </ul>
+<ul>
+	{% for subscription in company.subscriptions %}
+	<li>
+		{{ subscription.name}} <a href="{{ path('ui_subscription_delete', {'hash': subscription.hash}) }}">delete</a>
+	</li>
+	{% endfor %}
+	<li><a href="{{ path('ui_company_newsubscription', {'hash': company.hash}) }}">New subscription</a></li>
+</ul>
 {% endblock container %}

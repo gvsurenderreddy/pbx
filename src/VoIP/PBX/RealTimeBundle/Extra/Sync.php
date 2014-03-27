@@ -12,16 +12,18 @@ class Sync {
 		// Construction
 	}
 	
-	public function companyToContextExtensionConf($company)
+	public function subscriptionToPeer($subscription)
 	{
-		if (!$conf = $company->getAstContextExtensionConf()) $conf = new Conf();
-		$conf->setCatMetric(0);
-		$conf->setVarMetric(0);
-		$conf->setFilename('extensions.conf');
-		$conf->setCategory($company->getContext());
-		$conf->setVarName('switch');
-		$conf->setVarVal('Realtime/@');
-		return $conf;
+		if (!$peer = $subscription->getAstPeer()) $peer = new SipPeer();
+		$peer->setName($subscription->getUsername());
+		$peer->setSecret($subscription->getSecret());
+		$peer->setHost($subscription->getHost());
+		$peer->setType('peer');
+		$peer->setAllow('gsm');
+		$peer->setDefaultUser($subscription->getUsername());
+		$peer->setInsecure('invite');
+		$peer->setDtfmode('rfc2833');
+		return $peer;
 	}
 	
 	public function phoneToPeer($phone)

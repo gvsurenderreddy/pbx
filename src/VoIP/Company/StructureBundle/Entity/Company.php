@@ -64,6 +64,12 @@ class Company
     private $offices;
 	
 	/**
+     * @ORM\OneToMany(targetEntity="\VoIP\Company\SubscriptionsBundle\Entity\Subscription", mappedBy="company")
+	 * @ORM\OrderBy({"name" = "ASC"})
+     */
+    private $subscriptions;
+	
+	/**
 	 * @ORM\ManyToMany(targetEntity="\Management\Session\UserBundle\Entity\User", inversedBy="companies")
 	 * @ORM\JoinTable(name="structure_company_has_user",
 	 *      joinColumns={@ORM\JoinColumn(name="company_id", referencedColumnName="id")},
@@ -71,12 +77,6 @@ class Company
 	 *      )
 	 */
 	protected $users;
-	
-	/**
-     * @ORM\ManyToOne(targetEntity="\VoIP\PBX\RealTimeBundle\Entity\Conf", inversedBy="companies")
-	 * @ORM\JoinColumn(name="ast_context_extension_conf_id", referencedColumnName="id", onDelete="CASCADE")
-     */
-    private $astContextExtensionConf;
 	
 	/**
 	 * @ORM\PrePersist
@@ -334,25 +334,35 @@ class Company
     }
 
     /**
-     * Set astContextExtensionConf
+     * Add subscriptions
      *
-     * @param \VoIP\PBX\RealTimeBundle\Entity\Conf $astContextExtensionConf
+     * @param \VoIP\Company\SubscriptionsBundle\Entity\Subscription $subscriptions
      * @return Company
      */
-    public function setAstContextExtensionConf(\VoIP\PBX\RealTimeBundle\Entity\Conf $astContextExtensionConf = null)
+    public function addSubscription(\VoIP\Company\SubscriptionsBundle\Entity\Subscription $subscriptions)
     {
-        $this->astContextExtensionConf = $astContextExtensionConf;
+        $this->subscriptions[] = $subscriptions;
 
         return $this;
     }
 
     /**
-     * Get astContextExtensionConf
+     * Remove subscriptions
      *
-     * @return \VoIP\PBX\RealTimeBundle\Entity\Conf 
+     * @param \VoIP\Company\SubscriptionsBundle\Entity\Subscription $subscriptions
      */
-    public function getAstContextExtensionConf()
+    public function removeSubscription(\VoIP\Company\SubscriptionsBundle\Entity\Subscription $subscriptions)
     {
-        return $this->astContextExtensionConf;
+        $this->subscriptions->removeElement($subscriptions);
+    }
+
+    /**
+     * Get subscriptions
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getSubscriptions()
+    {
+        return $this->subscriptions;
     }
 }

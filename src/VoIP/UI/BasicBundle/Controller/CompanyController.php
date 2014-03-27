@@ -8,6 +8,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use VoIP\Company\StructureBundle\Entity\Company;
 use VoIP\Company\StructureBundle\Entity\Office;
+use VoIP\Company\SubscriptionsBundle\Entity\Subscription;
 use VoIP\PBX\RealTimeBundle\Extra\Sync;
 
 /**
@@ -87,6 +88,76 @@ class CompanyController extends Controller
     }
 	
     /**
+     * @Route("/{hash}/new-subscription", name="ui_company_newsubscription")
+     * @Template()
+	 * @Method("GET")
+     */
+    public function newSubscriptionAction($hash)
+    {
+		$user = $this->getUser();
+		$em = $this->getDoctrine()->getManager();
+		$company = $em->getRepository('VoIPCompanyStructureBundle:Company')->findOneBy(array(
+			'hash' => $hash
+		));
+        if (!$company) throw $this->createNotFoundException('Unable to find Company entity.');
+		if (!$user->hasCompany($company)) throw $this->createNotFoundException('No authorization.');
+        return array(
+			'company' => $company
+		);
+    }
+	
+    /**
+     * @Route("/{hash}/new-subscription")
+     * @Template()
+	 * @Method("POST")
+     */
+    public function createSubscriptionAction($hash)
+    {
+		$user = $this->getUser();
+		$em = $this->getDoctrine()->getManager();
+		$company = $em->getRepository('VoIPCompanyStructureBundle:Company')->findOneBy(array(
+			'hash' => $hash
+		));
+        if (!$company) throw $this->createNotFoundException('Unable to find Company entity.');
+		if (!$user->hasCompany($company)) throw $this->createNotFoundException('No authorization.');
+		
+		$request = $this->getRequest();
+		$name = $request->get('name');
+		$type = $request->get('type');
+		$number = $request->get('number');
+		$username = $request->get('username');
+		$secret = $request->get('secret');
+		$host = $request->get('host');
+		$emit = $request->get('emit') === 'on';
+		$receive = $request->get('receive') === 'on';
+		
+		$subscription = new Subscription();
+		$subscription->setName($name);
+		$subscription->setType($type);
+		$subscription->setNumber($number);
+		$subscription->setUsername($username);
+		$subscription->setSecret($secret);
+		$subscription->setHost($host);
+		$subscription->setEmitCall($emit);
+		$subscription->setReceiveCall($receive);
+		$subscription->setCompany($company);
+		
+		$em->persist($subscription);
+		
+		$em->flush();
+		
+		$sync = new Sync();
+		$astPeer = $sync->subscriptionToPeer($subscription);
+		$em->persist($astPeer);
+		$subscription->setAstPeer($astPeer);
+		$em->flush();
+		
+		return $this->redirect($this->generateUrl('ui_company', array(
+			'hash' => $company->getHash()
+		)));
+    }
+	
+    /**
      * @Route("/{hash}/delete", name="ui_company_delete")
      * @Template()
 	 * @Method("GET")
@@ -109,7 +180,10 @@ class CompanyController extends Controller
 			}
 			$em->remove($office);
 		}
-		$em->remove($company->getAstContextExtensionConf());
+		foreach ($company->getSubscriptions() as $subscription) {
+			if ($subscription->getAstPeer()) $em->remove($subscription->getAstPeer());
+			$em->remove($subscription);
+		}
 		$em->remove($company);
 		$em->flush();
 		

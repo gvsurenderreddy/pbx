@@ -61,11 +61,6 @@ class DefaultController extends Controller
 		$company->addUser($user);
 		$em->persist($company);
 		$em->flush();
-		$sync = new Sync();
-		$astConf = $sync->companyToContextExtensionConf($company);
-		$em->persist($astConf);
-		$company->setAstContextExtensionConf($astConf);
-		$em->flush();
 		return $this->redirect($this->generateUrl('ui_company', array(
 			'hash' => $company->getHash()
 		)));

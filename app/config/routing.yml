@@ -1,3 +1,8 @@
+vo_ip_company_subscriptions:
+    resource: "@VoIPCompanySubscriptionsBundle/Controller/"
+    type:     annotation
+    prefix:   /
+
 vo_ipui_basic:
     resource: "@VoIPUIBasicBundle/Controller/"
     type:     annotation

@@ -258,6 +258,18 @@ class SipPeer
      * @ORM\Column(name="dtfmode", type="string", length=80, nullable=true)
      */
     private $dtfmode;
+	
+	/**
+     * @ORM\OneToMany(targetEntity="\VoIP\Company\SubscriptionsBundle\Entity\Subscription", mappedBy="astPeer")
+	 * @ORM\OrderBy({"name" = "ASC"})
+     */
+    private $subscriptions;
+	
+	/**
+     * @ORM\OneToMany(targetEntity="\VoIP\Company\StructureBundle\Entity\Phone", mappedBy="astPeer")
+	 * @ORM\OrderBy({"name" = "ASC"})
+     */
+    private $phones;
 
     /**
      * Get id
@@ -1095,5 +1107,79 @@ class SipPeer
     public function getDtfmode()
     {
         return $this->dtfmode;
+    }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->subscriptions = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->phones = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Add subscriptions
+     *
+     * @param \VoIP\Company\SubscriptionsBundle\Entity\Subscription $subscriptions
+     * @return SipPeer
+     */
+    public function addSubscription(\VoIP\Company\SubscriptionsBundle\Entity\Subscription $subscriptions)
+    {
+        $this->subscriptions[] = $subscriptions;
+
+        return $this;
+    }
+
+    /**
+     * Remove subscriptions
+     *
+     * @param \VoIP\Company\SubscriptionsBundle\Entity\Subscription $subscriptions
+     */
+    public function removeSubscription(\VoIP\Company\SubscriptionsBundle\Entity\Subscription $subscriptions)
+    {
+        $this->subscriptions->removeElement($subscriptions);
+    }
+
+    /**
+     * Get subscriptions
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getSubscriptions()
+    {
+        return $this->subscriptions;
+    }
+
+    /**
+     * Add phones
+     *
+     * @param \VoIP\Company\StructureBundle\Entity\Phone $phones
+     * @return SipPeer
+     */
+    public function addPhone(\VoIP\Company\StructureBundle\Entity\Phone $phones)
+    {
+        $this->phones[] = $phones;
+
+        return $this;
+    }
+
+    /**
+     * Remove phones
+     *
+     * @param \VoIP\Company\StructureBundle\Entity\Phone $phones
+     */
+    public function removePhone(\VoIP\Company\StructureBundle\Entity\Phone $phones)
+    {
+        $this->phones->removeElement($phones);
+    }
+
+    /**
+     * Get phones
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getPhones()
+    {
+        return $this->phones;
     }
 }
