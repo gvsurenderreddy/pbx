@@ -1073,4 +1073,27 @@ class SipPeer
     {
         return $this->defaultuser;
     }
+
+    /**
+     * Set dtfmode
+     *
+     * @param string $dtfmode
+     * @return SipPeer
+     */
+    public function setDtfmode($dtfmode)
+    {
+        $this->dtfmode = $dtfmode;
+
+        return $this;
+    }
+
+    /**
+     * Get dtfmode
+     *
+     * @return string 
+     */
+    public function getDtfmode()
+    {
+        return $this->dtfmode;
+    }
 }
