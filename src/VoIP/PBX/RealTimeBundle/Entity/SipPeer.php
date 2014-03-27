@@ -251,6 +251,13 @@ class SipPeer
      * @ORM\Column(name="defaultuser", type="string", length=80, nullable=true)
      */
     private $defaultuser;
+	
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="dtfmode", type="string", length=80, nullable=true)
+     */
+    private $dtfmode;
 
     /**
      * Get id

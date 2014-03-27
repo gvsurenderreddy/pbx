@@ -28,6 +28,9 @@ class SipPeerType extends AbstractType
 			->add('directmedia')
 			->add('permit')
 			->add('deny')
+			->add('defaultuser')
+			->add('insecure')
+			->add('dtfmode')
         ;
     }
     
