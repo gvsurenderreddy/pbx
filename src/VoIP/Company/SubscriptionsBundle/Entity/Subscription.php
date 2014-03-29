@@ -79,11 +79,11 @@ class Subscription
     private $receiveCall;
 
     /**
-     * @var boolean
+     * @var integer
      *
-     * @ORM\Column(name="emit_call", type="boolean")
+     * @ORM\Column(name="prefix", type="integer")
      */
-    private $emitCall;
+    private $prefix;
 
     /**
      * @var string
@@ -110,6 +110,15 @@ class Subscription
 	 * @ORM\JoinColumn(name="ast_sippeer_id", referencedColumnName="id", onDelete="CASCADE")
      */
     private $astPeer;
+	
+	/**
+	 * @ORM\ManyToMany(targetEntity="\VoIP\Company\SubscriptionsBundle\Entity\Country", inversedBy="subscriptions")
+	 * @ORM\JoinTable(name="structure_subscription_has_country",
+	 *      joinColumns={@ORM\JoinColumn(name="subscription_id", referencedColumnName="id")},
+	 *      inverseJoinColumns={@ORM\JoinColumn(name="country_id", referencedColumnName="id")}
+	 *      )
+	 */
+	protected $countries;
 	
 	/**
 	 * @ORM\PrePersist
@@ -330,29 +339,6 @@ class Subscription
     }
 
     /**
-     * Set emitCall
-     *
-     * @param boolean $emitCall
-     * @return Subscription
-     */
-    public function setEmitCall($emitCall)
-    {
-        $this->emitCall = $emitCall;
-
-        return $this;
-    }
-
-    /**
-     * Get emitCall
-     *
-     * @return boolean 
-     */
-    public function getEmitCall()
-    {
-        return $this->emitCall;
-    }
-
-    /**
      * Set host
      *
      * @param string $host
@@ -443,5 +429,68 @@ class Subscription
     public function getAstPeer()
     {
         return $this->astPeer;
+    }
+
+    /**
+     * Set prefix
+     *
+     * @param integer $prefix
+     * @return Subscription
+     */
+    public function setPrefix($prefix)
+    {
+        $this->prefix = $prefix;
+
+        return $this;
+    }
+
+    /**
+     * Get prefix
+     *
+     * @return integer 
+     */
+    public function getPrefix()
+    {
+        return $this->prefix;
+    }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->countries = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Add countries
+     *
+     * @param \VoIP\Company\SubscriptionsBundle\Entity\Country $countries
+     * @return Subscription
+     */
+    public function addCountry(\VoIP\Company\SubscriptionsBundle\Entity\Country $countries)
+    {
+        $this->countries[] = $countries;
+
+        return $this;
+    }
+
+    /**
+     * Remove countries
+     *
+     * @param \VoIP\Company\SubscriptionsBundle\Entity\Country $countries
+     */
+    public function removeCountry(\VoIP\Company\SubscriptionsBundle\Entity\Country $countries)
+    {
+        $this->countries->removeElement($countries);
+    }
+
+    /**
+     * Get countries
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getCountries()
+    {
+        return $this->countries;
     }
 }

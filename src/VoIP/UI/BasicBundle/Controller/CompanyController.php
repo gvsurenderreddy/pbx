@@ -101,8 +101,12 @@ class CompanyController extends Controller
 		));
         if (!$company) throw $this->createNotFoundException('Unable to find Company entity.');
 		if (!$user->hasCompany($company)) throw $this->createNotFoundException('No authorization.');
+		$countries = $em->getRepository('VoIPCompanySubscriptionsBundle:Country')->findBy(array(), array(
+			'name' => 'ASC'
+		));
         return array(
-			'company' => $company
+			'company' => $company,
+			'countries' => $countries
 		);
     }
 	
@@ -128,8 +132,9 @@ class CompanyController extends Controller
 		$username = $request->get('username');
 		$secret = $request->get('secret');
 		$host = $request->get('host');
-		$emit = $request->get('emit') === 'on';
+		$prefix = $request->get('prefix');
 		$receive = $request->get('receive') === 'on';
+		$countries = $request->get('countries');
 		
 		$subscription = new Subscription();
 		$subscription->setName($name);
@@ -138,9 +143,16 @@ class CompanyController extends Controller
 		$subscription->setUsername($username);
 		$subscription->setSecret($secret);
 		$subscription->setHost($host);
-		$subscription->setEmitCall($emit);
+		$subscription->setPrefix($prefix);
 		$subscription->setReceiveCall($receive);
 		$subscription->setCompany($company);
+		
+		foreach ($countries as $countryId) {
+			$country = $em->getRepository('VoIPCompanySubscriptionsBundle:Country')->find($countryId);
+			if (!$country) throw $this->createNotFoundException('Unable to find Country entity.');
+			$subscription->addCountry($country);
+			$country->addSubscription($subscription);
+		}
 		
 		$em->persist($subscription);
 		
