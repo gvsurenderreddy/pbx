@@ -1,3 +1,8 @@
+vo_ippbxcdr:
+    resource: "@VoIPPBXCDRBundle/Controller/"
+    type:     annotation
+    prefix:   /
+
 vo_ip_company_subscriptions:
     resource: "@VoIPCompanySubscriptionsBundle/Controller/"
     type:     annotation

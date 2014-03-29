@@ -96,7 +96,7 @@ class SipPeer
      *
      * @ORM\Column(name="context", type="string", length=40, nullable=true)
      */
-    private $context = 'from-internal';
+    private $context;
 	
     /**
      * @var string

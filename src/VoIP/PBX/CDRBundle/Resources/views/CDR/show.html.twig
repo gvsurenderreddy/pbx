@@ -1,0 +1,86 @@
+{% extends '::base.html.twig' %}
+
+{% block body -%}
+    <h1>CDR</h1>
+
+    <table class="record_properties">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ entity.id }}</td>
+            </tr>
+            <tr>
+                <th>Accountcode</th>
+                <td>{{ entity.accountcode }}</td>
+            </tr>
+            <tr>
+                <th>Src</th>
+                <td>{{ entity.src }}</td>
+            </tr>
+            <tr>
+                <th>Dst</th>
+                <td>{{ entity.dst }}</td>
+            </tr>
+            <tr>
+                <th>Dcontext</th>
+                <td>{{ entity.dcontext }}</td>
+            </tr>
+            <tr>
+                <th>Clid</th>
+                <td>{{ entity.clid }}</td>
+            </tr>
+            <tr>
+                <th>Channel</th>
+                <td>{{ entity.channel }}</td>
+            </tr>
+            <tr>
+                <th>Dstchannel</th>
+                <td>{{ entity.dstchannel }}</td>
+            </tr>
+            <tr>
+                <th>Start</th>
+                <td>{{ entity.start|date('Y-m-d H:i:s') }}</td>
+            </tr>
+            <tr>
+                <th>Answer</th>
+                <td>{{ entity.answer|date('Y-m-d H:i:s') }}</td>
+            </tr>
+            <tr>
+                <th>End</th>
+                <td>{{ entity.end|date('Y-m-d H:i:s') }}</td>
+            </tr>
+            <tr>
+                <th>Duration</th>
+                <td>{{ entity.duration }}</td>
+            </tr>
+            <tr>
+                <th>Billsec</th>
+                <td>{{ entity.billsec }}</td>
+            </tr>
+            <tr>
+                <th>Disposition</th>
+                <td>{{ entity.disposition }}</td>
+            </tr>
+            <tr>
+                <th>Amaflags</th>
+                <td>{{ entity.amaflags }}</td>
+            </tr>
+            <tr>
+                <th>Userfield</th>
+                <td>{{ entity.userfield }}</td>
+            </tr>
+            <tr>
+                <th>Uniqueid</th>
+                <td>{{ entity.uniqueid }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+        <ul class="record_actions">
+    <li>
+        <a href="{{ path('cdr') }}">
+            Back to the list
+        </a>
+    </li>
+</ul>
+{% endblock %}

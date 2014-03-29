@@ -1,4 +1,4 @@
-{% extends "::base.html.twig" %}
+{% extends "VoIPUIBasicBundle::layout.html.twig" %}
 {% block container %}
 <div class="page-header">
 	<h1>{{ company.name }} <small>{{ company.hash }} <a href="{{ path('ui_company_delete', {'hash': company.hash}) }}">delete</a></small></h1>
