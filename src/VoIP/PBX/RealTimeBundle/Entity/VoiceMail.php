@@ -15,18 +15,11 @@ class VoiceMail
     /**
      * @var integer
      *
-     * @ORM\Column(name="id", type="integer")
+     * @ORM\Column(name="uniqueid", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="unique_id", type="integer", unique=true)
-     */
-    private $uniqueId;
 
     /**
      * @var string
@@ -131,7 +124,7 @@ class VoiceMail
      *
      * @ORM\Column(name="envelope", type="string", length=3)
      */
-    private $envelope = no;
+    private $envelope = 'no';
 
     /**
      * @var string
@@ -352,31 +345,6 @@ class VoiceMail
     public function getId()
     {
         return $this->id;
-    }
-
-    
-
-    /**
-     * Set uniqueId
-     *
-     * @param integer $uniqueId
-     * @return VoiceMail
-     */
-    public function setUniqueId($uniqueId)
-    {
-        $this->uniqueId = $uniqueId;
-
-        return $this;
-    }
-
-    /**
-     * Get uniqueId
-     *
-     * @return integer 
-     */
-    public function getUniqueId()
-    {
-        return $this->uniqueId;
     }
 
     /**

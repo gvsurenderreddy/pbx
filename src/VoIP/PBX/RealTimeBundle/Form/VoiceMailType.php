@@ -15,7 +15,6 @@ class VoiceMailType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('uniqueId')
             ->add('customerId')
             ->add('context')
             ->add('mailbox')
