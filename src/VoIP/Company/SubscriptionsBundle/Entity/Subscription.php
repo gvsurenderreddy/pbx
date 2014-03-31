@@ -121,6 +121,12 @@ class Subscription
 	protected $countries;
 	
 	/**
+     * @ORM\OneToOne(targetEntity="\VoIP\Company\SubscriptionsBundle\Entity\DialPlanItem", inversedBy="subscription")
+	 * @ORM\JoinColumn(name="dialplan_firstitem_id", referencedColumnName="id", onDelete="CASCADE")
+     */
+    private $dialPlanFirstItem;
+	
+	/**
 	 * @ORM\PrePersist
 	 */
 	public function prePersist()
@@ -142,6 +148,12 @@ class Subscription
 	public function generateHash()
 	{
 		$this->hash = hash('crc32b', uniqid('', true));
+	}
+	
+	public function getDepth()
+	{
+		if (!($firstItem = $this->getDialPlanFirstItem())) return 0;
+		else return $firstItem->getDepth() + 1;
 	}
 
     /**
@@ -492,5 +504,29 @@ class Subscription
     public function getCountries()
     {
         return $this->countries;
+    }
+
+
+    /**
+     * Set dialPlanFirstItem
+     *
+     * @param \VoIP\Company\SubscriptionsBundle\Entity\DialPlanItem $dialPlanFirstItem
+     * @return Subscription
+     */
+    public function setDialPlanFirstItem(\VoIP\Company\SubscriptionsBundle\Entity\DialPlanItem $dialPlanFirstItem = null)
+    {
+        $this->dialPlanFirstItem = $dialPlanFirstItem;
+
+        return $this;
+    }
+
+    /**
+     * Get dialPlanFirstItem
+     *
+     * @return \VoIP\Company\SubscriptionsBundle\Entity\DialPlanItem 
+     */
+    public function getDialPlanFirstItem()
+    {
+        return $this->dialPlanFirstItem;
     }
 }

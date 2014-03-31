@@ -2,7 +2,7 @@
 <html>
     <head>
         <meta charset="UTF-8" />
-        <title>{% block title %}Welcome!{% endblock %}</title>
+        <title>{% block title %}48{% endblock %}</title>
         {% block stylesheets %}{% endblock %}
         <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
 		<link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}" type="text/css" media="screen" title="Twitter Bootstrap Stylesheets" charset="utf-8">
@@ -12,9 +12,41 @@
 		{% block navbar %}{% endblock navbar %}
 		{% block precontainer %}<div class="container">{% block container %}{% endblock container %}</div>{% endblock precontainer %}
 		{% endblock %}
+		{% block modal %}
+		<div id="modal" class="modal fade">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+						<h4 class="modal-title">Modal title</h4>
+					</div>
+					<div class="modal-body">
+						<p>One fine body&hellip;</p>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+						<button type="button" class="btn btn-primary">Save changes</button>
+					</div>
+				</div>
+			</div>
+		</div>
+		{% endblock modal %}
         {% block javascripts %}
 		<script src="{{ asset('js/jquery-2.1.0.min.js') }}"></script>
 		<script src="{{ asset('js/bootstrap.min.js') }}"></script>
+		<script>
+		$('.l-mod').click(function(){
+			$.ajax({
+				'url': $(this).data('url'),
+				'type': 'GET',
+				'success': function(data){
+					$('#modal').html(data);
+					$('#modal').modal();
+				}
+			});
+			return false;
+		})
+		</script>
 		{% endblock %}
     </body>
 </html>

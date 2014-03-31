@@ -58,10 +58,10 @@ class Company
     private $hash;
 	
 	/**
-     * @ORM\OneToMany(targetEntity="\VoIP\Company\StructureBundle\Entity\Office", mappedBy="company")
-	 * @ORM\OrderBy({"name" = "ASC"})
+     * @ORM\OneToMany(targetEntity="\VoIP\Company\StructureBundle\Entity\Phone", mappedBy="company")
+	 * @ORM\OrderBy({"extension" = "ASC"})
      */
-    private $offices;
+    private $phones;
 	
 	/**
      * @ORM\OneToMany(targetEntity="\VoIP\Company\SubscriptionsBundle\Entity\Subscription", mappedBy="company")
@@ -108,7 +108,6 @@ class Company
 	{
 		$this->hash = hash('crc32b', uniqid('', true));
 	}
-	
 
 
     /**
@@ -245,39 +244,6 @@ class Company
     }
 
     /**
-     * Add offices
-     *
-     * @param \VoIP\Company\StructureBundle\Entity\Office $offices
-     * @return Company
-     */
-    public function addOffice(\VoIP\Company\StructureBundle\Entity\Office $offices)
-    {
-        $this->offices[] = $offices;
-
-        return $this;
-    }
-
-    /**
-     * Remove offices
-     *
-     * @param \VoIP\Company\StructureBundle\Entity\Office $offices
-     */
-    public function removeOffice(\VoIP\Company\StructureBundle\Entity\Office $offices)
-    {
-        $this->offices->removeElement($offices);
-    }
-
-    /**
-     * Get offices
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getOffices()
-    {
-        return $this->offices;
-    }
-
-    /**
      * Add users
      *
      * @param \Management\Session\UserBundle\Entity\User $users
@@ -364,5 +330,38 @@ class Company
     public function getSubscriptions()
     {
         return $this->subscriptions;
+    }
+
+    /**
+     * Add phones
+     *
+     * @param \VoIP\Company\StructureBundle\Entity\Phone $phones
+     * @return Company
+     */
+    public function addPhone(\VoIP\Company\StructureBundle\Entity\Phone $phones)
+    {
+        $this->phones[] = $phones;
+
+        return $this;
+    }
+
+    /**
+     * Remove phones
+     *
+     * @param \VoIP\Company\StructureBundle\Entity\Phone $phones
+     */
+    public function removePhone(\VoIP\Company\StructureBundle\Entity\Phone $phones)
+    {
+        $this->phones->removeElement($phones);
+    }
+
+    /**
+     * Get phones
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getPhones()
+    {
+        return $this->phones;
     }
 }

@@ -1,0 +1,212 @@
+{% extends '::base.html.twig' %}
+
+{% block body -%}
+    <h1>VoiceMail</h1>
+
+    <table class="record_properties">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ entity.id }}</td>
+            </tr>
+            <tr>
+                <th>Uniqueid</th>
+                <td>{{ entity.uniqueId }}</td>
+            </tr>
+            <tr>
+                <th>Customerid</th>
+                <td>{{ entity.customerId }}</td>
+            </tr>
+            <tr>
+                <th>Context</th>
+                <td>{{ entity.context }}</td>
+            </tr>
+            <tr>
+                <th>Mailbox</th>
+                <td>{{ entity.mailbox }}</td>
+            </tr>
+            <tr>
+                <th>Password</th>
+                <td>{{ entity.password }}</td>
+            </tr>
+            <tr>
+                <th>Fullname</th>
+                <td>{{ entity.fullname }}</td>
+            </tr>
+            <tr>
+                <th>Email</th>
+                <td>{{ entity.email }}</td>
+            </tr>
+            <tr>
+                <th>Pager</th>
+                <td>{{ entity.pager }}</td>
+            </tr>
+            <tr>
+                <th>Tz</th>
+                <td>{{ entity.tz }}</td>
+            </tr>
+            <tr>
+                <th>Attach</th>
+                <td>{{ entity.attach }}</td>
+            </tr>
+            <tr>
+                <th>Saycid</th>
+                <td>{{ entity.saycid }}</td>
+            </tr>
+            <tr>
+                <th>Dialout</th>
+                <td>{{ entity.dialout }}</td>
+            </tr>
+            <tr>
+                <th>Callback</th>
+                <td>{{ entity.callback }}</td>
+            </tr>
+            <tr>
+                <th>Review</th>
+                <td>{{ entity.review }}</td>
+            </tr>
+            <tr>
+                <th>Operator</th>
+                <td>{{ entity.operator }}</td>
+            </tr>
+            <tr>
+                <th>Envelope</th>
+                <td>{{ entity.envelope }}</td>
+            </tr>
+            <tr>
+                <th>Sayduration</th>
+                <td>{{ entity.sayduration }}</td>
+            </tr>
+            <tr>
+                <th>Saydurationm</th>
+                <td>{{ entity.saydurationm }}</td>
+            </tr>
+            <tr>
+                <th>Sendvoicemail</th>
+                <td>{{ entity.sendvoicemail }}</td>
+            </tr>
+            <tr>
+                <th>Deletemessage</th>
+                <td>{{ entity.deleteMessage }}</td>
+            </tr>
+            <tr>
+                <th>Nextaftercmd</th>
+                <td>{{ entity.nextaftercmd }}</td>
+            </tr>
+            <tr>
+                <th>Forcename</th>
+                <td>{{ entity.forcename }}</td>
+            </tr>
+            <tr>
+                <th>Forcegreetings</th>
+                <td>{{ entity.forcegreetings }}</td>
+            </tr>
+            <tr>
+                <th>Hidefromdir</th>
+                <td>{{ entity.hidefromdir }}</td>
+            </tr>
+            <tr>
+                <th>Stamp</th>
+                <td>{{ entity.stamp|date('Y-m-d H:i:s') }}</td>
+            </tr>
+            <tr>
+                <th>Attachfmt</th>
+                <td>{{ entity.attachfmt }}</td>
+            </tr>
+            <tr>
+                <th>Searchcontexts</th>
+                <td>{{ entity.searchcontexts }}</td>
+            </tr>
+            <tr>
+                <th>Cidinternalcontexts</th>
+                <td>{{ entity.cidinternalcontexts }}</td>
+            </tr>
+            <tr>
+                <th>Exitcontext</th>
+                <td>{{ entity.exitcontext }}</td>
+            </tr>
+            <tr>
+                <th>Volgain</th>
+                <td>{{ entity.volgain }}</td>
+            </tr>
+            <tr>
+                <th>Tempgreetwarn</th>
+                <td>{{ entity.tempgreetwarn }}</td>
+            </tr>
+            <tr>
+                <th>Messagewrap</th>
+                <td>{{ entity.messagewrap }}</td>
+            </tr>
+            <tr>
+                <th>Minpassword</th>
+                <td>{{ entity.minpassword }}</td>
+            </tr>
+            <tr>
+                <th>Vmpassword</th>
+                <td>{{ entity.vmPassword }}</td>
+            </tr>
+            <tr>
+                <th>Vmnewpassword</th>
+                <td>{{ entity.vmNewpassword }}</td>
+            </tr>
+            <tr>
+                <th>Vmpasschanged</th>
+                <td>{{ entity.vmPasschanged }}</td>
+            </tr>
+            <tr>
+                <th>Vmreenterpassword</th>
+                <td>{{ entity.vmReenterpassword }}</td>
+            </tr>
+            <tr>
+                <th>Vmmismatch</th>
+                <td>{{ entity.vmMismatch }}</td>
+            </tr>
+            <tr>
+                <th>Vminvalidpassword</th>
+                <td>{{ entity.vmInvalidPassword }}</td>
+            </tr>
+            <tr>
+                <th>Vmplstryagain</th>
+                <td>{{ entity.vmPlsTryAgain }}</td>
+            </tr>
+            <tr>
+                <th>Listencontrolforwardkey</th>
+                <td>{{ entity.listenControlForwardKey }}</td>
+            </tr>
+            <tr>
+                <th>Listencontrolreversekey</th>
+                <td>{{ entity.listenControlReverseKey }}</td>
+            </tr>
+            <tr>
+                <th>Listencontrolpausekey</th>
+                <td>{{ entity.listenControlPauseKey }}</td>
+            </tr>
+            <tr>
+                <th>Listencontrolrestartkey</th>
+                <td>{{ entity.listenControlRestartKey }}</td>
+            </tr>
+            <tr>
+                <th>Listencontrolstopkey</th>
+                <td>{{ entity.listenControlStopKey }}</td>
+            </tr>
+            <tr>
+                <th>Backupdeleted</th>
+                <td>{{ entity.backupdeleted }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+        <ul class="record_actions">
+    <li>
+        <a href="{{ path('voicemail') }}">
+            Back to the list
+        </a>
+    </li>
+    <li>
+        <a href="{{ path('voicemail_edit', { 'id': entity.id }) }}">
+            Edit
+        </a>
+    </li>
+    <li>{{ form(delete_form) }}</li>
+</ul>
+{% endblock %}

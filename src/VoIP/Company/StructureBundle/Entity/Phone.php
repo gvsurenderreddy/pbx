@@ -65,22 +65,16 @@ class Phone
     private $hash;
 	
 	/**
-     * @ORM\ManyToOne(targetEntity="\VoIP\Company\StructureBundle\Entity\Office", inversedBy="phones")
-	 * @ORM\JoinColumn(name="office_id", referencedColumnName="id", onDelete="CASCADE")
+     * @ORM\ManyToOne(targetEntity="\VoIP\Company\StructureBundle\Entity\Company", inversedBy="phones")
+	 * @ORM\JoinColumn(name="company_id", referencedColumnName="id", onDelete="CASCADE")
      */
-    private $office;
+    private $company;
 	
 	/**
      * @ORM\ManyToOne(targetEntity="\VoIP\PBX\RealTimeBundle\Entity\SipPeer", inversedBy="phones")
 	 * @ORM\JoinColumn(name="ast_sippeer_id", referencedColumnName="id", onDelete="CASCADE")
      */
     private $astPeer;
-	
-	/**
-     * @ORM\ManyToOne(targetEntity="\VoIP\PBX\RealTimeBundle\Entity\Extension", inversedBy="phones")
-	 * @ORM\JoinColumn(name="ast_extension_id", referencedColumnName="id", onDelete="CASCADE")
-     */
-    private $astExtension;
 	
 	/**
 	 * @ORM\PrePersist
@@ -233,29 +227,6 @@ class Phone
     }
 
     /**
-     * Set office
-     *
-     * @param \VoIP\Company\StructureBundle\Entity\Office $office
-     * @return Phone
-     */
-    public function setOffice(\VoIP\Company\StructureBundle\Entity\Office $office = null)
-    {
-        $this->office = $office;
-
-        return $this;
-    }
-
-    /**
-     * Get office
-     *
-     * @return \VoIP\Company\StructureBundle\Entity\Office 
-     */
-    public function getOffice()
-    {
-        return $this->office;
-    }
-
-    /**
      * Set hash
      *
      * @param string $hash
@@ -302,25 +273,25 @@ class Phone
     }
 
     /**
-     * Set astExtension
+     * Set company
      *
-     * @param \VoIP\PBX\RealTimeBundle\Entity\Extension $astExtension
+     * @param \VoIP\Company\StructureBundle\Entity\Company $company
      * @return Phone
      */
-    public function setAstExtension(\VoIP\PBX\RealTimeBundle\Entity\Extension $astExtension = null)
+    public function setCompany(\VoIP\Company\StructureBundle\Entity\Company $company = null)
     {
-        $this->astExtension = $astExtension;
+        $this->company = $company;
 
         return $this;
     }
 
     /**
-     * Get astExtension
+     * Get company
      *
-     * @return \VoIP\PBX\RealTimeBundle\Entity\Extension 
+     * @return \VoIP\Company\StructureBundle\Entity\Company 
      */
-    public function getAstExtension()
+    public function getCompany()
     {
-        return $this->astExtension;
+        return $this->company;
     }
 }

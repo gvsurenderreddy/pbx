@@ -1,0 +1,94 @@
+{% extends "VoIPUIBasicBundle::layout.html.twig" %}
+{% block title %}48 | Edit your subscription{% endblock %}
+{% block container %}
+<div class="page-header">
+	<h1>Edit your subscription</h1>
+</div>
+<div class="row">
+	<div class="col-md-offset-3 col-md-6">
+		<form class="form-horizontal" role="form" action="{{ path('ui_subscription_edit', {'hash': subscription.hash}) }}" method="POST">
+			<div class="form-group">
+				<label for="name" class="col-sm-2 control-label">Name</label>
+				<div class="col-sm-10">
+					<input type="text" class="form-control" id="name" name="name" value="{{ subscription.name }}" required>
+				</div>
+			</div>
+			<div class="form-group">
+				<label for="type" class="col-sm-2 control-label">Type</label>
+				<div class="col-sm-10">
+					<select type="text" class="form-control" id="type" name="type" required>
+						<option value="hoiio" {% if subscription.type == 'hoiio' %}selected="selected"{% endif %}>Hoiio.com</option>
+					</select>
+				</div>
+			</div>
+			<div class="form-group">
+				<label for="number" class="col-sm-2 control-label">Number</label>
+				<div class="col-sm-10">
+					<input type="text" class="form-control" id="number" name="number" placeholder="+6512344321" value="{{ subscription.number }}" required>
+				</div>
+			</div>
+			<div class="form-group">
+				<label for="username" class="col-sm-2 control-label">Username</label>
+				<div class="col-sm-10">
+					<input class="form-control" id="username" name="username" value="{{ subscription.username }}" required>
+				</div>
+			</div>
+			<div class="form-group">
+				<label for="secret" class="col-sm-2 control-label">Secret</label>
+				<div class="col-sm-10">
+					<input type="password" class="form-control" id="secret" name="secret" value="{{ subscription.secret }}" required>
+				</div>
+			</div>
+			<div class="form-group">
+				<label for="host" class="col-sm-2 control-label">Host</label>
+				<div class="col-sm-10">
+					<input type="password" class="form-control" id="host" name="host" placeholder="sip.my-provider.com" value="{{ subscription.host }}" required>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="col-sm-offset-2 col-sm-10">
+					<div class="checkbox">
+						<label>
+							<input type="checkbox" name="receive" {% if subscription.receivecall %}checked{% endif %}> Receive calls
+						</label>
+					</div>
+				</div>
+			</div>
+			<div class="form-group">
+				<label for="prefix" class="col-sm-2 control-label">Prefix</label>
+				<div class="col-sm-10">
+					<select class="form-control" id="type" name="prefix" required>
+						<option value="0" {% if subscription.prefix == '0' %}selected="selected"{% endif %}>Do not emit phone calls</option>
+						<option value="1" {% if subscription.prefix == '1' %}selected="selected"{% endif %}>1</option>
+						<option value="2" {% if subscription.prefix == '2' %}selected="selected"{% endif %}>2</option>
+						<option value="3" {% if subscription.prefix == '3' %}selected="selected"{% endif %}>3</option>
+						<option value="4" {% if subscription.prefix == '4' %}selected="selected"{% endif %}>4</option>
+						<option value="5" {% if subscription.prefix == '5' %}selected="selected"{% endif %}>5</option>
+						<option value="6" {% if subscription.prefix == '6' %}selected="selected"{% endif %}>6</option>
+						<option value="7" {% if subscription.prefix == '7' %}selected="selected"{% endif %}>7</option>
+						<option value="8" {% if subscription.prefix == '8' %}selected="selected"{% endif %}>8</option>
+						<option value="9" {% if subscription.prefix == '9' %}selected="selected"{% endif %}>9</option>
+					</select>
+				</div>
+			</div>
+			<div class="form-group">
+				<label for="countries" class="col-sm-2 control-label">Countries</label>
+				<div class="col-sm-10">
+					<select class="form-control" id="countries" name="countries[]" multiple>
+						{% for country in countries %}
+						<option value="{{ country.id }}" {% if country in subscription.countries %}selected="selected"{% endif %}>{{ country.name }}</option>
+						{% endfor %}
+					</select>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="col-sm-offset-2 col-sm-10">
+					<button type="submit" class="btn btn-primary btn-block">Submit</button>
+					<a href="{{ path('ui_company', {'hash': subscription.company.hash}) }}" class="btn btn-default btn-block">Cancel</a>
+				</div>
+			</div>
+		</form>
+	</div>
+</div>
+
+{% endblock container %}

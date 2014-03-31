@@ -1,84 +1,93 @@
-{% extends "::base.html.twig" %}
-{% block body %}
-<form class="form-horizontal" role="form" action="{{ path('ui_company_newsubscription', {'hash': company.hash}) }}" method="POST">
-	<div class="form-group">
-		<label for="name" class="col-sm-2 control-label">Name</label>
-		<div class="col-sm-10">
-			<input type="text" class="form-control" id="name" name="name" required>
-		</div>
-	</div>
-	<div class="form-group">
-		<label for="type" class="col-sm-2 control-label">Type</label>
-		<div class="col-sm-10">
-			<select type="text" class="form-control" id="type" name="type" required>
-				<option value="hoiio">Hoiio.com</option>
-			</select>
-		</div>
-	</div>
-	<div class="form-group">
-		<label for="number" class="col-sm-2 control-label">Number</label>
-		<div class="col-sm-10">
-			<input type="text" class="form-control" id="number" name="number" placeholder="+6512344321" required>
-		</div>
-	</div>
-	<div class="form-group">
-		<label for="username" class="col-sm-2 control-label">Username</label>
-		<div class="col-sm-10">
-			<input class="form-control" id="username" name="username" required>
-		</div>
-	</div>
-	<div class="form-group">
-		<label for="secret" class="col-sm-2 control-label">Secret</label>
-		<div class="col-sm-10">
-			<input type="password" class="form-control" id="secret" name="secret" required>
-		</div>
-	</div>
-	<div class="form-group">
-		<label for="host" class="col-sm-2 control-label">Host</label>
-		<div class="col-sm-10">
-			<input type="password" class="form-control" id="host" name="host" placeholder="sip.my-provider.com" required>
-		</div>
-	</div>
-	<div class="form-group">
-		<div class="col-sm-offset-2 col-sm-10">
-			<div class="checkbox">
-				<label>
-					<input type="checkbox" name="receive"> Receive calls
-				</label>
+{% extends "VoIPUIBasicBundle::layout.html.twig" %}
+{% block title %}48 | New phone{% endblock %}
+{% block container %}
+<div class="page-header">
+	<h1>New subscription</h1>
+</div>
+<div class="row">
+	<div class="col-md-offset-3 col-md-6">
+		<form class="form-horizontal" role="form" action="{{ path('ui_company_newsubscription', {'hash': company.hash}) }}" method="POST">
+			<div class="form-group">
+				<label for="name" class="col-sm-2 control-label">Name</label>
+				<div class="col-sm-10">
+					<input type="text" class="form-control" id="name" name="name" required>
+				</div>
 			</div>
-		</div>
+			<div class="form-group">
+				<label for="type" class="col-sm-2 control-label">Type</label>
+				<div class="col-sm-10">
+					<select type="text" class="form-control" id="type" name="type" required>
+						<option value="hoiio">Hoiio.com</option>
+					</select>
+				</div>
+			</div>
+			<div class="form-group">
+				<label for="number" class="col-sm-2 control-label">Number</label>
+				<div class="col-sm-10">
+					<input type="text" class="form-control" id="number" name="number" placeholder="+6512344321" required>
+				</div>
+			</div>
+			<div class="form-group">
+				<label for="username" class="col-sm-2 control-label">Username</label>
+				<div class="col-sm-10">
+					<input class="form-control" id="username" name="username" required>
+				</div>
+			</div>
+			<div class="form-group">
+				<label for="secret" class="col-sm-2 control-label">Secret</label>
+				<div class="col-sm-10">
+					<input type="password" class="form-control" id="secret" name="secret" required>
+				</div>
+			</div>
+			<div class="form-group">
+				<label for="host" class="col-sm-2 control-label">Host</label>
+				<div class="col-sm-10">
+					<input type="password" class="form-control" id="host" name="host" placeholder="sip.my-provider.com" required>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="col-sm-offset-2 col-sm-10">
+					<div class="checkbox">
+						<label>
+							<input type="checkbox" name="receive"> Receive calls
+						</label>
+					</div>
+				</div>
+			</div>
+			<div class="form-group">
+				<label for="prefix" class="col-sm-2 control-label">Prefix</label>
+				<div class="col-sm-10">
+					<select class="form-control" id="type" name="prefix" required>
+						<option value="0">Do not emit phone calls</option>
+						<option value="1">1</option>
+						<option value="2">2</option>
+						<option value="3">3</option>
+						<option value="4">4</option>
+						<option value="5">5</option>
+						<option value="6">6</option>
+						<option value="7">7</option>
+						<option value="8">8</option>
+						<option value="9">9</option>
+					</select>
+				</div>
+			</div>
+			<div class="form-group">
+				<label for="countries" class="col-sm-2 control-label">Countries</label>
+				<div class="col-sm-10">
+					<select class="form-control" id="countries" name="countries[]" multiple>
+						{% for country in countries %}
+						<option value="{{ country.id }}">{{ country.name }}</option>
+						{% endfor %}
+					</select>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="col-sm-offset-2 col-sm-10">
+					<button type="submit" class="btn btn-primary btn-block">Submit</button>
+					<a href="{{ path('ui_company', {'hash': company.hash}) }}" class="btn btn-default btn-block">Cancel</a>
+				</div>
+			</div>
+		</form>
 	</div>
-	<div class="form-group">
-		<label for="prefix" class="col-sm-2 control-label">Prefix</label>
-		<div class="col-sm-10">
-			<select class="form-control" id="type" name="prefix" required>
-				<option value="0">Do not emit phone calls</option>
-				<option value="1">1</option>
-				<option value="2">2</option>
-				<option value="3">3</option>
-				<option value="4">4</option>
-				<option value="5">5</option>
-				<option value="6">6</option>
-				<option value="7">7</option>
-				<option value="8">8</option>
-				<option value="9">9</option>
-			</select>
-		</div>
-	</div>
-	<div class="form-group">
-		<label for="countries" class="col-sm-2 control-label">Countries</label>
-		<div class="col-sm-10">
-			<select class="form-control" id="countries" name="countries[]" multiple>
-				{% for country in countries %}
-				<option value="{{ country.id }}">{{ country.name }}</option>
-				{% endfor %}
-			</select>
-		</div>
-	</div>
-	<div class="form-group">
-		<div class="col-sm-offset-2 col-sm-10">
-			<button type="submit" class="btn btn-default">Submit</button>
-		</div>
-	</div>
-</form>
-{% endblock body %}
+</div>
+{% endblock container %}

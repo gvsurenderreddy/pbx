@@ -1,28 +1,75 @@
 {% extends "VoIPUIBasicBundle::layout.html.twig" %}
+{% block title %}48 | {{ company.name }}{% endblock %}
 {% block container %}
 <div class="page-header">
-	<h1>{{ company.name }} <small>{{ company.hash }} <a href="{{ path('ui_company_delete', {'hash': company.hash}) }}">delete</a></small></h1>
+	<h1>{{ company.name }}</h1>
 </div>
-<ul>
-	{% for office in company.offices %}
-	<li>
-		{{ office.name}} <a href="{{ path('ui_office_delete', {'hash': office.hash}) }}">delete</a>
-		<ul>
-			{% for phone in office.phones %}
-			<li>{{ phone.extension }} ({{ phone.name }}) <a href="{{ path('ui_phone_delete', {'hash': phone.hash}) }}">delete</a></li>
-			{% endfor %}
-			<li><a href="{{ path('ui_office_newphone', {'hash': office.hash}) }}">New phone to {{ office.name }}</a></li>
-		</ul>
-	</li>
-	{% endfor %}
-	<li><a href="{{ path('ui_company_newoffice', {'hash': company.hash}) }}">New office</a></li>
-</ul>
-<ul>
-	{% for subscription in company.subscriptions %}
-	<li>
-		{{ subscription.name}} <a href="{{ path('ui_subscription_delete', {'hash': subscription.hash}) }}">delete</a>
-	</li>
-	{% endfor %}
-	<li><a href="{{ path('ui_company_newsubscription', {'hash': company.hash}) }}">New subscription</a></li>
-</ul>
+<div class="row">
+	<div class="col-md-12">
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<h3 class="panel-title">Realtime</h3>
+			</div>
+			<div class="panel-body">
+				Panel content
+			</div>
+		</div>	
+	</div>
+</div>
+<div class="row">
+	<div class="col-md-6">
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<div class="pull-right"><a href="{{ path('ui_company_newphone', {'hash': company.hash}) }}"><span class="glyphicon glyphicon-plus"></span></a></div>
+				<h3 class="panel-title">Phones</h3>
+			</div>
+			<table class="table">
+				<tr>
+					<th>Name</th>
+					<th>Ext.</th>
+					<th></th>
+				</tr>
+				{% for phone in company.phones %}
+				<tr>
+					<td>{{ phone.name }}</td>
+					<td>{{ phone.extension }}</td>
+					<td>
+						<a href="{{ path('ui_phone_edit', {'hash': phone.hash}) }}"><span class="glyphicon glyphicon-pencil"></span></a>
+						<a href="{{ path('ui_phone_delete', {'hash': phone.hash}) }}"><span class="glyphicon glyphicon-trash"></span></a>
+						<a href="#" class="l-mod" data-url="{{ path('ui_phone_credentials', {'hash': phone.hash}) }}"><span class="glyphicon glyphicon-phone-alt"></span></a>
+					</td>
+				</tr>
+				{% endfor %}
+			</table>
+		</div>	
+	</div>
+	<div class="col-md-6">
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<div class="pull-right"><a href="{{ path('ui_company_newsubscription', {'hash': company.hash}) }}"><span class="glyphicon glyphicon-plus"></span></a></div>
+				<h3 class="panel-title">Subscription</h3>
+			</div>
+			<table class="table">
+				<tr>
+					<th>Name</th>
+					<th></th>
+					<th colspan="3">Dialplan</th>
+				</tr>
+				{% for subscription in company.subscriptions %}
+				<tr>
+					<td rowspan="{{ 1 + subscription.depth }}">{{ subscription.name }}</td>
+					<td rowspan="{{ 1 + subscription.depth }}">
+						<a href="{{ path('ui_subscription_edit', {'hash': subscription.hash}) }}"><span class="glyphicon glyphicon-pencil"></span></a>
+						<a href="{{ path('ui_subscription_delete', {'hash': subscription.hash}) }}"><span class="glyphicon glyphicon-trash"></span></a>
+					</td>
+					<td colspan="3">
+						<a href="{{ path('ui_subscription_adddialplan', {'hash': subscription.hash}) }}">Add a first item</a>
+					</td>
+				</tr>
+				{% if subscription.dialplanfirstitem %}{{ include('VoIPUIBasicBundle:DialPlanItem:show.html.twig',{ 'item': subscription.dialplanfirstitem }) }}{% endif %}
+				{% endfor %}
+			</table>
+		</div>	
+	</div>
+</div>
 {% endblock container %}

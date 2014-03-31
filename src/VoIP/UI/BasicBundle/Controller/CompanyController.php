@@ -7,7 +7,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use VoIP\Company\StructureBundle\Entity\Company;
-use VoIP\Company\StructureBundle\Entity\Office;
+use VoIP\Company\StructureBundle\Entity\Phone;
 use VoIP\Company\SubscriptionsBundle\Entity\Subscription;
 use VoIP\PBX\RealTimeBundle\Extra\Sync;
 
@@ -38,18 +38,18 @@ class CompanyController extends Controller
     }
 	
     /**
-     * @Route("/{hash}/new-office", name="ui_company_newoffice")
+     * @Route("/{hash}/new-phone", name="ui_company_newphone")
      * @Template()
 	 * @Method("GET")
      */
-    public function newOfficeAction($hash)
+    public function newPhoneAction($hash)
     {
 		$user = $this->getUser();
 		$em = $this->getDoctrine()->getManager();
 		$company = $em->getRepository('VoIPCompanyStructureBundle:Company')->findOneBy(array(
 			'hash' => $hash
 		));
-        if (!$company) throw $this->createNotFoundException('Unable to find Company entity.');
+        if (!$company) throw $this->createNotFoundException('Unable to find Office entity.');
 		if (!$user->hasCompany($company)) throw $this->createNotFoundException('No authorization.');
         return array(
 			'company' => $company
@@ -57,28 +57,48 @@ class CompanyController extends Controller
     }
 	
     /**
-     * @Route("/{hash}/new-office")
+     * @Route("/{hash}/new-phone")
      * @Template()
 	 * @Method("POST")
      */
-    public function createOfficeAction($hash)
+    public function createPhoneAction($hash)
     {
 		$user = $this->getUser();
 		$em = $this->getDoctrine()->getManager();
 		$company = $em->getRepository('VoIPCompanyStructureBundle:Company')->findOneBy(array(
 			'hash' => $hash
 		));
-        if (!$company) throw $this->createNotFoundException('Unable to find Company entity.');
+        if (!$company) throw $this->createNotFoundException('Unable to find Office entity.');
 		if (!$user->hasCompany($company)) throw $this->createNotFoundException('No authorization.');
 		
 		$request = $this->getRequest();
+		$extension = $request->get('extension');
 		$name = $request->get('name');
+		$type = $request->get('type');
 		
-		$office = new Office();
-		$office->setName($name);
-		$office->setCompany($company);
+		if ($extension < 100 || $extension > 999) {
+			throw $this->createNotFoundException('Extension range');
+		}
+		foreach ($company->getPhones() as $phone) {
+			if ($phone->getExtension() == $extension) throw $this->createNotFoundException('Not unique extension.');
+		}
 		
-		$em->persist($office);
+		$phone = new Phone();
+		$phone->setName($name);
+		$phone->setExtension($extension);
+		$phone->setType($type);
+		$phone->setCompany($company);
+		
+		$em->persist($phone);
+		
+		$sync = new Sync();
+		
+		$em->flush();
+		
+		$astPeer = $sync->phoneToPeer($phone);
+		$em->persist($astPeer);
+		
+		$phone->setAstPeer($astPeer);
 		
 		$em->flush();
 		
@@ -184,12 +204,9 @@ class CompanyController extends Controller
         if (!$company) throw $this->createNotFoundException('Unable to find Company entity.');
 		if (!$user->hasCompany($company)) throw $this->createNotFoundException('No authorization.');
 		
-		foreach ($company->getOffices() as $office) {
-			foreach ($office->getPhones() as $phone) {
-				if ($phone->getAstPeer()) $em->remove($phone->getAstPeer());
-				if ($phone->getAstExtension()) $em->remove($phone->getAstExtension());
-				$em->remove($phone);
-			}
+		foreach ($company->getPhones() as $phone) {
+			if ($phone->getAstPeer()) $em->remove($phone->getAstPeer());
+			$em->remove($phone);
 			$em->remove($office);
 		}
 		foreach ($company->getSubscriptions() as $subscription) {
