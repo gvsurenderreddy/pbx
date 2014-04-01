@@ -75,29 +75,6 @@ class VoiceMail
     }
 
     /**
-     * Set customerId
-     *
-     * @param string $customerId
-     * @return VoiceMail
-     */
-    public function setCustomerId($customerId)
-    {
-        $this->customerId = $customerId;
-
-        return $this;
-    }
-
-    /**
-     * Get customerId
-     *
-     * @return string 
-     */
-    public function getCustomerId()
-    {
-        return $this->customerId;
-    }
-
-    /**
      * Set context
      *
      * @param string $context
