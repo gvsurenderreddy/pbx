@@ -19,7 +19,6 @@
         {% for entity in entities %}
             <tr>
                 <td><a href="{{ path('voicemail_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
-                <td>{{ entity.customerId }}</td>
                 <td>{{ entity.context }}</td>
                 <td>{{ entity.mailbox }}</td>
                 <td>{{ entity.password }}</td>
