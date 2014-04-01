@@ -9,3 +9,4 @@
 /vendor/
 /bin/
 /composer.phar
+/nodejs/node_modules
