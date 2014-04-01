@@ -7,52 +7,11 @@
         <thead>
             <tr>
                 <th>Id</th>
-                <th>Uniqueid</th>
-                <th>Customerid</th>
                 <th>Context</th>
                 <th>Mailbox</th>
                 <th>Password</th>
                 <th>Fullname</th>
                 <th>Email</th>
-                <th>Pager</th>
-                <th>Tz</th>
-                <th>Attach</th>
-                <th>Saycid</th>
-                <th>Dialout</th>
-                <th>Callback</th>
-                <th>Review</th>
-                <th>Operator</th>
-                <th>Envelope</th>
-                <th>Sayduration</th>
-                <th>Saydurationm</th>
-                <th>Sendvoicemail</th>
-                <th>Deletemessage</th>
-                <th>Nextaftercmd</th>
-                <th>Forcename</th>
-                <th>Forcegreetings</th>
-                <th>Hidefromdir</th>
-                <th>Stamp</th>
-                <th>Attachfmt</th>
-                <th>Searchcontexts</th>
-                <th>Cidinternalcontexts</th>
-                <th>Exitcontext</th>
-                <th>Volgain</th>
-                <th>Tempgreetwarn</th>
-                <th>Messagewrap</th>
-                <th>Minpassword</th>
-                <th>Vmpassword</th>
-                <th>Vmnewpassword</th>
-                <th>Vmpasschanged</th>
-                <th>Vmreenterpassword</th>
-                <th>Vmmismatch</th>
-                <th>Vminvalidpassword</th>
-                <th>Vmplstryagain</th>
-                <th>Listencontrolforwardkey</th>
-                <th>Listencontrolreversekey</th>
-                <th>Listencontrolpausekey</th>
-                <th>Listencontrolrestartkey</th>
-                <th>Listencontrolstopkey</th>
-                <th>Backupdeleted</th>
                 <th>Actions</th>
             </tr>
         </thead>
@@ -60,52 +19,12 @@
         {% for entity in entities %}
             <tr>
                 <td><a href="{{ path('voicemail_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
-                <td>{{ entity.uniqueId }}</td>
                 <td>{{ entity.customerId }}</td>
                 <td>{{ entity.context }}</td>
                 <td>{{ entity.mailbox }}</td>
                 <td>{{ entity.password }}</td>
                 <td>{{ entity.fullname }}</td>
                 <td>{{ entity.email }}</td>
-                <td>{{ entity.pager }}</td>
-                <td>{{ entity.tz }}</td>
-                <td>{{ entity.attach }}</td>
-                <td>{{ entity.saycid }}</td>
-                <td>{{ entity.dialout }}</td>
-                <td>{{ entity.callback }}</td>
-                <td>{{ entity.review }}</td>
-                <td>{{ entity.operator }}</td>
-                <td>{{ entity.envelope }}</td>
-                <td>{{ entity.sayduration }}</td>
-                <td>{{ entity.saydurationm }}</td>
-                <td>{{ entity.sendvoicemail }}</td>
-                <td>{{ entity.deleteMessage }}</td>
-                <td>{{ entity.nextaftercmd }}</td>
-                <td>{{ entity.forcename }}</td>
-                <td>{{ entity.forcegreetings }}</td>
-                <td>{{ entity.hidefromdir }}</td>
-                <td>{% if entity.stamp %}{{ entity.stamp|date('Y-m-d H:i:s') }}{% endif %}</td>
-                <td>{{ entity.attachfmt }}</td>
-                <td>{{ entity.searchcontexts }}</td>
-                <td>{{ entity.cidinternalcontexts }}</td>
-                <td>{{ entity.exitcontext }}</td>
-                <td>{{ entity.volgain }}</td>
-                <td>{{ entity.tempgreetwarn }}</td>
-                <td>{{ entity.messagewrap }}</td>
-                <td>{{ entity.minpassword }}</td>
-                <td>{{ entity.vmPassword }}</td>
-                <td>{{ entity.vmNewpassword }}</td>
-                <td>{{ entity.vmPasschanged }}</td>
-                <td>{{ entity.vmReenterpassword }}</td>
-                <td>{{ entity.vmMismatch }}</td>
-                <td>{{ entity.vmInvalidPassword }}</td>
-                <td>{{ entity.vmPlsTryAgain }}</td>
-                <td>{{ entity.listenControlForwardKey }}</td>
-                <td>{{ entity.listenControlReverseKey }}</td>
-                <td>{{ entity.listenControlPauseKey }}</td>
-                <td>{{ entity.listenControlRestartKey }}</td>
-                <td>{{ entity.listenControlStopKey }}</td>
-                <td>{{ entity.backupdeleted }}</td>
                 <td>
                 <ul>
                     <li>

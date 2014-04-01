@@ -6,8 +6,8 @@ var wav = require('wav');
 	console.log(files);
 });*/
 
-var input = fs.createReadStream('./folder/msg0026.WAV');
-var output = fs.createWriteStream('./folder/msg0026.mp3');
+var input = fs.createReadStream('./folder/beep.wav');
+var output = fs.createWriteStream('./folder/beep.mp3');
 
 var reader = new wav.Reader();
 reader.on('format', onFormat);
