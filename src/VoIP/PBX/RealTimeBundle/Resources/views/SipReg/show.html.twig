@@ -1,0 +1,68 @@
+{% extends '::base.html.twig' %}
+
+{% block body -%}
+    <h1>SipReg</h1>
+
+    <table class="record_properties">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ entity.id }}</td>
+            </tr>
+            <tr>
+                <th>Peer</th>
+                <td>{{ entity.peer }}</td>
+            </tr>
+            <tr>
+                <th>Transport</th>
+                <td>{{ entity.transport }}</td>
+            </tr>
+            <tr>
+                <th>User</th>
+                <td>{{ entity.user }}</td>
+            </tr>
+            <tr>
+                <th>Domain</th>
+                <td>{{ entity.domain }}</td>
+            </tr>
+            <tr>
+                <th>Secret</th>
+                <td>{{ entity.secret }}</td>
+            </tr>
+            <tr>
+                <th>Authuser</th>
+                <td>{{ entity.authuser }}</td>
+            </tr>
+            <tr>
+                <th>Host</th>
+                <td>{{ entity.host }}</td>
+            </tr>
+            <tr>
+                <th>Port</th>
+                <td>{{ entity.port }}</td>
+            </tr>
+            <tr>
+                <th>Extension</th>
+                <td>{{ entity.extension }}</td>
+            </tr>
+            <tr>
+                <th>Expiry</th>
+                <td>{{ entity.expiry }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+        <ul class="record_actions">
+    <li>
+        <a href="{{ path('sipreg') }}">
+            Back to the list
+        </a>
+    </li>
+    <li>
+        <a href="{{ path('sipreg_edit', { 'id': entity.id }) }}">
+            Edit
+        </a>
+    </li>
+    <li>{{ form(delete_form) }}</li>
+</ul>
+{% endblock %}

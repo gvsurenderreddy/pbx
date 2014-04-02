@@ -7,21 +7,21 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-use VoIP\PBX\RealTimeBundle\Entity\VoiceMessage;
-use VoIP\PBX\RealTimeBundle\Form\VoiceMessageType;
+use VoIP\PBX\RealTimeBundle\Entity\SipReg;
+use VoIP\PBX\RealTimeBundle\Form\SipRegType;
 
 /**
- * VoiceMessage controller.
+ * SipReg controller.
  *
- * @Route("/admin/voicemessage")
+ * @Route("/admin/sipreg")
  */
-class VoiceMessageController extends Controller
+class SipRegController extends Controller
 {
 
     /**
-     * Lists all VoiceMessage entities.
+     * Lists all SipReg entities.
      *
-     * @Route("/", name="voicemessage")
+     * @Route("/", name="sipreg")
      * @Method("GET")
      * @Template()
      */
@@ -29,22 +29,22 @@ class VoiceMessageController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entities = $em->getRepository('VoIPPBXRealTimeBundle:VoiceMessage')->findAll();
+        $entities = $em->getRepository('VoIPPBXRealTimeBundle:SipReg')->findAll();
 
         return array(
             'entities' => $entities,
         );
     }
     /**
-     * Creates a new VoiceMessage entity.
+     * Creates a new SipReg entity.
      *
-     * @Route("/", name="voicemessage_create")
+     * @Route("/", name="sipreg_create")
      * @Method("POST")
-     * @Template("VoIPPBXRealTimeBundle:VoiceMessage:new.html.twig")
+     * @Template("VoIPPBXRealTimeBundle:SipReg:new.html.twig")
      */
     public function createAction(Request $request)
     {
-        $entity = new VoiceMessage();
+        $entity = new SipReg();
         $form = $this->createCreateForm($entity);
         $form->handleRequest($request);
 
@@ -53,7 +53,7 @@ class VoiceMessageController extends Controller
             $em->persist($entity);
             $em->flush();
 
-            return $this->redirect($this->generateUrl('voicemessage_show', array('id' => $entity->getId())));
+            return $this->redirect($this->generateUrl('sipreg_show', array('id' => $entity->getId())));
         }
 
         return array(
@@ -63,16 +63,16 @@ class VoiceMessageController extends Controller
     }
 
     /**
-    * Creates a form to create a VoiceMessage entity.
+    * Creates a form to create a SipReg entity.
     *
-    * @param VoiceMessage $entity The entity
+    * @param SipReg $entity The entity
     *
     * @return \Symfony\Component\Form\Form The form
     */
-    private function createCreateForm(VoiceMessage $entity)
+    private function createCreateForm(SipReg $entity)
     {
-        $form = $this->createForm(new VoiceMessageType(), $entity, array(
-            'action' => $this->generateUrl('voicemessage_create'),
+        $form = $this->createForm(new SipRegType(), $entity, array(
+            'action' => $this->generateUrl('sipreg_create'),
             'method' => 'POST',
         ));
 
@@ -82,15 +82,15 @@ class VoiceMessageController extends Controller
     }
 
     /**
-     * Displays a form to create a new VoiceMessage entity.
+     * Displays a form to create a new SipReg entity.
      *
-     * @Route("/new", name="voicemessage_new")
+     * @Route("/new", name="sipreg_new")
      * @Method("GET")
      * @Template()
      */
     public function newAction()
     {
-        $entity = new VoiceMessage();
+        $entity = new SipReg();
         $form   = $this->createCreateForm($entity);
 
         return array(
@@ -100,9 +100,9 @@ class VoiceMessageController extends Controller
     }
 
     /**
-     * Finds and displays a VoiceMessage entity.
+     * Finds and displays a SipReg entity.
      *
-     * @Route("/{id}", name="voicemessage_show")
+     * @Route("/{id}", name="sipreg_show")
      * @Method("GET")
      * @Template()
      */
@@ -110,10 +110,10 @@ class VoiceMessageController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entity = $em->getRepository('VoIPPBXRealTimeBundle:VoiceMessage')->find($id);
+        $entity = $em->getRepository('VoIPPBXRealTimeBundle:SipReg')->find($id);
 
         if (!$entity) {
-            throw $this->createNotFoundException('Unable to find VoiceMessage entity.');
+            throw $this->createNotFoundException('Unable to find SipReg entity.');
         }
 
         $deleteForm = $this->createDeleteForm($id);
@@ -125,9 +125,9 @@ class VoiceMessageController extends Controller
     }
 
     /**
-     * Displays a form to edit an existing VoiceMessage entity.
+     * Displays a form to edit an existing SipReg entity.
      *
-     * @Route("/{id}/edit", name="voicemessage_edit")
+     * @Route("/{id}/edit", name="sipreg_edit")
      * @Method("GET")
      * @Template()
      */
@@ -135,10 +135,10 @@ class VoiceMessageController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entity = $em->getRepository('VoIPPBXRealTimeBundle:VoiceMessage')->find($id);
+        $entity = $em->getRepository('VoIPPBXRealTimeBundle:SipReg')->find($id);
 
         if (!$entity) {
-            throw $this->createNotFoundException('Unable to find VoiceMessage entity.');
+            throw $this->createNotFoundException('Unable to find SipReg entity.');
         }
 
         $editForm = $this->createEditForm($entity);
@@ -152,16 +152,16 @@ class VoiceMessageController extends Controller
     }
 
     /**
-    * Creates a form to edit a VoiceMessage entity.
+    * Creates a form to edit a SipReg entity.
     *
-    * @param VoiceMessage $entity The entity
+    * @param SipReg $entity The entity
     *
     * @return \Symfony\Component\Form\Form The form
     */
-    private function createEditForm(VoiceMessage $entity)
+    private function createEditForm(SipReg $entity)
     {
-        $form = $this->createForm(new VoiceMessageType(), $entity, array(
-            'action' => $this->generateUrl('voicemessage_update', array('id' => $entity->getId())),
+        $form = $this->createForm(new SipRegType(), $entity, array(
+            'action' => $this->generateUrl('sipreg_update', array('id' => $entity->getId())),
             'method' => 'PUT',
         ));
 
@@ -170,20 +170,20 @@ class VoiceMessageController extends Controller
         return $form;
     }
     /**
-     * Edits an existing VoiceMessage entity.
+     * Edits an existing SipReg entity.
      *
-     * @Route("/{id}", name="voicemessage_update")
+     * @Route("/{id}", name="sipreg_update")
      * @Method("PUT")
-     * @Template("VoIPPBXRealTimeBundle:VoiceMessage:edit.html.twig")
+     * @Template("VoIPPBXRealTimeBundle:SipReg:edit.html.twig")
      */
     public function updateAction(Request $request, $id)
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entity = $em->getRepository('VoIPPBXRealTimeBundle:VoiceMessage')->find($id);
+        $entity = $em->getRepository('VoIPPBXRealTimeBundle:SipReg')->find($id);
 
         if (!$entity) {
-            throw $this->createNotFoundException('Unable to find VoiceMessage entity.');
+            throw $this->createNotFoundException('Unable to find SipReg entity.');
         }
 
         $deleteForm = $this->createDeleteForm($id);
@@ -193,7 +193,7 @@ class VoiceMessageController extends Controller
         if ($editForm->isValid()) {
             $em->flush();
 
-            return $this->redirect($this->generateUrl('voicemessage_edit', array('id' => $id)));
+            return $this->redirect($this->generateUrl('sipreg_edit', array('id' => $id)));
         }
 
         return array(
@@ -203,9 +203,9 @@ class VoiceMessageController extends Controller
         );
     }
     /**
-     * Deletes a VoiceMessage entity.
+     * Deletes a SipReg entity.
      *
-     * @Route("/{id}", name="voicemessage_delete")
+     * @Route("/{id}", name="sipreg_delete")
      * @Method("DELETE")
      */
     public function deleteAction(Request $request, $id)
@@ -215,21 +215,21 @@ class VoiceMessageController extends Controller
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
-            $entity = $em->getRepository('VoIPPBXRealTimeBundle:VoiceMessage')->find($id);
+            $entity = $em->getRepository('VoIPPBXRealTimeBundle:SipReg')->find($id);
 
             if (!$entity) {
-                throw $this->createNotFoundException('Unable to find VoiceMessage entity.');
+                throw $this->createNotFoundException('Unable to find SipReg entity.');
             }
 
             $em->remove($entity);
             $em->flush();
         }
 
-        return $this->redirect($this->generateUrl('voicemessage'));
+        return $this->redirect($this->generateUrl('sipreg'));
     }
 
     /**
-     * Creates a form to delete a VoiceMessage entity by id.
+     * Creates a form to delete a SipReg entity by id.
      *
      * @param mixed $id The entity id
      *
@@ -238,7 +238,7 @@ class VoiceMessageController extends Controller
     private function createDeleteForm($id)
     {
         return $this->createFormBuilder()
-            ->setAction($this->generateUrl('voicemessage_delete', array('id' => $id)))
+            ->setAction($this->generateUrl('sipreg_delete', array('id' => $id)))
             ->setMethod('DELETE')
             ->add('submit', 'submit', array('label' => 'Delete'))
             ->getForm()

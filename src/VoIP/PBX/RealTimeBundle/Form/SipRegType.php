@@ -6,7 +6,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
-class VoiceMessageType extends AbstractType
+class SipRegType extends AbstractType
 {
         /**
      * @param FormBuilderInterface $builder
@@ -15,19 +15,16 @@ class VoiceMessageType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('dir')
-            ->add('msgnum')
-            ->add('recording')
-            ->add('context')
-            ->add('macrocontext')
-            ->add('callerid')
-            ->add('origtime')
-            ->add('duration')
-            ->add('mailboxuser')
-            ->add('mailboxcontext')
-            ->add('messageLabel')
-            ->add('isRead')
-            ->add('flag')
+            ->add('peer')
+            ->add('transport')
+            ->add('user')
+            ->add('domain')
+            ->add('secret')
+            ->add('authuser')
+            ->add('host')
+            ->add('port')
+            ->add('extension')
+            ->add('expiry')
         ;
     }
     
@@ -37,7 +34,7 @@ class VoiceMessageType extends AbstractType
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'VoIP\PBX\RealTimeBundle\Entity\VoiceMessage'
+            'data_class' => 'VoIP\PBX\RealTimeBundle\Entity\SipReg'
         ));
     }
 
@@ -46,6 +43,6 @@ class VoiceMessageType extends AbstractType
      */
     public function getName()
     {
-        return 'voip_pbx_realtimebundle_voicemessage';
+        return 'voip_pbx_realtimebundle_sipreg';
     }
 }
