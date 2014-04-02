@@ -9,7 +9,8 @@
 		"aws-sdk": "x",
 		"lame": "x",
 		"wav": "x",
-		"ffmpeg": "x"
+		"ffmpeg": "x",
+		"mysql": "x"
 	},
 	"engines": {
 		"node": "0.10.26",

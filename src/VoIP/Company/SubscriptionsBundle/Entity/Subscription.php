@@ -99,6 +99,13 @@ class Subscription
      */
     private $hash;
 	
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="registration_code", type="string", length=255, nullable=true)
+     */
+    private $registrationCode;
+	
 	/**
      * @ORM\ManyToOne(targetEntity="\VoIP\Company\StructureBundle\Entity\Company", inversedBy="subscriptions")
 	 * @ORM\JoinColumn(name="company_id", referencedColumnName="id", onDelete="CASCADE")
@@ -134,6 +141,7 @@ class Subscription
 		$this->createdAt = new \DateTime();
 	    $this->updatedAt = new \DateTime();
 		if (!$this->hash) $this->generateHash();
+		$this->genRegistrationCode();
 	}
 	
 	/**
@@ -143,6 +151,7 @@ class Subscription
 	{
 	    $this->updatedAt = new \DateTime();
 		if (!$this->hash) $this->generateHash();
+		$this->genRegistrationCode();
 	}
 
 	public function generateHash()
@@ -154,6 +163,19 @@ class Subscription
 	{
 		if (!($firstItem = $this->getDialPlanFirstItem())) return 0;
 		else return $firstItem->getDepth() + 1;
+	}
+	
+	public function genRegistrationCode()
+	{
+		switch ($this->type) {
+			case 'hoiio':
+				$this->setRegistrationCode($this->username.':'.$this->secret.'@'.$this->host.'/'.$this->hash);
+				break;
+			
+			default:
+				$this->setRegistrationCode($this->username.':'.$this->secret.'@'.$this->host.'/'.$this->hash);
+				break;
+		}
 	}
 
     /**
@@ -528,5 +550,28 @@ class Subscription
     public function getDialPlanFirstItem()
     {
         return $this->dialPlanFirstItem;
+    }
+
+    /**
+     * Set registrationCode
+     *
+     * @param string $registrationCode
+     * @return Subscription
+     */
+    public function setRegistrationCode($registrationCode)
+    {
+        $this->registrationCode = $registrationCode;
+
+        return $this;
+    }
+
+    /**
+     * Get registrationCode
+     *
+     * @return string 
+     */
+    public function getRegistrationCode()
+    {
+        return $this->registrationCode;
     }
 }

@@ -167,11 +167,13 @@ class CompanyController extends Controller
 		$subscription->setReceiveCall($receive);
 		$subscription->setCompany($company);
 		
-		foreach ($countries as $countryId) {
-			$country = $em->getRepository('VoIPCompanySubscriptionsBundle:Country')->find($countryId);
-			if (!$country) throw $this->createNotFoundException('Unable to find Country entity.');
-			$subscription->addCountry($country);
-			$country->addSubscription($subscription);
+		if ($countries) {
+			foreach ($countries as $countryId) {
+				$country = $em->getRepository('VoIPCompanySubscriptionsBundle:Country')->find($countryId);
+				if (!$country) throw $this->createNotFoundException('Unable to find Country entity.');
+				$subscription->addCountry($country);
+				$country->addSubscription($subscription);
+			}
 		}
 		
 		$em->persist($subscription);
