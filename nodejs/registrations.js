@@ -22,7 +22,7 @@ pool.getConnection(function(err, connection){
 		for (var i = 0; i < registrations.length; i++) {
 			registrations[i] = "register => "+registrations[i];
 		}
-		fs.writeFile(parameters.asterisk.conf_dir+'test', String(registrations.join("\n")));
+		fs.writeFile(parameters.asterisk.conf_dir+'sip_registrations_custom.conf', String(registrations.join("\n")));
 	});
 })
 
