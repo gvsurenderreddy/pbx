@@ -33,4 +33,6 @@ function process(row, callback) {
 
 exec(parameters.asterisk.cmd_reload_sip, function (error, stdout, stderr) {
 	  if (error) throw error;
+	  console.log('stdout: ' + stdout);
+      console.log('stderr: ' + stderr);
 });
