@@ -18,11 +18,15 @@ pool.getConnection(function(err, connection){
 		});
 	}).on('end', function() {
 		connection.destroy();
-		console.log(registrations);
+		//console.log(registrations);
 		for (var i = 0; i < registrations.length; i++) {
 			registrations[i] = "register => "+registrations[i];
 		}
-		fs.writeFile(parameters.asterisk.conf_dir+'sip_registrations_custom.conf', String(registrations.join("\n")));
+		fs.writeFile(parameters.asterisk.conf_dir+'sip_registrations_custom.conf', String(registrations.join("\n")), function(err){
+			exec(parameters.asterisk.cmd_reload_sip, function (error, stdout, stderr) {
+				  if (error) throw error;
+			});
+		});
 	});
 })
 
@@ -30,9 +34,3 @@ function process(row, callback) {
 	if (row.registration_code && row.receive_call) registrations.push(row.registration_code);
 	callback();
 }
-
-exec(parameters.asterisk.cmd_reload_sip, function (error, stdout, stderr) {
-	  if (error) throw error;
-	  console.log('stdout: ' + stdout);
-      console.log('stderr: ' + stderr);
-});
