@@ -8,6 +8,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use VoIP\Company\StructureBundle\Entity\Company;
 use VoIP\PBX\RealTimeBundle\Extra\Sync;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**
  * @Route("/private")
@@ -64,5 +65,19 @@ class DefaultController extends Controller
 		return $this->redirect($this->generateUrl('ui_company', array(
 			'hash' => $company->getHash()
 		)));
+    }
+	
+    /**
+     * @Route("/test", name="ui_new_company")
+     * @Template()
+	 * @Method("GET")
+     */
+    public function testAction()
+    {
+		$data = array();
+		exec('sudo asterisk -x "sip show peers"', $data);
+		$response = new JsonResponse();
+		$response->setData($data);
+        return $response;
     }
 }
