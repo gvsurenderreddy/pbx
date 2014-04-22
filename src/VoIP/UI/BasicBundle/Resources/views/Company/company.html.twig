@@ -31,8 +31,8 @@
 				</tr>
 				{% for phone in company.phones %}
 				<tr>
-					<td>{{ phone.name }}</td>
-					<td>{{ phone.extension }}</td>
+					<td>{{ phone.employee ? phone.employee.name }}</td>
+					<td>{{ phone.employee ? phone.employee.extension }}</td>
 					<td>
 						<a href="{{ path('ui_phone_edit', {'hash': phone.hash}) }}"><span class="glyphicon glyphicon-pencil"></span></a>
 						<a href="{{ path('ui_phone_delete', {'hash': phone.hash}) }}"><span class="glyphicon glyphicon-trash"></span></a>

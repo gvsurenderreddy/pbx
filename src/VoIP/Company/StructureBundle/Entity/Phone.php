@@ -37,20 +37,6 @@ class Phone
     private $updatedAt;
 
     /**
-     * @var integer
-     *
-     * @ORM\Column(name="extension", type="integer")
-     */
-    private $extension;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="name", type="string", length=255, nullable=true)
-     */
-    private $name;
-
-    /**
      * @var string
      *
      * @ORM\Column(name="type", type="string", length=40)
@@ -69,6 +55,12 @@ class Phone
 	 * @ORM\JoinColumn(name="company_id", referencedColumnName="id", onDelete="CASCADE")
      */
     private $company;
+	
+	/**
+     * @ORM\OneToOne(targetEntity="\VoIP\Company\StructureBundle\Entity\Employee", inversedBy="phone")
+	 * @ORM\JoinColumn(name="employee_id", referencedColumnName="id", onDelete="CASCADE")
+     */
+    private $employee;
 	
 	/**
      * @ORM\ManyToOne(targetEntity="\VoIP\PBX\RealTimeBundle\Entity\SipPeer", inversedBy="phones")
@@ -158,29 +150,6 @@ class Phone
     }
 
     /**
-     * Set extension
-     *
-     * @param integer $extension
-     * @return Phone
-     */
-    public function setExtension($extension)
-    {
-        $this->extension = $extension;
-
-        return $this;
-    }
-
-    /**
-     * Get extension
-     *
-     * @return integer 
-     */
-    public function getExtension()
-    {
-        return $this->extension;
-    }
-
-    /**
      * Set type
      *
      * @param string $type
@@ -201,29 +170,6 @@ class Phone
     public function getType()
     {
         return $this->type;
-    }
-
-    /**
-     * Set name
-     *
-     * @param string $name
-     * @return Phone
-     */
-    public function setName($name)
-    {
-        $this->name = $name;
-
-        return $this;
-    }
-
-    /**
-     * Get name
-     *
-     * @return string 
-     */
-    public function getName()
-    {
-        return $this->name;
     }
 
     /**
@@ -293,5 +239,28 @@ class Phone
     public function getCompany()
     {
         return $this->company;
+    }
+
+    /**
+     * Set employee
+     *
+     * @param \VoIP\Company\StructureBundle\Entity\Employee $employee
+     * @return Phone
+     */
+    public function setEmployee(\VoIP\Company\StructureBundle\Entity\Employee $employee = null)
+    {
+        $this->employee = $employee;
+
+        return $this;
+    }
+
+    /**
+     * Get employee
+     *
+     * @return \VoIP\Company\StructureBundle\Entity\Employee 
+     */
+    public function getEmployee()
+    {
+        return $this->employee;
     }
 }

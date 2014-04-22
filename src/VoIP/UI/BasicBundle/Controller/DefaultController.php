@@ -68,14 +68,13 @@ class DefaultController extends Controller
     }
 	
     /**
-     * @Route("/test", name="ui_new_company")
+     * @Route("/test", name="ui_test")
      * @Template()
 	 * @Method("GET")
      */
     public function testAction()
     {
 		$data = array();
-		exec('sudo asterisk -x "sip show peers"', $data);
 		$response = new JsonResponse();
 		$response->setData($data);
         return $response;

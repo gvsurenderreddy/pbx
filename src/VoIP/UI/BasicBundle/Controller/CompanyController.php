@@ -8,6 +8,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use VoIP\Company\StructureBundle\Entity\Company;
 use VoIP\Company\StructureBundle\Entity\Phone;
+use VoIP\Company\StructureBundle\Entity\Employee;
 use VoIP\Company\SubscriptionsBundle\Entity\Subscription;
 use VoIP\PBX\RealTimeBundle\Extra\Sync;
 
@@ -79,16 +80,18 @@ class CompanyController extends Controller
 		if ($extension < 100 || $extension > 999) {
 			throw $this->createNotFoundException('Extension range');
 		}
-		foreach ($company->getPhones() as $phone) {
-			if ($phone->getExtension() == $extension) throw $this->createNotFoundException('Not unique extension.');
-		}
+		
+		$employee = new Employee();
+		$employee->setName($name);
+		$employee->setExtension($extension);
 		
 		$phone = new Phone();
-		$phone->setName($name);
-		$phone->setExtension($extension);
 		$phone->setType($type);
 		$phone->setCompany($company);
 		
+		$phone->setEmployee($employee);
+		
+		$em->persist($employee);
 		$em->persist($phone);
 		
 		$sync = new Sync();

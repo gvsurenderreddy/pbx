@@ -63,12 +63,9 @@ class PhoneController extends Controller
 		if ($extension < 100 || $extension > 999) {
 			throw $this->createNotFoundException('Extension range');
 		}
-		foreach ($company->getPhones() as $p) {
-			if ($p->getId() != $phone->getId() && $p->getExtension() == $extension) throw $this->createNotFoundException('Not unique extension.');
-		}
 		
-		$phone->setName($name);
-		$phone->setExtension($extension);
+		//$phone->setName($name);
+		//$phone->setExtension($extension);
 		$phone->setType($type);
 		
 		$em->flush();
@@ -269,7 +266,7 @@ class PhoneController extends Controller
 			'61359' => '0',
 			'60463' => '1',
 			'60655' => '0',
-			'63343' => '54.255.73.189',
+			'63343' => '54.255.15.160',
 			'63407' => '1',
 			'62959' => '0',
 			'62575' => '3600',

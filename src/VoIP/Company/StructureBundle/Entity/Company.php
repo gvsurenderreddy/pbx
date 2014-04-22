@@ -59,7 +59,7 @@ class Company
 	
 	/**
      * @ORM\OneToMany(targetEntity="\VoIP\Company\StructureBundle\Entity\Phone", mappedBy="company")
-	 * @ORM\OrderBy({"extension" = "ASC"})
+	 * @ORM\OrderBy({"hash" = "ASC"})
      */
     private $phones;
 	
