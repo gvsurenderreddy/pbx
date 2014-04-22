@@ -64,6 +64,12 @@ class Company
     private $phones;
 	
 	/**
+     * @ORM\OneToMany(targetEntity="\VoIP\Company\StructureBundle\Entity\Employee", mappedBy="company")
+	 * @ORM\OrderBy({"extension" = "ASC"})
+     */
+    private $employees;
+	
+	/**
      * @ORM\OneToMany(targetEntity="\VoIP\Company\SubscriptionsBundle\Entity\Subscription", mappedBy="company")
 	 * @ORM\OrderBy({"name" = "ASC"})
      */
@@ -363,5 +369,38 @@ class Company
     public function getPhones()
     {
         return $this->phones;
+    }
+
+    /**
+     * Add employees
+     *
+     * @param \VoIP\Company\StructureBundle\Entity\Employee $employees
+     * @return Company
+     */
+    public function addEmployee(\VoIP\Company\StructureBundle\Entity\Employee $employees)
+    {
+        $this->employees[] = $employees;
+
+        return $this;
+    }
+
+    /**
+     * Remove employees
+     *
+     * @param \VoIP\Company\StructureBundle\Entity\Employee $employees
+     */
+    public function removeEmployee(\VoIP\Company\StructureBundle\Entity\Employee $employees)
+    {
+        $this->employees->removeElement($employees);
+    }
+
+    /**
+     * Get employees
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getEmployees()
+    {
+        return $this->employees;
     }
 }

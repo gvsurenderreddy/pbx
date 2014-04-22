@@ -75,6 +75,7 @@ class CompanyController extends Controller
 		$request = $this->getRequest();
 		$extension = $request->get('extension');
 		$name = $request->get('name');
+		$phoneName = $request->get('phonename');
 		$type = $request->get('type');
 		
 		if ($extension < 100 || $extension > 999) {
@@ -84,9 +85,11 @@ class CompanyController extends Controller
 		$employee = new Employee();
 		$employee->setName($name);
 		$employee->setExtension($extension);
+		$employee->setCompany($company);
 		
 		$phone = new Phone();
 		$phone->setType($type);
+		$phone->setName($phoneName);
 		$phone->setCompany($company);
 		
 		$phone->setEmployee($employee);

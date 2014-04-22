@@ -63,6 +63,12 @@ class Employee
     private $phone;
 	
 	/**
+     * @ORM\ManyToOne(targetEntity="\VoIP\Company\StructureBundle\Entity\Company", inversedBy="employees")
+	 * @ORM\JoinColumn(name="company_id", referencedColumnName="id", onDelete="CASCADE")
+     */
+    private $company;
+	
+	/**
 	 * @ORM\PrePersist
 	 */
 	public function prePersist()
@@ -233,5 +239,28 @@ class Employee
     public function getPhone()
     {
         return $this->phone;
+    }
+
+    /**
+     * Set company
+     *
+     * @param \VoIP\Company\StructureBundle\Entity\Company $company
+     * @return Employee
+     */
+    public function setCompany(\VoIP\Company\StructureBundle\Entity\Company $company = null)
+    {
+        $this->company = $company;
+
+        return $this;
+    }
+
+    /**
+     * Get company
+     *
+     * @return \VoIP\Company\StructureBundle\Entity\Company 
+     */
+    public function getCompany()
+    {
+        return $this->company;
     }
 }

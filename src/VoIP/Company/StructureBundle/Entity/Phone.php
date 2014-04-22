@@ -50,6 +50,13 @@ class Phone
      */
     private $hash;
 	
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="name", type="string", length=255)
+     */
+    private $name;
+	
 	/**
      * @ORM\ManyToOne(targetEntity="\VoIP\Company\StructureBundle\Entity\Company", inversedBy="phones")
 	 * @ORM\JoinColumn(name="company_id", referencedColumnName="id", onDelete="CASCADE")
@@ -262,5 +269,28 @@ class Phone
     public function getEmployee()
     {
         return $this->employee;
+    }
+
+    /**
+     * Set name
+     *
+     * @param string $name
+     * @return Phone
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
+
+        return $this;
+    }
+
+    /**
+     * Get name
+     *
+     * @return string 
+     */
+    public function getName()
+    {
+        return $this->name;
     }
 }

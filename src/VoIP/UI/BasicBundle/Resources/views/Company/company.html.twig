@@ -25,23 +25,47 @@
 			</div>
 			<table class="table">
 				<tr>
+					<th>Phone</th>
+					<th>Type</th>
+					<th></th>
 					<th>Name</th>
 					<th>Ext.</th>
-					<th></th>
+					
 				</tr>
 				{% for phone in company.phones %}
 				<tr>
-					<td>{{ phone.employee ? phone.employee.name }}</td>
-					<td>{{ phone.employee ? phone.employee.extension }}</td>
+					<td>{{ phone.name }}</td>
+					<td>{{ phone.type|humanize }}</td>
 					<td>
 						<a href="{{ path('ui_phone_edit', {'hash': phone.hash}) }}"><span class="glyphicon glyphicon-pencil"></span></a>
 						<a href="{{ path('ui_phone_delete', {'hash': phone.hash}) }}"><span class="glyphicon glyphicon-trash"></span></a>
 						<a href="#" class="l-mod" data-url="{{ path('ui_phone_configure', {'hash': phone.hash}) }}"><span class="glyphicon glyphicon-flash"></span></a>
 						<a href="#" class="l-mod" data-url="{{ path('ui_phone_credentials', {'hash': phone.hash}) }}"><span class="glyphicon glyphicon-phone-alt"></span></a>
 					</td>
+					<td>{{ phone.employee ? phone.employee.name }}</td>
+					<td>{{ phone.employee ? phone.employee.extension }}</td>
 				</tr>
 				{% endfor %}
 			</table>
+			
+		</div>
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<h3 class="panel-title">Employees</h3>
+			</div>
+			<table class="table">
+				<tr>
+					<th>Name</th>
+					<th>Ext.</th>
+				</tr>
+				{% for employee in company.employees %}
+				<tr>
+					<td>{{ employee.name }}</td>
+					<td>{{ employee.extension }}</td>
+				</tr>
+				{% endfor %}
+			</table>
+			
 		</div>	
 	</div>
 	<div class="col-md-6">
