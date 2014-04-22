@@ -56,16 +56,10 @@ class PhoneController extends Controller
 		if (!$user->hasCompany($company)) throw $this->createNotFoundException('No authorization.');
 		
 		$request = $this->getRequest();
-		$extension = $request->get('extension');
 		$name = $request->get('name');
 		$type = $request->get('type');
 		
-		if ($extension < 100 || $extension > 999) {
-			throw $this->createNotFoundException('Extension range');
-		}
-		
-		//$phone->setName($name);
-		//$phone->setExtension($extension);
+		$phone->setName($name);
 		$phone->setType($type);
 		
 		$em->flush();
