@@ -281,4 +281,36 @@ class CompanyController extends Controller
 		
 		return $this->redirect($this->generateUrl('ui_index'));
     }
+	
+    /**
+     * @Route("/{hash}/mailbox", name="ui_company_mailbox")
+     * @Template()
+	 * @Method("GET")
+     */
+    public function mailboxAction($hash)
+    {
+		$user = $this->getUser();
+		$em = $this->getDoctrine()->getManager();
+		$company = $em->getRepository('VoIPCompanyStructureBundle:Company')->findOneBy(array(
+			'hash' => $hash
+		));
+        if (!$company) throw $this->createNotFoundException('Unable to find Company entity.');
+		if (!$user->hasCompany($company)) throw $this->createNotFoundException('No authorization.');
+		$repository = $this->getDoctrine()->getRepository('VoIPCompanyVoicemailBundle:Message');
+
+		$query = $repository->createQueryBuilder('m')
+			->leftJoin('m.voicemail', 'v')
+			->leftJoin('v.company', 'c')
+		    ->where('c.hash = :hash')
+			->andWhere('m.archivedAt IS NULL')
+		    ->setParameter('hash', $hash)
+		    ->orderBy('m.createdAt', 'ASC')
+		    ->getQuery();
+
+		$messages = $query->getResult();
+        return array(
+			'company' => $company,
+			'messages' => $messages
+		);
+    }
 }

@@ -1,0 +1,41 @@
+{% extends "VoIPUIBasicBundle::layout.html.twig" %}
+{% block title %}48 | {{ company.name }}{% endblock %}
+{% block container %}
+<div class="page-header">
+	<h1>Mailbox</h1>
+</div>
+<table class="table table-hover">
+	<tr>
+		<th></th>
+		<th>Date</th>
+		<th>From</th>
+		<th>Duration</th>
+		<th>Message</th>
+	</tr>
+	{% for message in messages %}
+	<tr class="message-row-{{ message.hash }}">
+		<td>
+			{% if not message.readat %}<span class="label label-info message-labelnew-{{ message.hash }}">New</span>{% endif %}
+		</td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td>
+			<audio controls="controls" class="message" data-hash="{{ message.hash }}">
+				Your browser does not support the <code>audio</code> element.
+				<source src="https://s3-ap-southeast-1.amazonaws.com/voiptest/vm/{{ message.filepath }}" type="audio/ogg">
+			</audio>
+		</td>
+	</tr>
+	{% endfor %}
+</table>
+{% endblock container %}
+{% block javascripts %}
+{{ parent() }}
+<script>
+$('audio.message').bind('play', function(){
+	var hash = $(this).data('hash');
+	$('.message-labelnew-'+hash).hide();
+});	
+</script>
+{% endblock javascripts %}

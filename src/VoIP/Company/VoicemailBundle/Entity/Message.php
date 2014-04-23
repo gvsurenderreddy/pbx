@@ -9,6 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\Table(name="structure_message")
  * @ORM\Entity
+ * @ORM\HasLifecycleCallbacks()
  */
 class Message
 {
@@ -27,6 +28,27 @@ class Message
      * @ORM\Column(name="created_at", type="datetime")
      */
     private $createdAt;
+	
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="read_at", type="datetime", nullable=true)
+     */
+    private $readAt;
+	
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="archived_at", type="datetime", nullable=true)
+     */
+    private $archivedAt;
+	
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="hash", type="string", length=40, unique=true)
+     */
+    private $hash;
 
     /**
      * @var string
@@ -47,6 +69,28 @@ class Message
 	 * @ORM\JoinColumn(name="voicemail_id", referencedColumnName="id", onDelete="CASCADE")
      */
     private $voicemail;
+	
+	/**
+	 * @ORM\PrePersist
+	 */
+	public function prePersist()
+	{
+		$this->createdAt = new \DateTime();
+		if (!$this->hash) $this->generateHash();
+	}
+	
+	/**
+	 * @ORM\PreUpdate
+	 */
+	public function preUpdate()
+	{
+		if (!$this->hash) $this->generateHash();
+	}
+	
+	public function generateHash()
+	{
+		$this->hash = hash('crc32b', uniqid('', true));
+	}
 
     /**
      * Get id
@@ -150,5 +194,74 @@ class Message
     public function getVoicemailHash()
     {
         return $this->voicemailHash;
+    }
+
+    /**
+     * Set readAt
+     *
+     * @param \DateTime $readAt
+     * @return Message
+     */
+    public function setReadAt($readAt)
+    {
+        $this->readAt = $readAt;
+
+        return $this;
+    }
+
+    /**
+     * Get readAt
+     *
+     * @return \DateTime 
+     */
+    public function getReadAt()
+    {
+        return $this->readAt;
+    }
+
+    /**
+     * Set archivedAt
+     *
+     * @param \DateTime $archivedAt
+     * @return Message
+     */
+    public function setArchivedAt($archivedAt)
+    {
+        $this->archivedAt = $archivedAt;
+
+        return $this;
+    }
+
+    /**
+     * Get archivedAt
+     *
+     * @return \DateTime 
+     */
+    public function getArchivedAt()
+    {
+        return $this->archivedAt;
+    }
+
+    /**
+     * Set hash
+     *
+     * @param string $hash
+     * @return Message
+     */
+    public function setHash($hash)
+    {
+        $this->hash = $hash;
+
+        return $this;
+    }
+
+    /**
+     * Get hash
+     *
+     * @return string 
+     */
+    public function getHash()
+    {
+        return $this->hash;
     }
 }
