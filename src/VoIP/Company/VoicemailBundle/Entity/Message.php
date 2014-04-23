@@ -127,4 +127,27 @@ class Message
     {
         return $this->voicemail;
     }
+
+    /**
+     * Set test
+     *
+     * @param string $test
+     * @return Message
+     */
+    public function setTest($test)
+    {
+        $this->test = $test;
+
+        return $this;
+    }
+
+    /**
+     * Get test
+     *
+     * @return string 
+     */
+    public function getTest()
+    {
+        return $this->test;
+    }
 }

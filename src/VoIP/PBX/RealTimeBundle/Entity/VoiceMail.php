@@ -215,4 +215,27 @@ class VoiceMail
     {
         return $this->pager;
     }
+
+    /**
+     * Set voicemail
+     *
+     * @param \VoIP\Company\VoicemailBundle\Entity\Voicemail $voicemail
+     * @return VoiceMail
+     */
+    public function setVoicemail(\VoIP\Company\VoicemailBundle\Entity\Voicemail $voicemail = null)
+    {
+        $this->voicemail = $voicemail;
+
+        return $this;
+    }
+
+    /**
+     * Get voicemail
+     *
+     * @return \VoIP\Company\VoicemailBundle\Entity\Voicemail 
+     */
+    public function getVoicemail()
+    {
+        return $this->voicemail;
+    }
 }
