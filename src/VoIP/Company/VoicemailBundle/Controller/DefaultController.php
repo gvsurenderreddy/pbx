@@ -48,6 +48,7 @@ class DefaultController extends Controller
 		));
 		
 		$message->setFilePath($fileName);
+		$message->setTest($voicemailHash);
 		
 		$em->persist($message);
 		$em->flush();

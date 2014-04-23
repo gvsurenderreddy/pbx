@@ -35,6 +35,13 @@ class Message
      */
     private $filePath;
 	
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="test", type="string", length=255, nullable=true)
+     */
+    private $test;
+	
 	/**
      * @ORM\ManyToOne(targetEntity="\VoIP\Company\VoicemailBundle\Entity\Voicemail", inversedBy="messages")
 	 * @ORM\JoinColumn(name="voicemail_id", referencedColumnName="id", onDelete="CASCADE")
