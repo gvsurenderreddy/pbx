@@ -63,6 +63,10 @@ class VoiceMail
      */
     private $pager;
 
+	/**
+     * @ORM\OneToOne(targetEntity="\VoIP\Company\VoicemailBundle\Entity\Voicemail", mappedBy="astVoicemail")
+     */
+    private $voicemail;
 
     /**
      * Get id
