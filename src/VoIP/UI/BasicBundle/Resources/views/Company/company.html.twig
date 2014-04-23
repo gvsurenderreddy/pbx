@@ -71,6 +71,8 @@
 					<th>Name</th>
 					<th>Ext.</th>
 					<th></th>
+					<th>Phone</th>
+					<th></th>
 				</tr>
 				{% for employee in company.employees %}
 				<tr>
@@ -79,6 +81,21 @@
 					<td>
 						<a href="{{ path('ui_employee_edit', {'hash': employee.hash}) }}"><span class="glyphicon glyphicon-pencil"></span></a>
 						<a href="{{ path('ui_employee_delete', {'hash': employee.hash}) }}"><span class="glyphicon glyphicon-trash"></span></a>
+					</td>
+					<td>{% if employee.phone %}{{ employee.phone.name }}{% endif %}</td>
+					<td>
+						<div class="dropdown">
+							<span class="glyphicon glyphicon-phone-alt dropdown-toggle" data-toggle="dropdown"></span>
+							<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu{{ employee.hash }}">
+								{% for phone in company.phones %}
+								<li role="presentation"><a role="menuitem" tabindex="-1" href="{{ path('ui_phone_attribute', {'hash': phone.hash, 'hash2': employee.hash}) }}">{{ phone.name }}</a></li>
+								{% endfor %}
+								{% if employee.phone %}
+								<li role="presentation" class="divider"></li>
+								<li role="presentation"><a role="menuitem" tabindex="-1" href="{{ path('ui_phone_unattribute', {'hash': employee.phone.hash,}) }}">Unattribute</a></li>
+								{% endif %}
+							</ul>
+						</div>
 					</td>
 				</tr>
 				{% endfor %}
