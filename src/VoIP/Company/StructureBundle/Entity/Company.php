@@ -64,6 +64,12 @@ class Company
     private $phones;
 	
 	/**
+     * @ORM\OneToMany(targetEntity="\VoIP\Company\VoicemailBundle\Entity\Voicemail", mappedBy="company")
+	 * @ORM\OrderBy({"createdAt" = "ASC"})
+     */
+    private $voicemails;
+	
+	/**
      * @ORM\OneToMany(targetEntity="\VoIP\Company\StructureBundle\Entity\Employee", mappedBy="company")
 	 * @ORM\OrderBy({"extension" = "ASC"})
      */
@@ -402,5 +408,71 @@ class Company
     public function getEmployees()
     {
         return $this->employees;
+    }
+
+    /**
+     * Add messages
+     *
+     * @param \VoIP\Company\VoicemailBundle\Entity\Message $messages
+     * @return Company
+     */
+    public function addMessage(\VoIP\Company\VoicemailBundle\Entity\Message $messages)
+    {
+        $this->messages[] = $messages;
+
+        return $this;
+    }
+
+    /**
+     * Remove messages
+     *
+     * @param \VoIP\Company\VoicemailBundle\Entity\Message $messages
+     */
+    public function removeMessage(\VoIP\Company\VoicemailBundle\Entity\Message $messages)
+    {
+        $this->messages->removeElement($messages);
+    }
+
+    /**
+     * Get messages
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getMessages()
+    {
+        return $this->messages;
+    }
+
+    /**
+     * Add voicemails
+     *
+     * @param \VoIP\Company\VoicemailBundle\Entity\Voicemail $voicemails
+     * @return Company
+     */
+    public function addVoicemail(\VoIP\Company\VoicemailBundle\Entity\Voicemail $voicemails)
+    {
+        $this->voicemails[] = $voicemails;
+
+        return $this;
+    }
+
+    /**
+     * Remove voicemails
+     *
+     * @param \VoIP\Company\VoicemailBundle\Entity\Voicemail $voicemails
+     */
+    public function removeVoicemail(\VoIP\Company\VoicemailBundle\Entity\Voicemail $voicemails)
+    {
+        $this->voicemails->removeElement($voicemails);
+    }
+
+    /**
+     * Get voicemails
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getVoicemails()
+    {
+        return $this->voicemails;
     }
 }

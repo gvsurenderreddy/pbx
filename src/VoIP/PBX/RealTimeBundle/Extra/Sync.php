@@ -5,11 +5,23 @@ namespace VoIP\PBX\RealTimeBundle\Extra;
 use VoIP\PBX\RealTimeBundle\Entity\SipPeer;
 use VoIP\PBX\RealTimeBundle\Entity\Extension;
 use VoIP\PBX\RealTimeBundle\Entity\Conf;
+use VoIP\PBX\RealTimeBundle\Entity\Voicemail;
 
 class Sync {
 	
 	function __construct() {
 		// Construction
+	}
+	
+	public function voicemailToVoicemail($voicemail)
+	{
+		if (!$vm = $voicemail->getAstVoicemail()) $vm = new Voicemail();
+		$vm->setMailbox($voicemail->getHash());
+		$vm->setContext('mailbox');
+		$vm->setPassword(rand(1000,9999));
+		$vm->setFullname($voicemail->getCompany()->getName());
+		$vm->setEmail('adrien@eudes.co');
+		return $vm;
 	}
 	
 	public function subscriptionToPeer($subscription)

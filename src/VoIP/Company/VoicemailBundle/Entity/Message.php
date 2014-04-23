@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Message
  *
- * @ORM\Table(name="structure_vm")
+ * @ORM\Table(name="structure_message")
  * @ORM\Entity
  */
 class Message
@@ -34,7 +34,12 @@ class Message
      * @ORM\Column(name="file_path", type="string", length=255)
      */
     private $filePath;
-
+	
+	/**
+     * @ORM\ManyToOne(targetEntity="\VoIP\Company\VoicemailBundle\Entity\Voicemail", inversedBy="messages")
+	 * @ORM\JoinColumn(name="voicemail_id", referencedColumnName="id", onDelete="CASCADE")
+     */
+    private $voicemail;
 
     /**
      * Get id
@@ -90,5 +95,29 @@ class Message
     public function getFilePath()
     {
         return $this->filePath;
+    }
+
+
+    /**
+     * Set voicemail
+     *
+     * @param \VoIP\Company\VoicemailBundle\Entity\Voicemail $voicemail
+     * @return Message
+     */
+    public function setVoicemail(\VoIP\Company\VoicemailBundle\Entity\Voicemail $voicemail = null)
+    {
+        $this->voicemail = $voicemail;
+
+        return $this;
+    }
+
+    /**
+     * Get voicemail
+     *
+     * @return \VoIP\Company\VoicemailBundle\Entity\Voicemail 
+     */
+    public function getVoicemail()
+    {
+        return $this->voicemail;
     }
 }

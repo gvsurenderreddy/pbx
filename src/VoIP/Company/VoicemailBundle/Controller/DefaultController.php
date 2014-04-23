@@ -19,11 +19,20 @@ class DefaultController extends Controller
     public function createAction()
     {
 		$em = $this->getDoctrine()->getManager();
+		
 		$request = $this->getRequest();
 		$file = $request->files->get('file');
-		$company = $request->files->get('company');
+		$voicemailHash = (int)$request->files->get('mailbox');
+		
+        $voicemail = $em->getRepository('VoIPCompanyVoicemailBundle:Voicemail')->findOneBy(array(
+        	'hash' => $voicemailHash
+        ));
+		
 		$message = new Message();
+		
 		$message->setCreatedAt(new \DateTime());
+		$message->setVoicemail($voicemail);
+		
         $fileName = sha1(uniqid(mt_rand(), true)).'.ogg';
 		$filePath = __DIR__.'/../../../../../web/tmp/';
         $file->move($filePath, $fileName);
@@ -37,9 +46,12 @@ class DefaultController extends Controller
 				'Expires'          => 'Tue, 01 Jan 2030 03:54:42 GMT',
 			)
 		));
+		
 		$message->setFilePath($fileName);
+		
 		$em->persist($message);
 		$em->flush();
+		
 		$response = new JsonResponse();
 		$response->setData(array());
         return $response;

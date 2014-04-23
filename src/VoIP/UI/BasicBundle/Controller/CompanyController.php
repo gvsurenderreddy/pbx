@@ -10,6 +10,7 @@ use VoIP\Company\StructureBundle\Entity\Company;
 use VoIP\Company\StructureBundle\Entity\Phone;
 use VoIP\Company\StructureBundle\Entity\Employee;
 use VoIP\Company\SubscriptionsBundle\Entity\Subscription;
+use VoIP\Company\VoicemailBundle\Entity\Voicemail;
 use VoIP\PBX\RealTimeBundle\Extra\Sync;
 
 /**
@@ -190,6 +191,60 @@ class CompanyController extends Controller
 		$astPeer = $sync->subscriptionToPeer($subscription);
 		$em->persist($astPeer);
 		$subscription->setAstPeer($astPeer);
+		$em->flush();
+		
+		return $this->redirect($this->generateUrl('ui_company', array(
+			'hash' => $company->getHash()
+		)));
+    }
+	
+    /**
+     * @Route("/{hash}/new-voicemail", name="ui_company_newvoicemail")
+     * @Template()
+	 * @Method("GET")
+     */
+    public function newVoicemailAction($hash)
+    {
+		$user = $this->getUser();
+		$em = $this->getDoctrine()->getManager();
+		$company = $em->getRepository('VoIPCompanyStructureBundle:Company')->findOneBy(array(
+			'hash' => $hash
+		));
+        if (!$company) throw $this->createNotFoundException('Unable to find Company entity.');
+		if (!$user->hasCompany($company)) throw $this->createNotFoundException('No authorization.');
+        return array(
+			'company' => $company
+		);
+    }
+	
+    /**
+     * @Route("/{hash}/new-voicemail")
+     * @Template()
+	 * @Method("POST")
+     */
+    public function createVoicemailAction($hash)
+    {
+		$user = $this->getUser();
+		$em = $this->getDoctrine()->getManager();
+		$company = $em->getRepository('VoIPCompanyStructureBundle:Company')->findOneBy(array(
+			'hash' => $hash
+		));
+        if (!$company) throw $this->createNotFoundException('Unable to find Company entity.');
+		if (!$user->hasCompany($company)) throw $this->createNotFoundException('No authorization.');
+		
+		$request = $this->getRequest();
+		
+		$voicemail = new Voicemail();
+		$voicemail->setCompany($company);
+		
+		$em->persist($voicemail);
+		
+		$em->flush();
+		
+		$sync = new Sync();
+		$astVoicemail = $sync->voicemailToVoicemail($voicemail);
+		$em->persist($astVoicemail);
+		$voicemail->setAstVoicemail($astVoicemail);
 		$em->flush();
 		
 		return $this->redirect($this->generateUrl('ui_company', array(
