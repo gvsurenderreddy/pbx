@@ -260,14 +260,12 @@ class SipPeer
     private $dtfmode;
 	
 	/**
-     * @ORM\OneToMany(targetEntity="\VoIP\Company\SubscriptionsBundle\Entity\Subscription", mappedBy="astPeer")
-	 * @ORM\OrderBy({"name" = "ASC"})
+     * @ORM\OneToOne(targetEntity="\VoIP\Company\SubscriptionsBundle\Entity\Subscription", mappedBy="astPeer")
      */
-    private $subscriptions;
+    private $subscription;
 	
 	/**
      * @ORM\OneToOne(targetEntity="\VoIP\Company\StructureBundle\Entity\Phone", mappedBy="astPeer")
-	 * @ORM\OrderBy({"name" = "ASC"})
      */
     private $phone;
 
@@ -1108,47 +1106,51 @@ class SipPeer
     {
         return $this->dtfmode;
     }
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->subscriptions = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->phones = new \Doctrine\Common\Collections\ArrayCollection();
-    }
 
     /**
-     * Add subscriptions
+     * Set phone
      *
-     * @param \VoIP\Company\SubscriptionsBundle\Entity\Subscription $subscriptions
+     * @param \VoIP\Company\StructureBundle\Entity\Phone $phone
      * @return SipPeer
      */
-    public function addSubscription(\VoIP\Company\SubscriptionsBundle\Entity\Subscription $subscriptions)
+    public function setPhone(\VoIP\Company\StructureBundle\Entity\Phone $phone = null)
     {
-        $this->subscriptions[] = $subscriptions;
+        $this->phone = $phone;
 
         return $this;
     }
 
     /**
-     * Remove subscriptions
+     * Get phone
      *
-     * @param \VoIP\Company\SubscriptionsBundle\Entity\Subscription $subscriptions
+     * @return \VoIP\Company\StructureBundle\Entity\Phone 
      */
-    public function removeSubscription(\VoIP\Company\SubscriptionsBundle\Entity\Subscription $subscriptions)
+    public function getPhone()
     {
-        $this->subscriptions->removeElement($subscriptions);
+        return $this->phone;
+    }
+
+
+    /**
+     * Set subscription
+     *
+     * @param \VoIP\Company\SubscriptionsBundle\Entity\Subscription $subscription
+     * @return SipPeer
+     */
+    public function setSubscription(\VoIP\Company\SubscriptionsBundle\Entity\Subscription $subscription = null)
+    {
+        $this->subscription = $subscription;
+
+        return $this;
     }
 
     /**
-     * Get subscriptions
+     * Get subscription
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \VoIP\Company\SubscriptionsBundle\Entity\Subscription 
      */
-    public function getSubscriptions()
+    public function getSubscription()
     {
-        return $this->subscriptions;
+        return $this->subscription;
     }
-
-
 }

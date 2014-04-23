@@ -70,6 +70,63 @@ class PhoneController extends Controller
 		$astPeer = $sync->phoneToPeer($phone);
 		$phone->setAstPeer($astPeer);
 		
+		$em->persist($astPeer);
+		
+		$em->flush();
+		
+		return $this->redirect($this->generateUrl('ui_company', array(
+			'hash' => $company->getHash()
+		)));
+    }
+	
+    /**
+     * @Route("/{hash}/attribute/{hash2}", name="ui_phone_attribute")
+     * @Template()
+	 * @Method("GET")
+     */
+    public function attributeAction($hash, $hash2)
+    {
+		$user = $this->getUser();
+		$em = $this->getDoctrine()->getManager();
+		$phone = $em->getRepository('VoIPCompanyStructureBundle:Phone')->findOneBy(array(
+			'hash' => $hash
+		));
+        if (!$phone) throw $this->createNotFoundException('Unable to find Phone entity.');
+		$employee = $em->getRepository('VoIPCompanyStructureBundle:Employee')->findOneBy(array(
+			'hash' => $hash2
+		));
+        if (!$employee) throw $this->createNotFoundException('Unable to find Employee entity.');
+		$company = $phone->getCompany();
+		if (!$user->hasCompany($company)) throw $this->createNotFoundException('No authorization.');
+		
+		if ($prevPhone = $employee->getPhone()) $prevPhone->setEmployee(null);
+		$em->flush();
+		
+		$phone->setEmployee($employee);
+		$em->flush();
+		
+		return $this->redirect($this->generateUrl('ui_company', array(
+			'hash' => $company->getHash()
+		)));
+    }
+	
+    /**
+     * @Route("/{hash}/unattribute", name="ui_phone_unattribute")
+     * @Template()
+	 * @Method("GET")
+     */
+    public function unattributeAction($hash)
+    {
+		$user = $this->getUser();
+		$em = $this->getDoctrine()->getManager();
+		$phone = $em->getRepository('VoIPCompanyStructureBundle:Phone')->findOneBy(array(
+			'hash' => $hash
+		));
+        if (!$phone) throw $this->createNotFoundException('Unable to find Phone entity.');
+		$company = $phone->getCompany();
+		if (!$user->hasCompany($company)) throw $this->createNotFoundException('No authorization.');
+		
+		$phone->setEmployee(null);
 		$em->flush();
 		
 		return $this->redirect($this->generateUrl('ui_company', array(

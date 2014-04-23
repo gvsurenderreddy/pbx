@@ -28,9 +28,8 @@
 					<th>Phone</th>
 					<th>Type</th>
 					<th></th>
-					<th>Name</th>
-					<th>Ext.</th>
-					
+					<th>Employee</th>
+					<th></th>				
 				</tr>
 				{% for phone in company.phones %}
 				<tr>
@@ -42,8 +41,21 @@
 						{% if phone.type == 'ciscophone' %}<a href="#" class="l-mod" data-url="{{ path('ui_phone_configure', {'hash': phone.hash}) }}"><span class="glyphicon glyphicon-flash"></span></a>{% endif %}
 						<a href="#" class="l-mod" data-url="{{ path('ui_phone_credentials', {'hash': phone.hash}) }}"><span class="glyphicon glyphicon-phone-alt"></span></a>
 					</td>
-					<td>{{ phone.employee ? phone.employee.name }}</td>
-					<td>{{ phone.employee ? phone.employee.extension }}</td>
+					<td>{% if phone.employee %}{{ phone.employee.name }} ({{ phone.employee.extension }}){% endif %}</td>
+					<td>
+						<div class="dropdown">
+							<span class="glyphicon glyphicon-user dropdown-toggle" data-toggle="dropdown"></span>
+							<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu{{ phone.hash }}">
+								{% for employee in company.employees %}
+								<li role="presentation"><a role="menuitem" tabindex="-1" href="{{ path('ui_phone_attribute', {'hash': phone.hash, 'hash2': employee.hash}) }}">{{ employee.name }} ({{ employee.extension }})</a></li>
+								{% endfor %}
+								{% if phone.employee %}
+								<li role="presentation" class="divider"></li>
+								<li role="presentation"><a role="menuitem" tabindex="-1" href="{{ path('ui_phone_unattribute', {'hash': phone.hash,}) }}">Unattribute</a></li>
+								{% endif %}
+							</ul>
+						</div>
+					</td>
 				</tr>
 				{% endfor %}
 			</table>
