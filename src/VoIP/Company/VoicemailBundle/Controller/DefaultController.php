@@ -22,7 +22,7 @@ class DefaultController extends Controller
 		
 		$request = $this->getRequest();
 		$file = $request->files->get('file');
-		$voicemailHash = $request->files->get('mailbox');
+		$voicemailHash = $request->get('mailbox');
 		
         $voicemail = $em->getRepository('VoIPCompanyVoicemailBundle:Voicemail')->findOneBy(array(
         	'hash' => $voicemailHash
