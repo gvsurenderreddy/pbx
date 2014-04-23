@@ -1,25 +1,22 @@
 {% extends "VoIPUIBasicBundle::layout.html.twig" %}
-{% block title %}48 | New phone{% endblock %}
+{% block title %}48 | New employee{% endblock %}
 {% block container %}
 <div class="page-header">
 	<h1>New phone</h1>
 </div>
 <div class="row">
 	<div class="col-md-offset-3 col-md-6">
-		<form class="form-horizontal" role="form" action="{{ path('ui_company_newphone', {'hash': company.hash}) }}" method="POST">
+		<form class="form-horizontal" role="form" action="{{ path('ui_company_newemployee', {'hash': company.hash}) }}" method="POST">
 			<div class="form-group">
-				<label for="phonename" class="col-sm-2 control-label">Name</label>
+				<label for="name" class="col-sm-2 control-label">Name</label>
 				<div class="col-sm-10">
-					<input type="text" class="form-control" id="phonename" name="phonename" placeholder="Mark's desk" required>
+					<input type="text" class="form-control" id="name" name="name" placeholder="Mark Baloon" required>
 				</div>
 			</div>
 			<div class="form-group">
-				<label for="type" class="col-sm-2 control-label">Type</label>
+				<label for="extension" class="col-sm-2 control-label">Extension</label>
 				<div class="col-sm-10">
-					<select class="form-control" id="type" name="type">
-						<option value="ciscophone">Cisco phone</option>
-						<option value="softphone">Softphone</option>
-					</select>
+					<input type="integer" class="form-control" id="extension" name="extension" placeholder="101" required>
 				</div>
 			</div>
 			<div class="form-group">

@@ -74,28 +74,14 @@ class CompanyController extends Controller
 		if (!$user->hasCompany($company)) throw $this->createNotFoundException('No authorization.');
 		
 		$request = $this->getRequest();
-		$extension = $request->get('extension');
-		$name = $request->get('name');
 		$phoneName = $request->get('phonename');
 		$type = $request->get('type');
-		
-		if ($extension < 100 || $extension > 999) {
-			throw $this->createNotFoundException('Extension range');
-		}
-		
-		$employee = new Employee();
-		$employee->setName($name);
-		$employee->setExtension($extension);
-		$employee->setCompany($company);
 		
 		$phone = new Phone();
 		$phone->setType($type);
 		$phone->setName($phoneName);
 		$phone->setCompany($company);
 		
-		$phone->setEmployee($employee);
-		
-		$em->persist($employee);
 		$em->persist($phone);
 		
 		$sync = new Sync();
@@ -107,6 +93,62 @@ class CompanyController extends Controller
 		
 		$phone->setAstPeer($astPeer);
 		
+		$em->flush();
+		
+		return $this->redirect($this->generateUrl('ui_company', array(
+			'hash' => $company->getHash()
+		)));
+    }
+	
+    /**
+     * @Route("/{hash}/new-employee", name="ui_company_newemployee")
+     * @Template()
+	 * @Method("GET")
+     */
+    public function newEmployeeAction($hash)
+    {
+		$user = $this->getUser();
+		$em = $this->getDoctrine()->getManager();
+		$company = $em->getRepository('VoIPCompanyStructureBundle:Company')->findOneBy(array(
+			'hash' => $hash
+		));
+        if (!$company) throw $this->createNotFoundException('Unable to find Office entity.');
+		if (!$user->hasCompany($company)) throw $this->createNotFoundException('No authorization.');
+        return array(
+			'company' => $company
+		);
+    }
+	
+    /**
+     * @Route("/{hash}/new-employee")
+     * @Template()
+	 * @Method("POST")
+     */
+    public function createEmployeeAction($hash)
+    {
+		$user = $this->getUser();
+		$em = $this->getDoctrine()->getManager();
+		$company = $em->getRepository('VoIPCompanyStructureBundle:Company')->findOneBy(array(
+			'hash' => $hash
+		));
+        if (!$company) throw $this->createNotFoundException('Unable to find Office entity.');
+		if (!$user->hasCompany($company)) throw $this->createNotFoundException('No authorization.');
+		
+		$request = $this->getRequest();
+		$extension = $request->get('extension');
+		$name = $request->get('name');
+		
+		if ($extension < 100 || $extension > 999) {
+			throw $this->createNotFoundException('Extension range');
+		}
+		
+		$employee = new Employee();
+		$employee->setName($name);
+		$employee->setExtension($extension);
+		$employee->setCompany($company);
+		
+		$em->persist($employee);
+
 		$em->flush();
 		
 		return $this->redirect($this->generateUrl('ui_company', array(

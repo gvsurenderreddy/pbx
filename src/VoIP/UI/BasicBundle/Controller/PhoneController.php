@@ -35,7 +35,8 @@ class PhoneController extends Controller
 		$company = $phone->getCompany();
 		if (!$user->hasCompany($company)) throw $this->createNotFoundException('No authorization.');
         return array(
-			'phone' => $phone
+			'phone' => $phone,
+			'company' => $company
 		);
     }
 	

@@ -53,7 +53,7 @@ class Sync {
 		$sippeer->setQualify(200);
 		$sippeer->setDirectmedia('no');
 		$sippeer->setDisallow(null);
-		$sippeer->setFromUser($phone->getEmployee()->getExtension());
+		$sippeer->setFromUser(null);
 		$sippeer->setDefaultUser($phone->getHash());
 		return $sippeer;
 	}

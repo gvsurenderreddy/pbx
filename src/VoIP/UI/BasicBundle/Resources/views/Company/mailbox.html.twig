@@ -11,13 +11,15 @@
 		<th>From</th>
 		<th>Duration</th>
 		<th>Message</th>
+		<th></th>
+		<th></th>
 	</tr>
 	{% for message in messages %}
 	<tr class="message-row-{{ message.hash }}">
 		<td>
-			{% if not message.readat %}<span class="label label-info message-labelnew-{{ message.hash }}">New</span>{% endif %}
+			<span class="label label-info message-labelnew-{{ message.hash }} {{ message.readat ? 'hidden' }}">New</span>
 		</td>
-		<td></td>
+		<td>{{ message.createdat|date('d/m/Y H:i:s') }}</td>
 		<td></td>
 		<td></td>
 		<td>
@@ -25,6 +27,12 @@
 				Your browser does not support the <code>audio</code> element.
 				<source src="https://s3-ap-southeast-1.amazonaws.com/voiptest/vm/{{ message.filepath }}" type="audio/ogg">
 			</audio>
+		</td>
+		<td>
+			<a href="{{ path('ui_message_unread', {'hash': message.hash}) }}" class="message-unreadlink-{{ message.hash }} {{ not message.readat ? 'hidden' }}">mark as unread</a
+		</td>
+		<td>
+			<a href="{{ path('ui_message_archive', {'hash': message.hash}) }}">archive</a>
 		</td>
 	</tr>
 	{% endfor %}
@@ -35,7 +43,13 @@
 <script>
 $('audio.message').bind('play', function(){
 	var hash = $(this).data('hash');
-	$('.message-labelnew-'+hash).hide();
+	$.ajax({
+		'url': '{{ path('ui_message_read', {'hash': 'tochange'}) }}'.replace('tochange', hash),
+		'success': function(){
+			$('.message-labelnew-'+hash).addClass('hidden');
+			$('.message-unreadlink-'+hash).removeClass('hidden');
+		}
+	})
 });	
 </script>
 {% endblock javascripts %}

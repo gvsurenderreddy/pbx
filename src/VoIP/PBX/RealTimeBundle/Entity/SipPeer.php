@@ -266,10 +266,10 @@ class SipPeer
     private $subscriptions;
 	
 	/**
-     * @ORM\OneToMany(targetEntity="\VoIP\Company\StructureBundle\Entity\Phone", mappedBy="astPeer")
+     * @ORM\OneToOne(targetEntity="\VoIP\Company\StructureBundle\Entity\Phone", mappedBy="astPeer")
 	 * @ORM\OrderBy({"name" = "ASC"})
      */
-    private $phones;
+    private $phone;
 
     /**
      * Get id
@@ -1150,36 +1150,5 @@ class SipPeer
         return $this->subscriptions;
     }
 
-    /**
-     * Add phones
-     *
-     * @param \VoIP\Company\StructureBundle\Entity\Phone $phones
-     * @return SipPeer
-     */
-    public function addPhone(\VoIP\Company\StructureBundle\Entity\Phone $phones)
-    {
-        $this->phones[] = $phones;
 
-        return $this;
-    }
-
-    /**
-     * Remove phones
-     *
-     * @param \VoIP\Company\StructureBundle\Entity\Phone $phones
-     */
-    public function removePhone(\VoIP\Company\StructureBundle\Entity\Phone $phones)
-    {
-        $this->phones->removeElement($phones);
-    }
-
-    /**
-     * Get phones
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getPhones()
-    {
-        return $this->phones;
-    }
 }

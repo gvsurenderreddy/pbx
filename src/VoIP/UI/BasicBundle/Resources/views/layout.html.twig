@@ -15,8 +15,8 @@
 		{% if is_granted('ROLE_USER') %}
 		<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 			<ul class="nav navbar-nav">
-				<li class="active"><a href="#">Link</a></li>
-				<li><a href="#">Link</a></li>
+				<li class="{{ app.request.attributes.get('_route') == 'ui_company' ? 'active' }}"><a href="{{ path('ui_company', {'hash': company.hash}) }}">Dashboard</a></li>
+				<li class="{{ app.request.attributes.get('_route') == 'ui_company_mailbox' ? 'active' }}"><a href="{{ path('ui_company_mailbox', {'hash': company.hash}) }}">Mailbox</a></li>
 				<li class="dropdown">
 					<a href="#" class="dropdown-toggle" data-toggle="dropdown">Dropdown <b class="caret"></b></a>
 					<ul class="dropdown-menu">

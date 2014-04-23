@@ -70,7 +70,7 @@ class Phone
     private $employee;
 	
 	/**
-     * @ORM\ManyToOne(targetEntity="\VoIP\PBX\RealTimeBundle\Entity\SipPeer", inversedBy="phones")
+     * @ORM\OneToOne(targetEntity="\VoIP\PBX\RealTimeBundle\Entity\SipPeer", inversedBy="phones")
 	 * @ORM\JoinColumn(name="ast_sippeer_id", referencedColumnName="id", onDelete="CASCADE")
      */
     private $astPeer;
