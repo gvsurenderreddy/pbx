@@ -38,9 +38,9 @@ class Message
     /**
      * @var string
      *
-     * @ORM\Column(name="test", type="string", length=255, nullable=true)
+     * @ORM\Column(name="voicemail_hash", type="string", length=10, nullable=true)
      */
-    private $test;
+    private $voicemailHash;
 	
 	/**
      * @ORM\ManyToOne(targetEntity="\VoIP\Company\VoicemailBundle\Entity\Voicemail", inversedBy="messages")
@@ -128,26 +128,27 @@ class Message
         return $this->voicemail;
     }
 
+
     /**
-     * Set test
+     * Set voicemailHash
      *
-     * @param string $test
+     * @param string $voicemailHash
      * @return Message
      */
-    public function setTest($test)
+    public function setVoicemailHash($voicemailHash)
     {
-        $this->test = $test;
+        $this->voicemailHash = $voicemailHash;
 
         return $this;
     }
 
     /**
-     * Get test
+     * Get voicemailHash
      *
      * @return string 
      */
-    public function getTest()
+    public function getVoicemailHash()
     {
-        return $this->test;
+        return $this->voicemailHash;
     }
 }
