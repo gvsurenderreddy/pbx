@@ -56,7 +56,7 @@ class Voicemail
     private $messages;
 	
 	/**
-     * @ORM\OneToOne(targetEntity="\VoIP\PBX\RealTimeBundle\Entity\Voicemail", inversedBy="voicemail")
+     * @ORM\OneToOne(targetEntity="\VoIP\PBX\RealTimeBundle\Entity\VoiceMail", inversedBy="voicemail")
 	 * @ORM\JoinColumn(name="ast_voicemail_id", referencedColumnName="id", onDelete="CASCADE")
      */
     private $astVoicemail;
@@ -231,10 +231,10 @@ class Voicemail
     /**
      * Set astVoicemail
      *
-     * @param \VoIP\PBX\RealTimeBundle\Entity\Voicemail $astVoicemail
+     * @param \VoIP\PBX\RealTimeBundle\Entity\Voicemail $astVoiceMail
      * @return Voicemail
      */
-    public function setAstVoicemail(\VoIP\PBX\RealTimeBundle\Entity\Voicemail $astVoicemail = null)
+    public function setAstVoicemail(\VoIP\PBX\RealTimeBundle\Entity\VoiceMail $astVoicemail = null)
     {
         $this->astVoicemail = $astVoicemail;
 
@@ -244,7 +244,7 @@ class Voicemail
     /**
      * Get astVoicemail
      *
-     * @return \VoIP\PBX\RealTimeBundle\Entity\Voicemail 
+     * @return \VoIP\PBX\RealTimeBundle\Entity\VoiceMail 
      */
     public function getAstVoicemail()
     {

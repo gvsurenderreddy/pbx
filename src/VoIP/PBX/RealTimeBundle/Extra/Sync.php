@@ -5,7 +5,7 @@ namespace VoIP\PBX\RealTimeBundle\Extra;
 use VoIP\PBX\RealTimeBundle\Entity\SipPeer;
 use VoIP\PBX\RealTimeBundle\Entity\Extension;
 use VoIP\PBX\RealTimeBundle\Entity\Conf;
-use VoIP\PBX\RealTimeBundle\Entity\Voicemail;
+use VoIP\PBX\RealTimeBundle\Entity\VoiceMail;
 
 class Sync {
 	
@@ -15,7 +15,7 @@ class Sync {
 	
 	public function voicemailToVoicemail($voicemail)
 	{
-		if (!$vm = $voicemail->getAstVoicemail()) $vm = new Voicemail();
+		if (!$vm = $voicemail->getAstVoicemail()) $vm = new VoiceMail();
 		$vm->setMailbox($voicemail->getHash());
 		$vm->setContext('mailbox');
 		$vm->setPassword(rand(1000,9999));
