@@ -57,4 +57,25 @@ class Sync {
 		$sippeer->setDefaultUser($phone->getHash());
 		return $sippeer;
 	}
+	
+	public function itemToExtension($subscription, $item, $n)
+	{
+		if (!$extension = $item->getAstExtension()) $extension = new Extension();
+		$extension->setContext('public');
+		$extension->setExten($subscription->getHash());
+		$extension->setPriority($n);
+		switch ($item->getType()) {
+			case 'extension':
+				$app = 'Dial';
+				$appData = 'SIP/'.$item->getPhone()->getHash();
+				break;
+			
+			default:
+				# code...
+				break;
+		}
+		$extension->setApp($app);
+		$extension->setAppdata($appData);
+		return $extension;
+	}
 }

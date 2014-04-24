@@ -187,8 +187,14 @@ class SubscriptionController extends Controller
 		
 		$type = $request->get('type');
 		
+		$phoneId = $request->get('phone');
+		$phone = $em->getRepository('VoIPCompanyStructureBundle:Phone')->findOneBy(array(
+			'hash' => $phoneId
+		));
+		
 		$item = new DialPlanItem();
 		$item->setType($type);
+		$item->setPhone($phone);
 		
 		$em->persist($item);
 		$em->flush();
@@ -206,16 +212,34 @@ class SubscriptionController extends Controller
 			$tmp = $subscription->getDialPlanFirstItem();
 			$subscription->setDialPlanFirstItem(null);
 			$em->flush();
-			$item->setNextItem($subscription->getDialPlanFirstItem());
+			$item->setNextItem($tmp);
 			$em->flush();
 			$subscription->setDialPlanFirstItem($item);
 			$em->flush();
 		}
 		
-		
+		$this->sync($subscription);
 		
 		return $this->redirect($this->generateUrl('ui_company', array(
 			'hash' => $company->getHash()
 		)));
     }
+	
+	public function sync($subscription)
+	{
+		if ($item = $subscription->getDialPlanFirstItem()) return $this->syncItem($subscription, $item, 1);
+		else return false;
+	}
+	public function syncItem($subscription, $item, $n)
+	{
+		$em = $this->getDoctrine()->getManager();
+		$sync = new Sync();
+		$astExension = $sync->itemToExtension($subscription, $item, $n);
+		$item->setAstExtension($astExension);
+		$em->persist($astExension);
+		$em->flush();
+		if ($nextItem = $item->getNextItem()) {
+			return $this->syncItem($subscription, $nextItem, $n+1);
+		} else return true;
+	}
 }

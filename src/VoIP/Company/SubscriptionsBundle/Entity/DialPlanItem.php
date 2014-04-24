@@ -72,6 +72,12 @@ class DialPlanItem
     private $hash;
 	
 	/**
+     * @ORM\ManyToOne(targetEntity="\VoIP\Company\StructureBundle\Entity\Phone", inversedBy="dialItems")
+	 * @ORM\JoinColumn(name="phone_id", referencedColumnName="id", onDelete="CASCADE")
+     */
+    private $phone;
+	
+	/**
      * @ORM\OneToOne(targetEntity="\VoIP\Company\SubscriptionsBundle\Entity\DialPlanItem", inversedBy="previousItem")
 	 * @ORM\JoinColumn(name="next_item_id", referencedColumnName="id", onDelete="CASCADE")
      */
@@ -86,6 +92,12 @@ class DialPlanItem
      * @ORM\OneToOne(targetEntity="\VoIP\Company\SubscriptionsBundle\Entity\Subscription", mappedBy="dialPlanFirstItem")
      */
     private $subscription;
+	
+	/**
+     * @ORM\OneToOne(targetEntity="\VoIP\PBX\RealTimeBundle\Entity\Extension", inversedBy="dialItem")
+	 * @ORM\JoinColumn(name="ast_extension_id", referencedColumnName="id", onDelete="CASCADE")
+     */
+    private $astExtension;
 	
 	/**
 	 * @ORM\PrePersist
@@ -120,7 +132,7 @@ class DialPlanItem
 	
 	public function getAbsolutePriority()
 	{
-		if ($company = $this->getSubscription()) return 1;
+		if ($subscription = $this->getSubscription()) return 1;
 		elseif (($previous = $this->getPreviousItem()) && ($previousOrder = $previous->getAbsolutePriority())) return $previousOrder + 1;
 		else return null;
 	}
@@ -372,5 +384,51 @@ class DialPlanItem
     public function getSubscription()
     {
         return $this->subscription;
+    }
+
+    /**
+     * Set astExtension
+     *
+     * @param \VoIP\PBX\RealTimeBundle\Entity\Extension $astExtension
+     * @return DialPlanItem
+     */
+    public function setAstExtension(\VoIP\PBX\RealTimeBundle\Entity\Extension $astExtension = null)
+    {
+        $this->astExtension = $astExtension;
+
+        return $this;
+    }
+
+    /**
+     * Get astExtension
+     *
+     * @return \VoIP\PBX\RealTimeBundle\Entity\Extension 
+     */
+    public function getAstExtension()
+    {
+        return $this->astExtension;
+    }
+
+    /**
+     * Set phone
+     *
+     * @param \VoIP\Company\StructureBundle\Entity\Phone $phone
+     * @return DialPlanItem
+     */
+    public function setPhone(\VoIP\Company\StructureBundle\Entity\Phone $phone = null)
+    {
+        $this->phone = $phone;
+
+        return $this;
+    }
+
+    /**
+     * Get phone
+     *
+     * @return \VoIP\Company\StructureBundle\Entity\Phone 
+     */
+    public function getPhone()
+    {
+        return $this->phone;
     }
 }
