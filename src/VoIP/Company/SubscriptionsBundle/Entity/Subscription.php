@@ -133,6 +133,7 @@ class Subscription
 	 *      joinColumns={@ORM\JoinColumn(name="subscription_id", referencedColumnName="id")},
 	 *      inverseJoinColumns={@ORM\JoinColumn(name="employee_id", referencedColumnName="id")}
 	 *      )
+	 * @ORM\OrderBy({"name" = "ASC"})
 	 */
 	protected $employees;
 	

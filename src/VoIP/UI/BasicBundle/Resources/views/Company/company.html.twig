@@ -113,20 +113,23 @@
 				<tr>
 					<th>Name</th>
 					<th></th>
-					<th colspan="3">Dialplan</th>
+					<th>Extensions to call</th>
 				</tr>
 				{% for subscription in company.subscriptions %}
 				<tr>
-					<td rowspan="{{ 1 + subscription.depth }}">{{ subscription.name }}</td>
-					<td rowspan="{{ 1 + subscription.depth }}">
+					<td>{{ subscription.name }}</td>
+					<td>
 						<a href="{{ path('ui_subscription_edit', {'hash': subscription.hash}) }}"><span class="glyphicon glyphicon-pencil"></span></a>
 						<a href="{{ path('ui_subscription_delete', {'hash': subscription.hash}) }}"><span class="glyphicon glyphicon-trash"></span></a>
 					</td>
-					<td colspan="3">
-						<a href="{{ path('ui_subscription_adddialplan', {'hash': subscription.hash}) }}">Add a first item</a>
+					<td>
+						{% for employee in subscription.employees %}
+						{{ employee.name }} ({{ employee.extension }}) {% if employee.phone %}<span class="label label-success">connected</span>{% endif %}<br>
+						{% else %}
+						<span class="label label-danger">no employee</span>
+						{% endfor %}
 					</td>
 				</tr>
-				{% if subscription.dialplanfirstitem %}{{ include('VoIPUIBasicBundle:DialPlanItem:show.html.twig',{ 'item': subscription.dialplanfirstitem }) }}{% endif %}
 				{% endfor %}
 			</table>
 		</div>	
