@@ -128,6 +128,15 @@ class Subscription
 	protected $countries;
 	
 	/**
+	 * @ORM\ManyToMany(targetEntity="\VoIP\Company\StructureBundle\Entity\Employee", inversedBy="subscriptions")
+	 * @ORM\JoinTable(name="structure_subscription_has_employee",
+	 *      joinColumns={@ORM\JoinColumn(name="subscription_id", referencedColumnName="id")},
+	 *      inverseJoinColumns={@ORM\JoinColumn(name="employee_id", referencedColumnName="id")}
+	 *      )
+	 */
+	protected $employees;
+	
+	/**
      * @ORM\OneToOne(targetEntity="\VoIP\Company\SubscriptionsBundle\Entity\DialPlanItem", inversedBy="subscription")
 	 * @ORM\JoinColumn(name="dialplan_firstitem_id", referencedColumnName="id", onDelete="CASCADE")
      */
@@ -573,5 +582,38 @@ class Subscription
     public function getRegistrationCode()
     {
         return $this->registrationCode;
+    }
+
+    /**
+     * Add employees
+     *
+     * @param \VoIP\Company\StructureBundle\Entity\Employee $employees
+     * @return Subscription
+     */
+    public function addEmployee(\VoIP\Company\StructureBundle\Entity\Employee $employees)
+    {
+        $this->employees[] = $employees;
+
+        return $this;
+    }
+
+    /**
+     * Remove employees
+     *
+     * @param \VoIP\Company\StructureBundle\Entity\Employee $employees
+     */
+    public function removeEmployee(\VoIP\Company\StructureBundle\Entity\Employee $employees)
+    {
+        $this->employees->removeElement($employees);
+    }
+
+    /**
+     * Get employees
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getEmployees()
+    {
+        return $this->employees;
     }
 }

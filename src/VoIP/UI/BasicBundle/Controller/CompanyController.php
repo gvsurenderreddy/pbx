@@ -173,9 +173,15 @@ class CompanyController extends Controller
 		$countries = $em->getRepository('VoIPCompanySubscriptionsBundle:Country')->findBy(array(), array(
 			'name' => 'ASC'
 		));
+		$employees = $em->getRepository('VoIPCompanyStructureBundle:Employee')->findBy(array(
+			'company' => $company
+		), array(
+			'name' => 'ASC'
+		));
         return array(
 			'company' => $company,
-			'countries' => $countries
+			'countries' => $countries,
+			'employees' => $employees,
 		);
     }
 	
@@ -204,6 +210,7 @@ class CompanyController extends Controller
 		$prefix = $request->get('prefix');
 		$receive = $request->get('receive') === 'on';
 		$countries = $request->get('countries');
+		$employees = $request->get('employees');
 		
 		$subscription = new Subscription();
 		$subscription->setName($name);
@@ -222,6 +229,14 @@ class CompanyController extends Controller
 				if (!$country) throw $this->createNotFoundException('Unable to find Country entity.');
 				$subscription->addCountry($country);
 				$country->addSubscription($subscription);
+			}
+		}
+		if ($employees) {
+			foreach ($employees as $employeeId) {
+				$employee = $em->getRepository('VoIPCompanyStructureBundle:Employee')->find($employeeId);
+				if (!$employee) throw $this->createNotFoundException('Unable to find Employee entity.');
+				$subscription->addEmployee($employee);
+				$employee->addSubscription($subscription);
 			}
 		}
 		

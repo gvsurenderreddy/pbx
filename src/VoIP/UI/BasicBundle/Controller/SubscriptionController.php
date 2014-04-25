@@ -34,12 +34,19 @@ class SubscriptionController extends Controller
         if (!$subscription) throw $this->createNotFoundException('Unable to find Subsciption entity.');
 		$company = $subscription->getCompany();
 		if (!$user->hasCompany($company)) throw $this->createNotFoundException('No authorization.');
+		$employees = $em->getRepository('VoIPCompanyStructureBundle:Employee')->findBy(array(
+			'company' => $company
+		), array(
+			'name' => 'ASC'
+		));
 		$countries = $em->getRepository('VoIPCompanySubscriptionsBundle:Country')->findBy(array(), array(
 			'name' => 'ASC'
 		));
         return array(
 			'subscription' => $subscription,
-			'countries' => $countries
+			'countries' => $countries,
+			'company' => $company,
+			'employees' => $employees
 		);
     }
 	
@@ -69,6 +76,7 @@ class SubscriptionController extends Controller
 		$prefix = $request->get('prefix');
 		$receive = $request->get('receive') === 'on';
 		$countries = $request->get('countries');
+		$employees = $request->get('employees');
 		
 		$subscription->setName($name);
 		$subscription->setType($type);
@@ -92,6 +100,20 @@ class SubscriptionController extends Controller
 				$country->addSubscription($subscription);
 			}
 		}
+		
+		foreach ($subscription->getEmployees() as $employee) {
+			$subscription->removeEmployee($employee);
+		}
+		
+		if ($employees) {
+			foreach ($employees as $employeeId) {
+				$employee = $em->getRepository('VoIPCompanyStructureBundle:Employee')->find($employeeId);
+				if (!$employee) throw $this->createNotFoundException('Unable to find Employee entity.');
+				$subscription->addEmployee($employee);
+				$employee->addSubscription($subscription);
+			}
+		}
+		
 		$em->flush();
 		
 		$sync = new Sync();

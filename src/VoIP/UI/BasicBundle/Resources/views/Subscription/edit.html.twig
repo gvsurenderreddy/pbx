@@ -72,6 +72,16 @@
 				</div>
 			</div>
 			<div class="form-group">
+				<label for="employees" class="col-sm-2 control-label">Employees</label>
+				<div class="col-sm-10">
+					<select class="form-control" id="employees" name="employees[]" multiple>
+						{% for employee in employees %}
+						<option value="{{ employee.id }}" {% if employee in subscription.employees %}selected="selected"{% endif %}>{{ employee.name }} ({{ employee.extension }})</option>
+						{% endfor %}
+					</select>
+				</div>
+			</div>
+			<div class="form-group">
 				<label for="countries" class="col-sm-2 control-label">Countries</label>
 				<div class="col-sm-10">
 					<select class="form-control" id="countries" name="countries[]" multiple>

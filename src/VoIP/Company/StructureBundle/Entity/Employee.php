@@ -69,6 +69,12 @@ class Employee
     private $company;
 	
 	/**
+	 * @ORM\ManyToMany(targetEntity="\VoIP\Company\SubscriptionsBundle\Entity\Subscription", mappedBy="employees")
+	 * @ORM\OrderBy({"name" = "ASC"})
+	 */
+	protected $subscriptions;
+	
+	/**
 	 * @ORM\PrePersist
 	 */
 	public function prePersist()
@@ -262,5 +268,45 @@ class Employee
     public function getCompany()
     {
         return $this->company;
+    }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->subscriptions = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Add subscriptions
+     *
+     * @param \VoIP\Company\SubscriptionsBundle\Entity\Subscription $subscriptions
+     * @return Employee
+     */
+    public function addSubscription(\VoIP\Company\SubscriptionsBundle\Entity\Subscription $subscriptions)
+    {
+        $this->subscriptions[] = $subscriptions;
+
+        return $this;
+    }
+
+    /**
+     * Remove subscriptions
+     *
+     * @param \VoIP\Company\SubscriptionsBundle\Entity\Subscription $subscriptions
+     */
+    public function removeSubscription(\VoIP\Company\SubscriptionsBundle\Entity\Subscription $subscriptions)
+    {
+        $this->subscriptions->removeElement($subscriptions);
+    }
+
+    /**
+     * Get subscriptions
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getSubscriptions()
+    {
+        return $this->subscriptions;
     }
 }
