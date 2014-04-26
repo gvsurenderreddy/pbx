@@ -37,7 +37,7 @@ class DefaultController extends Controller
 		$filePath = __DIR__.'/../../../../../web/tmp/';
         $file->move($filePath, $fileName);
 		$s3 = $this->container->get('aws_s3');
-		$s3->create_object('voiptest', 'vm/'.$fileName, array(
+		$s3->create_object('fortyeight', 'vm/'.$fileName, array(
 			'fileUpload' => $filePath.$fileName,
 			'acl' => \AmazonS3::ACL_PUBLIC,
 			'headers' => array(
