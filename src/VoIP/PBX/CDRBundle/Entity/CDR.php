@@ -132,6 +132,49 @@ class CDR
      * @ORM\Column(name="uniqueid", type="string", length=128, nullable=true)
      */
     private $uniqueid;
+	
+	/**
+     * @ORM\ManyToOne(targetEntity="\VoIP\Company\StructureBundle\Entity\Employee", inversedBy="astDialerEmployees")
+	 * @ORM\JoinColumn(name="dialer_employee_id", referencedColumnName="id", onDelete="CASCADE")
+     */
+    private $dialerEmployee;
+	
+	/**
+     * @ORM\ManyToOne(targetEntity="\VoIP\Company\StructureBundle\Entity\Phone", inversedBy="astDialerPhones")
+	 * @ORM\JoinColumn(name="dialer_phone_id", referencedColumnName="id", onDelete="CASCADE")
+     */
+    private $dialerPhone;
+	
+	/**
+     * @ORM\ManyToOne(targetEntity="\VoIP\Company\SubscriptionsBundle\Entity\Subscription", inversedBy="astDialerSubscriptions")
+	 * @ORM\JoinColumn(name="dialer_subscription_id", referencedColumnName="id", onDelete="CASCADE")
+     */
+    private $dialerSubscription;
+	
+	/**
+     * @ORM\ManyToOne(targetEntity="\VoIP\Company\StructureBundle\Entity\Employee", inversedBy="astReceiverEmployees")
+	 * @ORM\JoinColumn(name="receiver_employee_id", referencedColumnName="id", onDelete="CASCADE")
+     */
+    private $receiverEmployee;
+	
+	/**
+     * @ORM\ManyToOne(targetEntity="\VoIP\Company\StructureBundle\Entity\Phone", inversedBy="astReceiverPhones")
+	 * @ORM\JoinColumn(name="receiver_phone_id", referencedColumnName="id", onDelete="CASCADE")
+     */
+    private $receiverPhone;
+	
+	/**
+     * @ORM\ManyToOne(targetEntity="\VoIP\Company\SubscriptionsBundle\Entity\Subscription", inversedBy="astReceiverSubscriptions")
+	 * @ORM\JoinColumn(name="receiver_subscription_id", referencedColumnName="id", onDelete="CASCADE")
+     */
+    private $receiverSubscription;
+	
+	/**
+     * @ORM\ManyToOne(targetEntity="\VoIP\Company\StructureBundle\Entity\Company", inversedBy="astCalls")
+	 * @ORM\JoinColumn(name="company_id", referencedColumnName="id", onDelete="CASCADE")
+     */
+    private $company;
+
 
 
     /**
@@ -510,5 +553,166 @@ class CDR
     public function getUniqueid()
     {
         return $this->uniqueid;
+    }
+
+    /**
+     * Set dialerEmployee
+     *
+     * @param \VoIP\Company\StructureBundle\Entity\Employee $dialerEmployee
+     * @return CDR
+     */
+    public function setDialerEmployee(\VoIP\Company\StructureBundle\Entity\Employee $dialerEmployee = null)
+    {
+        $this->dialerEmployee = $dialerEmployee;
+
+        return $this;
+    }
+
+    /**
+     * Get dialerEmployee
+     *
+     * @return \VoIP\Company\StructureBundle\Entity\Employee 
+     */
+    public function getDialerEmployee()
+    {
+        return $this->dialerEmployee;
+    }
+
+    /**
+     * Set dialerPhone
+     *
+     * @param \VoIP\Company\StructureBundle\Entity\Phone $dialerPhone
+     * @return CDR
+     */
+    public function setDialerPhone(\VoIP\Company\StructureBundle\Entity\Phone $dialerPhone = null)
+    {
+        $this->dialerPhone = $dialerPhone;
+
+        return $this;
+    }
+
+    /**
+     * Get dialerPhone
+     *
+     * @return \VoIP\Company\StructureBundle\Entity\Phone 
+     */
+    public function getDialerPhone()
+    {
+        return $this->dialerPhone;
+    }
+
+    /**
+     * Set dialerSubscription
+     *
+     * @param \VoIP\Company\SubscriptionsBundle\Entity\Subscription $dialerSubscription
+     * @return CDR
+     */
+    public function setDialerSubscription(\VoIP\Company\SubscriptionsBundle\Entity\Subscription $dialerSubscription = null)
+    {
+        $this->dialerSubscription = $dialerSubscription;
+
+        return $this;
+    }
+
+    /**
+     * Get dialerSubscription
+     *
+     * @return \VoIP\Company\SubscriptionsBundle\Entity\Subscription 
+     */
+    public function getDialerSubscription()
+    {
+        return $this->dialerSubscription;
+    }
+
+    /**
+     * Set receiverEmployee
+     *
+     * @param \VoIP\Company\StructureBundle\Entity\Employee $receiverEmployee
+     * @return CDR
+     */
+    public function setReceiverEmployee(\VoIP\Company\StructureBundle\Entity\Employee $receiverEmployee = null)
+    {
+        $this->receiverEmployee = $receiverEmployee;
+
+        return $this;
+    }
+
+    /**
+     * Get receiverEmployee
+     *
+     * @return \VoIP\Company\StructureBundle\Entity\Employee 
+     */
+    public function getReceiverEmployee()
+    {
+        return $this->receiverEmployee;
+    }
+
+    /**
+     * Set receiverPhone
+     *
+     * @param \VoIP\Company\StructureBundle\Entity\Phone $receiverPhone
+     * @return CDR
+     */
+    public function setReceiverPhone(\VoIP\Company\StructureBundle\Entity\Phone $receiverPhone = null)
+    {
+        $this->receiverPhone = $receiverPhone;
+
+        return $this;
+    }
+
+    /**
+     * Get receiverPhone
+     *
+     * @return \VoIP\Company\StructureBundle\Entity\Phone 
+     */
+    public function getReceiverPhone()
+    {
+        return $this->receiverPhone;
+    }
+
+    /**
+     * Set receiverSubscription
+     *
+     * @param \VoIP\Company\SubscriptionsBundle\Entity\Subscription $receiverSubscription
+     * @return CDR
+     */
+    public function setReceiverSubscription(\VoIP\Company\SubscriptionsBundle\Entity\Subscription $receiverSubscription = null)
+    {
+        $this->receiverSubscription = $receiverSubscription;
+
+        return $this;
+    }
+
+    /**
+     * Get receiverSubscription
+     *
+     * @return \VoIP\Company\SubscriptionsBundle\Entity\Subscription 
+     */
+    public function getReceiverSubscription()
+    {
+        return $this->receiverSubscription;
+    }
+
+    /**
+     * Set company
+     *
+     * @param \VoIP\Company\StructureBundle\Entity\Company $company
+     * @return CDR
+     */
+    public function setCompany(\VoIP\Company\StructureBundle\Entity\Company $company = null)
+    {
+        $this->company = $company;
+
+        return $this;
+    }
+
+    /**
+     * Get company
+     *
+     * @return \VoIP\Company\StructureBundle\Entity\Company 
+     */
+    public function getCompany()
+    {
+        return $this->company;
     }
 }
