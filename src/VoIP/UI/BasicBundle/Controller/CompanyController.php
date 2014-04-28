@@ -314,7 +314,8 @@ class CompanyController extends Controller
 
 		$query = $repository->createQueryBuilder('m')
 			->leftJoin('m.voicemail', 'v')
-			->leftJoin('v.company', 'c')
+			->leftJoin('v.subscription', 's')
+			->leftJoin('s.company', 'c')
 		    ->where('c.hash = :hash')
 			->andWhere('m.archivedAt IS NULL')
 		    ->setParameter('hash', $hash)
