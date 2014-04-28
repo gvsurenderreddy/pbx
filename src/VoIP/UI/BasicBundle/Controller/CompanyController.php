@@ -245,6 +245,7 @@ class CompanyController extends Controller
 		
 		$voicemail = new Voicemail();
 		$voicemail->setSubscription($subscription);
+		$subscription->setVoicemail($voicemail);
 		$em->persist($voicemail);
 		$em->flush();
 		

@@ -39,7 +39,7 @@ class Voicemail
     /**
      * @var string
      *
-     * @ORM\Column(name="hash", type="string", length=40)
+     * @ORM\Column(name="hash", type="string", length=20)
      */
     private $hash;
 	
@@ -142,28 +142,6 @@ class Voicemail
     }
 
     /**
-     * Set hash
-     *
-     * @param string $hash
-     * @return Voicemail
-     */
-    public function setHash($hash)
-    {
-        $this->hash = $hash;
-
-        return $this;
-    }
-
-    /**
-     * Get hash
-     *
-     * @return string 
-     */
-    public function getHash()
-    {
-        return $this->hash;
-    }
-    /**
      * Constructor
      */
     public function __construct()
@@ -249,5 +227,29 @@ class Voicemail
     public function getSubscription()
     {
         return $this->subscription;
+    }
+
+
+    /**
+     * Set hash
+     *
+     * @param string $hash
+     * @return Voicemail
+     */
+    public function setHash($hash)
+    {
+        $this->hash = $hash;
+
+        return $this;
+    }
+
+    /**
+     * Get hash
+     *
+     * @return string 
+     */
+    public function getHash()
+    {
+        return $this->hash;
     }
 }

@@ -95,7 +95,7 @@ class Subscription
     /**
      * @var string
      *
-     * @ORM\Column(name="hash", type="string", length=255)
+     * @ORM\Column(name="hash", type="string", length=20)
      */
     private $hash;
 	
@@ -172,7 +172,7 @@ class Subscription
 
 	public function generateHash()
 	{
-		$this->hash = hash('crc32b', uniqid('', true));
+		$this->hash = hexdec(hash('crc32b', uniqid('', true)));
 	}
 	
 	public function getDepth()
@@ -412,29 +412,6 @@ class Subscription
     }
 
     /**
-     * Set hash
-     *
-     * @param string $hash
-     * @return Subscription
-     */
-    public function setHash($hash)
-    {
-        $this->hash = $hash;
-
-        return $this;
-    }
-
-    /**
-     * Get hash
-     *
-     * @return string 
-     */
-    public function getHash()
-    {
-        return $this->hash;
-    }
-
-    /**
      * Set company
      *
      * @param \VoIP\Company\StructureBundle\Entity\Company $company
@@ -645,5 +622,28 @@ class Subscription
     public function getVoicemail()
     {
         return $this->voicemail;
+    }
+
+    /**
+     * Set hash
+     *
+     * @param string $hash
+     * @return Subscription
+     */
+    public function setHash($hash)
+    {
+        $this->hash = $hash;
+
+        return $this;
+    }
+
+    /**
+     * Get hash
+     *
+     * @return string 
+     */
+    public function getHash()
+    {
+        return $this->hash;
     }
 }
