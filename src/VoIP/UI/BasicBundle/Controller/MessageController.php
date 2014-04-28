@@ -32,7 +32,7 @@ class MessageController extends Controller
 			'hash' => $hash
 		));
         if (!$message) throw $this->createNotFoundException('Unable to find Message entity.');
-		$company = $message->getVoicemail()->getCompany();
+		$company = $message->getSubscription()->getVoicemail()->getCompany();
 		if (!$user->hasCompany($company)) throw $this->createNotFoundException('No authorization.');
 		
 		$message->setReadAt(new \DateTime());
@@ -56,7 +56,7 @@ class MessageController extends Controller
 			'hash' => $hash
 		));
         if (!$message) throw $this->createNotFoundException('Unable to find Message entity.');
-		$company = $message->getVoicemail()->getCompany();
+		$company = $message->getSubscription()->getVoicemail()->getCompany();
 		if (!$user->hasCompany($company)) throw $this->createNotFoundException('No authorization.');
 		
 		$message->setReadAt(null);
@@ -80,7 +80,7 @@ class MessageController extends Controller
 			'hash' => $hash
 		));
         if (!$message) throw $this->createNotFoundException('Unable to find Message entity.');
-		$company = $message->getVoicemail()->getCompany();
+		$company = $message->getSubscription()->getVoicemail()->getCompany();
 		if (!$user->hasCompany($company)) throw $this->createNotFoundException('No authorization.');
 		
 		$message->setArchivedAt(new \DateTime());
