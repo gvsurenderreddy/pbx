@@ -119,6 +119,12 @@ class Subscription
     private $astPeer;
 	
 	/**
+     * @ORM\OneToOne(targetEntity="\VoIP\Company\VoicemailBundle\Entity\Voicemail", inversedBy="subscription")
+	 * @ORM\JoinColumn(name="voicemail_id", referencedColumnName="id", onDelete="CASCADE")
+     */
+    private $voicemail;
+	
+	/**
 	 * @ORM\ManyToMany(targetEntity="\VoIP\Company\SubscriptionsBundle\Entity\Country", inversedBy="subscriptions")
 	 * @ORM\JoinTable(name="structure_subscription_has_country",
 	 *      joinColumns={@ORM\JoinColumn(name="subscription_id", referencedColumnName="id")},
@@ -616,5 +622,28 @@ class Subscription
     public function getEmployees()
     {
         return $this->employees;
+    }
+
+    /**
+     * Set voicemail
+     *
+     * @param \VoIP\Company\VoicemailBundle\Entity\Voicemail $voicemail
+     * @return Subscription
+     */
+    public function setVoicemail(\VoIP\Company\VoicemailBundle\Entity\Voicemail $voicemail = null)
+    {
+        $this->voicemail = $voicemail;
+
+        return $this;
+    }
+
+    /**
+     * Get voicemail
+     *
+     * @return \VoIP\Company\VoicemailBundle\Entity\Voicemail 
+     */
+    public function getVoicemail()
+    {
+        return $this->voicemail;
     }
 }

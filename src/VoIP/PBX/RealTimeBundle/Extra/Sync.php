@@ -19,7 +19,7 @@ class Sync {
 		$vm->setMailbox($voicemail->getHash());
 		$vm->setContext('mailbox');
 		$vm->setPassword(rand(1000,9999));
-		$vm->setFullname($voicemail->getCompany()->getName());
+		$vm->setFullname($voicemail->getSubscription()->getCompany()->getName());
 		$vm->setEmail('adrien@eudes.co');
 		return $vm;
 	}

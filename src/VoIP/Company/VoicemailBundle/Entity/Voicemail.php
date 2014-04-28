@@ -44,16 +44,15 @@ class Voicemail
     private $hash;
 	
 	/**
-     * @ORM\ManyToOne(targetEntity="\VoIP\Company\StructureBundle\Entity\Company", inversedBy="voicemails")
-	 * @ORM\JoinColumn(name="company_id", referencedColumnName="id", onDelete="CASCADE")
-     */
-    private $company;
-	
-	/**
      * @ORM\OneToMany(targetEntity="\VoIP\Company\VoicemailBundle\Entity\Message", mappedBy="voicemail")
 	 * @ORM\OrderBy({"createdAt" = "ASC"})
      */
     private $messages;
+	
+	/**
+     * @ORM\OneToOne(targetEntity="\VoIP\Company\SubscriptionsBundle\Entity\Subscription", mappedBy="voicemail")
+     */
+    private $subscription;
 	
 	/**
      * @ORM\OneToOne(targetEntity="\VoIP\PBX\RealTimeBundle\Entity\VoiceMail", inversedBy="voicemail")
@@ -173,29 +172,6 @@ class Voicemail
     }
 
     /**
-     * Set company
-     *
-     * @param \VoIP\Company\StructureBundle\Entity\Company $company
-     * @return Voicemail
-     */
-    public function setCompany(\VoIP\Company\StructureBundle\Entity\Company $company = null)
-    {
-        $this->company = $company;
-
-        return $this;
-    }
-
-    /**
-     * Get company
-     *
-     * @return \VoIP\Company\StructureBundle\Entity\Company 
-     */
-    public function getCompany()
-    {
-        return $this->company;
-    }
-
-    /**
      * Add messages
      *
      * @param \VoIP\Company\VoicemailBundle\Entity\Message $messages
@@ -249,5 +225,29 @@ class Voicemail
     public function getAstVoicemail()
     {
         return $this->astVoicemail;
+    }
+
+
+    /**
+     * Set subscription
+     *
+     * @param \VoIP\Company\SubscriptionsBundle\Entity\Subscription $subscription
+     * @return Voicemail
+     */
+    public function setSubscription(\VoIP\Company\SubscriptionsBundle\Entity\Subscription $subscription = null)
+    {
+        $this->subscription = $subscription;
+
+        return $this;
+    }
+
+    /**
+     * Get subscription
+     *
+     * @return \VoIP\Company\SubscriptionsBundle\Entity\Subscription 
+     */
+    public function getSubscription()
+    {
+        return $this->subscription;
     }
 }
