@@ -328,4 +328,34 @@ class CompanyController extends Controller
 			'messages' => $messages
 		);
     }
+	
+    /**
+     * @Route("/{hash}/reports", name="ui_company_cdr")
+     * @Template()
+	 * @Method("GET")
+     */
+    public function cdrAction($hash)
+    {
+		$user = $this->getUser();
+		$em = $this->getDoctrine()->getManager();
+		$company = $em->getRepository('VoIPCompanyStructureBundle:Company')->findOneBy(array(
+			'hash' => $hash
+		));
+        if (!$company) throw $this->createNotFoundException('Unable to find Company entity.');
+		if (!$user->hasCompany($company)) throw $this->createNotFoundException('No authorization.');
+		$repository = $this->getDoctrine()->getRepository('VoIPPBXCDRBundle:CDR');
+
+		$query = $repository->createQueryBuilder('cdr')
+			->leftJoin('cdr.company', 'c')
+		    ->where('c.hash = :hash')
+		    ->setParameter('hash', $hash)
+		    ->orderBy('cdr.start', 'ASC')
+		    ->getQuery();
+
+		$cdrs = $query->getResult();
+        return array(
+			'company' => $company,
+			'cdrs' => $cdrs
+		);
+    }
 }

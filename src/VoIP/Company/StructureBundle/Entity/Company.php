@@ -91,6 +91,12 @@ class Company
 	protected $users;
 	
 	/**
+     * @ORM\OneToMany(targetEntity="\VoIP\PBX\CDRBundle\Entity\CDR", mappedBy="company")
+	 * @ORM\OrderBy({"start" = "ASC"})
+     */
+    private $reports;
+	
+	/**
 	 * @ORM\PrePersist
 	 */
 	public function prePersist()
