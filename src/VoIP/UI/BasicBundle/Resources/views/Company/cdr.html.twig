@@ -1,0 +1,25 @@
+{% extends "VoIPUIBasicBundle::layout.html.twig" %}
+{% block title %}48 | {{ company.name }}{% endblock %}
+{% block container %}
+<div class="page-header">
+	<h1>Reports</h1>
+</div>
+<table class="table table-hover">
+	<tr>
+		<th>Date</th>
+		<th>From</th>
+		<th>To</th>
+		<th>Dialer</th>
+		<th>Receiver</th>
+	</tr>
+	{% for cdr in cdrs %}
+	<tr>
+		<td>{{ cdr.start|date('d/m/Y') }}</td>
+		<td>{{ cdr.start|date('H:i:s') }}</td>
+		<td>{{ cdr.end|date('H:i:s') }}</td>
+		<td>{{ cdr.channel }}</td>
+		<td>{{ cdr.dstchannel }}</td>
+	</tr>
+	{% endfor %}
+</table>
+{% endblock container %}
