@@ -42,11 +42,22 @@ class SubscriptionController extends Controller
 		$countries = $em->getRepository('VoIPCompanySubscriptionsBundle:Country')->findBy(array(), array(
 			'name' => 'ASC'
 		));
+		$usedPrefixs = array();
+		foreach ($company->getSubscriptions() as $s) {
+			$usedPrefixs[] = $s->getPrefix();
+		}
+		$prefixs = array();
+		for ($i=1; $i < 10; $i++) { 
+			if (!in_array($i, $usedPrefixs) || $i == $subscription->getPrefix()) {
+				$prefixs[] = $i;
+			}
+		}
         return array(
 			'subscription' => $subscription,
 			'countries' => $countries,
 			'company' => $company,
-			'employees' => $employees
+			'employees' => $employees,
+			'prefixs' => $prefixs,
 		);
     }
 	
@@ -72,10 +83,10 @@ class SubscriptionController extends Controller
 		$number = $request->get('number');
 		$username = $request->get('username');
 		$secret = $request->get('secret');
-		$host = $request->get('host');
+		$host = 'siptrunk.hoiio.com';//$host = $request->get('host');
 		$prefix = $request->get('prefix');
-		$receive = $request->get('receive') === 'on';
-		$countries = $request->get('countries');
+		$receive = true;//$request->get('receive') === 'on';
+		//$countries = $request->get('countries');
 		$employees = $request->get('employees');
 		
 		$subscription->setName($name);
@@ -87,19 +98,6 @@ class SubscriptionController extends Controller
 		$subscription->setPrefix($prefix);
 		$subscription->setReceiveCall($receive);
 		$subscription->setCompany($company);
-		
-		foreach ($subscription->getCountries() as $country) {
-			$subscription->removeCountry($country);
-		}
-		
-		if ($countries) {
-			foreach ($countries as $countryId) {
-				$country = $em->getRepository('VoIPCompanySubscriptionsBundle:Country')->find($countryId);
-				if (!$country) throw $this->createNotFoundException('Unable to find Country entity.');
-				$subscription->addCountry($country);
-				$country->addSubscription($subscription);
-			}
-		}
 		
 		foreach ($subscription->getEmployees() as $employee) {
 			$subscription->removeEmployee($employee);

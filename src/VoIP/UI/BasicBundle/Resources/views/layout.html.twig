@@ -1,7 +1,7 @@
 {% extends "::base.html.twig" %}
 {% block title %}48{% endblock %}
 {% block navbar %}
-<nav class="navbar navbar-default" role="navigation">
+<nav class="navbar navbar-inverse navbar-static-top" role="navigation">
 	<div class="container-fluid">
 		<div class="navbar-header">
 			<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
@@ -15,8 +15,6 @@
 		{% if is_granted('ROLE_USER') %}
 		<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 			<ul class="nav navbar-nav">
-				<li class="{{ app.request.attributes.get('_route') == 'ui_company' ? 'active' }}"><a href="{{ path('ui_company', {'hash': company.hash}) }}">Dashboard</a></li>
-				<li class="{{ app.request.attributes.get('_route') == 'ui_company_mailbox' ? 'active' }}"><a href="{{ path('ui_company_mailbox', {'hash': company.hash}) }}">Mailbox</a></li>
 				<li class="dropdown">
 					<a href="#" class="dropdown-toggle" data-toggle="dropdown">Dropdown <b class="caret"></b></a>
 					<ul class="dropdown-menu">
@@ -59,3 +57,33 @@
 	</div>
 </nav>
 {% endblock navbar %}
+{% block precontainer %}
+<div class="row main-container">
+	<div class="col-md-2">
+		{# 
+		<center class="new-phone">
+			<div class="btn-group">
+				<button type="button" class="btn btn-primary">New phone</button>
+				<button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+					<span class="caret"></span>
+					<span class="sr-only">Toggle Dropdown</span>
+				</button>
+				<ul class="dropdown-menu" role="menu">
+					<li><a href="#">Action</a></li>
+					<li><a href="#">Another action</a></li>
+					<li><a href="#">Something else here</a></li>
+					<li class="divider"></li>
+					<li><a href="#">Separated link</a></li>
+				</ul>
+			</div>
+		</center>
+		 #}
+		<ul class="nav nav-pills nav-stacked">
+			<li class="{{ app.request.attributes.get('_route') == 'ui_company' ? 'active' }}"><a href="{{ path('ui_company', {'hash': company.hash}) }}"><span class="glyphicon glyphicon-th"></span> Switchboard</a></li>
+			<li class="{{ app.request.attributes.get('_route') == 'ui_company_mailbox' ? 'active' }}"><a href="{{ path('ui_company_mailbox', {'hash': company.hash}) }}"><span class="glyphicon glyphicon-envelope"></span> Mailbox</a></li>
+			<li class="{{ app.request.attributes.get('_route') == 'ui_company_cdr' ? 'active' }}"><a href="{{ path('ui_company_cdr', {'hash': company.hash}) }}"><span class="glyphicon glyphicon-earphone"></span> Reports</a></li>
+		</ul>
+	</div>
+	<div class="col-md-10">{% block container %}{% endblock container %}</div>
+</div>
+{% endblock precontainer %}

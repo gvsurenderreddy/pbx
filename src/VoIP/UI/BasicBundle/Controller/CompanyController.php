@@ -186,10 +186,22 @@ class CompanyController extends Controller
 		), array(
 			'name' => 'ASC'
 		));
+		$subscriptions = $company->getSubscriptions();
+		$usedPrefixs = array();
+		foreach ($subscriptions as $subscription) {
+			$usedPrefixs[] = $subscription->getPrefix();
+		}
+		$prefixs = array();
+		for ($i=1; $i < 10; $i++) { 
+			if (!in_array($i, $usedPrefixs)) {
+				$prefixs[] = $i;
+			}
+		}
         return array(
 			'company' => $company,
 			'countries' => $countries,
 			'employees' => $employees,
+			'prefixs' => $prefixs,
 		);
     }
 	
@@ -214,10 +226,10 @@ class CompanyController extends Controller
 		$number = $request->get('number');
 		$username = $request->get('username');
 		$secret = $request->get('secret');
-		$host = $request->get('host');
+		$host = 'siptrunk.hoiio.com';//$host = $request->get('host');
 		$prefix = $request->get('prefix');
-		$receive = $request->get('receive') === 'on';
-		$countries = $request->get('countries');
+		$receive = true;//$request->get('receive') === 'on';
+		//$countries = $request->get('countries');
 		$employees = $request->get('employees');
 		
 		$subscription = new Subscription();
@@ -230,7 +242,7 @@ class CompanyController extends Controller
 		$subscription->setPrefix($prefix);
 		$subscription->setReceiveCall($receive);
 		$subscription->setCompany($company);
-		
+		/*
 		if ($countries) {
 			foreach ($countries as $countryId) {
 				$country = $em->getRepository('VoIPCompanySubscriptionsBundle:Country')->find($countryId);
@@ -239,6 +251,7 @@ class CompanyController extends Controller
 				$country->addSubscription($subscription);
 			}
 		}
+		*/
 		if ($employees) {
 			foreach ($employees as $employeeId) {
 				$employee = $em->getRepository('VoIPCompanyStructureBundle:Employee')->find($employeeId);
