@@ -2,13 +2,10 @@ var app = angular.module('fortyeight', [])
 app.config(function($interpolateProvider){
 	$interpolateProvider.startSymbol('{[{').endSymbol('}]}');
 })
-app.controller('ConfigurationCtrl', function($scope, $http) {
-	$http({
-		method: 'GET',
-		url: 'http://192.168.1.240'
-	}).success(function(data, status, headers, config) {
-		console.log(data);
-	}).error(function(data, status, headers, config) {
-		
-	});
+app.controller('ConfigurationCtrl', function($scope, $http, $location, $window) {
+	delete $http.defaults.headers.common['X-Requested-With'];
+	$scope.configured = 0;
+	$scope.submit = function(){
+		$scope.configured = 1;
+	}
 });

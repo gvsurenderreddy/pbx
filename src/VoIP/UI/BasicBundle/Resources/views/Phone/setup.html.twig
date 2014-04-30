@@ -1,6 +1,9 @@
-<form action="{{ url }}" method="POST" accept-charset="utf-8">
+<form action="{{ url }}" method="POST" accept-charset="utf-8" id="configureForm">
 	{% for key, value in conf %}
 	<input type="hidden" value="{{ value }}" name="{{ key }}">
 	{% endfor %}
 	<p><input type="submit" value="Continue &rarr;"></p>
 </form>
+<script type="text/javascript" charset="utf-8">
+document.getElementById('configureForm').submit();
+</script>

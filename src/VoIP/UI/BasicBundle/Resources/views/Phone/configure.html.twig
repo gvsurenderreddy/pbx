@@ -4,9 +4,9 @@
 <div class="page-header">
 	<h1>Configuration of your phone "{{ phone.name }}"</h1>
 </div>
-<div class="row" ng-controller="ConfigurationCtrl">
+<div class="row" ng-app="fortyeight" ng-controller="ConfigurationCtrl">
 	<div class="col-md-offset-3 col-md-6">
-		<form class="form-horizontal" role="form" name="form">
+		<form class="form-horizontal" role="form" name="form" action="{{ path('ui_phone_setup', {'hash': phone.hash}) }}" target="_blank">
 			<div class="form-group {[{(form.ip.$error.required || form.ip.$error.pattern) ? 'has-error' : 'has-success'}]}">
 				<label for="ip" class="col-sm-4 control-label">IP address of the phone</label>
 				<div class="col-sm-8">
@@ -15,8 +15,10 @@
 			</div>
 			<div class="form-group">
 				<div class="col-sm-offset-4 col-sm-8">
-					<a href="{{ path('ui_company', {'hash': phone.company.hash}) }}" class="btn btn-default">Not now</a>
-					<button type="submit" class="btn btn-primary">Configure</button>
+					<a href="{{ path('ui_company', {'hash': phone.company.hash}) }}" class="btn btn-default" ng-show="!configured">Not now</a>
+					<button type="button" class="btn btn-default" ng-show="(form.ip.$error.required || form.ip.$error.pattern)">Configure</button>
+					<button type="submit" class="btn btn-primary" ng-show="!(form.ip.$error.required || form.ip.$error.pattern)" ng-click="submit()">Configure</button>
+					<a href="{{ path('ui_company', {'hash': phone.company.hash}) }}" class="btn btn-success" ng-show="configured">Back to dashboard</a>
 				</div>
 			</div>
 		</form>
