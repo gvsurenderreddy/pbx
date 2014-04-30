@@ -1,0 +1,22 @@
+.main-container {
+	padding: 0 20px;
+}
+.nav-pills>li.active>a {
+	background-color: #101010;
+}
+.nav-pills>li.active>a:hover {
+	background-color: #222;
+}
+.nav-pills>li>a {
+	color: #999;
+}
+.navbar-inverse .navbar-brand {
+	color: #fff;
+}
+.btn-primary {
+	background-color: #4ec4fa;
+	border-color: #4bb1e0;
+}
+a {
+	color: #121212;
+}
