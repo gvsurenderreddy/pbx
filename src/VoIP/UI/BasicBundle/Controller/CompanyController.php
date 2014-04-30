@@ -95,9 +95,17 @@ class CompanyController extends Controller
 		
 		$em->flush();
 		
-		return $this->redirect($this->generateUrl('ui_company', array(
-			'hash' => $company->getHash()
-		)));
+		if ($phone->getType() == 'ciscophone') {
+			return $this->redirect($this->generateUrl('ui_phone_configure', array(
+				'hash' => $phone->getHash()
+			)));
+		} else {
+			return $this->redirect($this->generateUrl('ui_company', array(
+				'hash' => $company->getHash()
+			)));
+		}
+		
+		
     }
 	
     /**

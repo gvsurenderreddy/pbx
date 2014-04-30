@@ -38,7 +38,7 @@
 					<td>
 						<a href="{{ path('ui_phone_edit', {'hash': phone.hash}) }}"><span class="glyphicon glyphicon-pencil"></span></a>
 						<a href="{{ path('ui_phone_delete', {'hash': phone.hash}) }}"><span class="glyphicon glyphicon-trash"></span></a>
-						{% if phone.type == 'ciscophone' %}<a href="#" class="l-mod" data-url="{{ path('ui_phone_configure', {'hash': phone.hash}) }}"><span class="glyphicon glyphicon-flash"></span></a>{% endif %}
+						{% if phone.type == 'ciscophone' %}<a href="{{ path('ui_phone_configure', {'hash': phone.hash}) }}"><span class="glyphicon glyphicon-flash"></span></a>{% endif %}
 						<a href="#" class="l-mod" data-url="{{ path('ui_phone_credentials', {'hash': phone.hash}) }}"><span class="glyphicon glyphicon-phone-alt"></span></a>
 					</td>
 					<td>{% if phone.employee %}{{ phone.employee.name }} ({{ phone.employee.extension }}){% endif %}</td>

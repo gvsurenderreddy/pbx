@@ -11,6 +11,7 @@ use VoIP\Company\StructureBundle\Entity\Office;
 use VoIP\Company\StructureBundle\Entity\Phone;
 use VoIP\PBX\RealTimeBundle\Extra\Sync;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * @Route("/private/p")
@@ -60,6 +61,8 @@ class PhoneController extends Controller
 		$name = $request->get('name');
 		$type = $request->get('type');
 		
+		$prevName = $phone->getName();
+		
 		$phone->setName($name);
 		$phone->setType($type);
 		
@@ -73,6 +76,16 @@ class PhoneController extends Controller
 		$em->persist($astPeer);
 		
 		$em->flush();
+		
+		if ($phone->getType() == 'ciscophone' && $prevName != $phone->getName()) {
+			return $this->redirect($this->generateUrl('ui_phone_configure', array(
+				'hash' => $phone->getHash()
+			)));
+		} else {
+			return $this->redirect($this->generateUrl('ui_company', array(
+				'hash' => $company->getHash()
+			)));
+		}
 		
 		return $this->redirect($this->generateUrl('ui_company', array(
 			'hash' => $company->getHash()
@@ -697,7 +710,35 @@ class PhoneController extends Controller
 		if (!$user->hasCompany($company)) throw $this->createNotFoundException('No authorization.');
 		
 		return array(
-			'phone' => $phone
+			'phone' => $phone,
+			'company' => $company
 		);
+    }
+    /**
+     * @Route("/{hash}/configure.js", name="ui_phone_configure_js")
+	 * @Method("GET")
+     */
+    public function configureJSAction($hash)
+    {
+		$request = $this->getRequest();
+		$ip = $request->get('ip');
+		$user = $this->getUser();
+		$em = $this->getDoctrine()->getManager();
+		$phone = $em->getRepository('VoIPCompanyStructureBundle:Phone')->findOneBy(array(
+			'hash' => $hash
+		));
+        if (!$phone) throw $this->createNotFoundException('Unable to find Phone entity.');
+		$company = $phone->getCompany();
+		if (!$user->hasCompany($company)) throw $this->createNotFoundException('No authorization.');
+		
+		$response = new Response($this->renderView(
+		    'VoIPUIBasicBundle:Phone:configure.js.twig',
+		    array(
+				'phone' => $phone,
+				'company' => $company
+			)
+		));
+		$response->headers->set('Content-Type', 'text/javascript');
+		return $response;
     }
 }

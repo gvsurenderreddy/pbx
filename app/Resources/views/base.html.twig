@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html ng-app="fortyeight">
     <head>
         <meta charset="UTF-8" />
         <title>{% block title %}48{% endblock %}</title>
@@ -33,6 +33,7 @@
 		{% endblock modal %}
         {% block javascripts %}
 		<script src="{{ asset('js/jquery-2.1.0.min.js') }}"></script>
+		<script src="{{ asset('js/angular.min.js') }}"></script>
 		<script src="{{ asset('js/bootstrap.min.js') }}"></script>
 		<script>
 		$('.l-mod').click(function(){
