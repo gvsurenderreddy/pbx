@@ -23,11 +23,3 @@ body {
 a {
 	color: #121212;
 }
-.footer {
-	position: absolute;
-	bottom: 0;
-	left: 0;
-	right: 0;
-	padding: 10px 20px;
-	color: #999;
-}
