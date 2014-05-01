@@ -181,6 +181,17 @@ class CDR
 	 * @ORM\JoinColumn(name="company_id", referencedColumnName="id", onDelete="CASCADE")
      */
     private $company;
+	
+	public function getPrice()
+	{
+		if (($answer = $this->getAnswer()) && ($end = $this->getEnd())) {
+			$t1 = $answer->getTimestamp();
+			$t2 = $end->getTimestamp();
+			return $rate * ($t2 - $t1) / 60;
+		} else {
+			return 0;
+		}
+	}
 
 
 
