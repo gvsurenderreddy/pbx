@@ -481,4 +481,37 @@ class Company
     {
         return $this->voicemails;
     }
+
+    /**
+     * Add reports
+     *
+     * @param \VoIP\PBX\CDRBundle\Entity\CDR $reports
+     * @return Company
+     */
+    public function addReport(\VoIP\PBX\CDRBundle\Entity\CDR $reports)
+    {
+        $this->reports[] = $reports;
+
+        return $this;
+    }
+
+    /**
+     * Remove reports
+     *
+     * @param \VoIP\PBX\CDRBundle\Entity\CDR $reports
+     */
+    public function removeReport(\VoIP\PBX\CDRBundle\Entity\CDR $reports)
+    {
+        $this->reports->removeElement($reports);
+    }
+
+    /**
+     * Get reports
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getReports()
+    {
+        return $this->reports;
+    }
 }

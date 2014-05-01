@@ -133,6 +133,13 @@ class CDR
      */
     private $uniqueid;
 	
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="rate", type="float", nullable=true)
+     */
+    private $rate;
+	
 	/**
      * @ORM\ManyToOne(targetEntity="\VoIP\Company\StructureBundle\Entity\Employee", inversedBy="astDialerEmployees")
 	 * @ORM\JoinColumn(name="dialer_employee_id", referencedColumnName="id", onDelete="CASCADE")
@@ -714,5 +721,28 @@ class CDR
     public function getCompany()
     {
         return $this->company;
+    }
+
+    /**
+     * Set rate
+     *
+     * @param float $rate
+     * @return CDR
+     */
+    public function setRate($rate)
+    {
+        $this->rate = $rate;
+
+        return $this;
+    }
+
+    /**
+     * Get rate
+     *
+     * @return float 
+     */
+    public function getRate()
+    {
+        return $this->rate;
     }
 }
