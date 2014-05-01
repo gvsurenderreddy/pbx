@@ -134,6 +134,20 @@ class CDR
     private $uniqueid;
 	
     /**
+     * @var string
+     *
+     * @ORM\Column(name="dialer", type="string", length=128, nullable=true)
+     */
+    private $dialer;
+	
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="receiver", type="string", length=128, nullable=true)
+     */
+    private $receiver;
+	
+    /**
      * @var float
      *
      * @ORM\Column(name="rate", type="float", nullable=true)
@@ -755,5 +769,51 @@ class CDR
     public function getRate()
     {
         return $this->rate;
+    }
+
+    /**
+     * Set dialer
+     *
+     * @param string $dialer
+     * @return CDR
+     */
+    public function setDialer($dialer)
+    {
+        $this->dialer = $dialer;
+
+        return $this;
+    }
+
+    /**
+     * Get dialer
+     *
+     * @return string 
+     */
+    public function getDialer()
+    {
+        return $this->dialer;
+    }
+
+    /**
+     * Set receiver
+     *
+     * @param string $receiver
+     * @return CDR
+     */
+    public function setReceiver($receiver)
+    {
+        $this->receiver = $receiver;
+
+        return $this;
+    }
+
+    /**
+     * Get receiver
+     *
+     * @return string 
+     */
+    public function getReceiver()
+    {
+        return $this->receiver;
     }
 }
