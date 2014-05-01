@@ -187,7 +187,7 @@ class CDR
 		if (($answer = $this->getAnswer()) && ($end = $this->getEnd())) {
 			$t1 = $answer->getTimestamp();
 			$t2 = $end->getTimestamp();
-			return $rate * ($t2 - $t1);
+			return $this->getRate() * ($t2 - $t1) / 60;
 		} else {
 			return 0;
 		}
