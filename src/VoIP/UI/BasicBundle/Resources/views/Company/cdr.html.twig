@@ -16,8 +16,10 @@
 	<tr>
 		<td>{{ cdr.start|date('d/m/Y') }}</td>
 		<td>{{ cdr.start|date('H:i:s') }}</td>
-		<td>{{ cdr.answer|date('H:i:s') }}</td>
+		<td>{{ cdr.answer ? cdr.answer|date('H:i:s') }}</td>
 		<td>{{ cdr.end|date('H:i:s') }}</td>
+		<td>{{ cdr.channel }}</td>
+		<td>{{ cdr.dstchannel }}</td>
 		<td>S$ {{ cdr.rate|number_format(2, '.', ',') }} / min</td>
 		<td>S$ {{ cdr.price|number_format(5, '.', ',') }}</td>
 	</tr>
