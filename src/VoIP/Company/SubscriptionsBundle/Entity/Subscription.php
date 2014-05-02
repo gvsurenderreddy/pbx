@@ -100,6 +100,20 @@ class Subscription
     private $hash;
 	
     /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="activated_until", type="datetime", nullable=true)
+     */
+    private $activatedUntil;
+	
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="is_active", type="boolean")
+     */
+    private $isActive = true;
+	
+    /**
      * @var string
      *
      * @ORM\Column(name="registration_code", type="string", length=255, nullable=true)
@@ -645,5 +659,51 @@ class Subscription
     public function getHash()
     {
         return $this->hash;
+    }
+
+    /**
+     * Set activatedUntil
+     *
+     * @param \DateTime $activatedUntil
+     * @return Subscription
+     */
+    public function setActivatedUntil($activatedUntil)
+    {
+        $this->activatedUntil = $activatedUntil;
+
+        return $this;
+    }
+
+    /**
+     * Get activatedUntil
+     *
+     * @return \DateTime 
+     */
+    public function getActivatedUntil()
+    {
+        return $this->activatedUntil;
+    }
+
+    /**
+     * Set isActive
+     *
+     * @param boolean $isActive
+     * @return Subscription
+     */
+    public function setIsActive($isActive)
+    {
+        $this->isActive = $isActive;
+
+        return $this;
+    }
+
+    /**
+     * Get isActive
+     *
+     * @return boolean 
+     */
+    public function getIsActive()
+    {
+        return $this->isActive;
     }
 }

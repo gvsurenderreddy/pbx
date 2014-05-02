@@ -62,6 +62,13 @@ class Employee
      */
     private $phone;
 	
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="is_active", type="boolean")
+     */
+    private $isActive = true;
+	
 	/**
      * @ORM\ManyToOne(targetEntity="\VoIP\Company\StructureBundle\Entity\Company", inversedBy="employees")
 	 * @ORM\JoinColumn(name="company_id", referencedColumnName="id", onDelete="CASCADE")
@@ -308,5 +315,28 @@ class Employee
     public function getSubscriptions()
     {
         return $this->subscriptions;
+    }
+
+    /**
+     * Set isActive
+     *
+     * @param boolean $isActive
+     * @return Employee
+     */
+    public function setIsActive($isActive)
+    {
+        $this->isActive = $isActive;
+
+        return $this;
+    }
+
+    /**
+     * Get isActive
+     *
+     * @return boolean 
+     */
+    public function getIsActive()
+    {
+        return $this->isActive;
     }
 }

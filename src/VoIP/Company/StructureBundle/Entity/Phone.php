@@ -57,6 +57,20 @@ class Phone
      */
     private $name;
 	
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="activated_until", type="datetime", nullable=true)
+     */
+    private $activatedUntil;
+	
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="is_active", type="boolean")
+     */
+    private $isActive = true;
+	
 	/**
      * @ORM\ManyToOne(targetEntity="\VoIP\Company\StructureBundle\Entity\Company", inversedBy="phones")
 	 * @ORM\JoinColumn(name="company_id", referencedColumnName="id", onDelete="CASCADE")
@@ -292,5 +306,51 @@ class Phone
     public function getName()
     {
         return $this->name;
+    }
+
+    /**
+     * Set activatedUntil
+     *
+     * @param \DateTime $activatedUntil
+     * @return Phone
+     */
+    public function setActivatedUntil($activatedUntil)
+    {
+        $this->activatedUntil = $activatedUntil;
+
+        return $this;
+    }
+
+    /**
+     * Get activatedUntil
+     *
+     * @return \DateTime 
+     */
+    public function getActivatedUntil()
+    {
+        return $this->activatedUntil;
+    }
+
+    /**
+     * Set isActive
+     *
+     * @param boolean $isActive
+     * @return Phone
+     */
+    public function setIsActive($isActive)
+    {
+        $this->isActive = $isActive;
+
+        return $this;
+    }
+
+    /**
+     * Get isActive
+     *
+     * @return boolean 
+     */
+    public function getIsActive()
+    {
+        return $this->isActive;
     }
 }

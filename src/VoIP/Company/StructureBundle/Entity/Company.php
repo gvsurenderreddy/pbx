@@ -42,6 +42,13 @@ class Company
      * @ORM\Column(name="name", type="string", length=255)
      */
     private $name;
+	
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="is_active", type="boolean")
+     */
+    private $isActive = true;
 
     /**
      * @var string
@@ -513,5 +520,28 @@ class Company
     public function getReports()
     {
         return $this->reports;
+    }
+
+    /**
+     * Set isActive
+     *
+     * @param boolean $isActive
+     * @return Company
+     */
+    public function setIsActive($isActive)
+    {
+        $this->isActive = $isActive;
+
+        return $this;
+    }
+
+    /**
+     * Get isActive
+     *
+     * @return boolean 
+     */
+    public function getIsActive()
+    {
+        return $this->isActive;
     }
 }
