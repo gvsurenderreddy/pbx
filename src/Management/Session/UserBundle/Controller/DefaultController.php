@@ -8,5 +8,12 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
 class DefaultController extends Controller
 {
-
+	/**
+	 * @Route("/register2")
+	 * @Template()
+	 */
+	public function registerAction()
+	{
+		return array();
+	}
 }

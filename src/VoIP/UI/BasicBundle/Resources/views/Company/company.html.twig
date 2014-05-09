@@ -1,7 +1,9 @@
 {% extends "VoIPUIBasicBundle::layout.html.twig" %}
 {% block title %}48 | {{ company.name }}{% endblock %}
 {% block container %}
-
+<div class="page-header">
+	<h1>Example page header <small>Subtext for header</small></h1>
+</div>
 <div class="row">
 	<div class="col-md-12">
 		<div class="panel panel-default">
@@ -64,7 +66,7 @@
 		<div class="panel panel-default">
 			<div class="panel-heading">
 				<div class="pull-right"><a href="{{ path('ui_company_newemployee', {'hash': company.hash}) }}"><span class="glyphicon glyphicon-plus"></span></a></div>
-				<h3 class="panel-title">Employees</h3>
+				<h3 class="panel-title">Buddies</h3>
 			</div>
 			<table class="table">
 				<tr>

@@ -88,3 +88,9 @@ fos_user:
     db_driver: orm
     firewall_name: main
     user_class: Management\Session\UserBundle\Entity\User
+    registration:
+        confirmation:
+            enabled: true
+    from_email:
+        address: adrien@fortyeight.co
+        sender_name: Adrien@48

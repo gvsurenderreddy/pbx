@@ -1,0 +1,8 @@
+{% extends "::base.html.twig" %}
+
+{% block container %}
+An email has been sent to {{ user ? user.email : 'adrien@eudes.co' }}. It contains an activation link you must click to activate your account.
+{% endblock %}
+
+
+

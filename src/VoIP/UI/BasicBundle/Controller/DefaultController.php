@@ -29,6 +29,8 @@ class DefaultController extends Controller
 			return $this->redirect($this->generateUrl('ui_company', array(
 				'hash' => $company->getHash()
 			)));
+		} else {
+			return $this->redirect($this->generateUrl('ui_new_company'));
 		}
         return array(
 			'user' => $user

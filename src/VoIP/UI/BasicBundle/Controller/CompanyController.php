@@ -40,6 +40,45 @@ class CompanyController extends Controller
     }
 	
     /**
+     * @Template()
+     */
+    public function menuAction($route, $hash)
+    {
+		$user = $this->getUser();
+		$em = $this->getDoctrine()->getManager();
+		$query = $em->createQuery(
+		    'SELECT c
+		    FROM VoIPCompanyStructureBundle:Company c
+			LEFT JOIN c.phones p
+			LEFT JOIN c.subscriptions s
+			WHERE c.hash = :hash OR p.hash = :hash OR s.hash = :hash'
+		)->setParameters(array(
+			'hash' => $hash
+		));
+
+		$company = $query->getSingleResult();
+        if (!$company) throw $this->createNotFoundException('Unable to find Company entity.');
+		if (!$user->hasCompany($company)) throw $this->createNotFoundException('No authorization.');
+		$query = $em->createQuery(
+		    'SELECT COUNT(m)
+		    FROM VoIPCompanyVoicemailBundle:Message m
+			LEFT JOIN m.voicemail v
+			LEFT JOIN v.subscription s
+			LEFT JOIN s.company c
+			WHERE c.id = :companyId AND m.readAt is NULL'
+		)->setParameters(array(
+			'companyId' => 1
+		));
+
+		$newMessages = $query->getSingleScalarResult();
+        return array(
+			'company' => $company,
+			'newmessages' => $newMessages,
+			'route' => $route
+		);
+    }
+	
+    /**
      * @Route("/{hash}/new-phone", name="ui_company_newphone")
      * @Template()
 	 * @Method("GET")
@@ -379,4 +418,8 @@ class CompanyController extends Controller
 			'cdrs' => $cdrs
 		);
     }
+	
+    
+	
+	
 }
