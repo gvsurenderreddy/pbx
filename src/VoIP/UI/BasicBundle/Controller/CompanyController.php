@@ -67,7 +67,7 @@ class CompanyController extends Controller
 			LEFT JOIN s.company c
 			WHERE c.id = :companyId AND m.readAt is NULL'
 		)->setParameters(array(
-			'companyId' => 1
+			'companyId' => $company->getId()
 		));
 
 		$newMessages = $query->getSingleScalarResult();

@@ -32,7 +32,7 @@ monolog:
 assetic:
     use_controller: true
 
-#swiftmailer:
+# Swiftmailer:
 swiftmailer:
     transport: gmail
     username:  %mailer_user%
