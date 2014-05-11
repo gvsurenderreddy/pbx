@@ -9,11 +9,19 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 class DefaultController extends Controller
 {
 	/**
-	 * @Route("/register2")
+	 * @Route("/test")
 	 * @Template()
 	 */
-	public function registerAction()
+	public function testAction()
 	{
+		$message = \Swift_Message::newInstance()
+		->setSubject('Hello Email')
+		->setFrom('no-reply@fortyeight.co')
+		->setTo('adrien.eudes@gmail.com')
+		->setBody('You should see me from the profiler!');
+
+		$this->get('mailer')->send($message);
 		return array();
+		
 	}
 }
