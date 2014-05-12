@@ -26,9 +26,16 @@ class DefaultController extends Controller
 		$companies = $user->getCompanies();
 		if (count($companies)) {
 			$company = $companies[0];
-			return $this->redirect($this->generateUrl('ui_company', array(
-				'hash' => $company->getHash()
-			)));
+			if (count($company->getPhones()) > 0) {
+				return $this->redirect($this->generateUrl('ui_company', array(
+					'hash' => $company->getHash()
+				)));
+			} else {
+				return $this->redirect($this->generateUrl('ui_company_newphone', array(
+					'hash' => $company->getHash()
+				)));
+			}
+			
 		} else {
 			return $this->redirect($this->generateUrl('ui_new_company'));
 		}

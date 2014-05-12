@@ -63,6 +63,9 @@
 <div class="row main-container">
 	{% if app.request.attributes.get('_route_params').hash is defined %}
 	<div class="col-md-2 left-menu hidden-xs hidden-sm">
+		<div class="logo-main-menu">
+			<a href="{{ path('ui_index') }}"><img src="{{ asset('images/logo.png') }}" class="main-logo"></a>
+		</div>
 		{% render controller('VoIPUIBasicBundle:Company:menu', {'route': app.request.attributes.get('_route'), 'hash': app.request.attributes.get('_route_params').hash}) %}
 	</div>
 	{% endif %}

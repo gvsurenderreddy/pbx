@@ -21,7 +21,9 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use FOS\UserBundle\Model\UserInterface;
+use VoIP\Company\StructureBundle\Entity\Company;
 
 /**
  * Controller managing the registration
@@ -29,10 +31,11 @@ use FOS\UserBundle\Model\UserInterface;
  * @author Thibault Duplessis <thibault.duplessis@gmail.com>
  * @author Christophe Coevoet <stof@notk.org>
  */
-class RegistrationController extends ContainerAware
+class RegistrationController extends Controller
 {
     public function registerAction(Request $request)
     {
+		$em = $this->getDoctrine()->getManager();
         /** @var $formFactory \FOS\UserBundle\Form\Factory\FactoryInterface */
         $formFactory = $this->container->get('fos_user.registration.form.factory');
         /** @var $userManager \FOS\UserBundle\Model\UserManagerInterface */
@@ -59,8 +62,16 @@ class RegistrationController extends ContainerAware
             if ($form->isValid()) {
                 $event = new FormEvent($form, $request);
                 $dispatcher->dispatch(FOSUserEvents::REGISTRATION_SUCCESS, $event);
+				$user->setUsername($user->getEmail());
 
                 $userManager->updateUser($user);
+
+				$company = new Company();
+				$company->setName($user->getCompanyName());
+				$user->addCompany($company);
+				$company->addUser($user);
+				$em->persist($company);
+				$em->flush();
 
                 if (null === $response = $event->getResponse()) {
                     $url = $this->container->get('router')->generate('fos_user_registration_confirmed');
@@ -122,7 +133,7 @@ class RegistrationController extends ContainerAware
         $userManager->updateUser($user);
 
         if (null === $response = $event->getResponse()) {
-            $url = $this->container->get('router')->generate('ui_new_company');
+            $url = $this->container->get('router')->generate('ui_index');
             $response = new RedirectResponse($url);
         }
 

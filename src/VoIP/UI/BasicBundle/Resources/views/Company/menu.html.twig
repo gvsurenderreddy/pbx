@@ -1,14 +1,12 @@
 <center class="company-part">
-	<div class="company-logo">
-		<img src="https://d2dqjk71e8a9kk.cloudfront.net/logo_villabali-final-square.png" alt="company-logo" class="img-circle" width="150">
-	</div>
 	<div class="company-name">{{ company.name }}</div>
-	<div class="company-since">Member since {{ company.createdat|date('F Y') }}</div>
+	<div class="company-since">Saving since {{ company.createdat|date('F Y') }}</div>
 </center>
 <ul class="nav nav-pills nav-stacked">
 	<li class="{{ route == 'ui_company' ? 'active' }}"><a href="{{ path('ui_company', {'hash': company.hash}) }}"><span class="glyphicon glyphicon-th"></span> Switchboard</a></li>
 	<li class="{{ route == 'ui_company_mailbox' ? 'active' }}"><a href="{{ path('ui_company_mailbox', {'hash': company.hash}) }}"><span class="glyphicon glyphicon-play"></span> Mailbox{% if newmessages %} <span class="badge pull-right">{{ newmessages }}</span>{% endif %}</a></li>
 	<li class="{{ route == 'ui_company_cdr' ? 'active' }}"><a href="{{ path('ui_company_cdr', {'hash': company.hash}) }}"><span class="glyphicon glyphicon-list"></span> Call details</a></li>
 	<li class=""><a href="#"><span class="glyphicon glyphicon-cog"></span> Parameters</a></li>
-	<li class=""><a href="#"><span class="glyphicon glyphicon-usd"></span> Top up</a></li>
+	<li class=""><a href="#"><span class="glyphicon glyphicon-usd"></span> My bill</a></li>
+	<li class=""><a href="#"><span class="glyphicon glyphicon-circle-arrow-up"></span> Top up</a></li>
 </ul>

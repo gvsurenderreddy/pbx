@@ -49,6 +49,13 @@ class Company
      * @ORM\Column(name="is_active", type="boolean")
      */
     private $isActive = true;
+	
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="credit", type="float")
+     */
+    private $credit = 0;
 
     /**
      * @var string
@@ -543,5 +550,28 @@ class Company
     public function getIsActive()
     {
         return $this->isActive;
+    }
+
+    /**
+     * Set credit
+     *
+     * @param float $credit
+     * @return Company
+     */
+    public function setCredit($credit)
+    {
+        $this->credit = $credit;
+
+        return $this;
+    }
+
+    /**
+     * Get credit
+     *
+     * @return float 
+     */
+    public function getCredit()
+    {
+        return $this->credit;
     }
 }
