@@ -35,6 +35,13 @@ class Company
      * @ORM\Column(name="updated_at", type="datetime")
      */
     private $updatedAt;
+	
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="credit_updated_at", type="datetime")
+     */
+    private $creditUpdatedAt;
 
     /**
      * @var string
@@ -117,6 +124,7 @@ class Company
 	{
 		$this->createdAt = new \DateTime();
 	    $this->updatedAt = new \DateTime();
+		$this->creditUpdatedAt = new \DateTime();
 		if (!$this->context) $this->generateContext();
 		if (!$this->hash) $this->generateHash();
 	}
@@ -573,5 +581,28 @@ class Company
     public function getCredit()
     {
         return $this->credit;
+    }
+
+    /**
+     * Set creditUpdatedAt
+     *
+     * @param \DateTime $creditUpdatedAt
+     * @return Company
+     */
+    public function setCreditUpdatedAt($creditUpdatedAt)
+    {
+        $this->creditUpdatedAt = $creditUpdatedAt;
+
+        return $this;
+    }
+
+    /**
+     * Get creditUpdatedAt
+     *
+     * @return \DateTime 
+     */
+    public function getCreditUpdatedAt()
+    {
+        return $this->creditUpdatedAt;
     }
 }
