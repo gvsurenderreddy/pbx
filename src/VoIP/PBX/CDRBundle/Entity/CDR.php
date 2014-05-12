@@ -154,6 +154,13 @@ class CDR
      */
     private $rate;
 	
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="credit_updated_at", type="datetime", nullable=true)
+     */
+    private $creditUpdatedAt;
+	
 	/**
      * @ORM\ManyToOne(targetEntity="\VoIP\Company\StructureBundle\Entity\Employee", inversedBy="astDialerEmployees")
 	 * @ORM\JoinColumn(name="dialer_employee_id", referencedColumnName="id", onDelete="CASCADE")
