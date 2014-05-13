@@ -96,4 +96,11 @@ fos_user:
     from_email:
         address: adrien@fortyeight.co
         sender_name: Adrien@48
+firewalls:
+    main:
+        remember_me:
+            key: "%secret%"
+            lifetime: 31536000
+            path: /
+            domain: ~
         
