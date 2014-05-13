@@ -349,7 +349,8 @@ class CompanyController extends Controller
 		    'SELECT cdr
 		    FROM VoIPPBXCDRBundle:CDR cdr
 			LEFT JOIN cdr.company c
-			WHERE c.id = :companyId'
+			WHERE c.id = :companyId
+			ORDER BY cdr.end DESC'
 		)->setParameters(array(
 			'companyId' => $company->getId()
 		))->setMaxResults($card)->setFirstResult(($page - 1) * $card);
