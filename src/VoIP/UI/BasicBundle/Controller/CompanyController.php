@@ -18,7 +18,7 @@ class CompanyController extends Controller
 {
 	
     /**
-     * @Route("/", name="ui_company")
+     * @Route("/", name="ui_company", schemes="https")
      * @Template()
 	 * @Method("GET")
 	 * @Security("has_role('ROLE_USER')")
