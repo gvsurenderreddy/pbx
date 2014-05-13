@@ -1,6 +1,10 @@
 {% extends "VoIPUIBasicBundle::layout.html.twig" %}
 {% block title %}48 | {{ company.name }}{% endblock %}
 {% block container %}
+<ul class="pager">
+  {% if page != 1 %}<li class="previous"><a href="{{ path('ui_company_cdr', {'page': page - 1}) }}">&larr; Newer</a></li>{% endif %}
+  {% if cdrs|length == 20 %}<li class="next"><a href="{{ path('ui_company_cdr', {'page': page + 1}) }}">Older &rarr;</a></li>{% endif %}
+</ul>
 <table class="table table-hover">
 	<tr>
 		<th>Date</th>

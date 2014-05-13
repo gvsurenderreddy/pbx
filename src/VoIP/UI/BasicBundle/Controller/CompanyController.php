@@ -335,24 +335,31 @@ class CompanyController extends Controller
      */
     public function cdrAction()
     {
+		$card = 20;
+		$request = $this->getRequest();
+		$page = $request->query->get('page');
+		if (!$page) $page = 1;
+		
 		$user = $this->getUser();
 		$company = $user->getCompany();
 		
 		$em = $this->getDoctrine()->getManager();
-		
-		$repository = $this->getDoctrine()->getRepository('VoIPPBXCDRBundle:CDR');
 
-		$query = $repository->createQueryBuilder('cdr')
-			->leftJoin('cdr.company', 'c')
-		    ->where('c.hash = :hash')
-		    ->setParameter('hash', $company->getHash())
-		    ->orderBy('cdr.start', 'ASC')
-		    ->getQuery();
+		$query = $em->createQuery(
+		    'SELECT cdr
+		    FROM VoIPPBXCDRBundle:CDR cdr
+			LEFT JOIN cdr.company c
+			WHERE c.id = :companyId'
+		)->setParameters(array(
+			'companyId' => $company->getId()
+		))->setMaxResults($card)->setFirstResult(($page - 1) * $card);
 
 		$cdrs = $query->getResult();
+		
         return array(
 			'company' => $company,
-			'cdrs' => $cdrs
+			'cdrs' => $cdrs,
+			'page' => $page
 		);
     }
 	
