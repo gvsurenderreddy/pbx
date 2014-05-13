@@ -6,6 +6,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use VoIP\Company\StructureBundle\Entity\Company;
 use VoIP\Company\StructureBundle\Entity\Office;
 use VoIP\Company\StructureBundle\Entity\Phone;
@@ -13,7 +14,7 @@ use VoIP\PBX\RealTimeBundle\Extra\Sync;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**
- * @Route("/private/message")
+ * @Route("/m")
  */
 
 class MessageController extends Controller
@@ -23,6 +24,7 @@ class MessageController extends Controller
      * @Route("/{hash}/read", name="ui_message_read")
      * @Template()
 	 * @Method("GET")
+	 * @Security("has_role('ROLE_USER')")
      */
     public function readAction($hash)
     {
@@ -47,6 +49,7 @@ class MessageController extends Controller
      * @Route("/{hash}/unread", name="ui_message_unread")
      * @Template()
 	 * @Method("GET")
+	 * @Security("has_role('ROLE_USER')")
      */
     public function unreadAction($hash)
     {
@@ -71,6 +74,7 @@ class MessageController extends Controller
      * @Route("/{hash}/archive", name="ui_message_archive")
      * @Template()
 	 * @Method("GET")
+	 * @Security("has_role('ROLE_USER')")
      */
     public function archiveAction($hash)
     {

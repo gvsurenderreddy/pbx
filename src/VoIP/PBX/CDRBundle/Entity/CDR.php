@@ -823,4 +823,27 @@ class CDR
     {
         return $this->receiver;
     }
+
+    /**
+     * Set creditUpdatedAt
+     *
+     * @param \DateTime $creditUpdatedAt
+     * @return CDR
+     */
+    public function setCreditUpdatedAt($creditUpdatedAt)
+    {
+        $this->creditUpdatedAt = $creditUpdatedAt;
+
+        return $this;
+    }
+
+    /**
+     * Get creditUpdatedAt
+     *
+     * @return \DateTime 
+     */
+    public function getCreditUpdatedAt()
+    {
+        return $this->creditUpdatedAt;
+    }
 }

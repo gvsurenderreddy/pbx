@@ -6,6 +6,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use VoIP\Company\StructureBundle\Entity\Company;
 use VoIP\Company\StructureBundle\Entity\Office;
 use VoIP\Company\StructureBundle\Entity\Phone;
@@ -13,7 +14,7 @@ use VoIP\PBX\RealTimeBundle\Extra\Sync;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**
- * @Route("/private/e")
+ * @Route("/b")
  */
 
 class EmployeeController extends Controller
@@ -23,6 +24,7 @@ class EmployeeController extends Controller
      * @Route("/{hash}/edit", name="ui_employee_edit")
      * @Template()
 	 * @Method("GET")
+	 * @Security("has_role('ROLE_USER')")
      */
     public function editAction($hash)
     {
@@ -44,6 +46,7 @@ class EmployeeController extends Controller
      * @Route("/{hash}/edit")
      * @Template()
 	 * @Method("POST")
+	 * @Security("has_role('ROLE_USER')")
      */
     public function updateAction($hash)
     {
@@ -74,6 +77,7 @@ class EmployeeController extends Controller
      * @Route("/{hash}/delete", name="ui_employee_delete")
      * @Template()
 	 * @Method("GET")
+	 * @Security("has_role('ROLE_USER')")
      */
     public function deleteAction($hash)
     {

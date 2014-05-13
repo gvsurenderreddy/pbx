@@ -6,6 +6,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use VoIP\Company\StructureBundle\Entity\Company;
 use VoIP\Company\StructureBundle\Entity\Office;
 use VoIP\Company\StructureBundle\Entity\Phone;
@@ -14,7 +15,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- * @Route("/private/p")
+ * @Route("/p")
  */
 
 class PhoneController extends Controller
@@ -24,6 +25,7 @@ class PhoneController extends Controller
      * @Route("/{hash}/edit", name="ui_phone_edit")
      * @Template()
 	 * @Method("GET")
+	 * @Security("has_role('ROLE_USER')")
      */
     public function editAction($hash)
     {
@@ -45,6 +47,7 @@ class PhoneController extends Controller
      * @Route("/{hash}/edit")
      * @Template()
 	 * @Method("POST")
+	 * @Security("has_role('ROLE_USER')")
      */
     public function updateAction($hash)
     {
@@ -96,6 +99,7 @@ class PhoneController extends Controller
      * @Route("/{hash}/attribute/{hash2}", name="ui_phone_attribute")
      * @Template()
 	 * @Method("GET")
+	 * @Security("has_role('ROLE_USER')")
      */
     public function attributeAction($hash, $hash2)
     {
@@ -127,6 +131,7 @@ class PhoneController extends Controller
      * @Route("/{hash}/unattribute", name="ui_phone_unattribute")
      * @Template()
 	 * @Method("GET")
+	 * @Security("has_role('ROLE_USER')")
      */
     public function unattributeAction($hash)
     {
@@ -151,6 +156,7 @@ class PhoneController extends Controller
      * @Route("/{hash}/delete", name="ui_phone_delete")
      * @Template()
 	 * @Method("GET")
+	 * @Security("has_role('ROLE_USER')")
      */
     public function deleteAction($hash)
     {
@@ -176,6 +182,7 @@ class PhoneController extends Controller
      * @Route("/{hash}/credentials", name="ui_phone_credentials")
      * @Template()
 	 * @Method("GET")
+	 * @Security("has_role('ROLE_USER')")
      */
     public function credentialsAction($hash)
     {
@@ -197,6 +204,7 @@ class PhoneController extends Controller
      * @Route("/{hash}/setup", name="ui_phone_setup")
      * @Template()
 	 * @Method("GET")
+	 * @Security("has_role('ROLE_USER')")
      */
     public function setupAction($hash)
     {
@@ -695,6 +703,7 @@ class PhoneController extends Controller
      * @Route("/{hash}/configure", name="ui_phone_configure")
      * @Template()
 	 * @Method("GET")
+	 * @Security("has_role('ROLE_USER')")
      */
     public function configureAction($hash)
     {
@@ -717,6 +726,7 @@ class PhoneController extends Controller
     /**
      * @Route("/{hash}/configure.js", name="ui_phone_configure_js")
 	 * @Method("GET")
+	 * @Security("has_role('ROLE_USER')")
      */
     public function configureJSAction($hash)
     {

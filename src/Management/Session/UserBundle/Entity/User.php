@@ -42,21 +42,18 @@ class User extends BaseUser
      * )
      */
     protected $companyName;
+	
+	/**
+     * @ORM\ManyToOne(targetEntity="\VoIP\Company\StructureBundle\Entity\Company", inversedBy="users")
+	 * @ORM\JoinColumn(name="company_id", referencedColumnName="id", onDelete="CASCADE")
+     */
+    private $company;
 
 
 	public function __construct()
     {
         parent::__construct();
     }
-	
-	public function hasCompany($company)
-	{
-		$test = false;
-		foreach ($this->companies as $c) {
-			$test = $test || ($c->getId() == $company->getId());
-		}
-		return $test;
-	}
 
     /**
      * Get id
@@ -66,6 +63,29 @@ class User extends BaseUser
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * Set companyName
+     *
+     * @param string $companyName
+     * @return User
+     */
+    public function setCompanyName($companyName)
+    {
+        $this->companyName = $companyName;
+
+        return $this;
+    }
+
+    /**
+     * Get companyName
+     *
+     * @return string 
+     */
+    public function getCompanyName()
+    {
+        return $this->companyName;
     }
 
     /**
@@ -102,25 +122,25 @@ class User extends BaseUser
     }
 
     /**
-     * Set companyName
+     * Set company
      *
-     * @param string $companyName
+     * @param \VoIP\Company\StructureBundle\Entity\Company $company
      * @return User
      */
-    public function setCompanyName($companyName)
+    public function setCompany(\VoIP\Company\StructureBundle\Entity\Company $company = null)
     {
-        $this->companyName = $companyName;
+        $this->company = $company;
 
         return $this;
     }
 
     /**
-     * Get companyName
+     * Get company
      *
-     * @return string 
+     * @return \VoIP\Company\StructureBundle\Entity\Company 
      */
-    public function getCompanyName()
+    public function getCompany()
     {
-        return $this->companyName;
+        return $this->company;
     }
 }

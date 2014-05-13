@@ -103,13 +103,10 @@ class Company
     private $subscriptions;
 	
 	/**
-	 * @ORM\ManyToMany(targetEntity="\Management\Session\UserBundle\Entity\User", inversedBy="companies")
-	 * @ORM\JoinTable(name="structure_company_has_user",
-	 *      joinColumns={@ORM\JoinColumn(name="company_id", referencedColumnName="id")},
-	 *      inverseJoinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="id")}
-	 *      )
-	 */
-	protected $users;
+     * @ORM\OneToMany(targetEntity="\Management\Session\UserBundle\Entity\User", mappedBy="company")
+	 * @ORM\OrderBy({"username" = "ASC"})
+     */
+    private $users;
 	
 	/**
      * @ORM\OneToMany(targetEntity="\VoIP\PBX\CDRBundle\Entity\CDR", mappedBy="company")
@@ -281,39 +278,6 @@ class Company
     {
         $this->offices = new \Doctrine\Common\Collections\ArrayCollection();
         $this->users = new \Doctrine\Common\Collections\ArrayCollection();
-    }
-
-    /**
-     * Add users
-     *
-     * @param \Management\Session\UserBundle\Entity\User $users
-     * @return Company
-     */
-    public function addUser(\Management\Session\UserBundle\Entity\User $users)
-    {
-        $this->users[] = $users;
-
-        return $this;
-    }
-
-    /**
-     * Remove users
-     *
-     * @param \Management\Session\UserBundle\Entity\User $users
-     */
-    public function removeUser(\Management\Session\UserBundle\Entity\User $users)
-    {
-        $this->users->removeElement($users);
-    }
-
-    /**
-     * Get users
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getUsers()
-    {
-        return $this->users;
     }
 
     /**
@@ -604,5 +568,38 @@ class Company
     public function getCreditUpdatedAt()
     {
         return $this->creditUpdatedAt;
+    }
+
+    /**
+     * Add users
+     *
+     * @param \Management\Session\UserBundle\Entity\User $users
+     * @return Company
+     */
+    public function addUser(\Management\Session\UserBundle\Entity\User $users)
+    {
+        $this->users[] = $users;
+
+        return $this;
+    }
+
+    /**
+     * Remove users
+     *
+     * @param \Management\Session\UserBundle\Entity\User $users
+     */
+    public function removeUser(\Management\Session\UserBundle\Entity\User $users)
+    {
+        $this->users->removeElement($users);
+    }
+
+    /**
+     * Get users
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getUsers()
+    {
+        return $this->users;
     }
 }

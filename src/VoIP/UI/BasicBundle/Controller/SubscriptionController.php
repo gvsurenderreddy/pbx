@@ -6,6 +6,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use VoIP\Company\StructureBundle\Entity\Company;
 use VoIP\Company\StructureBundle\Entity\Office;
 use VoIP\Company\StructureBundle\Entity\Phone;
@@ -13,7 +14,7 @@ use VoIP\Company\SubscriptionsBundle\Entity\DialPlanItem;
 use VoIP\PBX\RealTimeBundle\Extra\Sync;
 
 /**
- * @Route("/private/s")
+ * @Route("/s")
  */
 
 class SubscriptionController extends Controller
@@ -23,6 +24,7 @@ class SubscriptionController extends Controller
      * @Route("/{hash}/edit", name="ui_subscription_edit")
      * @Template()
 	 * @Method("GET")
+	 * @Security("has_role('ROLE_USER')")
      */
     public function editAction($hash)
     {
@@ -65,6 +67,7 @@ class SubscriptionController extends Controller
      * @Route("/{hash}/edit")
      * @Template()
 	 * @Method("POST")
+	 * @Security("has_role('ROLE_USER')")
      */
     public function updateAction($hash)
     {
@@ -128,6 +131,7 @@ class SubscriptionController extends Controller
      * @Route("/{hash}/delete", name="ui_subscription_delete")
      * @Template()
 	 * @Method("GET")
+	 * @Security("has_role('ROLE_USER')")
      */
     public function deleteAction($hash)
     {
@@ -154,6 +158,7 @@ class SubscriptionController extends Controller
      * @Route("/{hash}/dialplan/add/{previousItemHash}", name="ui_subscription_adddialplan", defaults={"previousItemHash"=NULL})
      * @Template()
 	 * @Method("GET")
+	 * @Security("has_role('ROLE_USER')")
      */
     public function addDialplanItemAction($hash, $previousItemHash)
     {
@@ -184,6 +189,7 @@ class SubscriptionController extends Controller
     /**
      * @Route("/{hash}/dialplan/add/{previousItemHash}", defaults={"previousItemHash"=NULL})
 	 * @Method("POST")
+	 * @Security("has_role('ROLE_USER')")
      */
     public function createDialplanItemAction($hash, $previousItemHash)
     {

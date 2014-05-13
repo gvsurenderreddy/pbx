@@ -24,4 +24,3 @@ security:
         - { path: ^/register, role: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }
         - { path: ^/resetting, role: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }
         - { path: ^/admin/, role: ROLE_ADMIN, requires_channel: https }
-        - { path: ^/private/, role: ROLE_USER, requires_channel: https }

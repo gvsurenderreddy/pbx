@@ -68,8 +68,7 @@ class RegistrationController extends Controller
 
 				$company = new Company();
 				$company->setName($user->getCompanyName());
-				$user->addCompany($company);
-				$company->addUser($user);
+				$user->setCompany($company);
 				$em->persist($company);
 				$em->flush();
 

@@ -6,6 +6,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use VoIP\Company\StructureBundle\Entity\Company;
 use VoIP\Company\StructureBundle\Entity\Phone;
 use VoIP\Company\StructureBundle\Entity\Employee;
@@ -13,27 +14,24 @@ use VoIP\Company\SubscriptionsBundle\Entity\Subscription;
 use VoIP\Company\VoicemailBundle\Entity\Voicemail;
 use VoIP\PBX\RealTimeBundle\Extra\Sync;
 
-/**
- * @Route("/private/c")
- */
-
 class CompanyController extends Controller
 {
 	
     /**
-     * @Route("/{hash}", name="ui_company")
+     * @Route("/", name="ui_company")
      * @Template()
 	 * @Method("GET")
+	 * @Security("has_role('ROLE_USER')")
      */
-    public function companyAction($hash)
+    public function companyAction()
     {
 		$user = $this->getUser();
-		$em = $this->getDoctrine()->getManager();
-		$company = $em->getRepository('VoIPCompanyStructureBundle:Company')->findOneBy(array(
-			'hash' => $hash
-		));
-        if (!$company) throw $this->createNotFoundException('Unable to find Company entity.');
-		if (!$user->hasCompany($company)) throw $this->createNotFoundException('No authorization.');
+		$company = $user->getCompany();
+		/*
+		if (count($company->getPhones()) == 0) {
+			return $this->redirect($this->generateUrl('ui_company_newphone'))	;
+		}
+		*/
         return array(
 			'company' => $company
 		);
@@ -41,24 +39,13 @@ class CompanyController extends Controller
 	
     /**
      * @Template()
+	 * @Security("has_role('ROLE_USER')")
      */
-    public function menuAction($route, $hash)
+    public function menuAction($route)
     {
 		$user = $this->getUser();
+		$company = $user->getCompany();
 		$em = $this->getDoctrine()->getManager();
-		$query = $em->createQuery(
-		    'SELECT c
-		    FROM VoIPCompanyStructureBundle:Company c
-			LEFT JOIN c.phones p
-			LEFT JOIN c.subscriptions s
-			WHERE c.hash = :hash OR p.hash = :hash OR s.hash = :hash'
-		)->setParameters(array(
-			'hash' => $hash
-		));
-
-		$company = $query->getSingleResult();
-        if (!$company) throw $this->createNotFoundException('Unable to find Company entity.');
-		if (!$user->hasCompany($company)) throw $this->createNotFoundException('No authorization.');
 		$query = $em->createQuery(
 		    'SELECT COUNT(m)
 		    FROM VoIPCompanyVoicemailBundle:Message m
@@ -79,38 +66,31 @@ class CompanyController extends Controller
     }
 	
     /**
-     * @Route("/{hash}/new-phone", name="ui_company_newphone")
+     * @Route("/new-phone", name="ui_company_newphone")
      * @Template()
 	 * @Method("GET")
+	 * @Security("has_role('ROLE_USER')")
      */
-    public function newPhoneAction($hash)
+    public function newPhoneAction()
     {
 		$user = $this->getUser();
-		$em = $this->getDoctrine()->getManager();
-		$company = $em->getRepository('VoIPCompanyStructureBundle:Company')->findOneBy(array(
-			'hash' => $hash
-		));
-        if (!$company) throw $this->createNotFoundException('Unable to find Office entity.');
-		if (!$user->hasCompany($company)) throw $this->createNotFoundException('No authorization.');
+		$company = $user->getCompany();
         return array(
 			'company' => $company
 		);
     }
 	
     /**
-     * @Route("/{hash}/new-phone")
+     * @Route("/new-phone")
      * @Template()
 	 * @Method("POST")
+	 * @Security("has_role('ROLE_USER')")
      */
-    public function createPhoneAction($hash)
+    public function createPhoneAction()
     {
 		$user = $this->getUser();
+		$company = $user->getCompany();
 		$em = $this->getDoctrine()->getManager();
-		$company = $em->getRepository('VoIPCompanyStructureBundle:Company')->findOneBy(array(
-			'hash' => $hash
-		));
-        if (!$company) throw $this->createNotFoundException('Unable to find Office entity.');
-		if (!$user->hasCompany($company)) throw $this->createNotFoundException('No authorization.');
 		
 		$request = $this->getRequest();
 		$phoneName = $request->get('phonename');
@@ -148,38 +128,32 @@ class CompanyController extends Controller
     }
 	
     /**
-     * @Route("/{hash}/new-employee", name="ui_company_newemployee")
+     * @Route("/new-employee", name="ui_company_newemployee")
      * @Template()
 	 * @Method("GET")
+	 * @Security("has_role('ROLE_USER')")
      */
-    public function newEmployeeAction($hash)
+    public function newEmployeeAction()
     {
 		$user = $this->getUser();
-		$em = $this->getDoctrine()->getManager();
-		$company = $em->getRepository('VoIPCompanyStructureBundle:Company')->findOneBy(array(
-			'hash' => $hash
-		));
-        if (!$company) throw $this->createNotFoundException('Unable to find Office entity.');
-		if (!$user->hasCompany($company)) throw $this->createNotFoundException('No authorization.');
+		$company = $user->getCompany();
         return array(
 			'company' => $company
 		);
     }
 	
     /**
-     * @Route("/{hash}/new-employee")
+     * @Route("/new-employee")
      * @Template()
 	 * @Method("POST")
+	 * @Security("has_role('ROLE_USER')")
      */
-    public function createEmployeeAction($hash)
+    public function createEmployeeAction()
     {
 		$user = $this->getUser();
+		$company = $user->getCompany();
+		
 		$em = $this->getDoctrine()->getManager();
-		$company = $em->getRepository('VoIPCompanyStructureBundle:Company')->findOneBy(array(
-			'hash' => $hash
-		));
-        if (!$company) throw $this->createNotFoundException('Unable to find Office entity.');
-		if (!$user->hasCompany($company)) throw $this->createNotFoundException('No authorization.');
 		
 		$request = $this->getRequest();
 		$extension = $request->get('extension');
@@ -204,19 +178,18 @@ class CompanyController extends Controller
     }
 	
     /**
-     * @Route("/{hash}/new-subscription", name="ui_company_newsubscription")
+     * @Route("/new-subscription", name="ui_company_newsubscription")
      * @Template()
 	 * @Method("GET")
+	 * @Security("has_role('ROLE_USER')")
      */
-    public function newSubscriptionAction($hash)
+    public function newSubscriptionAction()
     {
 		$user = $this->getUser();
+		$company = $user->getCompany();
+		
 		$em = $this->getDoctrine()->getManager();
-		$company = $em->getRepository('VoIPCompanyStructureBundle:Company')->findOneBy(array(
-			'hash' => $hash
-		));
-        if (!$company) throw $this->createNotFoundException('Unable to find Company entity.');
-		if (!$user->hasCompany($company)) throw $this->createNotFoundException('No authorization.');
+		
 		$countries = $em->getRepository('VoIPCompanySubscriptionsBundle:Country')->findBy(array(), array(
 			'name' => 'ASC'
 		));
@@ -245,19 +218,17 @@ class CompanyController extends Controller
     }
 	
     /**
-     * @Route("/{hash}/new-subscription")
+     * @Route("/new-subscription")
      * @Template()
 	 * @Method("POST")
+	 * @Security("has_role('ROLE_USER')")
      */
-    public function createSubscriptionAction($hash)
+    public function createSubscriptionAction()
     {
 		$user = $this->getUser();
+		$company = $user->getCompany();
+		
 		$em = $this->getDoctrine()->getManager();
-		$company = $em->getRepository('VoIPCompanyStructureBundle:Company')->findOneBy(array(
-			'hash' => $hash
-		));
-        if (!$company) throw $this->createNotFoundException('Unable to find Company entity.');
-		if (!$user->hasCompany($company)) throw $this->createNotFoundException('No authorization.');
 		
 		$request = $this->getRequest();
 		$name = $request->get('name');
@@ -327,49 +298,16 @@ class CompanyController extends Controller
     }
 	
     /**
-     * @Route("/{hash}/delete", name="ui_company_delete")
+     * @Route("/mailbox", name="ui_company_mailbox")
      * @Template()
 	 * @Method("GET")
+	 * @Security("has_role('ROLE_USER')")
      */
-    public function deleteAction($hash)
+    public function mailboxAction()
     {
 		$user = $this->getUser();
-		$em = $this->getDoctrine()->getManager();
-		$company = $em->getRepository('VoIPCompanyStructureBundle:Company')->findOneBy(array(
-			'hash' => $hash
-		));
-        if (!$company) throw $this->createNotFoundException('Unable to find Company entity.');
-		if (!$user->hasCompany($company)) throw $this->createNotFoundException('No authorization.');
+		$company = $user->getCompany();
 		
-		foreach ($company->getPhones() as $phone) {
-			if ($phone->getAstPeer()) $em->remove($phone->getAstPeer());
-			$em->remove($phone);
-			$em->remove($office);
-		}
-		foreach ($company->getSubscriptions() as $subscription) {
-			if ($subscription->getAstPeer()) $em->remove($subscription->getAstPeer());
-			$em->remove($subscription);
-		}
-		$em->remove($company);
-		$em->flush();
-		
-		return $this->redirect($this->generateUrl('ui_index'));
-    }
-	
-    /**
-     * @Route("/{hash}/mailbox", name="ui_company_mailbox")
-     * @Template()
-	 * @Method("GET")
-     */
-    public function mailboxAction($hash)
-    {
-		$user = $this->getUser();
-		$em = $this->getDoctrine()->getManager();
-		$company = $em->getRepository('VoIPCompanyStructureBundle:Company')->findOneBy(array(
-			'hash' => $hash
-		));
-        if (!$company) throw $this->createNotFoundException('Unable to find Company entity.');
-		if (!$user->hasCompany($company)) throw $this->createNotFoundException('No authorization.');
 		$repository = $this->getDoctrine()->getRepository('VoIPCompanyVoicemailBundle:Message');
 
 		$query = $repository->createQueryBuilder('m')
@@ -378,7 +316,7 @@ class CompanyController extends Controller
 			->leftJoin('s.company', 'c')
 		    ->where('c.hash = :hash')
 			->andWhere('m.archivedAt IS NULL')
-		    ->setParameter('hash', $hash)
+		    ->setParameter('hash', $company->getHash())
 		    ->orderBy('m.createdAt', 'ASC')
 		    ->getQuery();
 
@@ -390,25 +328,24 @@ class CompanyController extends Controller
     }
 	
     /**
-     * @Route("/{hash}/reports", name="ui_company_cdr")
+     * @Route("/reports", name="ui_company_cdr")
      * @Template()
 	 * @Method("GET")
+	 * @Security("has_role('ROLE_USER')")
      */
-    public function cdrAction($hash)
+    public function cdrAction()
     {
 		$user = $this->getUser();
+		$company = $user->getCompany();
+		
 		$em = $this->getDoctrine()->getManager();
-		$company = $em->getRepository('VoIPCompanyStructureBundle:Company')->findOneBy(array(
-			'hash' => $hash
-		));
-        if (!$company) throw $this->createNotFoundException('Unable to find Company entity.');
-		if (!$user->hasCompany($company)) throw $this->createNotFoundException('No authorization.');
+		
 		$repository = $this->getDoctrine()->getRepository('VoIPPBXCDRBundle:CDR');
 
 		$query = $repository->createQueryBuilder('cdr')
 			->leftJoin('cdr.company', 'c')
 		    ->where('c.hash = :hash')
-		    ->setParameter('hash', $hash)
+		    ->setParameter('hash', $company->getHash())
 		    ->orderBy('cdr.start', 'ASC')
 		    ->getQuery();
 
