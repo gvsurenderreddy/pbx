@@ -34,6 +34,13 @@ class Rate
      * @ORM\Column(name="rate", type="float")
      */
     private $rate;
+	
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="rateIn", type="float")
+     */
+    private $rateIn;
 
     /**
      * @var string
@@ -210,5 +217,28 @@ class Rate
     public function getPrecision()
     {
         return $this->precision;
+    }
+
+    /**
+     * Set rateIn
+     *
+     * @param float $rateIn
+     * @return Rate
+     */
+    public function setRateIn($rateIn)
+    {
+        $this->rateIn = $rateIn;
+
+        return $this;
+    }
+
+    /**
+     * Get rateIn
+     *
+     * @return float 
+     */
+    public function getRateIn()
+    {
+        return $this->rateIn;
     }
 }

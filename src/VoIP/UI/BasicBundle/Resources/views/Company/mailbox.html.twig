@@ -34,6 +34,10 @@
 	</tr>
 	{% endfor %}
 </table>
+<ul class="pager">
+  {% if page != 1 %}<li class="previous"><a href="{{ path('ui_company_mailbox', {'page': page - 1}) }}">&larr; Newer</a></li>{% endif %}
+  {% if messages|length == 20 %}<li class="next"><a href="{{ path('ui_company_mailbox', {'page': page + 1}) }}">Older &rarr;</a></li>{% endif %}
+</ul>
 {% endblock container %}
 {% block javascripts %}
 {{ parent() }}

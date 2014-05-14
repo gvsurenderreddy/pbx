@@ -305,25 +305,32 @@ class CompanyController extends Controller
      */
     public function mailboxAction()
     {
+		$card = 20;
+		$request = $this->getRequest();
+		$page = $request->query->get('page');
+		if (!$page) $page = 1;
 		$user = $this->getUser();
 		$company = $user->getCompany();
-		
-		$repository = $this->getDoctrine()->getRepository('VoIPCompanyVoicemailBundle:Message');
+		$em = $this->getDoctrine()->getManager();
+		$query = $em->createQuery(
+		    'SELECT m
+		    FROM VoIPCompanyVoicemailBundle:Message m
+			LEFT JOIN m.voicemail v
+			LEFT JOIN v.subscription s
+			LEFT JOIN s.company c
+			WHERE c.hash = :hash AND m.archivedAt IS NULL
+			ORDER BY m.createdAt DESC'
+		)->setParameters(array(
+			'hash' => $company->getHash()
+		))->setMaxResults($card)->setFirstResult(($page - 1) * $card);
 
-		$query = $repository->createQueryBuilder('m')
-			->leftJoin('m.voicemail', 'v')
-			->leftJoin('v.subscription', 's')
-			->leftJoin('s.company', 'c')
-		    ->where('c.hash = :hash')
-			->andWhere('m.archivedAt IS NULL')
-		    ->setParameter('hash', $company->getHash())
-		    ->orderBy('m.createdAt', 'ASC')
-		    ->getQuery();
+		$messages = $query->getResult();
 
 		$messages = $query->getResult();
         return array(
 			'company' => $company,
-			'messages' => $messages
+			'messages' => $messages,
+			'page' => $page
 		);
     }
 	
