@@ -309,20 +309,37 @@ class CompanyController extends Controller
 		$request = $this->getRequest();
 		$page = $request->query->get('page');
 		if (!$page) $page = 1;
+		$archive = $request->get('archive');
 		$user = $this->getUser();
 		$company = $user->getCompany();
 		$em = $this->getDoctrine()->getManager();
-		$query = $em->createQuery(
-		    'SELECT m
-		    FROM VoIPCompanyVoicemailBundle:Message m
-			LEFT JOIN m.voicemail v
-			LEFT JOIN v.subscription s
-			LEFT JOIN s.company c
-			WHERE c.hash = :hash AND m.archivedAt IS NULL
-			ORDER BY m.createdAt DESC'
-		)->setParameters(array(
-			'hash' => $company->getHash()
-		))->setMaxResults($card)->setFirstResult(($page - 1) * $card);
+		if (!$archive) {
+			$archive = 0;
+			$query = $em->createQuery(
+			    'SELECT m
+			    FROM VoIPCompanyVoicemailBundle:Message m
+				LEFT JOIN m.voicemail v
+				LEFT JOIN v.subscription s
+				LEFT JOIN s.company c
+				WHERE c.hash = :hash AND m.archivedAt IS NULL
+				ORDER BY m.createdAt DESC'
+			)->setParameters(array(
+				'hash' => $company->getHash()
+			))->setMaxResults($card)->setFirstResult(($page - 1) * $card);
+		} else {
+			$query = $em->createQuery(
+			    'SELECT m
+			    FROM VoIPCompanyVoicemailBundle:Message m
+				LEFT JOIN m.voicemail v
+				LEFT JOIN v.subscription s
+				LEFT JOIN s.company c
+				WHERE c.hash = :hash AND m.archivedAt IS NOT NULL
+				ORDER BY m.createdAt DESC'
+			)->setParameters(array(
+				'hash' => $company->getHash()
+			))->setMaxResults($card)->setFirstResult(($page - 1) * $card);
+		}
+		
 
 		$messages = $query->getResult();
 
@@ -330,7 +347,8 @@ class CompanyController extends Controller
         return array(
 			'company' => $company,
 			'messages' => $messages,
-			'page' => $page
+			'page' => $page,
+			'archive' => $archive
 		);
     }
 	

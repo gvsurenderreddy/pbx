@@ -1,6 +1,11 @@
 {% extends "VoIPUIBasicBundle::layout.html.twig" %}
 {% block title %}48 | {{ company.name }}{% endblock %}
 {% block container %}
+<ul class="nav nav-pills">
+	<li class="{{ not archive ? 'active' }}"><a href="{{ path('ui_company_mailbox', {'archive': 0}) }}">Inbox</a></li>
+	<li class="{{ archive ? 'active' }}"><a href="{{ path('ui_company_mailbox', {'archive': 1}) }}">Archive</a></li>
+</ul>
+{% if messages|length > 0 %}
 <table class="table table-hover">
 	<tr>
 		<th></th>
@@ -35,9 +40,13 @@
 	{% endfor %}
 </table>
 <ul class="pager">
-  {% if page != 1 %}<li class="previous"><a href="{{ path('ui_company_mailbox', {'page': page - 1}) }}">&larr; Newer</a></li>{% endif %}
-  {% if messages|length == 20 %}<li class="next"><a href="{{ path('ui_company_mailbox', {'page': page + 1}) }}">Older &rarr;</a></li>{% endif %}
+  {% if page != 1 %}<li class="previous"><a href="{{ path('ui_company_mailbox', {'page': page - 1, 'archive': archive}) }}">&larr; Newer</a></li>{% endif %}
+  {% if messages|length == 20 %}<li class="next"><a href="{{ path('ui_company_mailbox', {'page': page + 1, 'archive': archive}) }}">Older &rarr;</a></li>{% endif %}
 </ul>
+{% else %}
+<center>No voicemail for the moment</center>
+{% endif %}
+
 {% endblock container %}
 {% block javascripts %}
 {{ parent() }}

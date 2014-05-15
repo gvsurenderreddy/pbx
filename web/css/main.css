@@ -7,31 +7,31 @@ body {
 	min-height: 100%;
 	margin: 0;
 }
-.nav-pills>li>a {
+.left-menu .nav-pills>li>a {
 	border-radius: 0;
 	font-size: 17px;
 	border-left: 8px solid transparent;
 }
-.nav-pills>li>a>span.glyphicon {
+.left-menu .nav-pills>li>a>span.glyphicon {
 	padding-right: 10px;
 }
-.nav-pills>li.active {
+.left-menu .nav-pills>li.active {
 	border-color: #fff;
 }
-.nav-pills>li.active>a {
+.left-menu .nav-pills>li.active>a {
 	background-color: transparent;
 	border-color: #fff;
 }
-.nav-pills>li.active>a:hover {
+.left-menu .nav-pills>li.active>a:hover {
 	background-color: transparent;
 }
-.nav-pills>li>a {
+.left-menu .nav-pills>li>a {
 	color: #888;
 }
-.nav-pills>li>a:hover {
+.left-menu .nav-pills>li>a:hover {
 	background-color: #eeeeee;
 }
-.navbar-inverse .navbar-brand {
+.left-menu .navbar-inverse .navbar-brand {
 	color: #fff;
 }
 .btn-primary {
