@@ -215,7 +215,7 @@ class CDR
 		if (($answer = $this->getAnswer()) && ($end = $this->getEnd())) {
 			$t1 = $answer->getTimestamp();
 			$t2 = $end->getTimestamp();
-			return $this->getRate() * ($t2 - $t1) / 60;
+			return $t2 - $t1 > 0 ? ($this->getRate() * ((int)(($t2 - $t1) / 60) + 1)) : 0;
 		} else {
 			return 0;
 		}
