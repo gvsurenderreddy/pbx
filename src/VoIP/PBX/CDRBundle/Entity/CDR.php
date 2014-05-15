@@ -34,6 +34,13 @@ class CDR
      * @ORM\Column(name="src", type="string", length=40, nullable=true)
      */
     private $src;
+	
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="type", type="string", length=2, nullable=true)
+     */
+    private $type;
 
     /**
      * @var string
@@ -845,5 +852,28 @@ class CDR
     public function getCreditUpdatedAt()
     {
         return $this->creditUpdatedAt;
+    }
+
+    /**
+     * Set type
+     *
+     * @param string $type
+     * @return CDR
+     */
+    public function setType($type)
+    {
+        $this->type = $type;
+
+        return $this;
+    }
+
+    /**
+     * Get type
+     *
+     * @return string 
+     */
+    public function getType()
+    {
+        return $this->type;
     }
 }

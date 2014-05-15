@@ -114,6 +114,27 @@ class Subscription
     private $isActive = true;
 	
     /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="rate_in", type="float")
+     */
+    private $rateIn = 0.01;
+	
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="rate_out", type="float")
+     */
+    private $rateOut = 0.01;
+	
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="rate_out_operator", type="float")
+     */
+    private $rateOutOperator = 0.00;
+	
+    /**
      * @var string
      *
      * @ORM\Column(name="registration_code", type="string", length=255, nullable=true)
@@ -705,5 +726,74 @@ class Subscription
     public function getIsActive()
     {
         return $this->isActive;
+    }
+
+    /**
+     * Set rateIn
+     *
+     * @param float $rateIn
+     * @return Subscription
+     */
+    public function setRateIn($rateIn)
+    {
+        $this->rateIn = $rateIn;
+
+        return $this;
+    }
+
+    /**
+     * Get rateIn
+     *
+     * @return float 
+     */
+    public function getRateIn()
+    {
+        return $this->rateIn;
+    }
+
+    /**
+     * Set rateOut
+     *
+     * @param float $rateOut
+     * @return Subscription
+     */
+    public function setRateOut($rateOut)
+    {
+        $this->rateOut = $rateOut;
+
+        return $this;
+    }
+
+    /**
+     * Get rateOut
+     *
+     * @return float 
+     */
+    public function getRateOut()
+    {
+        return $this->rateOut;
+    }
+
+    /**
+     * Set rateOutOperator
+     *
+     * @param float $rateOutOperator
+     * @return Subscription
+     */
+    public function setRateOutOperator($rateOutOperator)
+    {
+        $this->rateOutOperator = $rateOutOperator;
+
+        return $this;
+    }
+
+    /**
+     * Get rateOutOperator
+     *
+     * @return float 
+     */
+    public function getRateOutOperator()
+    {
+        return $this->rateOutOperator;
     }
 }
