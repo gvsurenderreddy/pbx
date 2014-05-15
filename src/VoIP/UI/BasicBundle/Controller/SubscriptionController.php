@@ -35,7 +35,7 @@ class SubscriptionController extends Controller
 		));
         if (!$subscription) throw $this->createNotFoundException('Unable to find Subsciption entity.');
 		$company = $subscription->getCompany();
-		if (!$user->hasCompany($company)) throw $this->createNotFoundException('No authorization.');
+		if ($user->getCompany()->getId() != $company->getId()) throw $this->createNotFoundException('No authorization.');
 		$employees = $em->getRepository('VoIPCompanyStructureBundle:Employee')->findBy(array(
 			'company' => $company
 		), array(
@@ -78,7 +78,7 @@ class SubscriptionController extends Controller
 		));
         if (!$subscription) throw $this->createNotFoundException('Unable to find Subsciption entity.');
 		$company = $subscription->getCompany();
-		if (!$user->hasCompany($company)) throw $this->createNotFoundException('No authorization.');
+		if ($user->getCompany()->getId() != $company->getId()) throw $this->createNotFoundException('No authorization.');
 		
 		$request = $this->getRequest();
 		$name = $request->get('name');
@@ -142,7 +142,7 @@ class SubscriptionController extends Controller
 		));
         if (!$subscription) throw $this->createNotFoundException('Unable to find Subscription entity.');
 		$company = $subscription->getCompany();
-		if (!$user->hasCompany($company)) throw $this->createNotFoundException('No authorization.');
+		if ($user->getCompany()->getId() != $company->getId()) throw $this->createNotFoundException('No authorization.');
 		
 		if ($subscription->getAstPeer()) $em->remove($subscription->getAstPeer());
 		
@@ -169,7 +169,7 @@ class SubscriptionController extends Controller
 		));
         if (!$subscription) throw $this->createNotFoundException('Unable to find Subscription entity.');
 		$company = $subscription->getCompany();
-		if (!$user->hasCompany($company)) throw $this->createNotFoundException('No authorization.');
+		if ($user->getCompany()->getId() != $company->getId()) throw $this->createNotFoundException('No authorization.');
 	
 		if ($previousItemHash) {
 			$previousItem = $em->getRepository('VoIPCompanySubscriptionsBundle:DialPlanItem')->findOneBy(array(
@@ -200,7 +200,7 @@ class SubscriptionController extends Controller
 		));
         if (!$subscription) throw $this->createNotFoundException('Unable to find Subscription entity.');
 		$company = $subscription->getCompany();
-		if (!$user->hasCompany($company)) throw $this->createNotFoundException('No authorization.');
+		if ($user->getCompany()->getId() != $company->getId()) throw $this->createNotFoundException('No authorization.');
 		
 		if ($previousItemHash) {
 			$previousItem = $em->getRepository('VoIPCompanySubscriptionsBundle:DialPlanItem')->findOneBy(array(
