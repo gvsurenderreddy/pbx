@@ -107,32 +107,39 @@ class Subscription
     private $activatedUntil;
 	
     /**
-     * @var \DateTime
+     * @var boolean
      *
      * @ORM\Column(name="is_active", type="boolean")
      */
     private $isActive = true;
 	
     /**
-     * @var \DateTime
+     * @var float
      *
      * @ORM\Column(name="rate_in", type="float")
      */
     private $rateIn = 0.01;
 	
     /**
-     * @var \DateTime
+     * @var float
      *
      * @ORM\Column(name="rate_out", type="float")
      */
     private $rateOut = 0.01;
 	
     /**
-     * @var \DateTime
+     * @var float
      *
      * @ORM\Column(name="rate_out_operator", type="float")
      */
     private $rateOutOperator = 0.00;
+	
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="rate_in_factor", type="float")
+     */
+    private $rateInFactor = 0;
 	
     /**
      * @var string
@@ -795,5 +802,28 @@ class Subscription
     public function getRateOutOperator()
     {
         return $this->rateOutOperator;
+    }
+
+    /**
+     * Set rateInFactor
+     *
+     * @param float $rateInFactor
+     * @return Subscription
+     */
+    public function setRateInFactor($rateInFactor)
+    {
+        $this->rateInFactor = $rateInFactor;
+
+        return $this;
+    }
+
+    /**
+     * Get rateInFactor
+     *
+     * @return float 
+     */
+    public function getRateInFactor()
+    {
+        return $this->rateInFactor;
     }
 }

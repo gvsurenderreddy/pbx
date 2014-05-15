@@ -36,7 +36,7 @@ class PhoneController extends Controller
 		));
         if (!$phone) throw $this->createNotFoundException('Unable to find Phone entity.');
 		$company = $phone->getCompany();
-		if (!$user->hasCompany($company)) throw $this->createNotFoundException('No authorization.');
+		if ($user->getCompany()->getId() != $company->getId()) throw $this->createNotFoundException('No authorization.');
         return array(
 			'phone' => $phone,
 			'company' => $company
@@ -58,7 +58,7 @@ class PhoneController extends Controller
 		));
         if (!$phone) throw $this->createNotFoundException('Unable to find Phone entity.');
 		$company = $phone->getCompany();
-		if (!$user->hasCompany($company)) throw $this->createNotFoundException('No authorization.');
+		if ($user->getCompany()->getId() != $company->getId()) throw $this->createNotFoundException('No authorization.');
 		
 		$request = $this->getRequest();
 		$name = $request->get('name');
@@ -114,7 +114,7 @@ class PhoneController extends Controller
 		));
         if (!$employee) throw $this->createNotFoundException('Unable to find Employee entity.');
 		$company = $phone->getCompany();
-		if (!$user->hasCompany($company)) throw $this->createNotFoundException('No authorization.');
+		if ($user->getCompany()->getId() != $company->getId()) throw $this->createNotFoundException('No authorization.');
 		
 		if ($prevPhone = $employee->getPhone()) $prevPhone->setEmployee(null);
 		$em->flush();
@@ -142,7 +142,7 @@ class PhoneController extends Controller
 		));
         if (!$phone) throw $this->createNotFoundException('Unable to find Phone entity.');
 		$company = $phone->getCompany();
-		if (!$user->hasCompany($company)) throw $this->createNotFoundException('No authorization.');
+		if ($user->getCompany()->getId() != $company->getId()) throw $this->createNotFoundException('No authorization.');
 		
 		$phone->setEmployee(null);
 		$em->flush();
@@ -167,7 +167,7 @@ class PhoneController extends Controller
 		));
         if (!$phone) throw $this->createNotFoundException('Unable to find Phone entity.');
 		$company = $phone->getCompany();
-		if (!$user->hasCompany($company)) throw $this->createNotFoundException('No authorization.');
+		if ($user->getCompany()->getId() != $company->getId()) throw $this->createNotFoundException('No authorization.');
 		
 		if ($phone->getAstPeer()) $em->remove($phone->getAstPeer());
 		$em->remove($phone);
@@ -193,7 +193,7 @@ class PhoneController extends Controller
 		));
         if (!$phone) throw $this->createNotFoundException('Unable to find Phone entity.');
 		$company = $phone->getCompany();
-		if (!$user->hasCompany($company)) throw $this->createNotFoundException('No authorization.');
+		if ($user->getCompany()->getId() != $company->getId()) throw $this->createNotFoundException('No authorization.');
 		
 		return array(
 			'phone' => $phone,
@@ -217,7 +217,7 @@ class PhoneController extends Controller
 		));
         if (!$phone) throw $this->createNotFoundException('Unable to find Phone entity.');
 		$company = $phone->getCompany();
-		if (!$user->hasCompany($company)) throw $this->createNotFoundException('No authorization.');
+		if ($user->getCompany()->getId() != $company->getId()) throw $this->createNotFoundException('No authorization.');
 		
 		$url = 'http://'.$ip.'/admin/bcisco.csc';
 	
@@ -716,7 +716,7 @@ class PhoneController extends Controller
 		));
         if (!$phone) throw $this->createNotFoundException('Unable to find Phone entity.');
 		$company = $phone->getCompany();
-		if (!$user->hasCompany($company)) throw $this->createNotFoundException('No authorization.');
+		if ($user->getCompany()->getId() != $company->getId()) throw $this->createNotFoundException('No authorization.');
 		
 		return array(
 			'phone' => $phone,
@@ -739,7 +739,7 @@ class PhoneController extends Controller
 		));
         if (!$phone) throw $this->createNotFoundException('Unable to find Phone entity.');
 		$company = $phone->getCompany();
-		if (!$user->hasCompany($company)) throw $this->createNotFoundException('No authorization.');
+		if ($user->getCompany()->getId() != $company->getId()) throw $this->createNotFoundException('No authorization.');
 		
 		$response = new Response($this->renderView(
 		    'VoIPUIBasicBundle:Phone:configure.js.twig',
