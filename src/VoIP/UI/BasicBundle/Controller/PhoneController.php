@@ -153,6 +153,72 @@ class PhoneController extends Controller
     }
 	
     /**
+     * @Route("/{hash}/renew", name="ui_phone_renew")
+     * @Template()
+	 * @Method("GET")
+	 * @Security("has_role('ROLE_USER')")
+     */
+    public function renewAction($hash)
+    {
+		$user = $this->getUser();
+		$em = $this->getDoctrine()->getManager();
+		$phone = $em->getRepository('VoIPCompanyStructureBundle:Phone')->findOneBy(array(
+			'hash' => $hash
+		));
+        if (!$phone) throw $this->createNotFoundException('Unable to find Phone entity.');
+		$company = $phone->getCompany();
+		if ($user->getCompany()->getId() != $company->getId()) throw $this->createNotFoundException('No authorization.');
+		
+		return array(
+			'phone' => $phone
+		);
+    }
+	
+    /**
+     * @Route("/{hash}/add-credit", name="ui_phone_credit")
+	 * @Method("GET")
+	 * @Security("has_role('ROLE_USER')")
+     */
+    public function addCreditAction($hash)
+    {
+		$user = $this->getUser();
+		$em = $this->getDoctrine()->getManager();
+		$phone = $em->getRepository('VoIPCompanyStructureBundle:Phone')->findOneBy(array(
+			'hash' => $hash
+		));
+        if (!$phone) throw $this->createNotFoundException('Unable to find Phone entity.');
+		$company = $phone->getCompany();
+		if ($user->getCompany()->getId() != $company->getId()) throw $this->createNotFoundException('No authorization.');
+		
+		$request = $this->getRequest();
+		$period = $request->get('period');
+		
+		$now = new \DateTime();
+		
+		if (!$phone->getActivatedUntil() || $now > $phone->getActivatedUntil()) {
+			$date = $now;
+		} else {
+			$date = $phone->getActivatedUntil();
+		}
+		
+		switch ($period) {
+			case 'month':
+				$date->modify('+1 month');
+				break;
+			case 'year':
+				$date->modify('+1 year');
+				break;
+		}
+		
+		
+		$phone->setActivatedUntil($date);
+		
+		$em->flush();
+		
+		return $this->redirect($this->generateUrl('ui_company'));
+    }
+	
+    /**
      * @Route("/{hash}/delete", name="ui_phone_delete")
      * @Template()
 	 * @Method("GET")
@@ -169,13 +235,14 @@ class PhoneController extends Controller
 		$company = $phone->getCompany();
 		if ($user->getCompany()->getId() != $company->getId()) throw $this->createNotFoundException('No authorization.');
 		
-		if ($phone->getAstPeer()) $em->remove($phone->getAstPeer());
-		$em->remove($phone);
+		if ($peer = $phone->getAstPeer()) {
+			$phone->setAstPeer(null);
+			$em->remove($peer);
+		}
+		$phone->setIsActive(false);
 		$em->flush();
 		
-		return $this->redirect($this->generateUrl('ui_company', array(
-			'hash' => $company->getHash()
-		)));
+		return $this->redirect($this->generateUrl('ui_company'));
     }
 	
     /**

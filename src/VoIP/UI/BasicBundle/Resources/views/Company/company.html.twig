@@ -29,14 +29,16 @@
 				<tr>
 					<th>Phone</th>
 					<th>Type</th>
+					<th>Activated until</th>
 					<th></th>
 					<th>Employee</th>
 					<th></th>				
 				</tr>
-				{% for phone in company.phones %}
+				{% for phone in company.phones if phone.isactive %}
 				<tr>
 					<td>{{ phone.name }}</td>
 					<td>{{ phone.type|humanize }}</td>
+					<td>{{ phone.activateduntil ? phone.activateduntil|date('d/m/Y') }} <a href="{{ path('ui_phone_renew', {'hash': phone.hash}) }}" class="tooltip-flag" data-toggle="tooltip" data-placement="bottom" title="Renew"><span class="glyphicon glyphicon-refresh"></span></a></td>
 					<td>
 						<a href="{{ path('ui_phone_edit', {'hash': phone.hash}) }}" data-toggle="tooltip" data-placement="bottom" title="Edit" class="tooltip-flag"><span class="glyphicon glyphicon-pencil"></span></a>
 						<a href="{{ path('ui_phone_delete', {'hash': phone.hash}) }}" data-toggle="tooltip" data-placement="bottom" title="Delete" class="tooltip-flag"><span class="glyphicon glyphicon-trash"></span></a>
@@ -114,12 +116,14 @@
 			<table class="table">
 				<tr>
 					<th>Name</th>
+					<th>Activated until</th>
 					<th></th>
 					<th>Extensions to call</th>
 				</tr>
 				{% for subscription in company.subscriptions %}
 				<tr>
 					<td>{{ subscription.name }}</td>
+					<td>{{ subscription.activateduntil ? subscription.activateduntil|date('d/m/Y') }} <a href="{{ path('ui_subscription_renew', {'hash': subscription.hash}) }}" class="tooltip-flag" data-toggle="tooltip" data-placement="bottom" title="Renew"><span class="glyphicon glyphicon-refresh"></span></a></td>
 					<td>
 						<a href="{{ path('ui_subscription_edit', {'hash': subscription.hash}) }}" data-toggle="tooltip" data-placement="bottom" title="Edit	" class="tooltip-flag"><span class="glyphicon glyphicon-pencil"></span></a>
 						<a href="{{ path('ui_subscription_delete', {'hash': subscription.hash}) }}" data-toggle="tooltip" data-placement="bottom" title="Delete" class="tooltip-flag"><span class="glyphicon glyphicon-trash"></span></a>

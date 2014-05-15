@@ -117,6 +117,16 @@ class SubscriptionController extends Controller
 		
 		$em->flush();
 		
+		$voicemail = $subscription->getVoicemail();
+		$em->persist($voicemail);
+		$em->flush();
+		
+		$sync = new Sync();
+		$astVoicemail = $sync->voicemailToVoicemail($voicemail);
+		$em->persist($astVoicemail);
+		$voicemail->setAstVoicemail($astVoicemail);
+		$em->flush();
+		
 		$sync = new Sync();
 		$astPeer = $sync->subscriptionToPeer($subscription);
 		$subscription->setAstPeer($astPeer);
@@ -125,6 +135,72 @@ class SubscriptionController extends Controller
 		return $this->redirect($this->generateUrl('ui_company', array(
 			'hash' => $company->getHash()
 		)));
+    }
+	
+    /**
+     * @Route("/{hash}/renew", name="ui_subscription_renew")
+     * @Template()
+	 * @Method("GET")
+	 * @Security("has_role('ROLE_USER')")
+     */
+    public function renewAction($hash)
+    {
+		$user = $this->getUser();
+		$em = $this->getDoctrine()->getManager();
+		$subscription = $em->getRepository('VoIPCompanySubscriptionsBundle:Subscription')->findOneBy(array(
+			'hash' => $hash
+		));
+        if (!$subscription) throw $this->createNotFoundException('Unable to find Subscription entity.');
+		$company = $subscription->getCompany();
+		if ($user->getCompany()->getId() != $company->getId()) throw $this->createNotFoundException('No authorization.');
+		
+		return array(
+			'subscription' => $subscription
+		);
+    }
+	
+    /**
+     * @Route("/{hash}/add-credit", name="ui_subscription_credit")
+	 * @Method("GET")
+	 * @Security("has_role('ROLE_USER')")
+     */
+    public function addCreditAction($hash)
+    {
+		$user = $this->getUser();
+		$em = $this->getDoctrine()->getManager();
+		$subscription = $em->getRepository('VoIPCompanySubscriptionsBundle:Subscription')->findOneBy(array(
+			'hash' => $hash
+		));
+        if (!$subscription) throw $this->createNotFoundException('Unable to find Subscription entity.');
+		$company = $subscription->getCompany();
+		if ($user->getCompany()->getId() != $company->getId()) throw $this->createNotFoundException('No authorization.');
+		
+		$request = $this->getRequest();
+		$period = $request->get('period');
+		
+		$now = new \DateTime();
+		
+		if (!$subscription->getActivatedUntil() || $now > $subscriptionhone->getActivatedUntil()) {
+			$date = $now;
+		} else {
+			$date = $subscription->getActivatedUntil();
+		}
+		
+		switch ($period) {
+			case 'month':
+				$date->modify('+1 month');
+				break;
+			case 'year':
+				$date->modify('+1 year');
+				break;
+		}
+		
+		
+		$subscription->setActivatedUntil($date);
+		
+		$em->flush();
+		
+		return $this->redirect($this->generateUrl('ui_company'));
     }
 	
     /**
@@ -250,22 +326,4 @@ class SubscriptionController extends Controller
 			'hash' => $company->getHash()
 		)));
     }
-	
-	public function sync($subscription)
-	{
-		if ($item = $subscription->getDialPlanFirstItem()) return $this->syncItem($subscription, $item, 1);
-		else return false;
-	}
-	public function syncItem($subscription, $item, $n)
-	{
-		$em = $this->getDoctrine()->getManager();
-		$sync = new Sync();
-		$astExension = $sync->itemToExtension($subscription, $item, $n);
-		$item->setAstExtension($astExension);
-		$em->persist($astExension);
-		$em->flush();
-		if ($nextItem = $item->getNextItem()) {
-			return $this->syncItem($subscription, $nextItem, $n+1);
-		} else return true;
-	}
 }
