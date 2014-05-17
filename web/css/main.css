@@ -130,6 +130,9 @@ a {
 .status-default {
 	background-color: #7cd56a;
 }
+.status-danger {
+	background-color: #ff4646;
+}
 .switchboard-card .until {
 	position: absolute;
 	bottom: 5px;
