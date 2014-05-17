@@ -245,7 +245,7 @@ class Subscription
 		// TEST CONNECTED_EMPLOYEE
 		$test = false;
 		foreach ($this->getEmployees() as $employee) {
-			if ($employee->getIsActive() && $employee->getPhone()) {
+			if ($employee->getIsActive() && count($employee->getPhones()) > 0) {
 				$test = true;
 			}
 		}

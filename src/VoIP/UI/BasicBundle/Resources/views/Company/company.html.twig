@@ -10,7 +10,7 @@
 		<center class="subsection-icon">+65</center>
 		<center><a href="{{ path('ui_company_newsubscription') }}">Add a subscription</a></center>
 		{% for subscription in company.subscriptions if subscription.isactive %}
-		<div class="switchboard-card switchboard-subscription {% for employee in subscription.employees %} emp{{ employee.hash }} {% if employee.phone %} pho{{ employee.phone.hash }}{% endif %}{% endfor %}" data-hash="{{ subscription.hash }}">
+		<div class="switchboard-card switchboard-subscription {% for employee in subscription.employees %} emp{{ employee.hash }} {% for phone in employee.phones %} pho{{ phone.hash }}{% endfor %}{% endfor %}" data-hash="{{ subscription.hash }}">
 			<div>
 				Subscription {{ subscription.name }}
 			</div>
@@ -36,7 +36,7 @@
 		{% for employee in company.employees if employee.isactive %}
 		<div class="switchboard-card switchboard-buddy
 		{% for subscription in employee.subscriptions %} sub{{ subscription.hash }}{% endfor %}
-		{% if employee.phone %} pho{{ employee.phone.hash }}{% endif %}" data-hash="{{ employee.hash }}">
+		{% for phone in employee.phones %} pho{{ phone.hash }}{% endfor %}" data-hash="{{ employee.hash }}">
 			<div>
 				{{ employee.name }}
 			</div>
@@ -46,18 +46,6 @@
 			<div class="tools">
 				<a href="{{ path('ui_employee_edit', {'hash': employee.hash}) }}" data-toggle="tooltip" data-placement="bottom" title="Edit" class="tooltip-flag"><span class="glyphicon glyphicon-pencil"></span></a>
 				<a href="{{ path('ui_employee_delete', {'hash': employee.hash}) }}" data-toggle="tooltip" data-placement="bottom" title="Delete" class="tooltip-flag"><span class="glyphicon glyphicon-trash"></span></a>
-				<div class="dropdown">
-					<span class="glyphicon glyphicon-link dropdown-toggle tooltip-flag" data-toggle="dropdown" data-toggle="tooltip" data-placement="bottom" title="Change phone"></span>
-					<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu{{ employee.hash }}">
-						{% for phone in company.phones if phone.isactive %}
-						<li role="presentation"><a role="menuitem" tabindex="-1" href="{{ path('ui_phone_attribute', {'hash': phone.hash, 'hash2': employee.hash}) }}">{{ phone.name }}</a></li>
-						{% endfor %}
-						{% if employee.phone %}
-						<li role="presentation" class="divider"></li>
-						<li role="presentation"><a role="menuitem" tabindex="-1" href="{{ path('ui_phone_unattribute', {'hash': employee.phone.hash,}) }}">Unattribute</a></li>
-						{% endif %}
-					</ul>
-				</div>
 			</div>
 			<div class="status status-{{ employee.status }} tooltip-flag" data-toggle="tooltip" data-placement="bottom" title="Connected"></div>
 		</div>
@@ -68,8 +56,7 @@
 		<center><a href="{{ path('ui_company_newphone') }}">Add a phone</a></center>
 		{% for phone in company.phones if phone.isactive %}
 		<div class="switchboard-card switchboard-phone
-		{% if phone.employee %}{% for subscription in phone.employee.subscriptions %} sub{{ subscription.hash }}{% endfor %}{% endif %}
-		{% if phone.employee %} emp{{ phone.employee.hash }}{% endif %}" data-hash="{{ phone.hash }}">
+		{% for employee in phone.employees %}emp{{ employee.hash }} {% for subscription in employee.subscriptions %} sub{{ subscription.hash }}{% endfor %}{% endfor %}" data-hash="{{ phone.hash }}">
 			<div>
 				{{ phone.name }}
 			</div>
@@ -87,122 +74,6 @@
 		{% endfor %}
 	</div>
 </div>
-{# 
-<div class="row">
-	<div class="col-md-6">
-		<div class="panel panel-default">
-			<div class="panel-heading">
-				<div class="pull-right"><a href="{{ path('ui_company_newphone') }}"><span class="glyphicon glyphicon-plus"></span></a></div>
-				<h3 class="panel-title">
-					Phones
-				</h3>
-			</div>
-			<table class="table">
-				<tr>
-					<th>Phone</th>
-					<th>Type</th>
-					<th>Activated until</th>
-					<th></th>
-					<th>Employee</th>
-					<th></th>				
-				</tr>
-				{% for phone in company.phones if phone.isactive %}
-				<tr>
-					<td>{{ phone.name }}</td>
-					<td>{{ phone.type|humanize }}</td>
-					<td>{{ phone.activateduntil ? phone.activateduntil|date('d/m/Y') }} <a href="{{ path('ui_phone_renew', {'hash': phone.hash}) }}" class="tooltip-flag" data-toggle="tooltip" data-placement="bottom" title="Renew"><span class="glyphicon glyphicon-refresh"></span></a></td>
-					<td>
-						<a href="{{ path('ui_phone_edit', {'hash': phone.hash}) }}" data-toggle="tooltip" data-placement="bottom" title="Edit" class="tooltip-flag"><span class="glyphicon glyphicon-pencil"></span></a>
-						<a href="{{ path('ui_phone_delete', {'hash': phone.hash}) }}" data-toggle="tooltip" data-placement="bottom" title="Delete" class="tooltip-flag"><span class="glyphicon glyphicon-trash"></span></a>
-						{% if phone.type == 'ciscophone' %}<a href="{{ path('ui_phone_configure', {'hash': phone.hash}) }}" data-toggle="tooltip" data-placement="bottom" title="Configure" class="tooltip-flag"><span class="glyphicon glyphicon-wrench"></span></a>{% endif %}
-						<a href="#" class="l-mod tooltip-flag" data-url="{{ path('ui_phone_credentials', {'hash': phone.hash}) }}" data-toggle="tooltip" data-placement="bottom" title="Credentials"><span class="glyphicon glyphicon-lock"></span></a>
-					</td>
-					<td>{% if phone.employee %}{{ phone.employee.name }} ({{ phone.employee.extension }}){% endif %}</td>
-					<td>
-						
-					</td>
-				</tr>
-				{% endfor %}
-			</table>
-			
-		</div>
-		<div class="panel panel-default">
-			<div class="panel-heading">
-				<div class="pull-right"><a href="{{ path('ui_company_newemployee') }}"><span class="glyphicon glyphicon-plus"></span></a></div>
-				<h3 class="panel-title">Buddies</h3>
-			</div>
-			<table class="table">
-				<tr>
-					<th>Name</th>
-					<th>Ext.</th>
-					<th></th>
-					<th>Phone</th>
-					<th></th>
-				</tr>
-				{% for employee in company.employees %}
-				<tr>
-					<td>{{ employee.name }}</td>
-					<td>{{ employee.extension }}</td>
-					<td>
-						<a href="{{ path('ui_employee_edit', {'hash': employee.hash}) }}" data-toggle="tooltip" data-placement="bottom" title="Edit" class="tooltip-flag"><span class="glyphicon glyphicon-pencil"></span></a>
-						<a href="{{ path('ui_employee_delete', {'hash': employee.hash}) }}" data-toggle="tooltip" data-placement="bottom" title="Delete" class="tooltip-flag"><span class="glyphicon glyphicon-trash"></span></a>
-					</td>
-					<td>{% if employee.phone %}{{ employee.phone.name }}{% endif %}</td>
-					<td>
-						<div class="dropdown">
-							<span class="glyphicon glyphicon-link dropdown-toggle tooltip-flag" data-toggle="dropdown" data-toggle="tooltip" data-placement="bottom" title="Change phone"></span>
-							<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu{{ employee.hash }}">
-								{% for phone in company.phones if phone.isactive %}
-								<li role="presentation"><a role="menuitem" tabindex="-1" href="{{ path('ui_phone_attribute', {'hash': phone.hash, 'hash2': employee.hash}) }}">{{ phone.name }}</a></li>
-								{% endfor %}
-								{% if employee.phone %}
-								<li role="presentation" class="divider"></li>
-								<li role="presentation"><a role="menuitem" tabindex="-1" href="{{ path('ui_phone_unattribute', {'hash': employee.phone.hash,}) }}">Unattribute</a></li>
-								{% endif %}
-							</ul>
-						</div>
-					</td>
-				</tr>
-				{% endfor %}
-			</table>
-			
-		</div>	
-	</div>
-	<div class="col-md-6">
-		<div class="panel panel-default">
-			<div class="panel-heading">
-				<div class="pull-right"><a href="{{ path('ui_company_newsubscription') }}"><span class="glyphicon glyphicon-plus"></span></a></div>
-				<h3 class="panel-title">Subscription</h3>
-			</div>
-			<table class="table">
-				<tr>
-					<th>Name</th>
-					<th>Activated until</th>
-					<th></th>
-					<th>Extensions to call</th>
-				</tr>
-				{% for subscription in company.subscriptions %}
-				<tr>
-					<td>{{ subscription.name }}</td>
-					<td>{{ subscription.activateduntil ? subscription.activateduntil|date('d/m/Y') }} <a href="{{ path('ui_subscription_renew', {'hash': subscription.hash}) }}" class="tooltip-flag" data-toggle="tooltip" data-placement="bottom" title="Renew"><span class="glyphicon glyphicon-refresh"></span></a></td>
-					<td>
-						<a href="{{ path('ui_subscription_edit', {'hash': subscription.hash}) }}" data-toggle="tooltip" data-placement="bottom" title="Edit	" class="tooltip-flag"><span class="glyphicon glyphicon-pencil"></span></a>
-						<a href="{{ path('ui_subscription_delete', {'hash': subscription.hash}) }}" data-toggle="tooltip" data-placement="bottom" title="Delete" class="tooltip-flag"><span class="glyphicon glyphicon-trash"></span></a>
-					</td>
-					<td>
-						{% for employee in subscription.employees %}
-						{{ employee.name }} ({{ employee.extension }}) {% if employee.phone %}<span class="label label-success">connected</span>{% endif %}<br>
-						{% else %}
-						<span class="label label-danger">no employee</span>
-						{% endfor %}
-					</td>
-				</tr>
-				{% endfor %}
-			</table>
-		</div>	
-	</div>
-</div>
-#}
 {% endblock container %}
 {% block javascripts %}
 {{ parent() }}

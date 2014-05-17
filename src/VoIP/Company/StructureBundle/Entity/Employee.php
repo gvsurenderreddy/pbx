@@ -57,11 +57,6 @@ class Employee
      */
     private $extension;
 	
-	/**
-     * @ORM\OneToOne(targetEntity="\VoIP\Company\StructureBundle\Entity\Phone", mappedBy="employee")
-     */
-    private $phone;
-	
     /**
      * @var \DateTime
      *
@@ -118,8 +113,10 @@ class Employee
 	
 	public function getStatus()
 	{
-		if (!$this->getPhone()) return 'danger';
-		elseif (!$this->getPhone()->getAmiStatusOk()) return 'warning';
+		if (count($this->getPhones()) == 0) return 'danger';
+		elseif(count($this->getPhones()->filter(function($p){
+			return $p->getAmiStatusOk();
+		})) == 0) return 'warning';
 		return 'default';
 	}
 
@@ -247,29 +244,6 @@ class Employee
     public function getHash()
     {
         return $this->hash;
-    }
-
-    /**
-     * Set phone
-     *
-     * @param \VoIP\Company\StructureBundle\Entity\Phone $phone
-     * @return Employee
-     */
-    public function setPhone(\VoIP\Company\StructureBundle\Entity\Phone $phone = null)
-    {
-        $this->phone = $phone;
-
-        return $this;
-    }
-
-    /**
-     * Get phone
-     *
-     * @return \VoIP\Company\StructureBundle\Entity\Phone 
-     */
-    public function getPhone()
-    {
-        return $this->phone;
     }
 
     /**

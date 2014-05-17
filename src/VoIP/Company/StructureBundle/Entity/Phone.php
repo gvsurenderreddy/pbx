@@ -85,12 +85,6 @@ class Phone
     private $company;
 	
 	/**
-     * @ORM\OneToOne(targetEntity="\VoIP\Company\StructureBundle\Entity\Employee", inversedBy="phone")
-	 * @ORM\JoinColumn(name="employee_id", referencedColumnName="id", onDelete="CASCADE")
-     */
-    private $employee;
-	
-	/**
      * @ORM\OneToOne(targetEntity="\VoIP\PBX\RealTimeBundle\Entity\SipPeer", inversedBy="phone")
 	 * @ORM\JoinColumn(name="ast_sippeer_id", referencedColumnName="id", onDelete="CASCADE")
      */
@@ -273,29 +267,6 @@ class Phone
     public function getCompany()
     {
         return $this->company;
-    }
-
-    /**
-     * Set employee
-     *
-     * @param \VoIP\Company\StructureBundle\Entity\Employee $employee
-     * @return Phone
-     */
-    public function setEmployee(\VoIP\Company\StructureBundle\Entity\Employee $employee = null)
-    {
-        $this->employee = $employee;
-
-        return $this;
-    }
-
-    /**
-     * Get employee
-     *
-     * @return \VoIP\Company\StructureBundle\Entity\Employee 
-     */
-    public function getEmployee()
-    {
-        return $this->employee;
     }
 
     /**
