@@ -37,7 +37,8 @@ class SubscriptionController extends Controller
 		$company = $subscription->getCompany();
 		if ($user->getCompany()->getId() != $company->getId()) throw $this->createNotFoundException('No authorization.');
 		$employees = $em->getRepository('VoIPCompanyStructureBundle:Employee')->findBy(array(
-			'company' => $company
+			'company' => $company,
+			'isActive' => true,
 		), array(
 			'name' => 'ASC'
 		));

@@ -104,6 +104,13 @@ class Employee
 	{
 		$this->hash = hash('crc32b', uniqid('', true));
 	}
+	
+	public function getStatus()
+	{
+		if (!$this->getPhone()) return 'danger';
+		elseif (!$this->getPhone()->getAmiStatusOk()) return 'warning';
+		return 'default';
+	}
 
 
     /**

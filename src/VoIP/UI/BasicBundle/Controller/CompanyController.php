@@ -194,7 +194,8 @@ class CompanyController extends Controller
 			'name' => 'ASC'
 		));
 		$employees = $em->getRepository('VoIPCompanyStructureBundle:Employee')->findBy(array(
-			'company' => $company
+			'company' => $company,
+			'isActive' => true
 		), array(
 			'name' => 'ASC'
 		));
