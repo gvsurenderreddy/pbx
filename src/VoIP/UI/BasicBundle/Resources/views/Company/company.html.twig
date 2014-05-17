@@ -82,7 +82,7 @@
 				{% if phone.type == 'ciscophone' %}<a href="{{ path('ui_phone_configure', {'hash': phone.hash}) }}" data-toggle="tooltip" data-placement="bottom" title="Configure" class="tooltip-flag"><span class="glyphicon glyphicon-wrench"></span></a>{% endif %}
 				<a href="#" class="l-mod tooltip-flag" data-url="{{ path('ui_phone_credentials', {'hash': phone.hash}) }}" data-toggle="tooltip" data-placement="bottom" title="Credentials"><span class="glyphicon glyphicon-lock"></span></a>
 			</div>
-			<div class="status status-default tooltip-flag" data-toggle="tooltip" data-placement="bottom" title="Connected"></div>
+			<div class="status status-{{ phone.amistatusok ? 'default' : 'danger' }} tooltip-flag" data-toggle="tooltip" data-placement="bottom" title="Connected"></div>
 		</div>
 		{% endfor %}
 	</div>
