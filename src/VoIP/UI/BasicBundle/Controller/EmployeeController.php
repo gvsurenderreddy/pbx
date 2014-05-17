@@ -38,7 +38,8 @@ class EmployeeController extends Controller
 		if ($user->getCompany()->getId() != $company->getId()) throw $this->createNotFoundException('No authorization.');
         return array(
 			'employee' => $employee,
-			'company' => $company
+			'company' => $company,
+			'phones' => $company->getPhones()
 		);
     }
 	
@@ -62,9 +63,24 @@ class EmployeeController extends Controller
 		$request = $this->getRequest();
 		$name = $request->get('name');
 		$extension = $request->get('extension');
+		$phones = $request->get('phones');
 		
 		$employee->setName($name);
 		$employee->setExtension($extension);
+		
+		foreach ($employee->getPhones() as $phone) {
+			$employee->removePhone($phone);
+			$phone->removeEmployee($employee);
+		}
+		
+		if ($phones) {
+			foreach ($phones as $phoneId) {
+				$phone = $em->getRepository('VoIPCompanyStructureBundle:Phone')->find($phoneId);
+				if (!$phone) throw $this->createNotFoundException('Unable to find Phone entity.');
+				$employee->addPhone($phone);
+				$phone->addEmployee($employee);
+			}
+		}
 		
 		$em->flush();
 		

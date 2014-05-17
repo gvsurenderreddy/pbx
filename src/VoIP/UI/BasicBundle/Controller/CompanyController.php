@@ -128,7 +128,7 @@ class CompanyController extends Controller
     }
 	
     /**
-     * @Route("/new-employee", name="ui_company_newemployee")
+     * @Route("/new-buddy", name="ui_company_newemployee")
      * @Template()
 	 * @Method("GET")
 	 * @Security("has_role('ROLE_USER')")
@@ -137,13 +137,15 @@ class CompanyController extends Controller
     {
 		$user = $this->getUser();
 		$company = $user->getCompany();
+		$phones = $company->getPhones();
         return array(
-			'company' => $company
+			'company' => $company,
+			'phones' => $phones,
 		);
     }
 	
     /**
-     * @Route("/new-employee")
+     * @Route("/new-buddy")
      * @Template()
 	 * @Method("POST")
 	 * @Security("has_role('ROLE_USER')")
@@ -158,6 +160,7 @@ class CompanyController extends Controller
 		$request = $this->getRequest();
 		$extension = $request->get('extension');
 		$name = $request->get('name');
+		$phones = $request->get('phones');
 		
 		if ($extension < 100 || $extension > 999) {
 			throw $this->createNotFoundException('Extension range');
@@ -167,6 +170,15 @@ class CompanyController extends Controller
 		$employee->setName($name);
 		$employee->setExtension($extension);
 		$employee->setCompany($company);
+		
+		if ($phones) {
+			foreach ($phones as $phoneId) {
+				$phone = $em->getRepository('VoIPCompanyStructureBundle:Phone')->find($phoneId);
+				if (!$phone) throw $this->createNotFoundException('Unable to find Phone entity.');
+				$employee->addPhone($phone);
+				$phone->addEmployee($employee);
+			}
+		}
 		
 		$em->persist($employee);
 

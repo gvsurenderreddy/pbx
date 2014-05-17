@@ -97,6 +97,12 @@ class Phone
     private $astPeer;
 	
 	/**
+	 * @ORM\ManyToMany(targetEntity="\VoIP\Company\StructureBundle\Entity\Employee", mappedBy="phones")
+	 * @ORM\OrderBy({"extension" = "ASC"})
+	 */
+	protected $employees;
+	
+	/**
 	 * @ORM\PrePersist
 	 */
 	public function prePersist()
@@ -382,5 +388,45 @@ class Phone
     public function getAmiStatusOk()
     {
         return $this->amiStatusOk;
+    }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->employees = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Add employees
+     *
+     * @param \VoIP\Company\StructureBundle\Entity\Employee $employees
+     * @return Phone
+     */
+    public function addEmployee(\VoIP\Company\StructureBundle\Entity\Employee $employees)
+    {
+        $this->employees[] = $employees;
+
+        return $this;
+    }
+
+    /**
+     * Remove employees
+     *
+     * @param \VoIP\Company\StructureBundle\Entity\Employee $employees
+     */
+    public function removeEmployee(\VoIP\Company\StructureBundle\Entity\Employee $employees)
+    {
+        $this->employees->removeElement($employees);
+    }
+
+    /**
+     * Get employees
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getEmployees()
+    {
+        return $this->employees;
     }
 }

@@ -80,6 +80,17 @@ class Employee
 	 * @ORM\OrderBy({"name" = "ASC"})
 	 */
 	protected $subscriptions;
+
+	
+	/**
+	 * @ORM\ManyToMany(targetEntity="\VoIP\Company\StructureBundle\Entity\Phone", inversedBy="employees")
+	 * @ORM\JoinTable(name="structure_employee_has_phone",
+	 *      joinColumns={@ORM\JoinColumn(name="employee_id", referencedColumnName="id")},
+	 *      inverseJoinColumns={@ORM\JoinColumn(name="phone_id", referencedColumnName="id")}
+	 *      )
+	 * @ORM\OrderBy({"name" = "ASC"})
+	 */
+	protected $phones;
 	
 	/**
 	 * @ORM\PrePersist
@@ -345,5 +356,38 @@ class Employee
     public function getIsActive()
     {
         return $this->isActive;
+    }
+
+    /**
+     * Add phones
+     *
+     * @param \VoIP\Company\StructureBundle\Entity\Phone $phones
+     * @return Employee
+     */
+    public function addPhone(\VoIP\Company\StructureBundle\Entity\Phone $phones)
+    {
+        $this->phones[] = $phones;
+
+        return $this;
+    }
+
+    /**
+     * Remove phones
+     *
+     * @param \VoIP\Company\StructureBundle\Entity\Phone $phones
+     */
+    public function removePhone(\VoIP\Company\StructureBundle\Entity\Phone $phones)
+    {
+        $this->phones->removeElement($phones);
+    }
+
+    /**
+     * Get phones
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getPhones()
+    {
+        return $this->phones;
     }
 }
