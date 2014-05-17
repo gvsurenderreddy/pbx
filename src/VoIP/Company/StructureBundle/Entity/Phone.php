@@ -71,6 +71,13 @@ class Phone
      */
     private $isActive = true;
 	
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="ami_status_ok", type="boolean", nullable=true)
+     */
+    private $amiStatusOk = false;
+	
 	/**
      * @ORM\ManyToOne(targetEntity="\VoIP\Company\StructureBundle\Entity\Company", inversedBy="phones")
 	 * @ORM\JoinColumn(name="company_id", referencedColumnName="id", onDelete="CASCADE")
@@ -352,5 +359,28 @@ class Phone
     public function getIsActive()
     {
         return $this->isActive;
+    }
+
+    /**
+     * Set amiStatusOk
+     *
+     * @param boolean $amiStatusOk
+     * @return Phone
+     */
+    public function setAmiStatusOk($amiStatusOk)
+    {
+        $this->amiStatusOk = $amiStatusOk;
+
+        return $this;
+    }
+
+    /**
+     * Get amiStatusOk
+     *
+     * @return boolean 
+     */
+    public function getAmiStatusOk()
+    {
+        return $this->amiStatusOk;
     }
 }

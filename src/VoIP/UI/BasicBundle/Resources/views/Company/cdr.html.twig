@@ -6,8 +6,9 @@
 		<th>Date</th>
 		<th>Dialer</th>
 		<th>Receiver</th>
-		<th>Rate</th>
-		<th>Minutes</th>
+		<th>Price 1st min.</th>
+		<th>Rate sec.</th>
+		<th>Time</th>
 		<th>Price</th>
 	</tr>
 	{% for cdr in cdrs %}
@@ -16,7 +17,8 @@
 		<td>{{ cdr.dialer }}</td>
 		<td>{{ cdr.receiver }}</td>
 		<td>S$ {{ cdr.rate|number_format(3, '.', ',') }} / min</td>
-		<td>{{ cdr.minutes }}</td>
+		<td>S$ {{ (cdr.rate/60)|number_format(5, '.', ',') }} / sec</td>
+		<td>{{ cdr.writtentime }}</td>
 		<td>S$ {{ cdr.price|number_format(5, '.', ',') }}</td>
 	</tr>
 	{% endfor %}

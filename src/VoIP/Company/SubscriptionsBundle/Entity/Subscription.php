@@ -235,6 +235,23 @@ class Subscription
 				break;
 		}
 	}
+	
+	public function getStatus()
+	{
+		// TEST HAS_PHONE
+		if (count($this->getEmployees()) == 0) {
+			return 'warning';
+		}
+		// TEST CONNECTED_EMPLOYEE
+		$test = false;
+		foreach ($this->getEmployees() as $employee) {
+			if ($employee->getIsActive() && $employee->getPhone()) {
+				$test = true;
+			}
+		}
+		if (!$test) return 'warning';
+		return 'default';
+	}
 
     /**
      * Get id

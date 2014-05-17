@@ -35,7 +35,7 @@ class EmployeeController extends Controller
 		));
         if (!$employee) throw $this->createNotFoundException('Unable to find Employee entity.');
 		$company = $employee->getCompany();
-		if (!$user->hasCompany($company)) throw $this->createNotFoundException('No authorization.');
+		if ($user->getCompany()->getId() != $company->getId()) throw $this->createNotFoundException('No authorization.');
         return array(
 			'employee' => $employee,
 			'company' => $company
@@ -57,7 +57,7 @@ class EmployeeController extends Controller
 		));
         if (!$employee) throw $this->createNotFoundException('Unable to find Employee entity.');
 		$company = $employee->getCompany();
-		if (!$user->hasCompany($company)) throw $this->createNotFoundException('No authorization.');
+		if ($user->getCompany()->getId() != $company->getId()) throw $this->createNotFoundException('No authorization.');
 		
 		$request = $this->getRequest();
 		$name = $request->get('name');
@@ -88,7 +88,7 @@ class EmployeeController extends Controller
 		));
         if (!$employee) throw $this->createNotFoundException('Unable to find Employee entity.');
 		$company = $employee->getCompany();
-		if (!$user->hasCompany($company)) throw $this->createNotFoundException('No authorization.');
+		if ($user->getCompany()->getId() != $company->getId()) throw $this->createNotFoundException('No authorization.');
 		
 		if ($phone = $employee->getPhone()) $phone->setEmployee(null);
 		$em->remove($employee);

@@ -5,17 +5,89 @@
 	<h1>Example page header <small>S$ {{ company.credit|number_format(2, '.', ',') }}</small></h1>
 </div>
 <div class="row">
-	<div class="col-md-12">
-		<div class="panel panel-default">
-			<div class="panel-heading">
-				<h3 class="panel-title">Realtime</h3>
+	
+	<div class="col-md-4">
+		<center class="subsection-icon">+65</center>
+		<center><a href="{{ path('ui_company_newsubscription') }}">Add a subscription</a></center>
+		{% for subscription in company.subscriptions if subscription.isactive %}
+		<div class="switchboard-card switchboard-subscription {% for employee in subscription.employees %} emp{{ employee.hash }} {% if employee.phone %} pho{{ employee.phone.hash }}{% endif %}{% endfor %}" data-hash="{{ subscription.hash }}">
+			<div>
+				Subscription {{ subscription.name }}
 			</div>
-			<div class="panel-body">
-				Panel content
+			<div>
+				{{ subscription.number }}
 			</div>
-		</div>	
+			<div class="until">
+				{{ subscription.activateduntil ? subscription.activateduntil|date('d/m/Y') }} <a href="{{ path('ui_subscription_renew', {'hash': subscription.hash}) }}" class="tooltip-flag" data-toggle="tooltip" data-placement="bottom" title="Renew"><span class="glyphicon glyphicon-refresh"></span></a>
+			</div>
+			<div class="tools">
+				<a href="{{ path('ui_subscription_edit', {'hash': subscription.hash}) }}" data-toggle="tooltip" data-placement="bottom" title="Edit	" class="tooltip-flag"><span class="glyphicon glyphicon-pencil"></span></a>
+				<a href="{{ path('ui_subscription_delete', {'hash': subscription.hash}) }}" data-toggle="tooltip" data-placement="bottom" title="Delete" class="tooltip-flag"><span class="glyphicon glyphicon-trash"></span></a>
+			</div>
+			<div class="status status-{{ subscription.status }} tooltip-flag" data-toggle="tooltip" data-placement="bottom" title="Connected"></div>
+		</div>
+		{% endfor %}
+	</div>
+	
+	
+	<div class="col-md-4">
+		<center class="subsection-icon"><span class="glyphicon glyphicon-user"></span></center>
+		<center><a href="{{ path('ui_company_newemployee') }}">Add a buddy</a></center>
+		{% for employee in company.employees if employee.isactive %}
+		<div class="switchboard-card switchboard-buddy
+		{% for subscription in employee.subscriptions %} sub{{ subscription.hash }}{% endfor %}
+		{% if employee.phone %} pho{{ employee.phone.hash }}{% endif %}" data-hash="{{ employee.hash }}">
+			<div>
+				{{ employee.name }}
+			</div>
+			<div>
+				{{ employee.extension }}
+			</div>
+			<div class="tools">
+				<a href="{{ path('ui_employee_edit', {'hash': employee.hash}) }}" data-toggle="tooltip" data-placement="bottom" title="Edit" class="tooltip-flag"><span class="glyphicon glyphicon-pencil"></span></a>
+				<a href="{{ path('ui_employee_delete', {'hash': employee.hash}) }}" data-toggle="tooltip" data-placement="bottom" title="Delete" class="tooltip-flag"><span class="glyphicon glyphicon-trash"></span></a>
+				<div class="dropdown">
+					<span class="glyphicon glyphicon-link dropdown-toggle tooltip-flag" data-toggle="dropdown" data-toggle="tooltip" data-placement="bottom" title="Change phone"></span>
+					<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu{{ employee.hash }}">
+						{% for phone in company.phones if phone.isactive %}
+						<li role="presentation"><a role="menuitem" tabindex="-1" href="{{ path('ui_phone_attribute', {'hash': phone.hash, 'hash2': employee.hash}) }}">{{ phone.name }}</a></li>
+						{% endfor %}
+						{% if employee.phone %}
+						<li role="presentation" class="divider"></li>
+						<li role="presentation"><a role="menuitem" tabindex="-1" href="{{ path('ui_phone_unattribute', {'hash': employee.phone.hash,}) }}">Unattribute</a></li>
+						{% endif %}
+					</ul>
+				</div>
+			</div>
+			<div class="status status-default tooltip-flag" data-toggle="tooltip" data-placement="bottom" title="Connected"></div>
+		</div>
+		{% endfor %}
+	</div>
+	<div class="col-md-4">
+		<center class="subsection-icon"><span class="glyphicon glyphicon-phone-alt"></span></center>
+		<center><a href="{{ path('ui_company_newphone') }}">Add a phone</a></center>
+		{% for phone in company.phones if phone.isactive %}
+		<div class="switchboard-card switchboard-phone
+		{% if phone.employee %}{% for subscription in phone.employee.subscriptions %} sub{{ subscription.hash }}{% endfor %}{% endif %}
+		{% if phone.employee %} emp{{ phone.employee.hash }}{% endif %}" data-hash="{{ phone.hash }}">
+			<div>
+				{{ phone.name }}
+			</div>
+			<div class="until">
+				{{ phone.activateduntil ? phone.activateduntil|date('d/m/Y') }} <a href="{{ path('ui_phone_renew', {'hash': phone.hash}) }}" class="tooltip-flag" data-toggle="tooltip" data-placement="bottom" title="Renew"><span class="glyphicon glyphicon-refresh"></span></a>
+			</div>
+			<div class="tools">
+				<a href="{{ path('ui_phone_edit', {'hash': phone.hash}) }}" data-toggle="tooltip" data-placement="bottom" title="Edit" class="tooltip-flag"><span class="glyphicon glyphicon-pencil"></span></a>
+				<a href="{{ path('ui_phone_delete', {'hash': phone.hash}) }}" data-toggle="tooltip" data-placement="bottom" title="Delete" class="tooltip-flag"><span class="glyphicon glyphicon-trash"></span></a>
+				{% if phone.type == 'ciscophone' %}<a href="{{ path('ui_phone_configure', {'hash': phone.hash}) }}" data-toggle="tooltip" data-placement="bottom" title="Configure" class="tooltip-flag"><span class="glyphicon glyphicon-wrench"></span></a>{% endif %}
+				<a href="#" class="l-mod tooltip-flag" data-url="{{ path('ui_phone_credentials', {'hash': phone.hash}) }}" data-toggle="tooltip" data-placement="bottom" title="Credentials"><span class="glyphicon glyphicon-lock"></span></a>
+			</div>
+			<div class="status status-default tooltip-flag" data-toggle="tooltip" data-placement="bottom" title="Connected"></div>
+		</div>
+		{% endfor %}
 	</div>
 </div>
+{# 
 <div class="row">
 	<div class="col-md-6">
 		<div class="panel panel-default">
@@ -47,18 +119,7 @@
 					</td>
 					<td>{% if phone.employee %}{{ phone.employee.name }} ({{ phone.employee.extension }}){% endif %}</td>
 					<td>
-						<div class="dropdown">
-							<span class="glyphicon glyphicon-link dropdown-toggle tooltip-flag" data-toggle="dropdown" data-toggle="tooltip" data-placement="bottom" title="Change user"></span>
-							<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu{{ phone.hash }}">
-								{% for employee in company.employees %}
-								<li role="presentation"><a role="menuitem" tabindex="-1" href="{{ path('ui_phone_attribute', {'hash': phone.hash, 'hash2': employee.hash}) }}">{{ employee.name }} ({{ employee.extension }})</a></li>
-								{% endfor %}
-								{% if phone.employee %}
-								<li role="presentation" class="divider"></li>
-								<li role="presentation"><a role="menuitem" tabindex="-1" href="{{ path('ui_phone_unattribute', {'hash': phone.hash,}) }}">Unattribute</a></li>
-								{% endif %}
-							</ul>
-						</div>
+						
 					</td>
 				</tr>
 				{% endfor %}
@@ -91,7 +152,7 @@
 						<div class="dropdown">
 							<span class="glyphicon glyphicon-link dropdown-toggle tooltip-flag" data-toggle="dropdown" data-toggle="tooltip" data-placement="bottom" title="Change phone"></span>
 							<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu{{ employee.hash }}">
-								{% for phone in company.phones %}
+								{% for phone in company.phones if phone.isactive %}
 								<li role="presentation"><a role="menuitem" tabindex="-1" href="{{ path('ui_phone_attribute', {'hash': phone.hash, 'hash2': employee.hash}) }}">{{ phone.name }}</a></li>
 								{% endfor %}
 								{% if employee.phone %}
@@ -141,4 +202,28 @@
 		</div>	
 	</div>
 </div>
+#}
 {% endblock container %}
+{% block javascripts %}
+{{ parent() }}
+<script>
+$('.switchboard-subscription').mouseover(function(){
+	$('.sub'+$(this).data('hash')).addClass('active');
+});
+$('.switchboard-subscription').mouseout(function(){
+	$('.sub'+$(this).data('hash')).removeClass('active');
+});
+$('.switchboard-buddy').mouseover(function(){
+	$('.emp'+$(this).data('hash')).addClass('active');
+});
+$('.switchboard-buddy').mouseout(function(){
+	$('.emp'+$(this).data('hash')).removeClass('active');
+});
+$('.switchboard-phone').mouseover(function(){
+	$('.pho'+$(this).data('hash')).addClass('active');
+});
+$('.switchboard-phone').mouseout(function(){
+	$('.pho'+$(this).data('hash')).removeClass('active');
+});
+</script>
+{% endblock %}

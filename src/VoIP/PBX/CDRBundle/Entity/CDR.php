@@ -210,20 +210,42 @@ class CDR
      */
     private $company;
 	
-	public function getMinutes()
+	public function getTime()
 	{
 		if (($answer = $this->getAnswer()) && ($end = $this->getEnd())) {
 			$t1 = $answer->getTimestamp();
 			$t2 = $end->getTimestamp();
-			return $t2 - $t1 > 0 ? ((int)(($t2 - $t1) / 60) + 1) : 0;
+			if ($t1 == $t2) return 0;
+			else return $t2 - $t1;
 		} else {
 			return 0;
 		}
 	}
 	
+	public function getWrittenTime()
+	{
+		$time = $this->getTime();
+		$h = (int) ($time / 3600);
+		$time = $time % 3600;
+		$m = (int) ($time / 60);
+		$s = $time % 60;
+		$h = $h < 10 ? '0'.$h : $h;
+		$m = $m < 10 ? '0'.$m : $m;
+		$s = $s < 10 ? '0'.$s : $s;
+		return $h . ':' . $m . ':' . $s;
+	}
+	
+	public function getPaidTime()
+	{
+		$time = $this->getTime();
+		if ($time == 0) return 0;
+		elseif ($time < 60) return 60;
+		else return $time;
+	}
+	
 	public function getPrice()
 	{
-		return $this->getMinutes() * $this->getRate();
+		return $this->getPaidTime() * $this->getRate() / 60;
 	}
 
 

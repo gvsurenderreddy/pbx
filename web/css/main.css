@@ -104,3 +104,42 @@ a {
 .badge {
 	background-color: #ccc;
 }
+.switchboard-card {
+	position: relative;
+	min-height: 60px;
+	background-color: #fff;
+	padding: 5px 20px 5px 15px;
+	margin: 5px;
+	box-shadow: 0 2px 6px rgba(0,0,0,0.3),0 4px 15px -5px rgba(0,0,0,0.0);
+	margin-bottom: 20px;
+}
+.switchboard-card:hover,
+.switchboard-card.active {
+	background-color: #eee;
+}
+.switchboard-card .status {
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	right: 0;
+	width: 10px;
+}
+.status-warning {
+	background-color: #f9c366;
+}
+.status-default {
+	background-color: #7cd56a;
+}
+.switchboard-card .until {
+	position: absolute;
+	bottom: 5px;
+	right: 20px;
+}
+.switchboard-card .tools {
+	position: absolute;
+	top: 5px;
+	right: 20px;
+}
+.subsection-icon {
+	font-size: 50px;
+}
