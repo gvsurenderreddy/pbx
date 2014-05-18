@@ -4,13 +4,13 @@
 {% endblock navbar %}
 {% block precontainer %}
 <div class="row main-container">
-	<div class="col-md-2 left-menu hidden-xs hidden-sm">
+	<div class="col-sm-2 left-menu hidden-xs">
 		<div class="logo-main-menu">
 			<a href="{{ path('ui_company') }}"><img src="{{ asset('images/logo.png') }}" class="main-logo"></a>
 		</div>
 		{% render controller('VoIPUIBasicBundle:Company:menu', {'route': app.request.attributes.get('_route')}) %}
 	</div>
-	<div class="col-sm-offset-2 col-md-10">
+	<div class="col-sm-offset-2 col-sm-10">
 		{% block container %}{% endblock container %}
 	</div>
 </div>

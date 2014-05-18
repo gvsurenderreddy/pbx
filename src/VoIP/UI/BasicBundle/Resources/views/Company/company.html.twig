@@ -6,7 +6,7 @@
 </div>
 <div class="row">
 	
-	<div class="col-md-4">
+	<div class="col-sm-4">
 		<center class="subsection-icon">+65</center>
 		<center><a href="{{ path('ui_company_newsubscription') }}">Add a subscription</a></center>
 		{% for subscription in company.subscriptions if subscription.isactive %}
@@ -30,7 +30,7 @@
 	</div>
 	
 	
-	<div class="col-md-4">
+	<div class="col-sm-4">
 		<center class="subsection-icon"><span class="glyphicon glyphicon-user"></span></center>
 		<center><a href="{{ path('ui_company_newemployee') }}">Add a buddy</a></center>
 		{% for employee in company.employees if employee.isactive %}
@@ -51,7 +51,7 @@
 		</div>
 		{% endfor %}
 	</div>
-	<div class="col-md-4">
+	<div class="col-sm-4">
 		<center class="subsection-icon"><span class="glyphicon glyphicon-phone-alt"></span></center>
 		<center><a href="{{ path('ui_company_newphone') }}">Add a phone</a></center>
 		{% for phone in company.phones if phone.isactive %}
