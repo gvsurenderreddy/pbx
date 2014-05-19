@@ -132,7 +132,7 @@ class RegistrationController extends Controller
         $userManager->updateUser($user);
 
         if (null === $response = $event->getResponse()) {
-            $url = $this->container->get('router')->generate('ui_index');
+            $url = $this->container->get('router')->generate('ui_company');
             $response = new RedirectResponse($url);
         }
 
