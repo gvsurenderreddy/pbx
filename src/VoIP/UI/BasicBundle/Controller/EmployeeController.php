@@ -12,6 +12,7 @@ use VoIP\Company\StructureBundle\Entity\Office;
 use VoIP\Company\StructureBundle\Entity\Phone;
 use VoIP\PBX\RealTimeBundle\Extra\Sync;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use VoIP\UI\BasicBundle\Extra\Image;
 
 /**
  * @Route("/b")
@@ -36,10 +37,15 @@ class EmployeeController extends Controller
         if (!$employee) throw $this->createNotFoundException('Unable to find Employee entity.');
 		$company = $employee->getCompany();
 		if ($user->getCompany()->getId() != $company->getId()) throw $this->createNotFoundException('No authorization.');
+		$extensions = range(100, 999);
+		foreach ($company->getEmployees() as $e) {
+			if ($e->getIsActive() && $e->getId() != $employee->getId()) unset($extensions[($e->getExtension() - 100)]);
+		}
         return array(
 			'employee' => $employee,
 			'company' => $company,
-			'phones' => $company->getPhones()
+			'phones' => $company->getPhones(),
+			'extensions' => $extensions
 		);
     }
 	
@@ -65,6 +71,8 @@ class EmployeeController extends Controller
 		$extension = $request->get('extension');
 		$phones = $request->get('phones');
 		
+		
+		
 		$employee->setName($name);
 		$employee->setExtension($extension);
 		
@@ -82,11 +90,15 @@ class EmployeeController extends Controller
 			}
 		}
 		
+		if ($imageFile = $request->files->get('image')) {
+			$image = new Image($imageFile, array('64', '256'), 'buddies/images', $this->container);
+			$employee->setImageUrl($image->getPaths('256'));
+			$employee->setThumbUrl($image->getPaths('64'));
+		}
+		
 		$em->flush();
 		
-		return $this->redirect($this->generateUrl('ui_company', array(
-			'hash' => $company->getHash()
-		)));
+		return $this->redirect($this->generateUrl('ui_company'));
     }
 	
     /**
@@ -106,8 +118,7 @@ class EmployeeController extends Controller
 		$company = $employee->getCompany();
 		if ($user->getCompany()->getId() != $company->getId()) throw $this->createNotFoundException('No authorization.');
 		
-		if ($phone = $employee->getPhone()) $phone->setEmployee(null);
-		$em->remove($employee);
+		$employee->setIsActive(false);
 		$em->flush();
 		
 		return $this->redirect($this->generateUrl('ui_company', array(

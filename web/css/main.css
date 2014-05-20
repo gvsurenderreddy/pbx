@@ -1,7 +1,7 @@
 body {
 	min-height: 100%;
 	background-color: #efefef;
-	font-family: 'Lato', sans-serif;
+	font-family: 'Muli', sans-serif;
 }
 .main-container {
 	min-height: 100%;
@@ -36,8 +36,15 @@ body {
 	color: #fff;
 }
 .btn-primary {
-	background-color: #4ec4fa;
-	border-color: #4bb1e0;
+	background-color: #3276b1;
+	border-color: #00547f;
+}
+.btn-primary:hover {
+	background-color: #00547f;
+}
+.btn-danger {
+	background-color: #C5231E;
+	border-color: #9E2723;
 }
 a {
 	color: #121212;
@@ -115,7 +122,7 @@ a {
 }
 .switchboard-card:hover,
 .switchboard-card.active {
-	background-color: #eee;
+	background-color: #c9e9fd;
 }
 .switchboard-card .status {
 	position: absolute;
@@ -145,4 +152,40 @@ a {
 }
 .subsection-icon {
 	font-size: 50px;
+}
+.switchboard-buddy .buddy-thumb {
+	position: absolute;
+	top: -10px;
+	left: -10px;
+}
+.switchboard-buddy {
+	padding-left: 50px;
+}
+.add-sth {
+	margin-bottom: 20px;
+}
+.btn-new {
+	margin: 30px 0 0;
+	
+}
+.btn-new a {
+	text-align: left;
+}
+.btn-new-main {
+	padding-left: 30px;
+	padding-right: 30px;
+}
+h1 a.glyphicon {
+	font-size: 17px;
+	margin-right: 10px;
+}
+a.glyphicon:hover {
+	color: #000;
+	text-decoration: none;
+}
+.form-new {
+	margin: 100px 0;
+}
+.title-switchboard {
+	margin: 20px 0 30px 0;
 }

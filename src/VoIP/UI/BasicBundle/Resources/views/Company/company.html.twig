@@ -7,21 +7,25 @@
 <div class="row">
 	
 	<div class="col-sm-4">
-		<center class="subsection-icon">+65</center>
-		<center><a href="{{ path('ui_company_newsubscription') }}">Add a subscription</a></center>
+		<h2 class="title-switchboard">Your phone numbers</h2>
 		{% for subscription in company.subscriptions if subscription.isactive %}
 		<div class="switchboard-card switchboard-subscription {% for employee in subscription.employees %} emp{{ employee.hash }} {% for phone in employee.phones %} pho{{ phone.hash }}{% endfor %}{% endfor %}" data-hash="{{ subscription.hash }}">
 			<div>
-				Subscription {{ subscription.name }}
+				{{ subscription.prefix }} • {{ subscription.number }}
 			</div>
 			<div>
-				{{ subscription.number }}
+				{% for employee in subscription.employees %}
+				<img src="{{ employee.thumburl ? employee.thumburl : 'https://s3-ap-southeast-1.amazonaws.com/fortyeight/buddies/images/7ee05724_64.png' }}" class="img-circle tooltip-flag" width="30" data-toggle="tooltip" data-placement="bottom" title="{{ employee.name }}">
+				{% endfor %}
 			</div>
 			<div class="until">
 				{{ subscription.activateduntil ? subscription.activateduntil|date('d/m/Y') }} <a href="{{ path('ui_subscription_renew', {'hash': subscription.hash}) }}" class="tooltip-flag" data-toggle="tooltip" data-placement="bottom" title="Renew"><span class="glyphicon glyphicon-refresh"></span></a>
 			</div>
 			<div class="tools">
-				<a href="{{ path('ui_subscription_edit', {'hash': subscription.hash}) }}" data-toggle="tooltip" data-placement="bottom" title="Edit	" class="tooltip-flag"><span class="glyphicon glyphicon-pencil"></span></a>
+				<a href="{{ path('ui_subscription_buddies', {'hash': subscription.hash}) }}" data-toggle="tooltip" data-placement="bottom" title="Buddies" class="tooltip-flag"><span class="glyphicon glyphicon-user"></span></a>
+				{% if subscription.iseditable %}
+				<a href="{{ path('ui_subscription_edit', {'hash': subscription.hash}) }}" data-toggle="tooltip" data-placement="bottom" title="Parameters" class="tooltip-flag"><span class="glyphicon glyphicon-cog"></span></a>
+				{% endif %}
 				<a href="{{ path('ui_subscription_delete', {'hash': subscription.hash}) }}" data-toggle="tooltip" data-placement="bottom" title="Delete" class="tooltip-flag"><span class="glyphicon glyphicon-trash"></span></a>
 			</div>
 			<div class="status status-{{ subscription.status }} tooltip-flag" data-toggle="tooltip" data-placement="bottom" title="Connected"></div>
@@ -31,20 +35,19 @@
 	
 	
 	<div class="col-sm-4">
-		<center class="subsection-icon"><span class="glyphicon glyphicon-user"></span></center>
-		<center><a href="{{ path('ui_company_newemployee') }}">Add a buddy</a></center>
+		<h2 class="title-switchboard">Your buddies</h2>
 		{% for employee in company.employees if employee.isactive %}
 		<div class="switchboard-card switchboard-buddy
 		{% for subscription in employee.subscriptions %} sub{{ subscription.hash }}{% endfor %}
 		{% for phone in employee.phones %} pho{{ phone.hash }}{% endfor %}" data-hash="{{ employee.hash }}">
-			<div>
-				{{ employee.name }}
+			<div class="buddy-name">
+				{{ employee.extension }} • {{ employee.name }}
 			</div>
-			<div>
-				{{ employee.extension }}
+			<div class="buddy-thumb">
+				<img src="{{ employee.thumburl ? employee.thumburl : 'https://s3-ap-southeast-1.amazonaws.com/fortyeight/buddies/images/7ee05724_64.png' }}" class="img-circle">
 			</div>
 			<div class="tools">
-				<a href="{{ path('ui_employee_edit', {'hash': employee.hash}) }}" data-toggle="tooltip" data-placement="bottom" title="Edit" class="tooltip-flag"><span class="glyphicon glyphicon-pencil"></span></a>
+				<a href="{{ path('ui_employee_edit', {'hash': employee.hash}) }}" data-toggle="tooltip" data-placement="bottom" title="Edit" class="tooltip-flag"><span class="glyphicon glyphicon-cog"></span></a>
 				<a href="{{ path('ui_employee_delete', {'hash': employee.hash}) }}" data-toggle="tooltip" data-placement="bottom" title="Delete" class="tooltip-flag"><span class="glyphicon glyphicon-trash"></span></a>
 			</div>
 			<div class="status status-{{ employee.status }} tooltip-flag" data-toggle="tooltip" data-placement="bottom" title="Connected"></div>
@@ -52,19 +55,24 @@
 		{% endfor %}
 	</div>
 	<div class="col-sm-4">
-		<center class="subsection-icon"><span class="glyphicon glyphicon-phone-alt"></span></center>
-		<center><a href="{{ path('ui_company_newphone') }}">Add a phone</a></center>
+		<h2 class="title-switchboard">Your phones</h2>
 		{% for phone in company.phones if phone.isactive %}
 		<div class="switchboard-card switchboard-phone
-		{% for employee in phone.employees %}emp{{ employee.hash }} {% for subscription in employee.subscriptions %} sub{{ subscription.hash }}{% endfor %}{% endfor %}" data-hash="{{ phone.hash }}">
+		{% for employee in phone.employees %}emp{{ employee.hash }} {% for subscription in employee.subscriptions %} sub{{ subscription.hash }} {% endfor %}{% endfor %}" data-hash="{{ phone.hash }}">
 			<div>
 				{{ phone.name }}
 			</div>
+			<div>
+				{% for employee in phone.employees %}
+				<img src="{{ employee.thumburl ? employee.thumburl : 'https://s3-ap-southeast-1.amazonaws.com/fortyeight/buddies/images/7ee05724_64.png' }}" class="img-circle tooltip-flag" width="30" data-toggle="tooltip" data-placement="bottom" title="{{ employee.name }}">
+				{% endfor %}
+			</div>
 			<div class="until">
-				{{ phone.activateduntil ? phone.activateduntil|date('d/m/Y') }} <a href="{{ path('ui_phone_renew', {'hash': phone.hash}) }}" class="tooltip-flag" data-toggle="tooltip" data-placement="bottom" title="Renew"><span class="glyphicon glyphicon-refresh"></span></a>
+				{% if phone.activateduntil %}{{ phone.activateduntil|date('d/m/Y') }}{% else %}<span class="label label-danger">Renew</span>{% endif %} <a href="{{ path('ui_phone_renew', {'hash': phone.hash}) }}" class="tooltip-flag" data-toggle="tooltip" data-placement="bottom" title="Renew"><span class="glyphicon glyphicon-refresh"></span></a>
 			</div>
 			<div class="tools">
-				<a href="{{ path('ui_phone_edit', {'hash': phone.hash}) }}" data-toggle="tooltip" data-placement="bottom" title="Edit" class="tooltip-flag"><span class="glyphicon glyphicon-pencil"></span></a>
+				<a href="{{ path('ui_phone_employees', {'hash': phone.hash}) }}" data-toggle="tooltip" data-placement="bottom" title="Buddies" class="tooltip-flag"><span class="glyphicon glyphicon-user"></span></a>
+				<a href="{{ path('ui_phone_edit', {'hash': phone.hash}) }}" data-toggle="tooltip" data-placement="bottom" title="Edit" class="tooltip-flag"><span class="glyphicon glyphicon-cog"></span></a>
 				<a href="{{ path('ui_phone_delete', {'hash': phone.hash}) }}" data-toggle="tooltip" data-placement="bottom" title="Delete" class="tooltip-flag"><span class="glyphicon glyphicon-trash"></span></a>
 				{% if phone.type == 'ciscophone' %}<a href="{{ path('ui_phone_configure', {'hash': phone.hash}) }}" data-toggle="tooltip" data-placement="bottom" title="Configure" class="tooltip-flag"><span class="glyphicon glyphicon-wrench"></span></a>{% endif %}
 				<a href="#" class="l-mod tooltip-flag" data-url="{{ path('ui_phone_credentials', {'hash': phone.hash}) }}" data-toggle="tooltip" data-placement="bottom" title="Credentials"><span class="glyphicon glyphicon-lock"></span></a>

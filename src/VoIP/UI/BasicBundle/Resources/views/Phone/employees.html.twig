@@ -1,0 +1,29 @@
+{% extends "VoIPUIBasicBundle::layout.html.twig" %}
+{% block title %}48 | Edit your subscription{% endblock %}
+{% block container %}
+<div class="page-header">
+	<h1 class="title-back"><a class="glyphicon glyphicon-chevron-left pull-left" href="{{ path('ui_company') }}"></a> Edit your subscription</h1>
+</div>
+<div class="row">
+	<div class="col-md-offset-3 col-md-6">
+		<form class="form-horizontal" role="form" action="{{ path('ui_phone_employees', {'hash': phone.hash}) }}" method="POST">
+			<div class="form-group">
+				<label for="employees" class="col-sm-2 control-label">Buddies</label>
+				<div class="col-sm-10">
+					<select class="form-control" id="employees" name="employees[]" multiple>
+						{% for employee in employees %}
+						<option value="{{ employee.id }}" {% if employee in phone.employees %}selected="selected"{% endif %}>{{ employee.name }} ({{ employee.extension }})</option>
+						{% endfor %}
+					</select>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="col-sm-offset-2 col-sm-10">
+					<button type="submit" class="btn btn-danger btn-block">Submit</button>
+				</div>
+			</div>
+		</form>
+	</div>
+</div>
+
+{% endblock container %}

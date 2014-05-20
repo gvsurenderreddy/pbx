@@ -64,6 +64,19 @@ class Employee
      */
     private $isActive = true;
 	
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="image_url", type="string", length=255, nullable=true)
+     */
+    private $imageUrl;
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="thumb_url", type="string", length=255, nullable=true)
+     */
+    private $thumbUrl;
+	
 	/**
      * @ORM\ManyToOne(targetEntity="\VoIP\Company\StructureBundle\Entity\Company", inversedBy="employees")
 	 * @ORM\JoinColumn(name="company_id", referencedColumnName="id", onDelete="CASCADE")
@@ -363,5 +376,51 @@ class Employee
     public function getPhones()
     {
         return $this->phones;
+    }
+
+    /**
+     * Set imageUrl
+     *
+     * @param string $imageUrl
+     * @return Employee
+     */
+    public function setImageUrl($imageUrl)
+    {
+        $this->imageUrl = $imageUrl;
+
+        return $this;
+    }
+
+    /**
+     * Get imageUrl
+     *
+     * @return string 
+     */
+    public function getImageUrl()
+    {
+        return $this->imageUrl;
+    }
+
+    /**
+     * Set thumbUrl
+     *
+     * @param string $thumbUrl
+     * @return Employee
+     */
+    public function setThumbUrl($thumbUrl)
+    {
+        $this->thumbUrl = $thumbUrl;
+
+        return $this;
+    }
+
+    /**
+     * Get thumbUrl
+     *
+     * @return string 
+     */
+    public function getThumbUrl()
+    {
+        return $this->thumbUrl;
     }
 }

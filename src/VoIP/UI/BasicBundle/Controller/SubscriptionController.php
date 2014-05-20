@@ -36,15 +36,6 @@ class SubscriptionController extends Controller
         if (!$subscription) throw $this->createNotFoundException('Unable to find Subsciption entity.');
 		$company = $subscription->getCompany();
 		if ($user->getCompany()->getId() != $company->getId()) throw $this->createNotFoundException('No authorization.');
-		$employees = $em->getRepository('VoIPCompanyStructureBundle:Employee')->findBy(array(
-			'company' => $company,
-			'isActive' => true,
-		), array(
-			'name' => 'ASC'
-		));
-		$countries = $em->getRepository('VoIPCompanySubscriptionsBundle:Country')->findBy(array(), array(
-			'name' => 'ASC'
-		));
 		$usedPrefixs = array();
 		foreach ($company->getSubscriptions() as $s) {
 			$usedPrefixs[] = $s->getPrefix();
@@ -57,9 +48,7 @@ class SubscriptionController extends Controller
 		}
         return array(
 			'subscription' => $subscription,
-			'countries' => $countries,
 			'company' => $company,
-			'employees' => $employees,
 			'prefixs' => $prefixs,
 		);
     }
@@ -87,11 +76,9 @@ class SubscriptionController extends Controller
 		$number = $request->get('number');
 		$username = $request->get('username');
 		$secret = $request->get('secret');
-		$host = 'siptrunk.hoiio.com';//$host = $request->get('host');
+		$host = 'siptrunk.hoiio.com';
 		$prefix = $request->get('prefix');
-		$receive = true;//$request->get('receive') === 'on';
-		//$countries = $request->get('countries');
-		$employees = $request->get('employees');
+		$receive = true;
 		
 		$subscription->setName($name);
 		$subscription->setType($type);
@@ -105,15 +92,6 @@ class SubscriptionController extends Controller
 		
 		foreach ($subscription->getEmployees() as $employee) {
 			$subscription->removeEmployee($employee);
-		}
-		
-		if ($employees) {
-			foreach ($employees as $employeeId) {
-				$employee = $em->getRepository('VoIPCompanyStructureBundle:Employee')->find($employeeId);
-				if (!$employee) throw $this->createNotFoundException('Unable to find Employee entity.');
-				$subscription->addEmployee($employee);
-				$employee->addSubscription($subscription);
-			}
 		}
 		
 		$em->flush();
@@ -136,6 +114,72 @@ class SubscriptionController extends Controller
 		return $this->redirect($this->generateUrl('ui_company', array(
 			'hash' => $company->getHash()
 		)));
+    }
+	
+    /**
+     * @Route("/{hash}/buddies", name="ui_subscription_buddies")
+     * @Template()
+	 * @Method("GET")
+	 * @Security("has_role('ROLE_USER')")
+     */
+    public function buddiesAction($hash)
+    {
+		$user = $this->getUser();
+		$em = $this->getDoctrine()->getManager();
+		$subscription = $em->getRepository('VoIPCompanySubscriptionsBundle:Subscription')->findOneBy(array(
+			'hash' => $hash
+		));
+        if (!$subscription) throw $this->createNotFoundException('Unable to find Subsciption entity.');
+		$company = $subscription->getCompany();
+		if ($user->getCompany()->getId() != $company->getId()) throw $this->createNotFoundException('No authorization.');
+		$employees = $em->getRepository('VoIPCompanyStructureBundle:Employee')->findBy(array(
+			'company' => $company,
+			'isActive' => true,
+		), array(
+			'name' => 'ASC'
+		));
+        return array(
+			'subscription' => $subscription,
+			'employees' => $employees
+		);
+    }
+	
+    /**
+     * @Route("/{hash}/buddies")
+     * @Template()
+	 * @Method("POST")
+	 * @Security("has_role('ROLE_USER')")
+     */
+    public function updateBuddiesAction($hash)
+    {
+		$user = $this->getUser();
+		$em = $this->getDoctrine()->getManager();
+		$subscription = $em->getRepository('VoIPCompanySubscriptionsBundle:Subscription')->findOneBy(array(
+			'hash' => $hash
+		));
+        if (!$subscription) throw $this->createNotFoundException('Unable to find Subsciption entity.');
+		$company = $subscription->getCompany();
+		if ($user->getCompany()->getId() != $company->getId()) throw $this->createNotFoundException('No authorization.');
+		
+		$request = $this->getRequest();
+		$employees = $request->get('employees');
+		
+		foreach ($subscription->getEmployees() as $employee) {
+			$subscription->removeEmployee($employee);
+		}
+		
+		if ($employees) {
+			foreach ($employees as $employeeId) {
+				$employee = $em->getRepository('VoIPCompanyStructureBundle:Employee')->find($employeeId);
+				if (!$employee) throw $this->createNotFoundException('Unable to find Employee entity.');
+				$subscription->addEmployee($employee);
+				$employee->addSubscription($subscription);
+			}
+		}
+
+		$em->flush();
+		
+		return $this->redirect($this->generateUrl('ui_company'));
     }
 	
     /**

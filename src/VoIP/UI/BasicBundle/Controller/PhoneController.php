@@ -39,7 +39,7 @@ class PhoneController extends Controller
 		if ($user->getCompany()->getId() != $company->getId()) throw $this->createNotFoundException('No authorization.');
         return array(
 			'phone' => $phone,
-			'company' => $company
+			'company' => $company,
 		);
     }
 	
@@ -93,6 +93,73 @@ class PhoneController extends Controller
 		return $this->redirect($this->generateUrl('ui_company', array(
 			'hash' => $company->getHash()
 		)));
+    }
+	
+    /**
+     * @Route("/{hash}/buddies", name="ui_phone_employees")
+     * @Template()
+	 * @Method("GET")
+	 * @Security("has_role('ROLE_USER')")
+     */
+    public function employeesAction($hash)
+    {
+		$user = $this->getUser();
+		$em = $this->getDoctrine()->getManager();
+		$phone = $em->getRepository('VoIPCompanyStructureBundle:Phone')->findOneBy(array(
+			'hash' => $hash
+		));
+        if (!$phone) throw $this->createNotFoundException('Unable to find Phone entity.');
+		$company = $phone->getCompany();
+		if ($user->getCompany()->getId() != $company->getId()) throw $this->createNotFoundException('No authorization.');
+		$employees = $em->getRepository('VoIPCompanyStructureBundle:Employee')->findBy(array(
+			'company' => $company,
+			'isActive' => true,
+		), array(
+			'name' => 'ASC'
+		));
+        return array(
+			'phone' => $phone,
+			'employees' => $employees
+		);
+    }
+	
+    /**
+     * @Route("/{hash}/buddies")
+     * @Template()
+	 * @Method("POST")
+	 * @Security("has_role('ROLE_USER')")
+     */
+    public function updateEmployeesAction($hash)
+    {
+		$user = $this->getUser();
+		$em = $this->getDoctrine()->getManager();
+		$phone = $em->getRepository('VoIPCompanyStructureBundle:Phone')->findOneBy(array(
+			'hash' => $hash
+		));
+        if (!$phone) throw $this->createNotFoundException('Unable to find Phone entity.');
+		$company = $phone->getCompany();
+		if ($user->getCompany()->getId() != $company->getId()) throw $this->createNotFoundException('No authorization.');
+		
+		$request = $this->getRequest();
+		$employees = $request->get('employees');
+		
+		foreach ($phone->getEmployees() as $employee) {
+			$phone->removeEmployee($employee);
+			$employee->removePhone($phone);
+		}
+		
+		if ($employees) {
+			foreach ($employees as $employeeId) {
+				$employee = $em->getRepository('VoIPCompanyStructureBundle:Employee')->find($employeeId);
+				if (!$employee) throw $this->createNotFoundException('Unable to find Employee entity.');
+				$phone->addEmployee($employee);
+				$employee->addPhone($phone);
+			}
+		}
+
+		$em->flush();
+		
+		return $this->redirect($this->generateUrl('ui_company'));
     }
 	
     /**

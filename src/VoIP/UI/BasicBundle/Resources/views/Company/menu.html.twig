@@ -1,6 +1,22 @@
 <center class="company-part">
 	<div class="company-name">{{ company.name }}</div>
-	<div class="company-since">Saving since {{ company.createdat|date('F Y') }}</div>
+	<div class="company-since">S$ {{ company.credit|number_format(2, '.', ',') }}</div>
+</center>
+<center>
+	<div class="btn-group btn-new">
+		<a href="{{ path('ui_company_newphoneemployee') }}" class="btn btn-danger btn-new-main">Add a Buddy & Phone</a>
+		<button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown">
+			<span class="caret"></span>
+			<span class="sr-only">Toggle Dropdown</span>
+		</button>
+		<ul class="dropdown-menu" role="menu">
+			<li><a href="{{ path('ui_company_newemployee') }}">Add a single Buddy</a></li>
+			<li><a href="{{ path('ui_company_newphone') }}">Add a single Phone</a></li>
+			<li class="divider"></li>
+			<li><a href="{{ path('ui_company_newsubscription') }}">Add an existing phone number</a></li>
+			<li><a href="{{ path('ui_company_newrequestnumber') }}">Request a phone number</a></li>
+		</ul>
+	</div>
 </center>
 <ul class="nav nav-pills nav-stacked">
 	<li class="{{ route == 'ui_company' ? 'active' }}"><a href="{{ path('ui_company') }}"><span class="glyphicon glyphicon-th"></span> Switchboard</a></li>

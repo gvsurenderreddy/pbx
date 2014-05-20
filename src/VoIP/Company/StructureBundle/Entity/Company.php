@@ -80,7 +80,7 @@ class Company
 	
 	/**
      * @ORM\OneToMany(targetEntity="\VoIP\Company\StructureBundle\Entity\Phone", mappedBy="company")
-	 * @ORM\OrderBy({"hash" = "ASC"})
+	 * @ORM\OrderBy({"name" = "ASC"})
      */
     private $phones;
 	
@@ -98,7 +98,7 @@ class Company
 	
 	/**
      * @ORM\OneToMany(targetEntity="\VoIP\Company\SubscriptionsBundle\Entity\Subscription", mappedBy="company")
-	 * @ORM\OrderBy({"name" = "ASC"})
+	 * @ORM\OrderBy({"prefix" = "ASC"})
      */
     private $subscriptions;
 	

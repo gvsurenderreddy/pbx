@@ -114,6 +114,13 @@ class Subscription
     private $isActive = true;
 	
     /**
+     * @var boolean
+     *
+     * @ORM\Column(name="is_editable", type="boolean")
+     */
+    private $isEditable = true;
+	
+    /**
      * @var float
      *
      * @ORM\Column(name="rate_in", type="float")
@@ -842,5 +849,28 @@ class Subscription
     public function getRateInFactor()
     {
         return $this->rateInFactor;
+    }
+
+    /**
+     * Set isEditable
+     *
+     * @param boolean $isEditable
+     * @return Subscription
+     */
+    public function setIsEditable($isEditable)
+    {
+        $this->isEditable = $isEditable;
+
+        return $this;
+    }
+
+    /**
+     * Get isEditable
+     *
+     * @return boolean 
+     */
+    public function getIsEditable()
+    {
+        return $this->isEditable;
     }
 }

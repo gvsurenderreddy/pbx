@@ -128,6 +128,82 @@ class CompanyController extends Controller
     }
 	
     /**
+     * @Route("/new-buddy-phone", name="ui_company_newphoneemployee")
+     * @Template()
+	 * @Method("GET")
+	 * @Security("has_role('ROLE_USER')")
+     */
+    public function newPhoneEmployeeAction()
+    {
+		$user = $this->getUser();
+		$company = $user->getCompany();
+		$extensions = range(100, 999);
+		foreach ($company->getEmployees() as $e) {
+			if ($e->getIsActive()) unset($extensions[($e->getExtension() - 100)]);
+		}
+        return array(
+        	'extensions' => $extensions,
+        );
+    }
+	
+    /**
+     * @Route("/new-buddy-phone")
+     * @Template()
+	 * @Method("POST")
+	 * @Security("has_role('ROLE_USER')")
+     */
+    public function createPhoneEmployeeAction()
+    {
+		$user = $this->getUser();
+		$company = $user->getCompany();
+		$em = $this->getDoctrine()->getManager();
+		
+		$request = $this->getRequest();
+		$name = $request->get('name');
+		$extension = $request->get('extension');
+		$type = $request->get('type');
+		
+		$employee = new Employee();
+		$employee->setName($name);
+		$employee->setExtension($extension);
+		$employee->setCompany($company);
+		
+		$phone = new Phone();
+		$phone->setType($type);
+		$phone->setName($name."'s phone");
+		$phone->setCompany($company);
+		
+		$phone->addEmployee($employee);
+		$employee->addPhone($phone);
+		
+		$em->persist($employee);
+		$em->persist($phone);
+		
+		$sync = new Sync();
+		
+		$em->flush();
+		
+		$astPeer = $sync->phoneToPeer($phone);
+		$em->persist($astPeer);
+		
+		$phone->setAstPeer($astPeer);
+		
+		$em->flush();
+		
+		if ($phone->getType() == 'ciscophone') {
+			return $this->redirect($this->generateUrl('ui_phone_configure', array(
+				'hash' => $phone->getHash()
+			)));
+		} else {
+			return $this->redirect($this->generateUrl('ui_company', array(
+				'hash' => $company->getHash()
+			)));
+		}
+		
+		
+    }
+	
+    /**
      * @Route("/new-buddy", name="ui_company_newemployee")
      * @Template()
 	 * @Method("GET")
@@ -138,9 +214,14 @@ class CompanyController extends Controller
 		$user = $this->getUser();
 		$company = $user->getCompany();
 		$phones = $company->getPhones();
+		$extensions = range(100, 999);
+		foreach ($company->getEmployees() as $e) {
+			if ($e->getIsActive()) unset($extensions[($e->getExtension() - 100)]);
+		}
         return array(
 			'company' => $company,
 			'phones' => $phones,
+			'extensions' => $extensions,
 		);
     }
 	
@@ -180,6 +261,12 @@ class CompanyController extends Controller
 			}
 		}
 		
+		if ($imageFile = $request->files->get('image')) {
+			$image = new Image($imageFile, array('64', '256'), 'buddies/images', $this->container);
+			$employee->setImageUrl($image->getPaths('256'));
+			$employee->setThumbUrl($image->getPaths('64'));
+		}
+		
 		$em->persist($employee);
 
 		$em->flush();
@@ -190,7 +277,7 @@ class CompanyController extends Controller
     }
 	
     /**
-     * @Route("/new-subscription", name="ui_company_newsubscription")
+     * @Route("/add-existing-number", name="ui_company_newsubscription")
      * @Template()
 	 * @Method("GET")
 	 * @Security("has_role('ROLE_USER')")
@@ -231,7 +318,7 @@ class CompanyController extends Controller
     }
 	
     /**
-     * @Route("/new-subscription")
+     * @Route("/add-existing-number")
      * @Template()
 	 * @Method("POST")
 	 * @Security("has_role('ROLE_USER')")
@@ -244,19 +331,17 @@ class CompanyController extends Controller
 		$em = $this->getDoctrine()->getManager();
 		
 		$request = $this->getRequest();
-		$name = $request->get('name');
 		$type = $request->get('type');
 		$number = $request->get('number');
 		$username = $request->get('username');
 		$secret = $request->get('secret');
-		$host = 'siptrunk.hoiio.com';//$host = $request->get('host');
+		$host = 'siptrunk.hoiio.com';
 		$prefix = $request->get('prefix');
-		$receive = true;//$request->get('receive') === 'on';
-		//$countries = $request->get('countries');
+		$receive = true;
 		$employees = $request->get('employees');
 		
 		$subscription = new Subscription();
-		$subscription->setName($name);
+		$subscription->setName($number);
 		$subscription->setType($type);
 		$subscription->setNumber($number);
 		$subscription->setUsername($username);
@@ -265,16 +350,6 @@ class CompanyController extends Controller
 		$subscription->setPrefix($prefix);
 		$subscription->setReceiveCall($receive);
 		$subscription->setCompany($company);
-		/*
-		if ($countries) {
-			foreach ($countries as $countryId) {
-				$country = $em->getRepository('VoIPCompanySubscriptionsBundle:Country')->find($countryId);
-				if (!$country) throw $this->createNotFoundException('Unable to find Country entity.');
-				$subscription->addCountry($country);
-				$country->addSubscription($subscription);
-			}
-		}
-		*/
 		if ($employees) {
 			foreach ($employees as $employeeId) {
 				$employee = $em->getRepository('VoIPCompanyStructureBundle:Employee')->find($employeeId);
@@ -308,6 +383,41 @@ class CompanyController extends Controller
 		return $this->redirect($this->generateUrl('ui_company', array(
 			'hash' => $company->getHash()
 		)));
+    }
+	
+    /**
+     * @Route("/request-number", name="ui_company_newrequestnumber")
+     * @Template()
+	 * @Method("GET")
+	 * @Security("has_role('ROLE_USER')")
+     */
+    public function newRequestNumberAction()
+    {
+        return array(
+        	'countries' => array(
+        		'france' => 'France (+33)',
+				'singapore' => 'Singapore (+65)'
+        	)
+        );
+    }
+	
+    /**
+     * @Route("/request-number")
+     * @Template()
+	 * @Method("POST")
+	 * @Security("has_role('ROLE_USER')")
+     */
+    public function createRequestNumberAction()
+    {
+		$user = $this->getUser();
+		$company = $user->getCompany();
+		
+		$em = $this->getDoctrine()->getManager();
+		
+		$request = $this->getRequest();
+		$country = $request->get('country');
+		
+		return $this->redirect($this->generateUrl('ui_company'));
     }
 	
     /**
