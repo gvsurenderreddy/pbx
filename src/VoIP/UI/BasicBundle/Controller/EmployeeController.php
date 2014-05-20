@@ -102,6 +102,73 @@ class EmployeeController extends Controller
     }
 	
     /**
+     * @Route("/{hash}/renew", name="ui_employee_renew")
+     * @Template()
+	 * @Method("GET")
+	 * @Security("has_role('ROLE_USER')")
+     */
+    public function renewAction($hash)
+    {
+		$user = $this->getUser();
+		$em = $this->getDoctrine()->getManager();
+		$employee = $em->getRepository('VoIPCompanyStructureBundle:Employee')->findOneBy(array(
+			'hash' => $hash
+		));
+        if (!$employee) throw $this->createNotFoundException('Unable to find Employee entity.');
+		$company = $employee->getCompany();
+		if ($user->getCompany()->getId() != $company->getId()) throw $this->createNotFoundException('No authorization.');
+		
+		return array(
+			'employee' => $employee
+		);
+    }
+	
+    /**
+     * @Route("/{hash}/add-credit", name="ui_employee_credit")
+	 * @Method("GET")
+	 * @Security("has_role('ROLE_USER')")
+     */
+    public function addCreditAction($hash)
+    {
+		$user = $this->getUser();
+		$em = $this->getDoctrine()->getManager();
+		$employee = $em->getRepository('VoIPCompanyStructureBundle:Employee')->findOneBy(array(
+			'hash' => $hash
+		));
+        if (!$employee) throw $this->createNotFoundException('Unable to find Employee entity.');
+		$company = $employee->getCompany();
+		if ($user->getCompany()->getId() != $company->getId()) throw $this->createNotFoundException('No authorization.');
+		
+		$request = $this->getRequest();
+		$period = $request->get('period');
+		
+		$now = new \DateTime();
+		
+		if (!$employee->getActivatedUntil() || $now > $employee->getActivatedUntil()) {
+			$date = $now;
+		} else {
+			$date = $employee->getActivatedUntil();
+		}
+		
+		switch ($period) {
+			case 'month':
+				$date->modify('+1 month');
+				break;
+			case 'year':
+				$date->modify('+1 year');
+				break;
+		}
+		
+		
+		$employee->setActivatedUntil($date);
+		
+		$em->flush();
+		
+		return $this->redirect($this->generateUrl('ui_company'));
+    }
+	
+	
+    /**
      * @Route("/{hash}/delete", name="ui_employee_delete")
      * @Template()
 	 * @Method("GET")

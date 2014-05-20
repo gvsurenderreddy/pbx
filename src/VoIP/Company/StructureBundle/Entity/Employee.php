@@ -77,6 +77,13 @@ class Employee
      */
     private $thumbUrl;
 	
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="activated_until", type="datetime", nullable=true)
+     */
+    private $activatedUntil;
+	
 	/**
      * @ORM\ManyToOne(targetEntity="\VoIP\Company\StructureBundle\Entity\Company", inversedBy="employees")
 	 * @ORM\JoinColumn(name="company_id", referencedColumnName="id", onDelete="CASCADE")
@@ -422,5 +429,28 @@ class Employee
     public function getThumbUrl()
     {
         return $this->thumbUrl;
+    }
+
+    /**
+     * Set activatedUntil
+     *
+     * @param \DateTime $activatedUntil
+     * @return Employee
+     */
+    public function setActivatedUntil($activatedUntil)
+    {
+        $this->activatedUntil = $activatedUntil;
+
+        return $this;
+    }
+
+    /**
+     * Get activatedUntil
+     *
+     * @return \DateTime 
+     */
+    public function getActivatedUntil()
+    {
+        return $this->activatedUntil;
     }
 }

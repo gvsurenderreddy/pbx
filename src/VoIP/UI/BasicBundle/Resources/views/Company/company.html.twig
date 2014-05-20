@@ -46,6 +46,9 @@
 			<div class="buddy-thumb">
 				<img src="{{ employee.thumburl ? employee.thumburl : 'https://s3-ap-southeast-1.amazonaws.com/fortyeight/buddies/images/7ee05724_64.png' }}" class="img-circle">
 			</div>
+			<div class="until">
+				{% if employee.activateduntil %}{{ employee.activateduntil|date('d/m/Y') }}{% else %}<span class="label label-danger">Renew</span>{% endif %} <a href="{{ path('ui_employee_renew', {'hash': employee.hash}) }}" class="tooltip-flag" data-toggle="tooltip" data-placement="bottom" title="Renew"><span class="glyphicon glyphicon-refresh"></span></a>
+			</div>
 			<div class="tools">
 				<a href="{{ path('ui_employee_edit', {'hash': employee.hash}) }}" data-toggle="tooltip" data-placement="bottom" title="Edit" class="tooltip-flag"><span class="glyphicon glyphicon-cog"></span></a>
 				<a href="{{ path('ui_employee_delete', {'hash': employee.hash}) }}" data-toggle="tooltip" data-placement="bottom" title="Delete" class="tooltip-flag"><span class="glyphicon glyphicon-trash"></span></a>

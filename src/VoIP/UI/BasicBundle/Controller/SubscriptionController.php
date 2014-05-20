@@ -225,7 +225,7 @@ class SubscriptionController extends Controller
 		
 		$now = new \DateTime();
 		
-		if (!$subscription->getActivatedUntil() || $now > $subscriptionhone->getActivatedUntil()) {
+		if (!$subscription->getActivatedUntil() || $now > $subscription->getActivatedUntil()) {
 			$date = $now;
 		} else {
 			$date = $subscription->getActivatedUntil();
