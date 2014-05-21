@@ -171,10 +171,7 @@ a {
 .btn-new a {
 	text-align: left;
 }
-.btn-new-main {
-	padding-left: 30px;
-	padding-right: 30px;
-}
+.btn-new-main { }
 h1 a.glyphicon {
 	font-size: 17px;
 	margin-right: 10px;
