@@ -1,6 +1,6 @@
 {% extends "VoIPUIBasicBundle::layout.html.twig" %}
 {% block title %}48 | {{ company.name }}{% endblock %}
-{% block headertitle %}Example page header <small>S$ {{ company.credit|number_format(2, '.', ',') }}</small>{% endblock headertitle %}
+{% block headertitle %}Switchboard{% endblock headertitle %}
 {% block container %}
 <div class="row">
 	<div class="col-sm-12 col-md-6 col-lg-4">
@@ -54,7 +54,7 @@
 		{% endfor %}
 	</div>
 	<div class="col-sm-12 col-md-6 col-lg-4">
-		<h2 class="title-switchboard">Your phone numbers</h2>
+		<h2 class="title-switchboard">Your lines</h2>
 		{% for subscription in company.subscriptions if subscription.isactive %}
 		<div class="switchboard-card switchboard-subscription {% for employee in subscription.employees %} emp{{ employee.hash }} {% for phone in employee.phones %} pho{{ phone.hash }}{% endfor %}{% endfor %}" data-hash="{{ subscription.hash }}">
 			<div>

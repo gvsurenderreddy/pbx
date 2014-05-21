@@ -58,7 +58,7 @@
 		{% block header %}
 		<div class="page-header hidden-xs">
 			<h1 class="title-back">
-				<a class="glyphicon glyphicon-chevron-left pull-left" href="{{ path('ui_company') }}"></a>
+				{% if app.request.attributes.get('_route') != 'ui_company' %}<a class="glyphicon glyphicon-chevron-left pull-left" href="{{ path('ui_company') }}"></a>{% endif %}
 				{{ block('headertitle') }}
 				<a class="pull-right nav-logout" href="{{ path('fos_user_security_logout') }}"><span class="glyphicon glyphicon-off"></span> Logout</a>
 			</h1>
