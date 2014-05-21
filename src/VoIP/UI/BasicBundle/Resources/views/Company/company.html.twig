@@ -1,10 +1,7 @@
 {% extends "VoIPUIBasicBundle::layout.html.twig" %}
 {% block title %}48 | {{ company.name }}{% endblock %}
-{% block header %}Example page header <small>S$ {{ company.credit|number_format(2, '.', ',') }}</small>{% endblock header %}
+{% block headertitle %}Example page header <small>S$ {{ company.credit|number_format(2, '.', ',') }}</small>{% endblock headertitle %}
 {% block container %}
-<div class="page-header hidden-xs">
-	<h1>Example page header <small>S$ {{ company.credit|number_format(2, '.', ',') }}</small></h1>
-</div>
 <div class="row">
 	<div class="col-sm-12 col-md-6 col-lg-4">
 		<h2 class="title-switchboard">Your buddies</h2>
