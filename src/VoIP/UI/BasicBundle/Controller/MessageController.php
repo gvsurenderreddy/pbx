@@ -35,7 +35,7 @@ class MessageController extends Controller
 		));
         if (!$message) throw $this->createNotFoundException('Unable to find Message entity.');
 		$company = $message->getVoicemail()->getSubscription()->getCompany();
-		if (!$user->hasCompany($company)) throw $this->createNotFoundException('No authorization.');
+		if (!$user->getCompany()->getId() == $company->getId()) throw $this->createNotFoundException('No authorization.');
 		
 		$message->setReadAt(new \DateTime());
 		$em->flush();
@@ -60,7 +60,7 @@ class MessageController extends Controller
 		));
         if (!$message) throw $this->createNotFoundException('Unable to find Message entity.');
 		$company = $message->getVoicemail()->getSubscription()->getCompany();
-		if (!$user->hasCompany($company)) throw $this->createNotFoundException('No authorization.');
+		if (!$user->getCompany()->getId() == $company->getId()) throw $this->createNotFoundException('No authorization.');
 		
 		$message->setReadAt(null);
 		$em->flush();
@@ -85,7 +85,7 @@ class MessageController extends Controller
 		));
         if (!$message) throw $this->createNotFoundException('Unable to find Message entity.');
 		$company = $message->getVoicemail()->getSubscription()->getCompany();
-		if (!$user->hasCompany($company)) throw $this->createNotFoundException('No authorization.');
+		if (!$user->getCompany()->getId() == $company->getId()) throw $this->createNotFoundException('No authorization.');
 		
 		$message->setArchivedAt(new \DateTime());
 		$em->flush();
