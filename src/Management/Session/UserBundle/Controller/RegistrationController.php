@@ -117,7 +117,9 @@ class RegistrationController extends Controller
         $user = $userManager->findUserByConfirmationToken($token);
 
         if (null === $user) {
-            throw new NotFoundHttpException(sprintf('The user with confirmation token "%s" does not exist', $token));
+            $url = $this->container->get('router')->generate('ui_company');
+            $response = new RedirectResponse($url);
+			return $response;
         }
 
         /** @var $dispatcher \Symfony\Component\EventDispatcher\EventDispatcherInterface */
@@ -132,7 +134,7 @@ class RegistrationController extends Controller
         $userManager->updateUser($user);
 
         if (null === $response = $event->getResponse()) {
-            $url = $this->container->get('router')->generate('ui_company');
+            $url = $this->container->get('router')->generate('ui_company_newphoneemployee');
             $response = new RedirectResponse($url);
         }
 
