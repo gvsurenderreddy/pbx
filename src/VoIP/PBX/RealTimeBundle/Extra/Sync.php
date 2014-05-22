@@ -35,6 +35,9 @@ class Sync {
 		$peer->setDefaultUser($subscription->getUsername());
 		$peer->setInsecure('invite');
 		$peer->setDtfmode('rfc2833');
+		if ($subscription->getType() == 'spa3102') {
+			$peer->setDynamic('yes');
+		}
 		return $peer;
 	}
 	

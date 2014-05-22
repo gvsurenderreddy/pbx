@@ -335,7 +335,15 @@ class CompanyController extends Controller
 		$number = $request->get('number');
 		$username = $request->get('username');
 		$secret = $request->get('secret');
-		$host = 'siptrunk.hoiio.com';
+		switch ($type) {
+			case 'hoiio':
+				$host = 'siptrunk.hoiio.com';
+				break;
+			default:
+				$host = 'dynamic';
+				break;
+		}
+		
 		$prefix = $request->get('prefix');
 		$receive = true;
 		$employees = $request->get('employees');

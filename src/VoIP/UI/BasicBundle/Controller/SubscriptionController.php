@@ -85,7 +85,14 @@ class SubscriptionController extends Controller
 		$subscription->setNumber($number);
 		$subscription->setUsername($username);
 		$subscription->setSecret($secret);
-		$subscription->setHost($host);
+		switch ($type) {
+			case 'hoiio':
+				$host = 'siptrunk.hoiio.com';
+				break;
+			default:
+				$host = 'dynamic';
+				break;
+		}
 		$subscription->setPrefix($prefix);
 		$subscription->setReceiveCall($receive);
 		$subscription->setCompany($company);
