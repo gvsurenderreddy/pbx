@@ -38,7 +38,7 @@ class Rate
     /**
      * @var float
      *
-     * @ORM\Column(name="rateIn", type="float")
+     * @ORM\Column(name="rate_in", type="float")
      */
     private $rateIn;
 

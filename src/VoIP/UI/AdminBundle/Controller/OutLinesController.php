@@ -155,6 +155,9 @@ class OutLinesController extends Controller
 		if (!$outLine) throw $this->createNotFoundException('Unable to find OutLine entity.');
 		$request = $this->getRequest();
 		$rateIds = $request->get('rates');
+		foreach ($outLine->getRates() as $rate) {
+			$rate->setOutLine(null);
+		}
 		foreach ($rateIds as $id) {
 			$rate = $em->getRepository('VoIPPBXBillBundle:Rate')->find($id);
 			if (!$rate) throw $this->createNotFoundException('Unable to find Rate entity.');

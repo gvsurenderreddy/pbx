@@ -34,12 +34,25 @@
 </table>
 <table class="table table-condensed table-hover">
 	<tr>
-		<th>Name</th>
-		<th>Out Line</th>
+		<th rowspan="2">Name</th>
+		<th colspan="2">Rates</th>
+		<th rowspan="2">Code</th>
+		<th rowspan="2">Prefix</th>
+		<th rowspan="2">Precision</th>
+		<th rowspan="2">Out Line</th>
+	</tr>
+	<tr>
+		<th>IN</th>
+		<th>OUT</th>
 	</tr>
 	{% for rate in rates %}
 	<tr>
 		<td>{{ rate.name }}</td>
+		<td>{{ rate.ratein }}</td>
+		<td>{{ rate.rate }}</td>
+		<td>{{ rate.code }}</td>
+		<td>{{ rate.prefix }}</td>
+		<td>{{ rate.precision }}</td>
 		<td>
 			{% if rate.outline %}
 			<span class="glyphicon glyphicon-ok"></span> {{ rate.outline.hash }}
