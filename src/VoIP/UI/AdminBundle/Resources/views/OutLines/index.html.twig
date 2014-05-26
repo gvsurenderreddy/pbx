@@ -22,7 +22,7 @@
 		<td>{{ outline.rates|length }}</td>
 		<td>
 			{% for rate in outline.rates %}
-			{{ rate.name }}{% if not loop.last %}<br>{% endif %}
+			{{ rate.name }} (+{{ rate.prefix }}){% if not loop.last %}<br>{% endif %}
 			{% endfor %}
 		</td>
 		<td>

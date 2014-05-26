@@ -6,7 +6,7 @@
 		<div class="col-sm-10">
 			<select class="form-control" id="rates" name="rates[]" multiple size="20">
 				{% for rate in rates %}
-				<option value="{{ rate.id }}" {% if rate in outline.rates %}selected{% endif %}>{{ rate.name }}</option>
+				<option value="{{ rate.id }}" {% if rate in outline.rates %}selected{% endif %}>{{ rate.name }} (+{{ rate.prefix }})</option>
 				{% endfor %}
 			</select>
 		</div>
