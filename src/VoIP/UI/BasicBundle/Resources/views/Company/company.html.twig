@@ -74,6 +74,7 @@
 				<a href="{{ path('ui_subscription_edit', {'hash': subscription.hash}) }}" data-toggle="tooltip" data-placement="bottom" title="Parameters" class="tooltip-flag"><span class="glyphicon glyphicon-cog"></span></a>
 				{% endif %}
 				<a href="{{ path('ui_subscription_delete', {'hash': subscription.hash}) }}" data-toggle="tooltip" data-placement="bottom" title="Delete" class="tooltip-flag"><span class="glyphicon glyphicon-trash"></span></a>
+				{% if subscription.type == 'spa3102' %}<a href="{{ path('ui_subscription_configure', {'hash': subscription.hash}) }}" data-toggle="tooltip" data-placement="bottom" title="Configure" class="tooltip-flag"><span class="glyphicon glyphicon-wrench"></span></a>{% endif %}
 			</div>
 			<div class="status status-{{ subscription.status }} tooltip-flag" data-toggle="tooltip" data-placement="bottom" title="Connected"></div>
 		</div>

@@ -28,6 +28,7 @@ class AppKernel extends Kernel
             new VoIP\Company\VoicemailBundle\VoIPCompanyVoicemailBundle(),
             new VoIP\PBX\BillBundle\VoIPPBXBillBundle(),
             new VoIP\PBX\AMIBundle\VoIPPBXAMIBundle(),
+            new VoIP\UI\AdminBundle\VoIPUIAdminBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

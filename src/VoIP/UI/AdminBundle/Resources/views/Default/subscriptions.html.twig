@@ -1,0 +1,17 @@
+{% extends '::base.html.twig' %}
+{% block body %}
+<table class="table table-condensed table-hover">
+	<tr>
+		<th>Company</th>
+		<th>Name</th>
+		<th>Active</th>
+	</tr>
+	{% for subscription in subscriptions %}
+	<tr>
+		<td>{{ subscription.company ? subscription.company.name }}</td>
+		<td>{{ subscription.name }}</td>
+		<td>{% if subscription.isactive %}<span class="glyphicon glyphicon-ok"></span>{% endif %}</td>
+	</tr>
+	{% endfor %}
+</table>
+{% endblock %}

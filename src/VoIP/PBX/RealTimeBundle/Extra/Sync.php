@@ -41,6 +41,23 @@ class Sync {
 		return $peer;
 	}
 	
+	public function outLineToPeer($outLine)
+	{
+		if (!$peer = $outLine->getAstPeer()) $peer = new SipPeer();
+		$peer->setName($outLine->getUsername());
+		$peer->setSecret($outLine->getSecret());
+		$peer->setHost($outLine->getHost());
+		$peer->setType('peer');
+		$peer->setAllow('gsm');
+		$peer->setDefaultUser($outLine->getUsername());
+		$peer->setInsecure('invite');
+		$peer->setDtfmode('rfc2833');
+		if ($outLine->getType() == 'spa3102') {
+			$peer->setDynamic('yes');
+		}
+		return $peer;
+	}
+	
 	public function phoneToPeer($phone)
 	{
 		if (!$sippeer = $phone->getAstPeer()) $sippeer = new SipPeer();

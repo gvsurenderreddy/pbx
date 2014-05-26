@@ -1,3 +1,8 @@
+vo_ipui_admin:
+    resource: "@VoIPUIAdminBundle/Controller/"
+    type:     annotation
+    prefix:   /
+
 vo_ippbxami:
     resource: "@VoIPPBXAMIBundle/Controller/"
     type:     annotation

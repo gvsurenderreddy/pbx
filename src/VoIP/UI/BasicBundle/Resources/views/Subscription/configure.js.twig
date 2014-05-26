@@ -1,0 +1,11 @@
+var app = angular.module('fortyeight', [])
+app.config(function($interpolateProvider){
+	$interpolateProvider.startSymbol('{[{').endSymbol('}]}');
+})
+app.controller('ConfigurationCtrl', function($scope, $http, $location, $window) {
+	delete $http.defaults.headers.common['X-Requested-With'];
+	$scope.configured = 0;
+	$scope.submit = function(){
+		$scope.configured = 1;
+	}
+});
