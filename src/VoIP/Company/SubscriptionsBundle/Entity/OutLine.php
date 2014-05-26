@@ -86,10 +86,10 @@ class OutLine
     private $isActive = true;
 	
 	/**
-     * @ORM\OneToMany(targetEntity="\VoIP\Company\SubscriptionsBundle\Entity\Country", mappedBy="outLine")
+     * @ORM\OneToMany(targetEntity="\VoIP\PBX\BillBundle\Entity\Rate", mappedBy="outLine")
 	 * @ORM\OrderBy({"name" = "ASC"})
      */
-    private $countries;
+    private $rates;
 	
 	/**
      * @ORM\OneToOne(targetEntity="\VoIP\PBX\RealTimeBundle\Entity\SipPeer", inversedBy="subscription")
@@ -450,150 +450,14 @@ class OutLine
      */
     public function __construct()
     {
-        $this->countries = new \Doctrine\Common\Collections\ArrayCollection();
-    }
-
-    /**
-     * Add countries
-     *
-     * @param \VoIP\Company\SubscriptionsBundle\Entity\Country $countries
-     * @return Subscription
-     */
-    public function addCountry(\VoIP\Company\SubscriptionsBundle\Entity\Country $countries)
-    {
-        $this->countries[] = $countries;
-
-        return $this;
-    }
-
-    /**
-     * Remove countries
-     *
-     * @param \VoIP\Company\SubscriptionsBundle\Entity\Country $countries
-     */
-    public function removeCountry(\VoIP\Company\SubscriptionsBundle\Entity\Country $countries)
-    {
-        $this->countries->removeElement($countries);
-    }
-
-    /**
-     * Get countries
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getCountries()
-    {
-        return $this->countries;
-    }
-
-
-    /**
-     * Set dialPlanFirstItem
-     *
-     * @param \VoIP\Company\SubscriptionsBundle\Entity\DialPlanItem $dialPlanFirstItem
-     * @return Subscription
-     */
-    public function setDialPlanFirstItem(\VoIP\Company\SubscriptionsBundle\Entity\DialPlanItem $dialPlanFirstItem = null)
-    {
-        $this->dialPlanFirstItem = $dialPlanFirstItem;
-
-        return $this;
-    }
-
-    /**
-     * Get dialPlanFirstItem
-     *
-     * @return \VoIP\Company\SubscriptionsBundle\Entity\DialPlanItem 
-     */
-    public function getDialPlanFirstItem()
-    {
-        return $this->dialPlanFirstItem;
-    }
-
-    /**
-     * Set registrationCode
-     *
-     * @param string $registrationCode
-     * @return Subscription
-     */
-    public function setRegistrationCode($registrationCode)
-    {
-        $this->registrationCode = $registrationCode;
-
-        return $this;
-    }
-
-    /**
-     * Get registrationCode
-     *
-     * @return string 
-     */
-    public function getRegistrationCode()
-    {
-        return $this->registrationCode;
-    }
-
-    /**
-     * Add employees
-     *
-     * @param \VoIP\Company\StructureBundle\Entity\Employee $employees
-     * @return Subscription
-     */
-    public function addEmployee(\VoIP\Company\StructureBundle\Entity\Employee $employees)
-    {
-        $this->employees[] = $employees;
-
-        return $this;
-    }
-
-    /**
-     * Remove employees
-     *
-     * @param \VoIP\Company\StructureBundle\Entity\Employee $employees
-     */
-    public function removeEmployee(\VoIP\Company\StructureBundle\Entity\Employee $employees)
-    {
-        $this->employees->removeElement($employees);
-    }
-
-    /**
-     * Get employees
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getEmployees()
-    {
-        return $this->employees;
-    }
-
-    /**
-     * Set voicemail
-     *
-     * @param \VoIP\Company\VoicemailBundle\Entity\Voicemail $voicemail
-     * @return Subscription
-     */
-    public function setVoicemail(\VoIP\Company\VoicemailBundle\Entity\Voicemail $voicemail = null)
-    {
-        $this->voicemail = $voicemail;
-
-        return $this;
-    }
-
-    /**
-     * Get voicemail
-     *
-     * @return \VoIP\Company\VoicemailBundle\Entity\Voicemail 
-     */
-    public function getVoicemail()
-    {
-        return $this->voicemail;
+        
     }
 
     /**
      * Set hash
      *
      * @param string $hash
-     * @return Subscription
+     * @return OutLine
      */
     public function setHash($hash)
     {
@@ -613,33 +477,10 @@ class OutLine
     }
 
     /**
-     * Set activatedUntil
-     *
-     * @param \DateTime $activatedUntil
-     * @return Subscription
-     */
-    public function setActivatedUntil($activatedUntil)
-    {
-        $this->activatedUntil = $activatedUntil;
-
-        return $this;
-    }
-
-    /**
-     * Get activatedUntil
-     *
-     * @return \DateTime 
-     */
-    public function getActivatedUntil()
-    {
-        return $this->activatedUntil;
-    }
-
-    /**
      * Set isActive
      *
      * @param boolean $isActive
-     * @return Subscription
+     * @return OutLine
      */
     public function setIsActive($isActive)
     {
@@ -659,140 +500,35 @@ class OutLine
     }
 
     /**
-     * Set rateIn
+     * Add rates
      *
-     * @param float $rateIn
-     * @return Subscription
-     */
-    public function setRateIn($rateIn)
-    {
-        $this->rateIn = $rateIn;
-
-        return $this;
-    }
-
-    /**
-     * Get rateIn
-     *
-     * @return float 
-     */
-    public function getRateIn()
-    {
-        return $this->rateIn;
-    }
-
-    /**
-     * Set rateOut
-     *
-     * @param float $rateOut
-     * @return Subscription
-     */
-    public function setRateOut($rateOut)
-    {
-        $this->rateOut = $rateOut;
-
-        return $this;
-    }
-
-    /**
-     * Get rateOut
-     *
-     * @return float 
-     */
-    public function getRateOut()
-    {
-        return $this->rateOut;
-    }
-
-    /**
-     * Set rateOutOperator
-     *
-     * @param float $rateOutOperator
-     * @return Subscription
-     */
-    public function setRateOutOperator($rateOutOperator)
-    {
-        $this->rateOutOperator = $rateOutOperator;
-
-        return $this;
-    }
-
-    /**
-     * Get rateOutOperator
-     *
-     * @return float 
-     */
-    public function getRateOutOperator()
-    {
-        return $this->rateOutOperator;
-    }
-
-    /**
-     * Set rateInFactor
-     *
-     * @param float $rateInFactor
-     * @return Subscription
-     */
-    public function setRateInFactor($rateInFactor)
-    {
-        $this->rateInFactor = $rateInFactor;
-
-        return $this;
-    }
-
-    /**
-     * Get rateInFactor
-     *
-     * @return float 
-     */
-    public function getRateInFactor()
-    {
-        return $this->rateInFactor;
-    }
-
-    /**
-     * Set isEditable
-     *
-     * @param boolean $isEditable
-     * @return Subscription
-     */
-    public function setIsEditable($isEditable)
-    {
-        $this->isEditable = $isEditable;
-
-        return $this;
-    }
-
-    /**
-     * Get isEditable
-     *
-     * @return boolean 
-     */
-    public function getIsEditable()
-    {
-        return $this->isEditable;
-    }
-
-    /**
-     * Set internRate
-     *
-     * @param float $internRate
+     * @param \VoIP\PBX\BillBundle\Entity\Rate $rates
      * @return OutLine
      */
-    public function setInternRate($internRate)
+    public function addRate(\VoIP\PBX\BillBundle\Entity\Rate $rates)
     {
-        $this->internRate = $internRate;
+        $this->rates[] = $rates;
 
         return $this;
     }
 
     /**
-     * Get internRate
+     * Remove rates
      *
-     * @return float 
+     * @param \VoIP\PBX\BillBundle\Entity\Rate $rates
      */
-    public function getInternRate()
+    public function removeRate(\VoIP\PBX\BillBundle\Entity\Rate $rates)
     {
-        return $this->internRate;
+        $this->rates->removeElement($rates);
+    }
+
+    /**
+     * Get rates
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getRates()
+    {
+        return $this->rates;
     }
 }

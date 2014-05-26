@@ -9,7 +9,7 @@
 		<th>Username</th>
 		<th>Secret</th>
 		<th>Host</th>
-		<th colspan="2">Countries</th>
+		<th colspan="2">Rates</th>
 		<th>Actions</th>
 	</tr>
 	{% for outline in outlines %}
@@ -19,15 +19,15 @@
 		<td>{{ outline.username }}</td>
 		<td>{{ outline.secret }}</td>
 		<td>{{ outline.host }}</td>
-		<td>{{ outline.countries|length }}</td>
+		<td>{{ outline.rates|length }}</td>
 		<td>
-			{% for country in outline.countries %}
-			{{ country.name }}{% if not loop.last %}<br>{% endif %}
+			{% for rate in outline.rates %}
+			{{ rate.name }}{% if not loop.last %}<br>{% endif %}
 			{% endfor %}
 		</td>
 		<td>
 			<a href="{{ path('outline_edit', {'id': outline.id}) }}">edit</a>
-			<a href="{{ path('outline_countries', {'id': outline.id}) }}">countries</a>
+			<a href="{{ path('outline_rates', {'id': outline.id}) }}">countries</a>
 		</td>
 	</tr>
 	{% endfor %}
@@ -37,12 +37,12 @@
 		<th>Name</th>
 		<th>Out Line</th>
 	</tr>
-	{% for country in countries %}
+	{% for rate in rates %}
 	<tr>
-		<td>{{ country.name }}</td>
+		<td>{{ rate.name }}</td>
 		<td>
-			{% if country.outline %}
-			<span class="glyphicon glyphicon-ok"></span> {{ country.outline.hash }}
+			{% if rate.outline %}
+			<span class="glyphicon glyphicon-ok"></span> {{ rate.outline.hash }}
 			{% else %}
 			<span class="glyphicon glyphicon-remove"></span>
 			{% endif %}
