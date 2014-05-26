@@ -115,12 +115,6 @@ class Company
     private $reports;
 	
 	/**
-     * @ORM\ManyToOne(targetEntity="\VoIP\Company\SubscriptionsBundle\Entity\OutLine", inversedBy="company")
-	 * @ORM\JoinColumn(name="out_line_id", referencedColumnName="id", onDelete="CASCADE")
-     */
-    private $outLine;
-	
-	/**
 	 * @ORM\PrePersist
 	 */
 	public function prePersist()
@@ -607,28 +601,5 @@ class Company
     public function getUsers()
     {
         return $this->users;
-    }
-
-    /**
-     * Set outLine
-     *
-     * @param \VoIP\Company\SubscriptionsBundle\Entity\OutLine $outLine
-     * @return Company
-     */
-    public function setOutLine(\VoIP\Company\SubscriptionsBundle\Entity\OutLine $outLine = null)
-    {
-        $this->outLine = $outLine;
-
-        return $this;
-    }
-
-    /**
-     * Get outLine
-     *
-     * @return \VoIP\Company\SubscriptionsBundle\Entity\OutLine 
-     */
-    public function getOutLine()
-    {
-        return $this->outLine;
     }
 }

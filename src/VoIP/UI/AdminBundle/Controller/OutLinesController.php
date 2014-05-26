@@ -22,7 +22,7 @@ class OutLinesController extends Controller
     public function indexAction()
     {
 		$em = $this->getDoctrine()->getManager();
-		$companies = $em->getRepository('VoIPCompanyStructureBundle:Company')->findBy(array(), array(
+		$countries = $em->getRepository('VoIPCompanySubscriptionsBundle:Country')->findBy(array(), array(
 			'name' => 'ASC'
 		));
 		$outLines = $em->getRepository('VoIPCompanySubscriptionsBundle:OutLine')->findBy(array(), array(
@@ -30,7 +30,7 @@ class OutLinesController extends Controller
 		));
         return array(
         	'outlines' => $outLines,
-			'companies' => $companies
+			'countries' => $countries
         );
     }
     /**
@@ -126,39 +126,39 @@ class OutLinesController extends Controller
 		return $this->redirect($this->generateUrl('outlines'));
     }
     /**
-     * @Route("/companies/{id}", name="outline_companies")
+     * @Route("/countries/{id}", name="outline_countries")
      * @Template()
      * @Method("GET")
      */
-    public function companiesAction($id)
+    public function countriesAction($id)
     {
 		$em = $this->getDoctrine()->getManager();
 		$outLine = $em->getRepository('VoIPCompanySubscriptionsBundle:OutLine')->find($id);
 		if (!$outLine) throw $this->createNotFoundException('Unable to find OutLine entity.');
-		$companies = $em->getRepository('VoIPCompanyStructureBundle:Company')->findBy(array(), array(
+		$countries = $em->getRepository('VoIPCompanySubscriptionsBundle:Country')->findBy(array(), array(
 			'name' => 'ASC'
 		));
         return array(
         	'outline' => $outLine,
-			'companies' => $companies
+			'countries' => $countries
         );
     }
     /**
-     * @Route("/companies/{id}")
+     * @Route("/countries/{id}")
      * @Template()
      * @Method("POST")
      */
-    public function companiesPostAction($id)
+    public function countriesPostAction($id)
     {
 		$em = $this->getDoctrine()->getManager();
 		$outLine = $em->getRepository('VoIPCompanySubscriptionsBundle:OutLine')->find($id);
 		if (!$outLine) throw $this->createNotFoundException('Unable to find OutLine entity.');
 		$request = $this->getRequest();
-		$comapnyIds = $request->get('companies');
-		foreach ($comapnyIds as $id) {
-			$company = $em->getRepository('VoIPCompanyStructureBundle:Company')->find($id);
-			if (!$company) throw $this->createNotFoundException('Unable to find Comapny entity.');
-			$company->setOutLine($outLine);
+		$countryIds = $request->get('countries');
+		foreach ($countryIds as $id) {
+			$country = $em->getRepository('VoIPCompanySubscriptionsBundle:Country')->find($id);
+			if (!$country) throw $this->createNotFoundException('Unable to find Country entity.');
+			$country->setOutLine($outLine);
 		}
 		$em->flush();
         return $this->redirect($this->generateUrl('outlines'));

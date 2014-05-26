@@ -9,7 +9,7 @@
 		<th>Username</th>
 		<th>Secret</th>
 		<th>Host</th>
-		<th colspan="2">Companies</th>
+		<th colspan="2">Countries</th>
 		<th>Actions</th>
 	</tr>
 	{% for outline in outlines %}
@@ -19,32 +19,30 @@
 		<td>{{ outline.username }}</td>
 		<td>{{ outline.secret }}</td>
 		<td>{{ outline.host }}</td>
-		<td>{{ outline.companies|length }}</td>
+		<td>{{ outline.countries|length }}</td>
 		<td>
-			{% for company in outline.companies %}
-			{{ company.name }}{% if not loop.last %}<br>{% endif %}
+			{% for country in outline.countries %}
+			{{ country.name }}{% if not loop.last %}<br>{% endif %}
 			{% endfor %}
 		</td>
 		<td>
 			<a href="{{ path('outline_edit', {'id': outline.id}) }}">edit</a>
-			<a href="{{ path('outline_companies', {'id': outline.id}) }}">companies</a>
+			<a href="{{ path('outline_countries', {'id': outline.id}) }}">countries</a>
 		</td>
 	</tr>
 	{% endfor %}
 </table>
 <table class="table table-condensed table-hover">
 	<tr>
-		<th>Created at</th>
 		<th>Name</th>
 		<th>Out Line</th>
 	</tr>
-	{% for company in companies %}
+	{% for country in countries %}
 	<tr>
-		<td>{{ company.createdat|date('d/m/Y') }}</td>
-		<td>{{ company.name }}</td>
+		<td>{{ country.name }}</td>
 		<td>
-			{% if company.outline %}
-			<span class="glyphicon glyphicon-ok"></span> {{ company.outline.hash }}
+			{% if country.outline %}
+			<span class="glyphicon glyphicon-ok"></span> {{ country.outline.hash }}
 			{% else %}
 			<span class="glyphicon glyphicon-remove"></span>
 			{% endif %}

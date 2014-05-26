@@ -53,23 +53,16 @@ class OutLine
     /**
      * @var string
      *
-     * @ORM\Column(name="username", type="string", length=128, nullable=true)
+     * @ORM\Column(name="username", type="string", length=128, unique=true)
      */
     private $username;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="secret", type="string", length=255, nullable=true)
+     * @ORM\Column(name="secret", type="string", length=255)
      */
     private $secret;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="number", type="string", length=128, nullable=true)
-     */
-    private $number;
 
     /**
      * @var string
@@ -92,25 +85,11 @@ class OutLine
      */
     private $isActive = true;
 	
-    /**
-     * @var float
-     *
-     * @ORM\Column(name="intern_rate", type="float")
-     */
-    private $internRate = 0.01;
-	
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="registration_code", type="string", length=255, nullable=true)
-     */
-    private $registrationCode;
-	
 	/**
-     * @ORM\OneToMany(targetEntity="\VoIP\Company\StructureBundle\Entity\Company", mappedBy="outLine")
+     * @ORM\OneToMany(targetEntity="\VoIP\Company\SubscriptionsBundle\Entity\Country", mappedBy="outLine")
 	 * @ORM\OrderBy({"name" = "ASC"})
      */
-    private $companies;
+    private $countries;
 	
 	/**
      * @ORM\OneToOne(targetEntity="\VoIP\PBX\RealTimeBundle\Entity\SipPeer", inversedBy="subscription")
@@ -815,38 +794,5 @@ class OutLine
     public function getInternRate()
     {
         return $this->internRate;
-    }
-
-    /**
-     * Add companies
-     *
-     * @param \VoIP\Company\StructureBundle\Entity\Company $companies
-     * @return OutLine
-     */
-    public function addCompany(\VoIP\Company\StructureBundle\Entity\Company $companies)
-    {
-        $this->companies[] = $companies;
-
-        return $this;
-    }
-
-    /**
-     * Remove companies
-     *
-     * @param \VoIP\Company\StructureBundle\Entity\Company $companies
-     */
-    public function removeCompany(\VoIP\Company\StructureBundle\Entity\Company $companies)
-    {
-        $this->companies->removeElement($companies);
-    }
-
-    /**
-     * Get companies
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getCompanies()
-    {
-        return $this->companies;
     }
 }

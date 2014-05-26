@@ -43,10 +43,10 @@ class Country
     private $name;
 	
 	/**
-	 * @ORM\ManyToMany(targetEntity="\VoIP\Company\SubscriptionsBundle\Entity\Subscription", mappedBy="countries")
-	 * @ORM\OrderBy({"name" = "ASC"})
-	 */
-	protected $subscriptions;
+     * @ORM\ManyToOne(targetEntity="\VoIP\Company\SubscriptionsBundle\Entity\OutLine", inversedBy="countries")
+	 * @ORM\JoinColumn(name="out_line_id", referencedColumnName="id", onDelete="CASCADE")
+     */
+    private $outLine;
 
 
     /**
@@ -166,5 +166,28 @@ class Country
     public function getSubscriptions()
     {
         return $this->subscriptions;
+    }
+
+    /**
+     * Set outLine
+     *
+     * @param \VoIP\Company\SubscriptionsBundle\Entity\OutLine $outLine
+     * @return Country
+     */
+    public function setOutLine(\VoIP\Company\SubscriptionsBundle\Entity\OutLine $outLine = null)
+    {
+        $this->outLine = $outLine;
+
+        return $this;
+    }
+
+    /**
+     * Get outLine
+     *
+     * @return \VoIP\Company\SubscriptionsBundle\Entity\OutLine 
+     */
+    public function getOutLine()
+    {
+        return $this->outLine;
     }
 }
