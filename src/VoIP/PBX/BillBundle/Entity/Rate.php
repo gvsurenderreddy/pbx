@@ -71,10 +71,10 @@ class Rate
     private $precision;
 	
 	/**
-     * @ORM\ManyToOne(targetEntity="\VoIP\Company\SubscriptionsBundle\Entity\OutLine", inversedBy="countries")
-	 * @ORM\JoinColumn(name="out_line_id", referencedColumnName="id", onDelete="CASCADE")
-     */
-    private $outLine;
+	 * @ORM\ManyToMany(targetEntity="\VoIP\Company\SubscriptionsBundle\Entity\OutLine", mappedBy="rates")
+	 * @ORM\OrderBy({"hash" = "ASC"})
+	 */
+	protected $outLines;
 
 
     /**
@@ -247,27 +247,44 @@ class Rate
     {
         return $this->rateIn;
     }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->outLines = new \Doctrine\Common\Collections\ArrayCollection();
+    }
 
     /**
-     * Set outLine
+     * Add outLines
      *
-     * @param \VoIP\Company\SubscriptionsBundle\Entity\OutLine $outLine
+     * @param \VoIP\Company\SubscriptionsBundle\Entity\OutLine $outLines
      * @return Rate
      */
-    public function setOutLine(\VoIP\Company\SubscriptionsBundle\Entity\OutLine $outLine = null)
+    public function addOutLine(\VoIP\Company\SubscriptionsBundle\Entity\OutLine $outLines)
     {
-        $this->outLine = $outLine;
+        $this->outLines[] = $outLines;
 
         return $this;
     }
 
     /**
-     * Get outLine
+     * Remove outLines
      *
-     * @return \VoIP\Company\SubscriptionsBundle\Entity\OutLine 
+     * @param \VoIP\Company\SubscriptionsBundle\Entity\OutLine $outLines
      */
-    public function getOutLine()
+    public function removeOutLine(\VoIP\Company\SubscriptionsBundle\Entity\OutLine $outLines)
     {
-        return $this->outLine;
+        $this->outLines->removeElement($outLines);
+    }
+
+    /**
+     * Get outLines
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getOutLines()
+    {
+        return $this->outLines;
     }
 }

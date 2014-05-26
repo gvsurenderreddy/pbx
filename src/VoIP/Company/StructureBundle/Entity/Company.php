@@ -115,6 +115,12 @@ class Company
     private $reports;
 	
 	/**
+	 * @ORM\ManyToMany(targetEntity="\VoIP\Company\SubscriptionsBundle\Entity\OutLine", mappedBy="companies")
+	 * @ORM\OrderBy({"hash" = "ASC"})
+	 */
+	protected $outLines;
+	
+	/**
 	 * @ORM\PrePersist
 	 */
 	public function prePersist()
@@ -601,5 +607,38 @@ class Company
     public function getUsers()
     {
         return $this->users;
+    }
+
+    /**
+     * Add outLines
+     *
+     * @param \VoIP\Company\SubscriptionsBundle\Entity\OutLine $outLines
+     * @return Company
+     */
+    public function addOutLine(\VoIP\Company\SubscriptionsBundle\Entity\OutLine $outLines)
+    {
+        $this->outLines[] = $outLines;
+
+        return $this;
+    }
+
+    /**
+     * Remove outLines
+     *
+     * @param \VoIP\Company\SubscriptionsBundle\Entity\OutLine $outLines
+     */
+    public function removeOutLine(\VoIP\Company\SubscriptionsBundle\Entity\OutLine $outLines)
+    {
+        $this->outLines->removeElement($outLines);
+    }
+
+    /**
+     * Get outLines
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getOutLines()
+    {
+        return $this->outLines;
     }
 }

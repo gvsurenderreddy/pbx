@@ -85,17 +85,38 @@ class OutLine
      */
     private $isActive = true;
 	
-	/**
-     * @ORM\OneToMany(targetEntity="\VoIP\PBX\BillBundle\Entity\Rate", mappedBy="outLine")
-	 * @ORM\OrderBy({"name" = "ASC"})
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="is_public", type="boolean")
      */
-    private $rates;
+    private $isPublic = false;
 	
 	/**
      * @ORM\OneToOne(targetEntity="\VoIP\PBX\RealTimeBundle\Entity\SipPeer", inversedBy="subscription")
 	 * @ORM\JoinColumn(name="ast_sippeer_id", referencedColumnName="id", onDelete="CASCADE")
      */
     private $astPeer;
+	
+	/**
+	 * @ORM\ManyToMany(targetEntity="\VoIP\Company\StructureBundle\Entity\Company", inversedBy="outLines")
+	 * @ORM\JoinTable(name="structure_outline_has_company",
+	 *      joinColumns={@ORM\JoinColumn(name="outline_id", referencedColumnName="id")},
+	 *      inverseJoinColumns={@ORM\JoinColumn(name="company_id", referencedColumnName="id")}
+	 *      )
+	 * @ORM\OrderBy({"name" = "ASC"})
+	 */
+	protected $companies;
+	
+	/**
+	 * @ORM\ManyToMany(targetEntity="\VoIP\PBX\BillBundle\Entity\Rate", inversedBy="outLines")
+	 * @ORM\JoinTable(name="structure_outline_has_rate",
+	 *      joinColumns={@ORM\JoinColumn(name="outline_id", referencedColumnName="id")},
+	 *      inverseJoinColumns={@ORM\JoinColumn(name="rate_id", referencedColumnName="id")}
+	 *      )
+	 * @ORM\OrderBy({"name" = "ASC"})
+	 */
+	protected $rates;
 	
 	/**
 	 * @ORM\PrePersist
@@ -105,7 +126,6 @@ class OutLine
 		$this->createdAt = new \DateTime();
 	    $this->updatedAt = new \DateTime();
 		if (!$this->hash) $this->generateHash();
-		$this->genRegistrationCode();
 	}
 	
 	/**
@@ -115,7 +135,6 @@ class OutLine
 	{
 	    $this->updatedAt = new \DateTime();
 		if (!$this->hash) $this->generateHash();
-		$this->genRegistrationCode();
 	}
 
 	public function generateHash()
@@ -127,19 +146,6 @@ class OutLine
 	{
 		if (!($firstItem = $this->getDialPlanFirstItem())) return 0;
 		else return $firstItem->getDepth() + 1;
-	}
-	
-	public function genRegistrationCode()
-	{
-		switch ($this->type) {
-			case 'hoiio':
-				$this->setRegistrationCode($this->username.':'.$this->secret.'@'.$this->host.'/'.$this->hash);
-				break;
-			
-			default:
-				$this->setRegistrationCode($this->username.':'.$this->secret.'@'.$this->host.'/'.$this->hash);
-				break;
-		}
 	}
 	
 	public function getStatus()
@@ -497,6 +503,62 @@ class OutLine
     public function getIsActive()
     {
         return $this->isActive;
+    }
+
+    /**
+     * Set isPublic
+     *
+     * @param boolean $isPublic
+     * @return OutLine
+     */
+    public function setIsPublic($isPublic)
+    {
+        $this->isPublic = $isPublic;
+
+        return $this;
+    }
+
+    /**
+     * Get isPublic
+     *
+     * @return boolean 
+     */
+    public function getIsPublic()
+    {
+        return $this->isPublic;
+    }
+
+    /**
+     * Add companies
+     *
+     * @param \VoIP\Company\StructureBundle\Entity\Company $companies
+     * @return OutLine
+     */
+    public function addCompany(\VoIP\Company\StructureBundle\Entity\Company $companies)
+    {
+        $this->companies[] = $companies;
+
+        return $this;
+    }
+
+    /**
+     * Remove companies
+     *
+     * @param \VoIP\Company\StructureBundle\Entity\Company $companies
+     */
+    public function removeCompany(\VoIP\Company\StructureBundle\Entity\Company $companies)
+    {
+        $this->companies->removeElement($companies);
+    }
+
+    /**
+     * Get companies
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getCompanies()
+    {
+        return $this->companies;
     }
 
     /**

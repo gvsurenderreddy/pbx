@@ -10,6 +10,8 @@
 		<th>Secret</th>
 		<th>Host</th>
 		<th colspan="2">Rates</th>
+		<th colspan="2">Companies</th>
+		<th>Public</th>
 		<th>Actions</th>
 	</tr>
 	{% for outline in outlines %}
@@ -25,13 +27,22 @@
 			{{ rate.name }} (+{{ rate.prefix }}){% if not loop.last %}<br>{% endif %}
 			{% endfor %}
 		</td>
+		<td>{{ outline.companies|length }}</td>
+		<td>
+			{% for company in outline.companies %}
+			{{ company.name }}{% if not loop.last %}<br>{% endif %}
+			{% endfor %}
+		</td>
+		<td>{% if outline.ispublic %}<span class="glyphicon glyphicon-ok"></span>{% endif %}</td>
 		<td>
 			<a href="{{ path('outline_edit', {'id': outline.id}) }}">edit</a>
-			<a href="{{ path('outline_rates', {'id': outline.id}) }}">countries</a>
+			<a href="{{ path('outline_rates', {'id': outline.id}) }}">rates</a>
+			<a href="{{ path('outline_companies', {'id': outline.id}) }}">companies</a>
 		</td>
 	</tr>
 	{% endfor %}
 </table>
+{# 
 <table class="table table-condensed table-hover">
 	<tr>
 		<th rowspan="2">Name</th>
@@ -63,4 +74,5 @@
 	</tr>
 	{% endfor %}
 </table>
+ #}
 {% endblock %}
