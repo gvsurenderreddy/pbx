@@ -53,7 +53,7 @@ class RatesController extends Controller
         );
     }
     /**
-     * @Route("/create", name="outgroup_create")
+     * @Route("/create", name="rate_create")
      * @Template()
      * @Method("POST")
      */
@@ -74,7 +74,7 @@ class RatesController extends Controller
 		return $this->redirect($this->generateUrl('outgroups'));
     }
     /**
-     * @Route("/update/{id}", name="outgroup_update")
+     * @Route("/update/{id}", name="rate_update")
      * @Template()
      * @Method("POST")
      */
@@ -96,7 +96,7 @@ class RatesController extends Controller
 		return $this->redirect($this->generateUrl('outgroups'));
     }
     /**
-     * @Route("/companies/{id}", name="outgroup_companies")
+     * @Route("/companies/{id}", name="rate_companies")
      * @Template()
      * @Method("GET")
      */
@@ -134,7 +134,7 @@ class RatesController extends Controller
         return $this->redirect($this->generateUrl('outgroups'));
     }
     /**
-     * @Route("/outlines/{id}", name="outgroup_outlines")
+     * @Route("/outlines/{id}", name="rate_outlines")
      * @Template()
      * @Method("GET")
      */
