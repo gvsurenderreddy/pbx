@@ -5,18 +5,21 @@
 <table class="table table-condensed table-hover">
 	<tr>
 		<th>Created at</th>
+		<th>Name</th>
 		<th>Hash</th>
 		<th>Username</th>
 		<th>Secret</th>
 		<th>Host</th>
 		<th colspan="2">Rates</th>
-		<th colspan="2">Companies</th>
+		<th colspan="2">Groups</th>
 		<th>Public</th>
+		<th>SN</th>
 		<th>Actions</th>
 	</tr>
 	{% for outline in outlines %}
 	<tr>
 		<td>{{ outline.createdat|date('d/m/Y') }}</td>
+		<td>{{ outline.name }}</td>
 		<td>{{ outline.hash }}</td>
 		<td>{{ outline.username }}</td>
 		<td>{{ outline.secret }}</td>
@@ -27,17 +30,17 @@
 			{{ rate.name }} (+{{ rate.prefix }}){% if not loop.last %}<br>{% endif %}
 			{% endfor %}
 		</td>
-		<td>{{ outline.companies|length }}</td>
+		<td>{{ outline.outgroups|length }}</td>
 		<td>
-			{% for company in outline.companies %}
-			{{ company.name }}{% if not loop.last %}<br>{% endif %}
+			{% for outgroup in outline.outgroups %}
+			<a href="{{ path('outgroup_edit', {'id': outgroup.id}) }}">{{ outgroup.hash }}</a>{% if not loop.last %}<br>{% endif %}
 			{% endfor %}
 		</td>
 		<td>{% if outline.ispublic %}<span class="glyphicon glyphicon-ok"></span>{% endif %}</td>
+		<td>{% if outline.shownumber %}<span class="glyphicon glyphicon-ok"></span>{% endif %}</td>
 		<td>
 			<a href="{{ path('outline_edit', {'id': outline.id}) }}">edit</a>
 			<a href="{{ path('outline_rates', {'id': outline.id}) }}">rates</a>
-			<a href="{{ path('outline_companies', {'id': outline.id}) }}">companies</a>
 		</td>
 	</tr>
 	{% endfor %}

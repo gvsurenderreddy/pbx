@@ -1,0 +1,29 @@
+{% extends '::base.html.twig' %}
+{% block body %}
+
+<a href="{{ path('outline_new') }}">New</a>
+
+<table class="table table-condensed table-hover">
+	<tr>
+		<th rowspan="2">Name</th>
+		<th colspan="2">Rates</th>
+		<th rowspan="2">Code</th>
+		<th rowspan="2">Prefix</th>
+		<th rowspan="2">Precision</th>
+	</tr>
+	<tr>
+		<th>IN</th>
+		<th>OUT</th>
+	</tr>
+	{% for rate in rates %}
+	<tr>
+		<td>{{ rate.name }}</td>
+		<td>{{ rate.ratein }}</td>
+		<td>{{ rate.rate }}</td>
+		<td>{{ rate.code }}</td>
+		<td>{{ rate.prefix }}</td>
+		<td>{{ rate.precision }}</td>
+	</tr>
+	{% endfor %}
+</table>
+{% endblock %}

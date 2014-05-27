@@ -92,6 +92,13 @@ class OutLine
      */
     private $isPublic = false;
 	
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="show_number", type="boolean")
+     */
+    private $showNumber = false;
+	
 	/**
      * @ORM\OneToOne(targetEntity="\VoIP\PBX\RealTimeBundle\Entity\SipPeer", inversedBy="subscription")
 	 * @ORM\JoinColumn(name="ast_sippeer_id", referencedColumnName="id", onDelete="CASCADE")
@@ -99,14 +106,10 @@ class OutLine
     private $astPeer;
 	
 	/**
-	 * @ORM\ManyToMany(targetEntity="\VoIP\Company\StructureBundle\Entity\Company", inversedBy="outLines")
-	 * @ORM\JoinTable(name="structure_outline_has_company",
-	 *      joinColumns={@ORM\JoinColumn(name="outline_id", referencedColumnName="id")},
-	 *      inverseJoinColumns={@ORM\JoinColumn(name="company_id", referencedColumnName="id")}
-	 *      )
-	 * @ORM\OrderBy({"name" = "ASC"})
+	 * @ORM\ManyToMany(targetEntity="\VoIP\Company\SubscriptionsBundle\Entity\OutGroup", mappedBy="outLines")
+	 * @ORM\OrderBy({"hash" = "ASC"})
 	 */
-	protected $companies;
+	protected $outGroups;
 	
 	/**
 	 * @ORM\ManyToMany(targetEntity="\VoIP\PBX\BillBundle\Entity\Rate", inversedBy="outLines")
@@ -141,29 +144,6 @@ class OutLine
 	{
 		$this->hash = hexdec(hash('crc32b', uniqid('', true)));
 	}
-	
-	public function getDepth()
-	{
-		if (!($firstItem = $this->getDialPlanFirstItem())) return 0;
-		else return $firstItem->getDepth() + 1;
-	}
-	
-	public function getStatus()
-	{
-		// TEST HAS_PHONE
-		if (count($this->getEmployees()) == 0) {
-			return 'warning';
-		}
-		// TEST CONNECTED_EMPLOYEE
-		$test = false;
-		foreach ($this->getEmployees() as $employee) {
-			if ($employee->getIsActive() && count($employee->getPhones()) > 0) {
-				$test = true;
-			}
-		}
-		if (!$test) return 'warning';
-		return 'default';
-	}
 
     /**
      * Get id
@@ -174,12 +154,20 @@ class OutLine
     {
         return $this->id;
     }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->outGroups = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->rates = new \Doctrine\Common\Collections\ArrayCollection();
+    }
 
     /**
      * Set createdAt
      *
      * @param \DateTime $createdAt
-     * @return Subscription
+     * @return OutLine
      */
     public function setCreatedAt($createdAt)
     {
@@ -202,7 +190,7 @@ class OutLine
      * Set updatedAt
      *
      * @param \DateTime $updatedAt
-     * @return Subscription
+     * @return OutLine
      */
     public function setUpdatedAt($updatedAt)
     {
@@ -225,7 +213,7 @@ class OutLine
      * Set name
      *
      * @param string $name
-     * @return Subscription
+     * @return OutLine
      */
     public function setName($name)
     {
@@ -248,7 +236,7 @@ class OutLine
      * Set type
      *
      * @param string $type
-     * @return Subscription
+     * @return OutLine
      */
     public function setType($type)
     {
@@ -271,7 +259,7 @@ class OutLine
      * Set username
      *
      * @param string $username
-     * @return Subscription
+     * @return OutLine
      */
     public function setUsername($username)
     {
@@ -294,7 +282,7 @@ class OutLine
      * Set secret
      *
      * @param string $secret
-     * @return Subscription
+     * @return OutLine
      */
     public function setSecret($secret)
     {
@@ -314,56 +302,10 @@ class OutLine
     }
 
     /**
-     * Set number
-     *
-     * @param string $number
-     * @return Subscription
-     */
-    public function setNumber($number)
-    {
-        $this->number = $number;
-
-        return $this;
-    }
-
-    /**
-     * Get number
-     *
-     * @return string 
-     */
-    public function getNumber()
-    {
-        return $this->number;
-    }
-
-    /**
-     * Set receiveCall
-     *
-     * @param boolean $receiveCall
-     * @return Subscription
-     */
-    public function setReceiveCall($receiveCall)
-    {
-        $this->receiveCall = $receiveCall;
-
-        return $this;
-    }
-
-    /**
-     * Get receiveCall
-     *
-     * @return boolean 
-     */
-    public function getReceiveCall()
-    {
-        return $this->receiveCall;
-    }
-
-    /**
      * Set host
      *
      * @param string $host
-     * @return Subscription
+     * @return OutLine
      */
     public function setHost($host)
     {
@@ -380,83 +322,6 @@ class OutLine
     public function getHost()
     {
         return $this->host;
-    }
-
-    /**
-     * Set company
-     *
-     * @param \VoIP\Company\StructureBundle\Entity\Company $company
-     * @return Subscription
-     */
-    public function setCompany(\VoIP\Company\StructureBundle\Entity\Company $company = null)
-    {
-        $this->company = $company;
-
-        return $this;
-    }
-
-    /**
-     * Get company
-     *
-     * @return \VoIP\Company\StructureBundle\Entity\Company 
-     */
-    public function getCompany()
-    {
-        return $this->company;
-    }
-
-
-    /**
-     * Set astPeer
-     *
-     * @param \VoIP\PBX\RealTimeBundle\Entity\SipPeer $astPeer
-     * @return Subscription
-     */
-    public function setAstPeer(\VoIP\PBX\RealTimeBundle\Entity\SipPeer $astPeer = null)
-    {
-        $this->astPeer = $astPeer;
-
-        return $this;
-    }
-
-    /**
-     * Get astPeer
-     *
-     * @return \VoIP\PBX\RealTimeBundle\Entity\SipPeer 
-     */
-    public function getAstPeer()
-    {
-        return $this->astPeer;
-    }
-
-    /**
-     * Set prefix
-     *
-     * @param integer $prefix
-     * @return Subscription
-     */
-    public function setPrefix($prefix)
-    {
-        $this->prefix = $prefix;
-
-        return $this;
-    }
-
-    /**
-     * Get prefix
-     *
-     * @return integer 
-     */
-    public function getPrefix()
-    {
-        return $this->prefix;
-    }
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        
     }
 
     /**
@@ -529,36 +394,82 @@ class OutLine
     }
 
     /**
-     * Add companies
+     * Set showNumber
      *
-     * @param \VoIP\Company\StructureBundle\Entity\Company $companies
+     * @param boolean $showNumber
      * @return OutLine
      */
-    public function addCompany(\VoIP\Company\StructureBundle\Entity\Company $companies)
+    public function setShowNumber($showNumber)
     {
-        $this->companies[] = $companies;
+        $this->showNumber = $showNumber;
 
         return $this;
     }
 
     /**
-     * Remove companies
+     * Get showNumber
      *
-     * @param \VoIP\Company\StructureBundle\Entity\Company $companies
+     * @return boolean 
      */
-    public function removeCompany(\VoIP\Company\StructureBundle\Entity\Company $companies)
+    public function getShowNumber()
     {
-        $this->companies->removeElement($companies);
+        return $this->showNumber;
     }
 
     /**
-     * Get companies
+     * Set astPeer
+     *
+     * @param \VoIP\PBX\RealTimeBundle\Entity\SipPeer $astPeer
+     * @return OutLine
+     */
+    public function setAstPeer(\VoIP\PBX\RealTimeBundle\Entity\SipPeer $astPeer = null)
+    {
+        $this->astPeer = $astPeer;
+
+        return $this;
+    }
+
+    /**
+     * Get astPeer
+     *
+     * @return \VoIP\PBX\RealTimeBundle\Entity\SipPeer 
+     */
+    public function getAstPeer()
+    {
+        return $this->astPeer;
+    }
+
+    /**
+     * Add outGroups
+     *
+     * @param \VoIP\Company\SubscriptionsBundle\Entity\OutGroup $outGroups
+     * @return OutLine
+     */
+    public function addOutGroup(\VoIP\Company\SubscriptionsBundle\Entity\OutGroup $outGroups)
+    {
+        $this->outGroups[] = $outGroups;
+
+        return $this;
+    }
+
+    /**
+     * Remove outGroups
+     *
+     * @param \VoIP\Company\SubscriptionsBundle\Entity\OutGroup $outGroups
+     */
+    public function removeOutGroup(\VoIP\Company\SubscriptionsBundle\Entity\OutGroup $outGroups)
+    {
+        $this->outGroups->removeElement($outGroups);
+    }
+
+    /**
+     * Get outGroups
      *
      * @return \Doctrine\Common\Collections\Collection 
      */
-    public function getCompanies()
+    public function getOutGroups()
     {
-        return $this->companies;
+        return $this->outGroups;
     }
 
     /**

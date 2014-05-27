@@ -113,12 +113,12 @@ class Company
 	 * @ORM\OrderBy({"start" = "ASC"})
      */
     private $reports;
-	
+
 	/**
-	 * @ORM\ManyToMany(targetEntity="\VoIP\Company\SubscriptionsBundle\Entity\OutLine", mappedBy="companies")
-	 * @ORM\OrderBy({"hash" = "ASC"})
-	 */
-	protected $outLines;
+     * @ORM\ManyToOne(targetEntity="\VoIP\Company\SubscriptionsBundle\Entity\OutGroup", inversedBy="companies")
+	 * @ORM\JoinColumn(name="outgroup_id", referencedColumnName="id", onDelete="CASCADE")
+     */
+    private $outGroup;
 	
 	/**
 	 * @ORM\PrePersist
@@ -610,35 +610,25 @@ class Company
     }
 
     /**
-     * Add outLines
+     * Set outGroup
      *
-     * @param \VoIP\Company\SubscriptionsBundle\Entity\OutLine $outLines
+     * @param \VoIP\Company\SubscriptionsBundle\Entity\OutGroup $outGroup
      * @return Company
      */
-    public function addOutLine(\VoIP\Company\SubscriptionsBundle\Entity\OutLine $outLines)
+    public function setOutGroup(\VoIP\Company\SubscriptionsBundle\Entity\OutGroup $outGroup = null)
     {
-        $this->outLines[] = $outLines;
+        $this->outGroup = $outGroup;
 
         return $this;
     }
 
     /**
-     * Remove outLines
+     * Get outGroup
      *
-     * @param \VoIP\Company\SubscriptionsBundle\Entity\OutLine $outLines
+     * @return \VoIP\Company\SubscriptionsBundle\Entity\OutGroup 
      */
-    public function removeOutLine(\VoIP\Company\SubscriptionsBundle\Entity\OutLine $outLines)
+    public function getOutGroup()
     {
-        $this->outLines->removeElement($outLines);
-    }
-
-    /**
-     * Get outLines
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getOutLines()
-    {
-        return $this->outLines;
+        return $this->outGroup;
     }
 }

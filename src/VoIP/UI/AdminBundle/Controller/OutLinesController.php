@@ -68,11 +68,17 @@ class OutLinesController extends Controller
 		$username = $request->get('username');
 		$secret = $request->get('secret');
 		$host = $request->get('host');
+		$isPublic = $request->get('ispublic');
+		$showNumber = $request->get('shownumber');
+		$name = $request->get('name');
 		
+		$outLine->setName($name);
 		$outLine->setType($type);
 		$outLine->setUsername($username);
 		$outLine->setSecret($secret);
 		$outLine->setHost($host);
+		$outLine->setIsPublic($isPublic);
+		$outLine->setShowNumber($showNumber);
 		
 		$em->persist($outLine);
 		$em->flush();
@@ -104,12 +110,16 @@ class OutLinesController extends Controller
 		$secret = $request->get('secret');
 		$host = $request->get('host');
 		$isPublic = $request->get('ispublic');
+		$showNumber = $request->get('shownumber');
+		$name = $request->get('name');
 		
+		$outLine->setName($name);
 		$outLine->setType($type);
 		$outLine->setUsername($username);
 		$outLine->setSecret($secret);
 		$outLine->setHost($host);
 		$outLine->setIsPublic($isPublic);
+		$outLine->setShowNumber($showNumber);
 		
 		$em->persist($outLine);
 		$em->flush();
@@ -162,49 +172,6 @@ class OutLinesController extends Controller
 			if (!$rate) throw $this->createNotFoundException('Unable to find Rate entity.');
 			$outLine->addRate($rate);
 			$rate->addOutLine($outLine);
-		}
-		$em->flush();
-        return $this->redirect($this->generateUrl('outlines'));
-    }
-    /**
-     * @Route("/companies/{id}", name="outline_companies")
-     * @Template()
-     * @Method("GET")
-     */
-    public function companiesAction($id)
-    {
-		$em = $this->getDoctrine()->getManager();
-		$outLine = $em->getRepository('VoIPCompanySubscriptionsBundle:OutLine')->find($id);
-		if (!$outLine) throw $this->createNotFoundException('Unable to find OutLine entity.');
-		$companies = $em->getRepository('VoIPCompanyStructureBundle:Company')->findBy(array(), array(
-			'name' => 'ASC'
-		));
-        return array(
-        	'outline' => $outLine,
-			'companies' => $companies
-        );
-    }
-    /**
-     * @Route("/companies/{id}")
-     * @Template()
-     * @Method("POST")
-     */
-    public function companiesPostAction($id)
-    {
-		$em = $this->getDoctrine()->getManager();
-		$outLine = $em->getRepository('VoIPCompanySubscriptionsBundle:OutLine')->find($id);
-		if (!$outLine) throw $this->createNotFoundException('Unable to find OutLine entity.');
-		$request = $this->getRequest();
-		$rateIds = $request->get('companies');
-		foreach ($rateIds as $id) {
-			$company = $em->getRepository('VoIPCompanyStructureBundle:Company')->find($id);
-			if (!$company) throw $this->createNotFoundException('Unable to find Company entity.');
-			foreach ($company->getOutLines() as $o) {
-				$company->removeOutLine($o);
-				$o->removeCompany($company);
-			}
-			$outLine->addCompany($company);
-			$company->addOutLine($outLine);
 		}
 		$em->flush();
         return $this->redirect($this->generateUrl('outlines'));

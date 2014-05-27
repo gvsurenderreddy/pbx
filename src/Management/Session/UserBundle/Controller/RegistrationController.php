@@ -69,12 +69,14 @@ class RegistrationController extends Controller
 				$company = new Company();
 				$company->setName($user->getCompanyName());
 				$user->setCompany($company);
-				$outLine = $em->getRepository('VoIPCompanySubscriptionsBundle:OutLine')->findOneBy(array(
+				$outGroup = $em->getRepository('VoIPCompanySubscriptionsBundle:OutGroup')->findOneBy(array(
 					'isPublic' => true
+				), array(
+					'lastAttribution' => 'ASC'
 				));
 				if ($outLine) {
-					$outLine->addCompany($company);
-					$company->addOutLine($outLine);
+					$outGroup->setLastAttribution(new \DateTime());
+					$company->setOutGroup($outGroup);
 				}
 				$em->persist($company);
 				$em->flush();

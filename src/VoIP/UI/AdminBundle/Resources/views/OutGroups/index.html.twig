@@ -1,0 +1,41 @@
+{% extends '::base.html.twig' %}
+{% block body %}
+
+<a href="{{ path('outgroup_new') }}">New</a>
+<table class="table table-condensed table-hover">
+	<tr>
+		<th>Created at</th>
+		<th>Last attribution</th>
+		<th>Hash</th>
+		<th colspan="2">Companies</th>
+		<th colspan="2">Lines</th>
+		<th>Public</th>
+		<th>Actions</th>
+	</tr>
+	{% for outgroup in outgroups %}
+	<tr>
+		<td>{{ outgroup.createdat|date('d/m/Y') }}</td>
+		<td>{{ outgroup.lastattribution ? outgroup.lastattribution|date('d/m/Y H:i:s') }}</td>
+		<td>{{ outgroup.hash }}</td>
+		<td>{{ outgroup.companies|length }}</td>
+		<td>
+			{% for company in outgroup.companies %}
+			{{ company.name }}{% if not loop.last %}<br>{% endif %}
+			{% endfor %}
+		</td>
+		<td>{{ outgroup.outlines|length }}</td>
+		<td>
+			{% for outline in outgroup.outlines %}
+			<a href="{{ path('outline_edit', {'id': outline.id}) }}">{{ outline.hash }}</a>{% if not loop.last %}<br>{% endif %}
+			{% endfor %}
+		</td>
+		<td>{% if outgroup.ispublic %}<span class="glyphicon glyphicon-ok"></span>{% endif %}</td>
+		<td>
+			<a href="{{ path('outgroup_edit', {'id': outgroup.id}) }}">edit</a>
+			<a href="{{ path('outgroup_companies', {'id': outgroup.id}) }}">companies</a>
+			<a href="{{ path('outgroup_outlines', {'id': outgroup.id}) }}">lines</a>
+		</td>
+	</tr>
+	{% endfor %}
+</table>
+{% endblock %}
