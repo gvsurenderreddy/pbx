@@ -1,9 +1,7 @@
 {% extends "VoIPUIBasicBundle::layout.html.twig" %}
-{% block title %}48 | New employee{% endblock %}
+{% block title %}48 | New Buddy{% endblock %}
+{% block headertitle %}New Buddy{% endblock headertitle %}
 {% block container %}
-<div class="page-header">
-	<h1 class="title-back"><a class="glyphicon glyphicon-chevron-left pull-left" href="{{ path('ui_company') }}"></a> New Buddy</h1>
-</div>
 <div class="row form-new">
 	<div class="col-md-offset-3 col-md-6">
 		<form class="form-horizontal" role="form" action="{{ path('ui_company_newemployee', {'hash': company.hash}) }}" method="POST">

@@ -1,9 +1,7 @@
 {% extends "VoIPUIBasicBundle::layout.html.twig" %}
-{% block title %}48 | Renew your subscription{% endblock %}
+{% block title %}48 | Renew Line {{ subscription.name }}{% endblock %}
+{% block headertitle %}Renew Line {{ subscription.name }}{% endblock headertitle %}
 {% block container %}
-<div class="page-header">
-	<h1 class="title-back"><a class="glyphicon glyphicon-chevron-left pull-left" href="{{ path('ui_company') }}"></a> Renewal of your subscription "{{ subscription.name }}"</h1>
-</div>
 <a href="{{ path('ui_subscription_credit', {'hash': subscription.hash, 'period': 'month'}) }}">Add a month</a>
 <a href="{{ path('ui_subscription_credit', {'hash': subscription.hash, 'period': 'year'}) }}">Add a year</a>
 {% endblock container %}

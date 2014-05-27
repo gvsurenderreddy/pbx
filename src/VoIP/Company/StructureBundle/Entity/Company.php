@@ -98,7 +98,7 @@ class Company
 	
 	/**
      * @ORM\OneToMany(targetEntity="\VoIP\Company\SubscriptionsBundle\Entity\Subscription", mappedBy="company")
-	 * @ORM\OrderBy({"prefix" = "ASC"})
+	 * @ORM\OrderBy({"number" = "ASC"})
      */
     private $subscriptions;
 	

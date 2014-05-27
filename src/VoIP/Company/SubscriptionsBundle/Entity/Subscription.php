@@ -72,20 +72,6 @@ class Subscription
     private $number;
 
     /**
-     * @var boolean
-     *
-     * @ORM\Column(name="receive_call", type="boolean")
-     */
-    private $receiveCall;
-
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="prefix", type="integer")
-     */
-    private $prefix;
-
-    /**
      * @var string
      *
      * @ORM\Column(name="host", type="string", length=255)
@@ -123,13 +109,6 @@ class Subscription
     /**
      * @var float
      *
-     * @ORM\Column(name="rate_in", type="float")
-     */
-    private $rateIn = 0.01;
-	
-    /**
-     * @var float
-     *
      * @ORM\Column(name="rate_out", type="float")
      */
     private $rateOut = 0.01;
@@ -140,13 +119,6 @@ class Subscription
      * @ORM\Column(name="rate_out_operator", type="float")
      */
     private $rateOutOperator = 0.00;
-	
-    /**
-     * @var float
-     *
-     * @ORM\Column(name="rate_in_factor", type="float")
-     */
-    private $rateInFactor = 0;
 	
     /**
      * @var string
@@ -268,6 +240,14 @@ class Subscription
     public function getId()
     {
         return $this->id;
+    }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->countries = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->employees = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -432,29 +412,6 @@ class Subscription
     }
 
     /**
-     * Set receiveCall
-     *
-     * @param boolean $receiveCall
-     * @return Subscription
-     */
-    public function setReceiveCall($receiveCall)
-    {
-        $this->receiveCall = $receiveCall;
-
-        return $this;
-    }
-
-    /**
-     * Get receiveCall
-     *
-     * @return boolean 
-     */
-    public function getReceiveCall()
-    {
-        return $this->receiveCall;
-    }
-
-    /**
      * Set host
      *
      * @param string $host
@@ -475,219 +432,6 @@ class Subscription
     public function getHost()
     {
         return $this->host;
-    }
-
-    /**
-     * Set company
-     *
-     * @param \VoIP\Company\StructureBundle\Entity\Company $company
-     * @return Subscription
-     */
-    public function setCompany(\VoIP\Company\StructureBundle\Entity\Company $company = null)
-    {
-        $this->company = $company;
-
-        return $this;
-    }
-
-    /**
-     * Get company
-     *
-     * @return \VoIP\Company\StructureBundle\Entity\Company 
-     */
-    public function getCompany()
-    {
-        return $this->company;
-    }
-
-
-    /**
-     * Set astPeer
-     *
-     * @param \VoIP\PBX\RealTimeBundle\Entity\SipPeer $astPeer
-     * @return Subscription
-     */
-    public function setAstPeer(\VoIP\PBX\RealTimeBundle\Entity\SipPeer $astPeer = null)
-    {
-        $this->astPeer = $astPeer;
-
-        return $this;
-    }
-
-    /**
-     * Get astPeer
-     *
-     * @return \VoIP\PBX\RealTimeBundle\Entity\SipPeer 
-     */
-    public function getAstPeer()
-    {
-        return $this->astPeer;
-    }
-
-    /**
-     * Set prefix
-     *
-     * @param integer $prefix
-     * @return Subscription
-     */
-    public function setPrefix($prefix)
-    {
-        $this->prefix = $prefix;
-
-        return $this;
-    }
-
-    /**
-     * Get prefix
-     *
-     * @return integer 
-     */
-    public function getPrefix()
-    {
-        return $this->prefix;
-    }
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->countries = new \Doctrine\Common\Collections\ArrayCollection();
-    }
-
-    /**
-     * Add countries
-     *
-     * @param \VoIP\Company\SubscriptionsBundle\Entity\Country $countries
-     * @return Subscription
-     */
-    public function addCountry(\VoIP\Company\SubscriptionsBundle\Entity\Country $countries)
-    {
-        $this->countries[] = $countries;
-
-        return $this;
-    }
-
-    /**
-     * Remove countries
-     *
-     * @param \VoIP\Company\SubscriptionsBundle\Entity\Country $countries
-     */
-    public function removeCountry(\VoIP\Company\SubscriptionsBundle\Entity\Country $countries)
-    {
-        $this->countries->removeElement($countries);
-    }
-
-    /**
-     * Get countries
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getCountries()
-    {
-        return $this->countries;
-    }
-
-
-    /**
-     * Set dialPlanFirstItem
-     *
-     * @param \VoIP\Company\SubscriptionsBundle\Entity\DialPlanItem $dialPlanFirstItem
-     * @return Subscription
-     */
-    public function setDialPlanFirstItem(\VoIP\Company\SubscriptionsBundle\Entity\DialPlanItem $dialPlanFirstItem = null)
-    {
-        $this->dialPlanFirstItem = $dialPlanFirstItem;
-
-        return $this;
-    }
-
-    /**
-     * Get dialPlanFirstItem
-     *
-     * @return \VoIP\Company\SubscriptionsBundle\Entity\DialPlanItem 
-     */
-    public function getDialPlanFirstItem()
-    {
-        return $this->dialPlanFirstItem;
-    }
-
-    /**
-     * Set registrationCode
-     *
-     * @param string $registrationCode
-     * @return Subscription
-     */
-    public function setRegistrationCode($registrationCode)
-    {
-        $this->registrationCode = $registrationCode;
-
-        return $this;
-    }
-
-    /**
-     * Get registrationCode
-     *
-     * @return string 
-     */
-    public function getRegistrationCode()
-    {
-        return $this->registrationCode;
-    }
-
-    /**
-     * Add employees
-     *
-     * @param \VoIP\Company\StructureBundle\Entity\Employee $employees
-     * @return Subscription
-     */
-    public function addEmployee(\VoIP\Company\StructureBundle\Entity\Employee $employees)
-    {
-        $this->employees[] = $employees;
-
-        return $this;
-    }
-
-    /**
-     * Remove employees
-     *
-     * @param \VoIP\Company\StructureBundle\Entity\Employee $employees
-     */
-    public function removeEmployee(\VoIP\Company\StructureBundle\Entity\Employee $employees)
-    {
-        $this->employees->removeElement($employees);
-    }
-
-    /**
-     * Get employees
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getEmployees()
-    {
-        return $this->employees;
-    }
-
-    /**
-     * Set voicemail
-     *
-     * @param \VoIP\Company\VoicemailBundle\Entity\Voicemail $voicemail
-     * @return Subscription
-     */
-    public function setVoicemail(\VoIP\Company\VoicemailBundle\Entity\Voicemail $voicemail = null)
-    {
-        $this->voicemail = $voicemail;
-
-        return $this;
-    }
-
-    /**
-     * Get voicemail
-     *
-     * @return \VoIP\Company\VoicemailBundle\Entity\Voicemail 
-     */
-    public function getVoicemail()
-    {
-        return $this->voicemail;
     }
 
     /**
@@ -760,26 +504,26 @@ class Subscription
     }
 
     /**
-     * Set rateIn
+     * Set isEditable
      *
-     * @param float $rateIn
+     * @param boolean $isEditable
      * @return Subscription
      */
-    public function setRateIn($rateIn)
+    public function setIsEditable($isEditable)
     {
-        $this->rateIn = $rateIn;
+        $this->isEditable = $isEditable;
 
         return $this;
     }
 
     /**
-     * Get rateIn
+     * Get isEditable
      *
-     * @return float 
+     * @return boolean 
      */
-    public function getRateIn()
+    public function getIsEditable()
     {
-        return $this->rateIn;
+        return $this->isEditable;
     }
 
     /**
@@ -829,48 +573,183 @@ class Subscription
     }
 
     /**
-     * Set rateInFactor
+     * Set registrationCode
      *
-     * @param float $rateInFactor
+     * @param string $registrationCode
      * @return Subscription
      */
-    public function setRateInFactor($rateInFactor)
+    public function setRegistrationCode($registrationCode)
     {
-        $this->rateInFactor = $rateInFactor;
+        $this->registrationCode = $registrationCode;
 
         return $this;
     }
 
     /**
-     * Get rateInFactor
+     * Get registrationCode
      *
-     * @return float 
+     * @return string 
      */
-    public function getRateInFactor()
+    public function getRegistrationCode()
     {
-        return $this->rateInFactor;
+        return $this->registrationCode;
     }
 
     /**
-     * Set isEditable
+     * Set company
      *
-     * @param boolean $isEditable
+     * @param \VoIP\Company\StructureBundle\Entity\Company $company
      * @return Subscription
      */
-    public function setIsEditable($isEditable)
+    public function setCompany(\VoIP\Company\StructureBundle\Entity\Company $company = null)
     {
-        $this->isEditable = $isEditable;
+        $this->company = $company;
 
         return $this;
     }
 
     /**
-     * Get isEditable
+     * Get company
      *
-     * @return boolean 
+     * @return \VoIP\Company\StructureBundle\Entity\Company 
      */
-    public function getIsEditable()
+    public function getCompany()
     {
-        return $this->isEditable;
+        return $this->company;
+    }
+
+    /**
+     * Set astPeer
+     *
+     * @param \VoIP\PBX\RealTimeBundle\Entity\SipPeer $astPeer
+     * @return Subscription
+     */
+    public function setAstPeer(\VoIP\PBX\RealTimeBundle\Entity\SipPeer $astPeer = null)
+    {
+        $this->astPeer = $astPeer;
+
+        return $this;
+    }
+
+    /**
+     * Get astPeer
+     *
+     * @return \VoIP\PBX\RealTimeBundle\Entity\SipPeer 
+     */
+    public function getAstPeer()
+    {
+        return $this->astPeer;
+    }
+
+    /**
+     * Set voicemail
+     *
+     * @param \VoIP\Company\VoicemailBundle\Entity\Voicemail $voicemail
+     * @return Subscription
+     */
+    public function setVoicemail(\VoIP\Company\VoicemailBundle\Entity\Voicemail $voicemail = null)
+    {
+        $this->voicemail = $voicemail;
+
+        return $this;
+    }
+
+    /**
+     * Get voicemail
+     *
+     * @return \VoIP\Company\VoicemailBundle\Entity\Voicemail 
+     */
+    public function getVoicemail()
+    {
+        return $this->voicemail;
+    }
+
+    /**
+     * Add countries
+     *
+     * @param \VoIP\Company\SubscriptionsBundle\Entity\Country $countries
+     * @return Subscription
+     */
+    public function addCountry(\VoIP\Company\SubscriptionsBundle\Entity\Country $countries)
+    {
+        $this->countries[] = $countries;
+
+        return $this;
+    }
+
+    /**
+     * Remove countries
+     *
+     * @param \VoIP\Company\SubscriptionsBundle\Entity\Country $countries
+     */
+    public function removeCountry(\VoIP\Company\SubscriptionsBundle\Entity\Country $countries)
+    {
+        $this->countries->removeElement($countries);
+    }
+
+    /**
+     * Get countries
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getCountries()
+    {
+        return $this->countries;
+    }
+
+    /**
+     * Add employees
+     *
+     * @param \VoIP\Company\StructureBundle\Entity\Employee $employees
+     * @return Subscription
+     */
+    public function addEmployee(\VoIP\Company\StructureBundle\Entity\Employee $employees)
+    {
+        $this->employees[] = $employees;
+
+        return $this;
+    }
+
+    /**
+     * Remove employees
+     *
+     * @param \VoIP\Company\StructureBundle\Entity\Employee $employees
+     */
+    public function removeEmployee(\VoIP\Company\StructureBundle\Entity\Employee $employees)
+    {
+        $this->employees->removeElement($employees);
+    }
+
+    /**
+     * Get employees
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getEmployees()
+    {
+        return $this->employees;
+    }
+
+    /**
+     * Set dialPlanFirstItem
+     *
+     * @param \VoIP\Company\SubscriptionsBundle\Entity\DialPlanItem $dialPlanFirstItem
+     * @return Subscription
+     */
+    public function setDialPlanFirstItem(\VoIP\Company\SubscriptionsBundle\Entity\DialPlanItem $dialPlanFirstItem = null)
+    {
+        $this->dialPlanFirstItem = $dialPlanFirstItem;
+
+        return $this;
+    }
+
+    /**
+     * Get dialPlanFirstItem
+     *
+     * @return \VoIP\Company\SubscriptionsBundle\Entity\DialPlanItem 
+     */
+    public function getDialPlanFirstItem()
+    {
+        return $this->dialPlanFirstItem;
     }
 }

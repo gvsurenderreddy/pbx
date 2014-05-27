@@ -38,20 +38,9 @@ class SubscriptionController extends Controller
         if (!$subscription) throw $this->createNotFoundException('Unable to find Subsciption entity.');
 		$company = $subscription->getCompany();
 		if ($user->getCompany()->getId() != $company->getId()) throw $this->createNotFoundException('No authorization.');
-		$usedPrefixs = array();
-		foreach ($company->getSubscriptions() as $s) {
-			$usedPrefixs[] = $s->getPrefix();
-		}
-		$prefixs = array();
-		for ($i=1; $i < 10; $i++) { 
-			if (!in_array($i, $usedPrefixs) || $i == $subscription->getPrefix()) {
-				$prefixs[] = $i;
-			}
-		}
         return array(
 			'subscription' => $subscription,
 			'company' => $company,
-			'prefixs' => $prefixs,
 		);
     }
 	
@@ -79,10 +68,8 @@ class SubscriptionController extends Controller
 		$username = $request->get('username');
 		$secret = $request->get('secret');
 		$host = 'siptrunk.hoiio.com';
-		$prefix = $request->get('prefix');
-		$receive = true;
 		
-		$subscription->setName($name);
+		$subscription->setName($number);
 		$subscription->setType($type);
 		$subscription->setNumber($number);
 		$subscription->setUsername($username);
@@ -95,13 +82,7 @@ class SubscriptionController extends Controller
 				$host = 'dynamic';
 				break;
 		}
-		$subscription->setPrefix($prefix);
-		$subscription->setReceiveCall($receive);
 		$subscription->setCompany($company);
-		
-		foreach ($subscription->getEmployees() as $employee) {
-			$subscription->removeEmployee($employee);
-		}
 		
 		$em->flush();
 		
@@ -115,10 +96,11 @@ class SubscriptionController extends Controller
 		$voicemail->setAstVoicemail($astVoicemail);
 		$em->flush();
 		
-		$sync = new Sync();
+		/*
 		$astPeer = $sync->subscriptionToPeer($subscription);
 		$subscription->setAstPeer($astPeer);
 		$em->flush();
+		*/
 		
 		return $this->redirect($this->generateUrl('ui_company', array(
 			'hash' => $company->getHash()

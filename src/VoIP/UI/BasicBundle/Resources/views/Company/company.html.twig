@@ -58,7 +58,7 @@
 		{% for subscription in company.subscriptions if subscription.isactive %}
 		<div class="switchboard-card switchboard-subscription {% for employee in subscription.employees %} emp{{ employee.hash }} {% for phone in employee.phones %} pho{{ phone.hash }}{% endfor %}{% endfor %}" data-hash="{{ subscription.hash }}">
 			<div>
-				{{ subscription.prefix }} • {{ subscription.number }}
+				{{ subscription.number }}
 			</div>
 			<div>
 				{% for employee in subscription.employees %}

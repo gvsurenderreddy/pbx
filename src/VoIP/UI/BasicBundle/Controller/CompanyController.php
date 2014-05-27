@@ -287,33 +287,8 @@ class CompanyController extends Controller
 		$user = $this->getUser();
 		$company = $user->getCompany();
 		
-		$em = $this->getDoctrine()->getManager();
-		
-		$countries = $em->getRepository('VoIPCompanySubscriptionsBundle:Country')->findBy(array(), array(
-			'name' => 'ASC'
-		));
-		$employees = $em->getRepository('VoIPCompanyStructureBundle:Employee')->findBy(array(
-			'company' => $company,
-			'isActive' => true
-		), array(
-			'name' => 'ASC'
-		));
-		$subscriptions = $company->getSubscriptions();
-		$usedPrefixs = array();
-		foreach ($subscriptions as $subscription) {
-			$usedPrefixs[] = $subscription->getPrefix();
-		}
-		$prefixs = array();
-		for ($i=1; $i < 10; $i++) { 
-			if (!in_array($i, $usedPrefixs)) {
-				$prefixs[] = $i;
-			}
-		}
         return array(
 			'company' => $company,
-			'countries' => $countries,
-			'employees' => $employees,
-			'prefixs' => $prefixs,
 		);
     }
 	
@@ -355,8 +330,6 @@ class CompanyController extends Controller
 		$subscription->setUsername($username);
 		$subscription->setSecret($secret);
 		$subscription->setHost($host);
-		$subscription->setPrefix($prefix);
-		$subscription->setReceiveCall($receive);
 		$subscription->setCompany($company);
 		if ($employees) {
 			foreach ($employees as $employeeId) {
@@ -378,10 +351,12 @@ class CompanyController extends Controller
 		
 		$sync = new Sync();
 		
+		/*
 		$astPeer = $sync->subscriptionToPeer($subscription);
 		$em->persist($astPeer);
 		$subscription->setAstPeer($astPeer);
 		$em->flush();
+		*/
 		
 		$astVoicemail = $sync->voicemailToVoicemail($voicemail);
 		$em->persist($astVoicemail);

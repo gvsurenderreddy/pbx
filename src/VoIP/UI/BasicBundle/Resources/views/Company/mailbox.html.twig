@@ -2,7 +2,7 @@
 {% block title %}48 | {{ company.name }}{% endblock %}
 {% block headertitle %}Mailbox{% endblock headertitle %}
 {% block container %}
-<ul class="nav nav-pills">
+<ul class="nav nav-tabs">
 	<li class="{{ not archive ? 'active' }}"><a href="{{ path('ui_company_mailbox', {'archive': 0}) }}">Inbox</a></li>
 	<li class="{{ archive ? 'active' }}"><a href="{{ path('ui_company_mailbox', {'archive': 1}) }}">Archive</a></li>
 </ul>

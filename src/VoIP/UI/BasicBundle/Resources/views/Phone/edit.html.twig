@@ -1,9 +1,7 @@
 {% extends "VoIPUIBasicBundle::layout.html.twig" %}
-{% block title %}48 | Edit dial plan{% endblock %}
+{% block title %}48 | Edit Phone {{ phone.name }}{% endblock %}
+{% block headertitle %}Edit Phone {{ phone.name }}{% endblock headertitle %}
 {% block container %}
-<div class="page-header">
-	<h1 class="title-back"><a class="glyphicon glyphicon-chevron-left pull-left" href="{{ path('ui_company') }}"></a> Edit your phone</h1>
-</div>
 <div class="row">
 	<div class="col-md-offset-3 col-md-6">
 		<form class="form-horizontal" role="form" action="{{ path('ui_phone_edit', {'hash': phone.hash}) }}" method="POST">
@@ -24,8 +22,7 @@
 			</div>
 			<div class="form-group">
 				<div class="col-sm-offset-2 col-sm-10">
-					<button type="submit" class="btn btn-primary btn-block">Submit</button>
-					<a href="{{ path('ui_company', {'hash': phone.company.hash}) }}" class="btn btn-default btn-block">Cancel</a>
+					<button type="submit" class="btn btn-danger btn-block btn-lg">Save</button>
 				</div>
 			</div>
 		</form>

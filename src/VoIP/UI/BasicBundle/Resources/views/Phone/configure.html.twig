@@ -1,9 +1,7 @@
 {% extends "VoIPUIBasicBundle::layout.html.twig" %}
 {% block title %}48 | Configure your phone{% endblock %}
+{% block headertitle %}Configure your phone {{ phone.name }}{% endblock headertitle %}
 {% block container %}
-<div class="page-header">
-	<h1>Configuration of your phone "{{ phone.name }}"</h1>
-</div>
 <div class="row" ng-app="fortyeight" ng-controller="ConfigurationCtrl">
 	<div class="col-md-offset-3 col-md-6">
 		<form class="form-horizontal" role="form" name="form" action="{{ path('ui_phone_setup', {'hash': phone.hash}) }}" target="_blank">
