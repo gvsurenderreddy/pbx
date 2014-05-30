@@ -225,9 +225,11 @@ class SubscriptionController extends Controller
 		switch ($period) {
 			case 'month':
 				$date->modify('+1 month');
+				$company->setCredit($company->getCredit() - 10);
 				break;
 			case 'year':
 				$date->modify('+1 year');
+				$company->setCredit($company->getCredit() - 100);
 				break;
 		}
 		
@@ -260,103 +262,6 @@ class SubscriptionController extends Controller
 		
 		$em->remove($subscription);
 		$em->flush();
-		
-		return $this->redirect($this->generateUrl('ui_company', array(
-			'hash' => $company->getHash()
-		)));
-    }
-	
-    /**
-     * @Route("/{hash}/dialplan/add/{previousItemHash}", name="ui_subscription_adddialplan", defaults={"previousItemHash"=NULL})
-     * @Template()
-	 * @Method("GET")
-	 * @Security("has_role('ROLE_USER')")
-     */
-    public function addDialplanItemAction($hash, $previousItemHash)
-    {
-		$user = $this->getUser();
-		$em = $this->getDoctrine()->getManager();
-		$subscription = $em->getRepository('VoIPCompanySubscriptionsBundle:Subscription')->findOneBy(array(
-			'hash' => $hash
-		));
-        if (!$subscription) throw $this->createNotFoundException('Unable to find Subscription entity.');
-		$company = $subscription->getCompany();
-		if ($user->getCompany()->getId() != $company->getId()) throw $this->createNotFoundException('No authorization.');
-	
-		if ($previousItemHash) {
-			$previousItem = $em->getRepository('VoIPCompanySubscriptionsBundle:DialPlanItem')->findOneBy(array(
-				'hash' => $previousItemHash
-			));
-	        if (!$previousItem) throw $this->createNotFoundException('Unable to find DialPlanItem entity.');
-		} else $previousItem = null;
-		
-		return array(
-			'subscription' => $subscription,
-			'previousitem' => $previousItem,
-			'company' => $company,
-			'phones' => $company->getPhones(),
-		);
-    }
-	
-    /**
-     * @Route("/{hash}/dialplan/add/{previousItemHash}", defaults={"previousItemHash"=NULL})
-	 * @Method("POST")
-	 * @Security("has_role('ROLE_USER')")
-     */
-    public function createDialplanItemAction($hash, $previousItemHash)
-    {
-		$user = $this->getUser();
-		$em = $this->getDoctrine()->getManager();
-		$subscription = $em->getRepository('VoIPCompanySubscriptionsBundle:Subscription')->findOneBy(array(
-			'hash' => $hash
-		));
-        if (!$subscription) throw $this->createNotFoundException('Unable to find Subscription entity.');
-		$company = $subscription->getCompany();
-		if ($user->getCompany()->getId() != $company->getId()) throw $this->createNotFoundException('No authorization.');
-		
-		if ($previousItemHash) {
-			$previousItem = $em->getRepository('VoIPCompanySubscriptionsBundle:DialPlanItem')->findOneBy(array(
-				'hash' => $previousItemHash
-			));
-	        if (!$previousItem) throw $this->createNotFoundException('Unable to find DialPlanItem entity.');
-		} else $previousItem = null;
-	
-		$request = $this->getRequest();
-		
-		$type = $request->get('type');
-		
-		$phoneId = $request->get('phone');
-		$phone = $em->getRepository('VoIPCompanyStructureBundle:Phone')->findOneBy(array(
-			'hash' => $phoneId
-		));
-		
-		$item = new DialPlanItem();
-		$item->setType($type);
-		$item->setPhone($phone);
-		
-		$em->persist($item);
-		$em->flush();
-		
-		if ($previousItem) {
-			$tmp = $previousItem->getNextItem();
-			$previousItem->setNextItem(null);
-			$em->flush();
-			$item->setNextItem($tmp);
-			$em->flush();
-			$previousItem->setNextItem($item);
-			$em->flush();
-		}
-		else {
-			$tmp = $subscription->getDialPlanFirstItem();
-			$subscription->setDialPlanFirstItem(null);
-			$em->flush();
-			$item->setNextItem($tmp);
-			$em->flush();
-			$subscription->setDialPlanFirstItem($item);
-			$em->flush();
-		}
-		
-		$this->sync($subscription);
 		
 		return $this->redirect($this->generateUrl('ui_company', array(
 			'hash' => $company->getHash()

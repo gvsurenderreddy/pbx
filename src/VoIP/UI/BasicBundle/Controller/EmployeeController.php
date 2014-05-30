@@ -153,9 +153,11 @@ class EmployeeController extends Controller
 		switch ($period) {
 			case 'month':
 				$date->modify('+1 month');
+				$company->setCredit($company->getCredit() - 10);
 				break;
 			case 'year':
 				$date->modify('+1 year');
+				$company->setCredit($company->getCredit() - 100);
 				break;
 		}
 		

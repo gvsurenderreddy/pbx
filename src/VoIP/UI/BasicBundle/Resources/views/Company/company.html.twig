@@ -3,14 +3,17 @@
 {% block headertitle %}Switchboard{% endblock headertitle %}
 {% block container %}
 <div class="row">
-	<div class="col-sm-12 col-md-6 col-lg-4">
-		<h2 class="title-switchboard">Your buddies</h2>
+	<div class="col-sm-12 col-md-12 col-lg-4">
+		<h2 class="title-switchboard"><a href="{{ path('ui_company_newemployee') }}"><span class="glyphicon glyphicon-plus"></span></a> Buddies</h2>
 		{% for employee in company.employees if employee.isactive %}
 		<div class="switchboard-card switchboard-buddy
 		{% for subscription in employee.subscriptions %} sub{{ subscription.hash }}{% endfor %}
 		{% for phone in employee.phones %} pho{{ phone.hash }}{% endfor %}" data-hash="{{ employee.hash }}">
 			<div class="buddy-name">
-				{{ employee.extension }} • {{ employee.name }}
+				{{ employee.name }}
+			</div>
+			<div class="buddy-name">
+				{{ employee.extension }}
 			</div>
 			<div class="buddy-thumb">
 				<img src="{{ employee.thumburl ? employee.thumburl : 'https://s3-ap-southeast-1.amazonaws.com/fortyeight/buddies/images/7ee05724_64.png' }}" class="img-circle">
@@ -26,8 +29,8 @@
 		</div>
 		{% endfor %}
 	</div>
-	<div class="col-sm-12 col-md-6 col-lg-4">
-		<h2 class="title-switchboard">Your phones</h2>
+	<div class="col-sm-12 col-md-12 col-lg-4">
+		<h2 class="title-switchboard"><a href="{{ path('ui_company_newphone') }}"><span class="glyphicon glyphicon-plus"></span></a> Phones</h2>
 		{% for phone in company.phones if phone.isactive %}
 		<div class="switchboard-card switchboard-phone
 		{% for employee in phone.employees %}emp{{ employee.hash }} {% for subscription in employee.subscriptions %} sub{{ subscription.hash }} {% endfor %}{% endfor %}" data-hash="{{ phone.hash }}">
@@ -53,8 +56,8 @@
 		</div>
 		{% endfor %}
 	</div>
-	<div class="col-sm-12 col-md-6 col-lg-4">
-		<h2 class="title-switchboard">Your lines</h2>
+	<div class="col-sm-12 col-md-12 col-lg-4">
+		<h2 class="title-switchboard"><a href="{{ path('ui_company_newsubscription') }}"><span class="glyphicon glyphicon-plus"></span></a> Lines</h2>
 		{% for subscription in company.subscriptions if subscription.isactive %}
 		<div class="switchboard-card switchboard-subscription {% for employee in subscription.employees %} emp{{ employee.hash }} {% for phone in employee.phones %} pho{{ phone.hash }}{% endfor %}{% endfor %}" data-hash="{{ subscription.hash }}">
 			<div>

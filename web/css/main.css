@@ -186,6 +186,9 @@ a.glyphicon:hover {
 .title-switchboard {
 	margin: 20px 0 30px 0;
 }
+.title-switchboard .glyphicon {
+	font-size: 20px;
+}
 .nav-logout {
 	font-size: 14px;
 }
