@@ -43,8 +43,11 @@ body {
 	background-color: #00547f;
 }
 .btn-danger {
-	background-color: #C5231E;
+	background-color: #FF8F00;
 	border-color: #9E2723;
+}
+.btn-danger:hover {
+	background-color: #FFAD00;
 }
 a {
 	color: #121212;
