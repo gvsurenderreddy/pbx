@@ -62,13 +62,15 @@ doctrine:
 
 # Swiftmailer Configuration
 swiftmailer:
-    transport: "%mailer_transport%"
-    host:      "%mailer_host%"
-    username:  "%mailer_user%"
-    password:  "%mailer_password%"
-    port:       465
-    encryption: tls
+    transport: %mailer_transport%
+    host:      %mailer_host%
+    username:  %mailer_user%
+    password:  %mailer_password%
     spool:     { type: memory }
+    auth_mode:  login
+    encryption: tls
+    port:  587
+    logging:  "%kernel.debug%"
 
 # AWS Bundle
 cybernox_amazon_web_services:
