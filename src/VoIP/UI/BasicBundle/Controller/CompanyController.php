@@ -310,6 +310,10 @@ class CompanyController extends Controller
 		$number = $request->get('number');
 		$username = $request->get('username');
 		$secret = $request->get('secret');
+		$file = $request->files->get('announcement');
+		$record = $request->get('record');
+		
+		
 		switch ($type) {
 			case 'hoiio':
 				$host = 'siptrunk.hoiio.com';
@@ -339,6 +343,25 @@ class CompanyController extends Controller
 				$employee->addSubscription($subscription);
 			}
 		}
+		
+		if ($file) {
+	        $fileName = hash('crc32b', uniqid(mt_rand(), true)).'.mp3';
+			$filePath = __DIR__.'/../../../../../web/tmp/';
+	        $file->move($filePath, $fileName);
+			$s3 = $this->container->get('aws_s3');
+			$s3->create_object('fortyeight', 'ging/'.$fileName, array(
+				'fileUpload' => $filePath.$fileName,
+				'acl' => \AmazonS3::ACL_PUBLIC,
+				'headers' => array(
+					'Cache-Control'    => 'max-age=8000000',
+					'Content-Language' => 'en-US',
+					'Expires'          => 'Tue, 01 Jan 2030 03:54:42 GMT',
+				)
+			));
+			$subscription->setVmFile($fileName);
+		}
+		
+		$subscription->setRecordVM($record);
 		
 		$em->persist($subscription);
 		$em->flush();
