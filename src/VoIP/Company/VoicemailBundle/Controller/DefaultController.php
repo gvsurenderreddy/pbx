@@ -61,7 +61,7 @@ class DefaultController extends Controller
 		        ->setTo($user->getEmail())
 		        ->setBody(
 		            $this->renderView(
-		                'VoIPCompanyVoicemailBundle:Default:email.txt.twig',
+		                'VoIPCompanyVoicemailBundle:Default:mail.html.twig',
 		                array('name' => $user->getUsername())
 		            )
 		        )
