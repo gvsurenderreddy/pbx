@@ -53,8 +53,35 @@ class DefaultController extends Controller
 		$em->persist($message);
 		$em->flush();
 		
+		$company = $voicemail->getSubscription()->getCompany();
+		foreach ($company->getUsers() as $user) {
+		    $message = \Swift_Message::newInstance()
+		        ->setSubject('Someone tried to reach you. (S)he let you a voicemail.')
+		        ->setFrom('bot@fortyeight.co')
+		        ->setTo($user->getEmail())
+		        ->setBody(
+		            $this->renderView(
+		                'VoIPCompanyVoicemailBundle:Default:email.txt.twig',
+		                array('name' => $user->getUsername())
+		            )
+		        )
+				->setContentType("text/html")
+		    ;
+		    $this->get('mailer')->send($message); 
+		}
+		
 		$response = new JsonResponse();
 		$response->setData(array());
         return $response;
+    }
+    /**
+     * @Route("/vm/mail")
+     * @Template()
+     */
+    public function mailAction()
+    {
+		return array(
+			'name' => 'Adrien'
+		);
     }
 }
