@@ -107,6 +107,20 @@ class Subscription
     private $isEditable = true;
 	
     /**
+     * @var string
+     *
+     * @ORM\Column(name="vm_file", length=128, nullable=true)
+     */
+    private $vmFile;
+	
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="record_vm", type="boolean")
+     */
+    private $recordVM = true;
+	
+    /**
      * @var float
      *
      * @ORM\Column(name="rate_out", type="float")
@@ -751,5 +765,51 @@ class Subscription
     public function getDialPlanFirstItem()
     {
         return $this->dialPlanFirstItem;
+    }
+
+    /**
+     * Set vmFile
+     *
+     * @param string $vmFile
+     * @return Subscription
+     */
+    public function setVmFile($vmFile)
+    {
+        $this->vmFile = $vmFile;
+
+        return $this;
+    }
+
+    /**
+     * Get vmFile
+     *
+     * @return string 
+     */
+    public function getVmFile()
+    {
+        return $this->vmFile;
+    }
+
+    /**
+     * Set recordVM
+     *
+     * @param boolean $recordVM
+     * @return Subscription
+     */
+    public function setRecordVM($recordVM)
+    {
+        $this->recordVM = $recordVM;
+
+        return $this;
+    }
+
+    /**
+     * Get recordVM
+     *
+     * @return boolean 
+     */
+    public function getRecordVM()
+    {
+        return $this->recordVM;
     }
 }
