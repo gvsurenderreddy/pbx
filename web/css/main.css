@@ -41,18 +41,17 @@ body {
 	background-color: #00547f;
 }
 .btn-danger {
-	background-color: #B6FF8C;
-	border-color: #0CE87E;
-	color: #555;
+	background-color: #d9534f;
+	border-color: #9E2824;
+	color: #fff;
 }
 .btn-danger:focus,
 .btn-danger:active,
 .btn-danger.active,
 .btn-danger:hover,
 .open .dropdown-toggle.btn-danger {
-	background-color: #0CE87E;
-	border-color: #0CE87E;
-	color: #555;
+	background-color: #C03A35;
+	border-color: #9E2824;
 }
 a {
 	color: #121212;
