@@ -147,21 +147,29 @@ class EmployeeController extends Controller
 		if (!$employee->getActivatedUntil() || $now > $employee->getActivatedUntil()) {
 			$date = $now;
 		} else {
-			$date = $employee->getActivatedUntil();
+			$date = new \DateTime($employee->getActivatedUntil()->format('Y-m-d'));
 		}
 		
 		switch ($period) {
 			case 'month':
 				$date->modify('+1 month');
-				$company->setCredit($company->getCredit() - 10);
+				$price = 10;
 				break;
 			case 'year':
 				$date->modify('+1 year');
-				$company->setCredit($company->getCredit() - 100);
+				$price = 100;
 				break;
 		}
 		
+		if ($company->getCredit() < ($price + 5)) {
+			return $this->redirect($this->generateUrl('ui_company_topup', array(
+				'url' => $this->generateUrl('ui_employee_renew', array(
+					'hash' => $hash
+				))
+			)));
+		}
 		
+		$company->setCredit($company->getCredit() - $price);
 		$employee->setActivatedUntil($date);
 		
 		$em->flush();

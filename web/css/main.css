@@ -122,13 +122,28 @@ a {
 	background-color: #ccc;
 }
 .switchboard-card {
+	background-color: #fff;
+	margin: 5px 5px 20px 5px;
+	box-shadow: 0 2px 6px rgba(0,0,0,0.3),0 4px 15px -5px rgba(0,0,0,0.0);
+	position: relative;
+	cursor: pointer;
+}
+.switchboard-card .contentbox {
 	position: relative;
 	min-height: 60px;
-	background-color: #fff;
 	padding: 5px 20px 5px 15px;
-	margin: 5px;
-	box-shadow: 0 2px 6px rgba(0,0,0,0.3),0 4px 15px -5px rgba(0,0,0,0.0);
-	margin-bottom: 20px;
+}
+.switchboard-buddy .contentbox {
+	padding-left: 50px;
+}
+.switchboard-card .toolbox {
+	position: relative;
+	width: 100%;
+	display: none;
+	padding: 0 9px 0 0;
+}
+.switchboard-card.config .toolbox {
+	display: block;
 }
 .switchboard-card:hover,
 .switchboard-card.active {
@@ -155,10 +170,8 @@ a {
 	bottom: 5px;
 	right: 20px;
 }
-.switchboard-card .tools {
-	position: absolute;
-	top: 5px;
-	right: 20px;
+.switchboard-card .btn {
+	border-radius: 0;
 }
 .subsection-icon {
 	font-size: 50px;
@@ -167,9 +180,6 @@ a {
 	position: absolute;
 	top: -10px;
 	left: -10px;
-}
-.switchboard-buddy {
-	padding-left: 50px;
 }
 .add-sth {
 	margin-bottom: 20px;
@@ -201,4 +211,27 @@ a.glyphicon:hover {
 }
 .nav-logout {
 	font-size: 14px;
+}
+.btn-trash {
+	background-color: #d9534f;
+	color: #fff;
+}
+.btn-trash:hover {
+	background-color: #d84d4d;
+	color: #fff;
+}
+.status-danger,
+.status-danger:hover {
+	background-color: #d9534f;
+	color: #fff;
+}
+.status-danger .btn-renew {
+	background-color: #d9534f;
+	border-color: #b1302c;
+	color: #fff;
+}
+.status-danger .btn-trash {
+	background-color: #8f1916;
+	border-color: #8f1916;
+	color: #fff;
 }

@@ -245,6 +245,39 @@ class Subscription
 		if (!$test) return 'warning';
 		return 'default';
 	}
+	
+	public function isValidDetails()
+	{
+		if (!$date = $this->getActivatedUntil()) return 0;
+		$now = new \DateTime();
+		if ($date < $now) return 1;
+		$now->modify('+5 days');
+		if ($date < $now) return 2;
+		return 3;
+	}
+	public function isValid()
+	{
+		$now = new \DateTime();
+		$date = $this->getActivatedUntil();
+		return ($date && $date > $now);
+	}
+	public function isValidStatus()
+	{
+		switch ($this->isValidDetails()) {
+			case 0:
+				return 'status-danger';
+				break;
+			case 1:
+				return 'status-danger';
+				break;
+			case 2:
+				return 'status-warning';
+				break;
+			default:
+				return 'status-success';
+				break;
+		}
+	}
 
     /**
      * Get id

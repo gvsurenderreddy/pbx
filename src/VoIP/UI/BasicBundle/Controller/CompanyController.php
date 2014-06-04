@@ -27,6 +27,9 @@ class CompanyController extends Controller
     {
 		$user = $this->getUser();
 		$company = $user->getCompany();
+		if (!$user->getConditionsAccepted()) {
+			return $this->redirect($this->generateUrl('ui_company_conditions'));
+		}
 		/*
 		if (count($company->getPhones()) == 0) {
 			return $this->redirect($this->generateUrl('ui_company_newphone'))	;
@@ -516,6 +519,68 @@ class CompanyController extends Controller
 			'cdrs' => $cdrs,
 			'page' => $page
 		);
+    }
+	
+    /**
+     * @Route("/top-up", name="ui_company_topup")
+     * @Template()
+	 * @Method("GET")
+	 * @Security("has_role('ROLE_USER')")
+     */
+    public function topupAction()
+    {
+		return array();
+    }
+    /**
+     * @Route("/top-up")
+     * @Template()
+	 * @Method("POST")
+	 * @Security("has_role('ROLE_USER')")
+     */
+    public function topupPostAction()
+    {
+		$request = $this->getRequest();
+		$credit = (int) $request->get('credit');
+		$url = $request->get('url');
+		$em = $this->getDoctrine()->getManager();
+		$company = $this->getUser()->getCompany();
+		$company->setCredit($company->getCredit() + $credit);
+		$em->flush();
+		if ($url) {
+			return $this->redirect($url);
+		} else {
+			return $this->redirect($this->generateUrl('ui_company'));
+		}
+		
+    }
+	
+    /**
+     * @Route("/conditions", name="ui_company_conditions")
+     * @Template()
+	 * @Method("GET")
+	 * @Security("has_role('ROLE_USER')")
+     */
+    public function conditionsAction()
+    {
+		$user = $this->getUser();
+		if ($user->getConditionsAccepted()) {
+			return $this->redirect($this->generateUrl('ui_company'));
+		}
+		return array();
+    }
+	
+    /**
+     * @Route("/conditions")
+	 * @Method("POST")
+	 * @Security("has_role('ROLE_USER')")
+     */
+    public function conditionsPostAction()
+    {
+		$em = $this->getDoctrine()->getManager();
+		$user = $this->getUser();
+		$user->setConditionsAccepted(true);
+		$em->flush();
+		return $this->redirect($this->generateUrl('ui_company'));
     }
 	
     

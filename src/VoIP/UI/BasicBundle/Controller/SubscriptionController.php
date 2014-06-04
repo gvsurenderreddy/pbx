@@ -239,21 +239,29 @@ class SubscriptionController extends Controller
 		if (!$subscription->getActivatedUntil() || $now > $subscription->getActivatedUntil()) {
 			$date = $now;
 		} else {
-			$date = $subscription->getActivatedUntil();
+			$date = new \DateTime($subscription->getActivatedUntil()->format('Y-m-d'));
 		}
 		
 		switch ($period) {
 			case 'month':
 				$date->modify('+1 month');
-				$company->setCredit($company->getCredit() - 10);
+				$price = 10;
 				break;
 			case 'year':
 				$date->modify('+1 year');
-				$company->setCredit($company->getCredit() - 100);
+				$price = 100;
 				break;
 		}
 		
+		if ($company->getCredit() < ($price + 5)) {
+			return $this->redirect($this->generateUrl('ui_company_topup', array(
+				'url' => $this->generateUrl('ui_subscription_renew', array(
+					'hash' => $hash
+				))
+			)));
+		}
 		
+		$company->setCredit($company->getCredit() - $price);
 		$subscription->setActivatedUntil($date);
 		
 		$em->flush();

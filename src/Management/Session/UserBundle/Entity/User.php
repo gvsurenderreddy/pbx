@@ -23,6 +23,13 @@ class User extends BaseUser
      */
     protected $id;
 	
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="conditions_accepted", type="boolean")
+     */
+    protected $conditionsAccepted = false;
+	
 	/**
 	 * @ORM\ManyToMany(targetEntity="\VoIP\Company\StructureBundle\Entity\Company", mappedBy="users")
 	 * @ORM\OrderBy({"name" = "ASC"})
@@ -142,5 +149,28 @@ class User extends BaseUser
     public function getCompany()
     {
         return $this->company;
+    }
+
+    /**
+     * Set conditionsAccepted
+     *
+     * @param boolean $conditionsAccepted
+     * @return User
+     */
+    public function setConditionsAccepted($conditionsAccepted)
+    {
+        $this->conditionsAccepted = $conditionsAccepted;
+
+        return $this;
+    }
+
+    /**
+     * Get conditionsAccepted
+     *
+     * @return boolean 
+     */
+    public function getConditionsAccepted()
+    {
+        return $this->conditionsAccepted;
     }
 }
