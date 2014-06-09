@@ -13,6 +13,7 @@ use VoIP\Company\StructureBundle\Entity\Employee;
 use VoIP\Company\SubscriptionsBundle\Entity\Subscription;
 use VoIP\Company\VoicemailBundle\Entity\Voicemail;
 use VoIP\PBX\RealTimeBundle\Extra\Sync;
+use VoIP\UI\BasicBundle\Extra\Image;
 
 class CompanyController extends Controller
 {
