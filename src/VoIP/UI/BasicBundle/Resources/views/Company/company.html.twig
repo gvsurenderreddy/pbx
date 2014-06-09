@@ -4,7 +4,7 @@
 {% block container %}
 <div class="row">
 	<div class="col-sm-12 col-md-12 col-lg-4">
-		<h2 class="title-switchboard"><a href="{{ path('ui_company_newemployee') }}"><span class="glyphicon glyphicon-plus"></span></a> Buddies</h2>
+		<h2 class="title-switchboard"><a href="{{ path('ui_company_newemployee') }}"><span class="glyphicon glyphicon-plus"></span></a> {{ employees|length }} {{ employees|length > 1 ? 'Buddies' : 'Buddy' }}</h2>
 		{% for employee in company.employees if employee.isactive %}
 		<div class="switchboard-card switchboard-buddy {{ employee.isValidStatus }}
 		{% for subscription in employee.subscriptions %} sub{{ subscription.hash }}{% endfor %}
