@@ -57,7 +57,7 @@
 					{{ phone.name }}
 				</div>
 				<div>
-					{% for employee in phone.employees %}
+					{% for employee in phone.employees if employee.isactive %}
 					<img src="{{ employee.thumburl ? employee.thumburl : 'https://s3-ap-southeast-1.amazonaws.com/fortyeight/buddies/images/7ee05724_64.png' }}" class="img-circle tooltip-flag" width="30" data-toggle="tooltip" data-placement="bottom" title="{{ employee.name }}">
 					{% endfor %}
 				</div>
@@ -102,7 +102,7 @@
 					{{ subscription.number }}
 				</div>
 				<div>
-					{% for employee in subscription.employees %}
+					{% for employee in subscription.employees if employee.isactive %}
 					<img src="{{ employee.thumburl ? employee.thumburl : 'https://s3-ap-southeast-1.amazonaws.com/fortyeight/buddies/images/7ee05724_64.png' }}" class="img-circle tooltip-flag" width="30" data-toggle="tooltip" data-placement="bottom" title="{{ employee.name }}">
 					{% endfor %}
 				</div>
