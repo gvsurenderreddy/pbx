@@ -151,6 +151,25 @@ class Company
 	{
 		$this->hash = hash('crc32b', uniqid('', true));
 	}
+	
+	public function getActiveEmployees()
+	{
+		return $this->getEmployees()->filter(function($e){
+			return $e->getIsActive();
+		});
+	}
+	public function getActivePhones()
+	{
+		return $this->getPhones()->filter(function($e){
+			return $e->getIsActive();
+		});
+	}
+	public function getActiveSubscriptions()
+	{
+		return $this->getSubscriptions()->filter(function($e){
+			return $e->getIsActive();
+		});
+	}
 
 
     /**
