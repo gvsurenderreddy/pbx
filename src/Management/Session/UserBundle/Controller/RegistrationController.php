@@ -62,7 +62,7 @@ class RegistrationController extends Controller
             if ($form->isValid()) {
                 $event = new FormEvent($form, $request);
                 $dispatcher->dispatch(FOSUserEvents::REGISTRATION_SUCCESS, $event);
-				$user->setUsername($user->getEmail());
+				$user->setUsername($user->getUsername());
 
                 $userManager->updateUser($user);
 
