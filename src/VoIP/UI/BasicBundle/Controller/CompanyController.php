@@ -271,6 +271,12 @@ class CompanyController extends Controller
 			$employee->setThumbUrl($image->getPaths('64'));
 		}
 		
+		$now = new \DateTime();
+		$now->modify('+1 month');
+		
+		$employee->setActivatedUntil($now);
+		$company->setCredit($company->getCredit() - 10);
+		
 		$em->persist($employee);
 
 		$em->flush();
