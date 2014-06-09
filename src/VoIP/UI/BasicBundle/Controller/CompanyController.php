@@ -117,7 +117,7 @@ class CompanyController extends Controller
 		
 		$em->flush();
 		
-		if ($phone->getType() == 'ciscophone') {
+		if (strpos($phone->getType(), 'cisco.') !== false) {
 			return $this->redirect($this->generateUrl('ui_phone_configure', array(
 				'hash' => $phone->getHash()
 			)));
@@ -193,7 +193,7 @@ class CompanyController extends Controller
 		
 		$em->flush();
 		
-		if ($phone->getType() == 'ciscophone') {
+		if (strpos($phone->getType(), 'cisco.') !== false) {
 			return $this->redirect($this->generateUrl('ui_phone_configure', array(
 				'hash' => $phone->getHash()
 			)));

@@ -81,7 +81,7 @@ class PhoneController extends Controller
 		
 		$em->flush();
 		
-		if (strpos($phone->getType(), 'cisco') !== false) {
+		if (strpos($phone->getType(), 'cisco.') !== false) {
 			return $this->redirect($this->generateUrl('ui_phone_configure', array(
 				'hash' => $phone->getHash()
 			)));
