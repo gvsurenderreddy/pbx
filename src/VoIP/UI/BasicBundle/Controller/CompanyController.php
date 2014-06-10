@@ -433,7 +433,7 @@ class CompanyController extends Controller
     }
 	
     /**
-     * @Route("/request-number-post", name="ui_company_newrequestnumber")
+     * @Route("/request-number")
      * @Template()
 	 * @Method("POST")
 	 * @Security("has_role('ROLE_USER')")
@@ -467,17 +467,6 @@ class CompanyController extends Controller
 	    $this->get('mailer')->send($message); 
 		
 		return $this->redirect($this->generateUrl('ui_company', array('m' => 'number')));
-    }
-    /**
-     * @Route("/mail", name="ui_company_newrequestnumber")
-     * @Template("VoIPUIBasicBundle:Mails:request.html.twig")
-     */
-    public function mailRequestNumberAction()
-    {
-    	return array(
-    		'name' => 'adrien',
-			'country' => 'singapore'
-    	);
     }
 	
     /**
