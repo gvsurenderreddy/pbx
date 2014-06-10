@@ -57,6 +57,8 @@
 			</div>
 			<div class="status status-{{ employee.status }} tooltip-flag" data-toggle="tooltip" data-placement="bottom" title="Connected"></div>
 		</div>
+		{% else %}
+		<div class="alert alert-warning alert-first"><a href="{{ path('ui_company_newemployee') }}" class="alert-link">Add your first buddy</a></div>
 		{% endfor %}
 	</div>
 	<div class="col-sm-12 col-md-12 col-lg-4">
@@ -106,6 +108,8 @@
 			</div>
 			<div class="status status-{{ phone.amistatusok ? 'default' : 'danger' }} tooltip-flag" data-toggle="tooltip" data-placement="bottom" title="status status-{{ phone.amistatusok ? 'Connected' : 'Not connected' }}"></div>
 		</div>
+		{% else %}
+		<div class="alert alert-warning alert-first"><a href="{{ path('ui_company_newphone') }}" class="alert-link">Add your first phone</a></div>
 		{% endfor %}
 	</div>
 	<div class="col-sm-12 col-md-12 col-lg-4">
@@ -161,7 +165,7 @@
 			<div class="status status-{{ subscription.status }} tooltip-flag" data-toggle="tooltip" data-placement="bottom" title="Connected"></div>
 		</div>
 		{% else %}
-		<div class="alert alert-warning"><a href="{{ path('ui_company_newsubscription') }}">Add your first number</a></div>
+		<div class="alert alert-warning alert-first"><a href="{{ path('ui_company_newsubscription') }}" class="alert-link">Add your first number</a></div>
 		{% endfor %}
 	</div>
 </div>
