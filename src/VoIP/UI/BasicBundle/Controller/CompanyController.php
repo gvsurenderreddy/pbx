@@ -266,13 +266,13 @@ class CompanyController extends Controller
 			}
 		}
 		*/
-		
+		/*
 		if ($imageFile = $request->files->get('image')) {
 			$image = new Image($imageFile, array('64', '256'), 'buddies/images', $this->container);
 			$employee->setImageUrl($image->getPaths('256'));
 			$employee->setThumbUrl($image->getPaths('64'));
 		}
-		
+		*/
 		$now = new \DateTime();
 		$now->modify('+1 month');
 		
@@ -375,9 +375,15 @@ class CompanyController extends Controller
 			$subscription->setVmFile($fileName);
 		}
 		
+		$now = new \DateTime();
+		$now->modify('+1 month');
+		$subscription->setAsctivatedUntil($now);
+		
 		$license = $this->container->getParameter('price_subscription');
 		if (!$license) $license = 10;
 		$subscription->setLicense($license);
+		
+		$company->setCredit($company->getCredit() - $license);
 		
 		$subscription->setRecordVM($record);
 		

@@ -90,6 +90,51 @@ class EmployeeController extends Controller
 			}
 		}
 		
+		$em->flush();
+		
+		return $this->redirect($this->generateUrl('ui_company'));
+    }
+	
+    /**
+     * @Route("/{hash}/image", name="ui_employee_image")
+     * @Template()
+	 * @Method("GET")
+	 * @Security("has_role('ROLE_USER')")
+     */
+    public function imageAction($hash)
+    {
+		$user = $this->getUser();
+		$em = $this->getDoctrine()->getManager();
+		$employee = $em->getRepository('VoIPCompanyStructureBundle:Employee')->findOneBy(array(
+			'hash' => $hash
+		));
+        if (!$employee) throw $this->createNotFoundException('Unable to find Employee entity.');
+		$company = $employee->getCompany();
+        return array(
+			'employee' => $employee,
+			'company' => $company,
+		);
+    }
+	
+    /**
+     * @Route("/{hash}/image")
+     * @Template()
+	 * @Method("POST")
+	 * @Security("has_role('ROLE_USER')")
+     */
+    public function updateImageAction($hash)
+    {
+		$user = $this->getUser();
+		$em = $this->getDoctrine()->getManager();
+		$employee = $em->getRepository('VoIPCompanyStructureBundle:Employee')->findOneBy(array(
+			'hash' => $hash
+		));
+        if (!$employee) throw $this->createNotFoundException('Unable to find Employee entity.');
+		$company = $employee->getCompany();
+		if ($user->getCompany()->getId() != $company->getId()) throw $this->createNotFoundException('No authorization.');
+		
+		$request = $this->getRequest();
+		
 		if ($imageFile = $request->files->get('image')) {
 			$image = new Image($imageFile, array('64', '256'), 'buddies/images', $this->container);
 			$employee->setImageUrl($image->getPaths('256'));
