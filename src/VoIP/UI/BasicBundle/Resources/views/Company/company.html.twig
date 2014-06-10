@@ -106,7 +106,7 @@
 					</div>
 				</div>
 			</div>
-			<div class="status status-{{ phone.amistatusok ? 'default' : 'danger' }} tooltip-flag" data-toggle="tooltip" data-placement="bottom" title="status status-{{ phone.amistatusok ? 'Connected' : 'Not connected' }}"></div>
+			<div class="status status-{{ phone.amistatusok ? 'default' : 'danger' }} tooltip-flag" data-toggle="tooltip" data-placement="bottom" title="{{ phone.amistatusok ? 'Connected' : 'Not connected' }}"></div>
 		</div>
 		{% else %}
 		<div class="alert alert-warning alert-first"><a href="{{ path('ui_company_newphone') }}" class="alert-link">Add your first phone</a></div>
