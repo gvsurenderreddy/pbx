@@ -468,6 +468,17 @@ class CompanyController extends Controller
 		
 		return $this->redirect($this->generateUrl('ui_company', array('m' => 'number')));
     }
+    /**
+     * @Route("/mail", name="ui_company_newrequestnumber")
+     * @Template("VoIPUIBasicBundle:Mails:request.html.twig")
+     */
+    public function mailRequestNumberAction()
+    {
+    	return array(
+    		'name' => 'adrien',
+			'country' => 'singapore'
+    	);
+    }
 	
     /**
      * @Route("/mailbox", name="ui_company_mailbox")
