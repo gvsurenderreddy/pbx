@@ -36,12 +36,9 @@ class CompanyController extends Controller
 			return $this->redirect($this->generateUrl('ui_company_newphone'))	;
 		}
 		*/
-		$referer = $this->get('request')->server->get('HTTP_REFERER');
-		$messages = array();
+		//$referer = $this->get('request')->server->get('HTTP_REFERER');
         return array(
 			'company' => $company,
-			'messages' => $messages,
-			'test' => $referer
 		);
     }
 	
@@ -436,7 +433,7 @@ class CompanyController extends Controller
     }
 	
     /**
-     * @Route("/request-number-post", name="ui_company_newrequestnumber_post")
+     * @Route("/request-number-post", name="ui_company_newrequestnumber")
      * @Template()
 	 * @Method("POST")
 	 * @Security("has_role('ROLE_USER')")

@@ -8,7 +8,6 @@
 	You request has been sent to our team. We will contact you in the next hours.
 </div>
 {% endif %}
-{{ test }}
 <div class="row">
 	<div class="col-sm-12 col-md-12 col-lg-4">
 		<h2 class="title-switchboard"><a href="{{ path('ui_company_newemployee') }}"><span class="glyphicon glyphicon-plus"></span></a> {{ company.activeemployees|length }} {{ company.activeemployees|length > 1 ? 'Buddies' : 'Buddy' }}</h2>
@@ -161,6 +160,8 @@
 			</div>
 			<div class="status status-{{ subscription.status }} tooltip-flag" data-toggle="tooltip" data-placement="bottom" title="Connected"></div>
 		</div>
+		{% else %}
+		<div class="alert alert-warning"><a href="{{ path('ui_company_newsubscription') }}">Add your first number</a></div>
 		{% endfor %}
 	</div>
 </div>
