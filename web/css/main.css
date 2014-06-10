@@ -271,3 +271,6 @@ a.glyphicon:hover {
 .ui-button {
 	display: none;
 }
+.alert-help {
+	text-align: center;
+}

@@ -37,7 +37,8 @@ class CompanyController extends Controller
 		}
 		*/
         return array(
-			'company' => $company
+			'company' => $company,
+			'test' => $this->get('request')->server->get('HTTP_REFERER')
 		);
     }
 	
@@ -447,7 +448,25 @@ class CompanyController extends Controller
 		$request = $this->getRequest();
 		$country = $request->get('country');
 		
-		return $this->redirect($this->generateUrl('ui_company'));
+	    $message = \Swift_Message::newInstance()
+	        ->setSubject('We received your request for a new number.')
+	        ->setFrom('bot@fortyeight.co')
+	        ->setTo($user->getEmail())
+			->setBcc('adrien@fortyeight.co')
+	        ->setBody(
+	            $this->renderView(
+	                'VoIPUIBasicBundle:Mails:request.html.twig',
+	                array(
+						'name' => $user->getUsername(),
+						'country' => $country
+					)
+	            )
+	        )
+			->setContentType("text/html")
+	    ;
+	    $this->get('mailer')->send($message); 
+		
+		return $this->redirect($this->generateUrl('ui_company', array('m' => 'number')));
     }
 	
     /**

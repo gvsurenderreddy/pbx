@@ -1,0 +1,23 @@
+parameters:
+    database_driver: pdo_mysql
+    database_host: realtime.cierzhgbmbaz.ap-southeast-1.rds.amazonaws.com
+    database_port: 3306
+    database_name: RT48
+    database_user: root
+    database_password: F8APLBSGFa3QohT3
+    mailer_transport: smtp
+    mailer_host: email-smtp.us-east-1.amazonaws.com
+    mailer_user: AKIAJERCTP3MWVB7HZ4A
+    mailer_password: AlEmF6NrJg0yWLhZGFnY0XYtTi349hYvS4CSUnTZFI9V
+    locale: en
+    secret: D8tT3vMgjGeUiXr8rV62JF3YSY2NdU
+    aws_key: AKIAIFKO5TB634QVL35Q
+    aws_secret: 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
+    aws_account_id: 3025-8561-3467
+    aws_canonical_id: ad7f7d19eaf27c93e802bd0ff143b8dbeb894dec0a671653bccbd1ee567e9675
+    aws_canonical_name: YOUR_CONONICAL_NAME
+    aws_mfa_serial: YOUR_MFA_SERIAL
+    aws_cloudfront_keypair: YOUR_CLOUDFRONT_KEYPAIR_ID
+    aws_cloudfront_pem: YOUR_CLOUDFRONT_PRIVATE_KEY_PEM
+    price_employee: 10
+    price_subscription: 15
