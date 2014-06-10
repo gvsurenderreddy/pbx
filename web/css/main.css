@@ -204,10 +204,6 @@ a {
 .switchboard-buddy .buddy-thumb:hover {
 	
 }
-.switchboard-buddy .buddy-thumb:hover img {
-	opacity: 0.5;
-	border-color: #000;
-}
 .add-sth {
 	margin-bottom: 20px;
 }

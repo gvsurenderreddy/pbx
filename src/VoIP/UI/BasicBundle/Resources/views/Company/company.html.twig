@@ -23,7 +23,7 @@
 					
 				</div>
 				<div class="buddy-thumb">
-					<a href="{{ path('ui_employee_image', {'hash': employee.hash}) }}"><img src="{{ employee.thumburl ? employee.thumburl : 'https://s3-ap-southeast-1.amazonaws.com/fortyeight/buddies/images/7ee05724_64.png' }}" class="img-circle" width="50"></a>
+					<img src="{{ employee.thumburl ? employee.thumburl : 'https://s3-ap-southeast-1.amazonaws.com/fortyeight/buddies/images/7ee05724_64.png' }}" class="img-circle" width="50">
 				</div>
 				<div class="license">
 					License: S${{ employee.license|number_format(2, '.', ',') }}
