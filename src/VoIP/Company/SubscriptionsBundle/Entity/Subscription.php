@@ -141,6 +141,13 @@ class Subscription
      */
     private $registrationCode;
 	
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="license", type="integer")
+     */
+    private $license = 15;
+	
 	/**
      * @ORM\ManyToOne(targetEntity="\VoIP\Company\StructureBundle\Entity\Company", inversedBy="subscriptions")
 	 * @ORM\JoinColumn(name="company_id", referencedColumnName="id", onDelete="CASCADE")
@@ -183,6 +190,18 @@ class Subscription
 	 * @ORM\JoinColumn(name="dialplan_firstitem_id", referencedColumnName="id", onDelete="CASCADE")
      */
     private $dialPlanFirstItem;
+	
+	public function getDayLeft()
+	{
+		$now = new \DateTime();
+		if (!$date = $this->getActivatedUntil()) return '0 day';
+		else {
+			$days = (int)(($date->getTimestamp() - $now->getTimestamp()) / (60 * 60 * 24));
+			if ($days <= 0) return '0 day';
+			if ($days == 1) return '1 day';
+			return $days . ' days';
+		}
+	}
 	
 	/**
 	 * @ORM\PrePersist
@@ -844,5 +863,28 @@ class Subscription
     public function getRecordVM()
     {
         return $this->recordVM;
+    }
+
+    /**
+     * Set license
+     *
+     * @param integer $license
+     * @return Subscription
+     */
+    public function setLicense($license)
+    {
+        $this->license = $license;
+
+        return $this;
+    }
+
+    /**
+     * Get license
+     *
+     * @return integer 
+     */
+    public function getLicense()
+    {
+        return $this->license;
     }
 }

@@ -150,14 +150,16 @@ class EmployeeController extends Controller
 			$date = new \DateTime($employee->getActivatedUntil()->format('Y-m-d'));
 		}
 		
+		$license = $employee->getLicense();
+		
 		switch ($period) {
 			case 'month':
 				$date->modify('+1 month');
-				$price = 10;
+				$price = $license;
 				break;
 			case 'year':
 				$date->modify('+1 year');
-				$price = 100;
+				$price = 12 * $license;
 				break;
 		}
 		

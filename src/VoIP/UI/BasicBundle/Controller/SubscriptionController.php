@@ -242,14 +242,16 @@ class SubscriptionController extends Controller
 			$date = new \DateTime($subscription->getActivatedUntil()->format('Y-m-d'));
 		}
 		
+		$license = $subscription->getLicense();
+		
 		switch ($period) {
 			case 'month':
 				$date->modify('+1 month');
-				$price = 10;
+				$price = $license;
 				break;
 			case 'year':
 				$date->modify('+1 year');
-				$price = 100;
+				$price = 12 * $license;
 				break;
 		}
 		

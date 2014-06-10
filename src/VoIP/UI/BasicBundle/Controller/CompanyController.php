@@ -245,7 +245,7 @@ class CompanyController extends Controller
 		$request = $this->getRequest();
 		$extension = $request->get('extension');
 		$name = $request->get('name');
-		$phones = $request->get('phones');
+		//$phones = $request->get('phones');
 		
 		if ($extension < 100 || $extension > 999) {
 			throw $this->createNotFoundException('Extension range');
@@ -256,6 +256,7 @@ class CompanyController extends Controller
 		$employee->setExtension($extension);
 		$employee->setCompany($company);
 		
+		/*
 		if ($phones) {
 			foreach ($phones as $phoneId) {
 				$phone = $em->getRepository('VoIPCompanyStructureBundle:Phone')->find($phoneId);
@@ -264,6 +265,7 @@ class CompanyController extends Controller
 				$phone->addEmployee($employee);
 			}
 		}
+		*/
 		
 		if ($imageFile = $request->files->get('image')) {
 			$image = new Image($imageFile, array('64', '256'), 'buddies/images', $this->container);
@@ -274,8 +276,12 @@ class CompanyController extends Controller
 		$now = new \DateTime();
 		$now->modify('+1 month');
 		
+		$license = $this->container->getParameter('price_employee');
+		if (!$license) $license = 10;
+		$employee->setLicense($license);
+		
 		$employee->setActivatedUntil($now);
-		$company->setCredit($company->getCredit() - 10);
+		$company->setCredit($company->getCredit() - $employee->getLicense());
 		
 		$em->persist($employee);
 
@@ -368,6 +374,10 @@ class CompanyController extends Controller
 			));
 			$subscription->setVmFile($fileName);
 		}
+		
+		$license = $this->container->getParameter('price_subscription');
+		if (!$license) $license = 10;
+		$subscription->setLicense($license);
 		
 		$subscription->setRecordVM($record);
 		

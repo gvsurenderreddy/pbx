@@ -128,6 +128,7 @@ a {
 	position: relative;
 	cursor: pointer;
 }
+
 .switchboard-card .contentbox {
 	position: relative;
 	min-height: 60px;
@@ -169,6 +170,14 @@ a {
 	position: absolute;
 	bottom: 5px;
 	right: 20px;
+	font-size: 11px;
+}
+.switchboard-card .license {
+	position: absolute;
+	top: 5px;
+	right: 18px;
+	font-size: 11px;
+	color: #555;
 }
 .switchboard-card .btn {
 	border-radius: 0;

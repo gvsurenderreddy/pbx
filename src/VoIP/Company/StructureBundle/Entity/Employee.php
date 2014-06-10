@@ -58,6 +58,13 @@ class Employee
     private $extension;
 	
     /**
+     * @var integer
+     *
+     * @ORM\Column(name="license", type="integer")
+     */
+    private $license = 10;
+	
+    /**
      * @var \DateTime
      *
      * @ORM\Column(name="is_active", type="boolean")
@@ -171,6 +178,18 @@ class Employee
 			default:
 				return 'status-success';
 				break;
+		}
+	}
+	
+	public function getDayLeft()
+	{
+		$now = new \DateTime();
+		if (!$date = $this->getActivatedUntil()) return '0 day';
+		else {
+			$days = (int)(($date->getTimestamp() - $now->getTimestamp()) / (60 * 60 * 24));
+			if ($days <= 0) return '0 day';
+			if ($days == 1) return '1 day';
+			return $days . ' days';
 		}
 	}
 
@@ -485,5 +504,28 @@ class Employee
     public function getActivatedUntil()
     {
         return $this->activatedUntil;
+    }
+
+    /**
+     * Set license
+     *
+     * @param integer $license
+     * @return Employee
+     */
+    public function setLicense($license)
+    {
+        $this->license = $license;
+
+        return $this;
+    }
+
+    /**
+     * Get license
+     *
+     * @return integer 
+     */
+    public function getLicense()
+    {
+        return $this->license;
     }
 }
