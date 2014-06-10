@@ -1,0 +1,23 @@
+{% extends "VoIPUIBasicBundle::layout.html.twig" %}
+{% block title %}48 | Edit Company{% endblock %}
+{% block headertitle %}Edit Company{% endblock headertitle %}
+{% block container %}
+<div class="row form-new">
+	<div class="col-md-offset-3 col-md-6">
+		<form class="form-horizontal" role="form" action="{{ path('ui_company_image') }}" method="POST" enctype="multipart/form-data">
+			<div class="form-group">
+				<label for="image" class="col-sm-2 control-label">Image</label>
+				<div class="col-sm-10">
+					<input type="file" class="form-control" id="image" name="image">
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="col-sm-offset-2 col-sm-10">
+					<button type="submit" class="btn btn-danger btn-block btn-lg">Save</button>
+				</div>
+			</div>
+		</form>
+	</div>
+</div>
+
+{% endblock container %}

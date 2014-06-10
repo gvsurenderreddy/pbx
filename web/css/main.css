@@ -90,11 +90,19 @@ a {
 }
 .company-part {
 	margin-top: 10px;
+	position: relative;
 }
 .company-part .company-name {
 	margin-top: 30px;
 	color: #fff;
 	font-size: 20px;
+}
+.company-part .company-image {
+	width: 100%;
+	margin-top: 30px;
+}
+.company-part .company-image img {
+	width: 60%;
 }
 .company-part .company-since {
 	margin-top: 20px;

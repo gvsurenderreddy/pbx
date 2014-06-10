@@ -623,6 +623,43 @@ class CompanyController extends Controller
 		return $this->redirect($this->generateUrl('ui_company'));
     }
 	
+    /**
+     * @Route("/image", name="ui_company_image")
+     * @Template()
+	 * @Method("GET")
+	 * @Security("has_role('ROLE_USER')")
+     */
+    public function imageAction()
+    {
+		$user = $this->getUser();
+		$company = $this->getUser()->getCompany();
+        return array(
+			'company' => $company,
+		);
+    }
+	
+    /**
+     * @Route("/image")
+     * @Template()
+	 * @Method("POST")
+	 * @Security("has_role('ROLE_USER')")
+     */
+    public function updateImageAction()
+    {
+		$user = $this->getUser();
+		$em = $this->getDoctrine()->getManager();
+		$company = $this->getUser()->getCompany();
+		$request = $this->getRequest();
+		
+		if ($imageFile = $request->files->get('image')) {
+			$image = new Image($imageFile, array('256'), 'companies/images', $this->container);
+			$company->setImageUrl($image->getPaths('256'));
+		}
+		
+		$em->flush();
+		
+		return $this->redirect($this->generateUrl('ui_company'));
+    }
     
 	
 	

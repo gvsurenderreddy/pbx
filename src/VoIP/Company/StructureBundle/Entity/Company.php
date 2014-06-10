@@ -78,6 +78,13 @@ class Company
      */
     private $hash;
 	
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="image_url", type="string", length=255, nullable=true)
+     */
+    private $imageUrl;
+	
 	/**
      * @ORM\OneToMany(targetEntity="\VoIP\Company\StructureBundle\Entity\Phone", mappedBy="company")
 	 * @ORM\OrderBy({"name" = "ASC"})
@@ -649,5 +656,28 @@ class Company
     public function getOutGroup()
     {
         return $this->outGroup;
+    }
+
+    /**
+     * Set imageUrl
+     *
+     * @param string $imageUrl
+     * @return Company
+     */
+    public function setImageUrl($imageUrl)
+    {
+        $this->imageUrl = $imageUrl;
+
+        return $this;
+    }
+
+    /**
+     * Get imageUrl
+     *
+     * @return string 
+     */
+    public function getImageUrl()
+    {
+        return $this->imageUrl;
     }
 }
