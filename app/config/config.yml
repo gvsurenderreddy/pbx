@@ -98,6 +98,6 @@ fos_user:
         form:
             type: management_user_registration
     from_email:
-        address: adrien@fortyeight.co
-        sender_name: Adrien@48
+        address: bot@fortyeight.co
+        sender_name: "fortyeight.co"
         
