@@ -35,6 +35,13 @@ class Employee
      * @ORM\Column(name="updated_at", type="datetime")
      */
     private $updatedAt;
+	
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="canceled_at", type="datetime", nullable=true)
+     */
+    private $canceledAt;
 
     /**
      * @var string
@@ -102,6 +109,12 @@ class Employee
 	 * @ORM\OrderBy({"name" = "ASC"})
 	 */
 	protected $subscriptions;
+	
+	/**
+     * @ORM\OneToMany(targetEntity="\VoIP\Company\StructureBundle\Entity\EmployeePayment", mappedBy="employee")
+	 * @ORM\OrderBy({"createdAt" = "ASC"})
+     */
+    private $payments;
 
 	
 	/**
@@ -191,6 +204,34 @@ class Employee
 			if ($days == 1) return '1 day';
 			return $days . ' days';
 		}
+	}
+	
+	public function getRealTime($start, $end)
+	{
+		if ($this->getCreatedAt() >= $end) return 0;
+		if ($this->getCanceledAt() && $this->getCanceledAt() < $start) return 0;
+		if ($this->getCreatedAt() > $start) $start = $this->getCreatedAt();
+		if ($this->getCanceledAt() && $this->getCanceledAt() < $end) $end = $this->getCanceledAt();
+		return  $start->getTimestamp() - $end->getTimestamp();
+	}
+	
+	public function getStringTime($start, $end)
+	{
+		$total = $start->getTimestamp() - $end->getTimestamp();
+		if ($total == 0) return null; 
+		$sec = $this->getRealTime($start, $end);
+		if ($sec < 3600) null;
+		if ($sec < 86400) return ((int)($sec / 3600)).' hours';
+		else return ((int)($sec / 86400)).' days';
+	}
+	public function getRateTime($start, $end)
+	{
+		$total = $start->getTimestamp() - $end->getTimestamp();
+		if ($total == 0) return 0; 
+		$sec = $this->getRealTime($start, $end);
+		if ($sec < 3600) 0;
+		if ($sec < 86400) return $sec/$total;
+		else return $sec/$total;
 	}
 
     /**
@@ -527,5 +568,61 @@ class Employee
     public function getLicense()
     {
         return $this->license;
+    }
+
+    /**
+     * Set canceledAt
+     *
+     * @param \DateTime $canceledAt
+     * @return Employee
+     */
+    public function setCanceledAt($canceledAt)
+    {
+        $this->canceledAt = $canceledAt;
+
+        return $this;
+    }
+
+    /**
+     * Get canceledAt
+     *
+     * @return \DateTime 
+     */
+    public function getCanceledAt()
+    {
+        return $this->canceledAt;
+    }
+
+    /**
+     * Add payments
+     *
+     * @param \VoIP\Company\StructureBundle\Entity\EmployeePayment $payments
+     * @return Employee
+     */
+    public function addPayment(\VoIP\Company\StructureBundle\Entity\EmployeePayment $payments)
+    {
+        $this->payments[] = $payments;
+
+        return $this;
+    }
+
+    /**
+     * Remove payments
+     *
+     * @param \VoIP\Company\StructureBundle\Entity\EmployeePayment $payments
+     */
+    public function removePayment(\VoIP\Company\StructureBundle\Entity\EmployeePayment $payments)
+    {
+        $this->payments->removeElement($payments);
+    }
+
+    /**
+     * Get payments
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getPayments()
+    {
+        return $this->payments;
     }
 }

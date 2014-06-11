@@ -288,9 +288,15 @@ class SubscriptionController extends Controller
 		$company = $subscription->getCompany();
 		if ($user->getCompany()->getId() != $company->getId()) throw $this->createNotFoundException('No authorization.');
 		
-		if ($subscription->getAstPeer()) $em->remove($subscription->getAstPeer());
+
+		$subscription->setCanceledAt(new \DateTime());
+		$subscription->setIsActive(false);
 		
-		$em->remove($subscription);
+		if ($peer = $subscription->getAstPeer()) {
+			$subscription->setAstPeer(null);
+			$em->remove($peer);
+		}
+		
 		$em->flush();
 		
 		return $this->redirect($this->generateUrl('ui_company'));

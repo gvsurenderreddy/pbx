@@ -274,15 +274,13 @@ class CompanyController extends Controller
 			$employee->setThumbUrl($image->getPaths('64'));
 		}
 		*/
-		$now = new \DateTime();
-		$now->modify('+1 month');
+		$date = new \DateTime('2015-01-01');
 		
 		$license = $this->container->getParameter('price_employee');
-		if (!$license) $license = 10;
+		if (!$license) $license = $this->container->getParameter('price_phone');;
 		$employee->setLicense($license);
 		
-		$employee->setActivatedUntil($now);
-		$company->setCredit($company->getCredit() - $employee->getLicense());
+		$employee->setActivatedUntil($date);
 		
 		$em->persist($employee);
 
@@ -376,15 +374,12 @@ class CompanyController extends Controller
 			$subscription->setVmFile($fileName);
 		}
 		
-		$now = new \DateTime();
-		$now->modify('+1 month');
-		$subscription->setAsctivatedUntil($now);
+		$date = new \DateTime('2015-01-01');
+		$subscription->setAsctivatedUntil($date);
 		
 		$license = $this->container->getParameter('price_subscription');
 		if (!$license) $license = 10;
 		$subscription->setLicense($license);
-		
-		$company->setCredit($company->getCredit() - $license);
 		
 		$subscription->setRecordVM($record);
 		
@@ -558,6 +553,118 @@ class CompanyController extends Controller
 			'company' => $company,
 			'cdrs' => $cdrs,
 			'page' => $page
+		);
+    }
+	
+    /**
+     * @Route("/bill", name="ui_company_bill")
+     * @Template()
+	 * @Method("GET")
+	 * @Security("has_role('ROLE_USER')")
+     */
+    public function billAction()
+    {
+		$user = $this->getUser();
+		$company = $user->getCompany();
+		
+		$request = $this->getRequest();
+		$query = $request->query;
+		
+		$now = new \DateTime();
+		
+		if (!$month = $query->get('p')) {
+			$month = $now->format('Y-m');
+			$complete = false;
+		} else {
+			$complete = ($month != $now->format('Y-m'));
+		}
+		
+		
+		$start = new \DateTime($month.'-01');
+		$end = new \DateTime($start->format('Y-m-d')); $end->modify('+1 month');
+		
+		$em = $this->getDoctrine()->getManager();
+
+		$query = $em->createQuery(
+		    'SELECT cdr
+		    FROM VoIPPBXCDRBundle:CDR cdr
+			LEFT JOIN cdr.company c
+			WHERE c.id = :companyId AND cdr.end >= :start AND cdr.end < :end'
+		)->setParameters(array(
+			'companyId' => $company->getId(),
+			'start' => $start,
+			'end' => $end
+		));
+		
+		$cdrs = $query->getResult();
+		
+		$commumication = 0;
+		foreach ($cdrs as $cdr) {
+			$commumication += $cdr->getPrice();
+		}
+		
+		$query = $em->createQuery(
+		    'SELECT p
+		    FROM VoIPCompanyStructureBundle:EmployeePayment p
+			LEFT JOIN p.employee e
+			LEFT JOIN e.company c
+			WHERE c.id = :companyId AND p.createdAt < :end AND p.createdAt >= :start'
+		)->setParameters(array(
+			'companyId' => $company->getId(),
+			'start' => $start,
+			'end' => $end
+		));
+		
+		$ps = $query->getResult();
+		
+		$subEmployees = 0;
+		foreach ($ps as $p) $subEmployees += $p->getPrice();
+		
+		$query = $em->createQuery(
+		    'SELECT p
+		    FROM VoIPCompanySubscriptionsBundle:SubscriptionPayment p
+			LEFT JOIN p.subscription s
+			LEFT JOIN s.company c
+			WHERE c.id = :companyId AND p.createdAt < :end AND p.createdAt >= :start'
+		)->setParameters(array(
+			'companyId' => $company->getId(),
+			'start' => $start,
+			'end' => $end
+		));
+		
+		$ps = $query->getResult();
+		
+		$subSubcriptions = 0;
+		foreach ($ps as $p) $subSubcriptions += $p->getPrice();
+		
+		$months = array();
+		
+		$tmpM = new \DateTime($now->format('Y-m-01'));
+		$months[] = array(
+			'name' => $tmpM->format('F Y'),
+			'value' => $tmpM->format('Y-m')
+		);
+		while ($company->getCreatedAt() < $tmpM) {
+			$tmpM->modify('-1 month');
+			$months[] = array(
+				'name' => $tmpM->format('F Y'),
+				'value' => $tmpM->format('Y-m')
+			);
+		}
+		
+		$total = $commumication + $subEmployees + $subSubcriptions;
+		
+		
+		
+        return array(
+			'company' => $company,
+			'communication' => $commumication,
+			'employees' => $subEmployees,
+			'subscriptions' => $subSubcriptions,
+			'months' => $months,
+			'month' => $month,
+			'complete' => $complete,
+			'total' => $total
 		);
     }
 	

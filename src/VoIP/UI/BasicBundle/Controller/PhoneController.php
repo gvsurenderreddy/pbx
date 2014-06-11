@@ -308,6 +308,7 @@ class PhoneController extends Controller
 			$em->remove($peer);
 		}
 		$phone->setIsActive(false);
+		$phone->setCanceledAt(new \DateTime());
 		$em->flush();
 		
 		return $this->redirect($this->generateUrl('ui_company'));
