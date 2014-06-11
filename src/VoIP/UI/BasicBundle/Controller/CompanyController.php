@@ -375,7 +375,7 @@ class CompanyController extends Controller
 		}
 		
 		$date = new \DateTime('2015-01-01');
-		$subscription->setAsctivatedUntil($date);
+		$subscription->setActivatedUntil($date);
 		
 		$license = $this->container->getParameter('price_subscription');
 		if (!$license) $license = 10;
