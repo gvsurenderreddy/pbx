@@ -26,9 +26,11 @@
 		<td>{{ outline.host }}</td>
 		<td>{{ outline.rates|length }}</td>
 		<td>
+			{% if outline.rates|length < 10 %}
 			{% for rate in outline.rates %}
 			{{ rate.name }} (+{{ rate.prefix }}){% if not loop.last %}<br>{% endif %}
 			{% endfor %}
+			{% endif %}
 		</td>
 		<td>{{ outline.outgroups|length }}</td>
 		<td>

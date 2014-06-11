@@ -167,12 +167,21 @@ class OutLinesController extends Controller
 			$outLine->removeRate($rate);
 			$rate->removeOutLine($outLine);
 		}
-		foreach ($rateIds as $id) {
-			$rate = $em->getRepository('VoIPPBXBillBundle:Rate')->find($id);
-			if (!$rate) throw $this->createNotFoundException('Unable to find Rate entity.');
-			$outLine->addRate($rate);
-			$rate->addOutLine($outLine);
+		if (count($rateIds) > 0) {
+			foreach ($rateIds as $id) {
+				$rate = $em->getRepository('VoIPPBXBillBundle:Rate')->find($id);
+				if (!$rate) throw $this->createNotFoundException('Unable to find Rate entity.');
+				$outLine->addRate($rate);
+				$rate->addOutLine($outLine);
+			}
+		} else {
+			$rates = $em->getRepository('VoIPPBXBillBundle:Rate')->findAll();
+			foreach ($rates as $rate) {
+				$outLine->addRate($rate);
+				$rate->addOutLine($outLine);
+			}
 		}
+		
 		$em->flush();
         return $this->redirect($this->generateUrl('outlines'));
     }
