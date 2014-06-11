@@ -74,7 +74,7 @@ class RegistrationController extends Controller
 				), array(
 					'lastAttribution' => 'ASC'
 				));
-				if ($outLine) {
+				if ($outGroup) {
 					$outGroup->setLastAttribution(new \DateTime());
 					$company->setOutGroup($outGroup);
 				}

@@ -406,9 +406,7 @@ class CompanyController extends Controller
 		$voicemail->setAstVoicemail($astVoicemail);
 		$em->flush();
 		
-		return $this->redirect($this->generateUrl('ui_company', array(
-			'hash' => $company->getHash()
-		)));
+		return $this->redirect($this->generateUrl('ui_company'));
     }
 	
     /**
