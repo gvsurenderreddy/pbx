@@ -71,6 +71,34 @@ class CompanyController extends Controller
     }
 	
     /**
+     * @Template()
+	 * @Security("has_role('ROLE_USER')")
+     */
+    public function navAction($route)
+    {
+		$user = $this->getUser();
+		$company = $user->getCompany();
+		$em = $this->getDoctrine()->getManager();
+		$query = $em->createQuery(
+		    'SELECT COUNT(m)
+		    FROM VoIPCompanyVoicemailBundle:Message m
+			LEFT JOIN m.voicemail v
+			LEFT JOIN v.subscription s
+			LEFT JOIN s.company c
+			WHERE c.id = :companyId AND m.readAt is NULL'
+		)->setParameters(array(
+			'companyId' => $company->getId()
+		));
+
+		$newMessages = $query->getSingleScalarResult();
+        return array(
+			'company' => $company,
+			'newmessages' => $newMessages,
+			'route' => $route
+		);
+    }
+	
+    /**
      * @Route("/new-phone", name="ui_company_newphone")
      * @Template()
 	 * @Method("GET")

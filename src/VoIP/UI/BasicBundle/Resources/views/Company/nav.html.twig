@@ -1,0 +1,35 @@
+<nav class="navbar navbar-default visible-xs" role="navigation">
+	<div class="container-fluid">
+		<div class="navbar-header">
+			<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+				<span class="sr-only">Toggle navigation</span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+			</button>
+			<a class="navbar-brand" href="#">{{ company.name }} &bull; S$ {{ company.credit|number_format(2, '.', ',') }}</a>
+		</div>
+		<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+			<ul class="nav navbar-nav">
+				{# 
+				<li class="dropdown">
+					<a href="#" class="dropdown-toggle" data-toggle="dropdown">Add <b class="caret"></b></a>
+					<ul class="dropdown-menu">
+						<li><a href="{{ path('ui_company_newemployee') }}">Add a Buddy</a></li>
+						<li><a href="{{ path('ui_company_newphone') }}">Add a Phone</a></li>
+						<li class="divider"></li>
+						<li><a href="{{ path('ui_company_newsubscription') }}">Add an existing phone number</a></li>
+						<li><a href="{{ path('ui_company_newrequestnumber') }}">Request a phone number</a></li>
+					</ul>
+				</li>
+				 #}
+				<li><a href="{{ path('ui_company') }}">Switchboard</a></li>
+				{#<li><a href="{{ path('ui_company_mailbox') }}">Mailbox{% if newmessages %} <span class="badge pull-right">{{ newmessages }}</span>{% endif %}</a></li> #}
+				<li><a href="{{ path('ui_company_cdr') }}">Call details</a></li>
+				<li><a href="{{ path('fos_user_change_password') }}">Parameters</a></li>
+				<li><a href="{{ path('ui_company_bill') }}">My bill</a></li>
+				<li><a href="{{ path('ui_company_topup') }}">Top up</a></li>
+			</ul>
+		</div>
+	</div>
+</nav>

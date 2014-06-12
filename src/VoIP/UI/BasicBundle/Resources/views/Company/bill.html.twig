@@ -1,37 +1,97 @@
 {% extends "VoIPUIBasicBundle::layout.html.twig" %}
 {% block title %}48 | {{ company.name }}{% endblock %}
-{% block headertitle %}Call details{% endblock headertitle %}
+{% block headertitle %}Bill of {{ (month~'-01')|date('F Y') }} {% if month == ''|date('Y-m') %}<span class="label label-info">Current</span>{% endif %}{% endblock headertitle %}
 {% block container %}
-<form class="form-inline" role="form" action="{{ path('ui_company_bill') }}" method="GET">
-	<div class="form-group">
-		<label class="sr-only" for="month">Month</label>
-		<select class="form-control" name="p" id="month">
-			{% for m in months %}
-			<option value="{{ m.value }}" {% if month == m.value %}selected{% endif %}>{{ m.name }}</option>
-			{% endfor %}
-		</select>
-	</div>
-	<button type="submit" class="btn btn-default">Submit</button>
-</form>
+
 {% if not complete %}
 <div class="alert alert-warning">The bill of the current month will not be definitive and complete until the end of the month.</div>
 {% endif %}
-<table class="table table-hover">
-	<tr>
-		<td>Communication</td>
-		<td>{{ communication|number_format(3, '.', ',') }}</td>
-	</tr>
-	<tr>
-		<td>Buddies</td>
-		<td>{{ employees|number_format(3, '.', ',') }}</td>
-	</tr>
-	<tr>
-		<td>Numbers</td>
-		<td>{{ subscriptions|number_format(3, '.', ',') }}</td>
-	</tr>
-	<tr>
-		<th>Total paid</th>
-		<th>{{ total|number_format(2, '.', ',') }}</th>
-	</tr>
-</table>
+<div class="row bill">
+	<div class="col-lg-6">
+		<h2>Monthly Spend</h2>
+		<div class="total-price">Total paid during the month: <span class="total-price-amount">S$ {{ total }}</span></div>
+		<form class="form-inline" role="form" action="{{ path('ui_company_bill') }}" method="GET">
+			<div class="form-group">
+				<label class="" for="month">Find previous bills</label>
+				<select class="form-control" name="p" id="month">
+					{% for m in months %}
+					<option value="{{ m.value }}" {% if month == m.value %}selected{% endif %}>{{ m.name }}</option>
+					{% endfor %}
+				</select>
+			</div>
+			<button type="submit" class="btn btn-default">Submit</button>
+		</form>
+	</div>
+	<div class="col-lg-6">
+		<h2>Details</h2>
+		<div class="row visible-lg">
+			<div class="col-lg-8">
+				<canvas id="detailsChart" height="400"></canvas>
+			</div>
+			<div class="col-lg-4 legend">
+				<div class="legend-item">
+					<div class="legend-item-color legend-item-color-com"></div>
+					<div class="legend-item-text">Communication</div>
+				</div>
+				<div class="legend-item">
+					<div class="legend-item-color legend-item-color-emp"></div>
+					<div class="legend-item-text">Buddies</div>
+				</div>
+				<div class="legend-item">
+					<div class="legend-item-color legend-item-color-sub"></div>
+					<div class="legend-item-text">Subscriptions</div>
+				</div>
+			</div>
+		</div>
+		
+		<div id="row">
+			<div class="col-lg-offset-2 col-lg-8">
+				<table class="table table-hover">
+					<tr>
+						<td>Communication</td>
+						<td class="price">S$ {{ communication|number_format(3, '.', ',') }}</td>
+					</tr>
+					<tr>
+						<td>Buddies</td>
+						<td class="price">S$ {{ employees|number_format(3, '.', ',') }}</td>
+					</tr>
+					<tr>
+						<td>Numbers</td>
+						<td class="price">S$ {{ subscriptions|number_format(3, '.', ',') }}</td>
+					</tr>
+					<tr>
+						<th>Total paid</th>
+						<th class="price">S$ {{ total|number_format(2, '.', ',') }}</th>
+					</tr>
+				</table>
+			</div>
+		</div>
+		
+	</div>
+</div>
 {% endblock container %}
+{% block javascripts %}
+{{ parent() }}
+<script src="{{ asset('js/Chart.min.js') }}"></script>
+<script type="text/javascript">
+var ctx = document.getElementById("detailsChart").getContext("2d");
+var data = [
+	{
+		value: {{ communication }},
+		color:"#F7464A"
+	},
+	{
+		value : {{ employees }},
+		color : "#4D5360"
+	},
+	{
+		value : {{ subscriptions }},
+		color : "#D4CCC5"
+	}
+
+]
+new Chart(ctx).Doughnut(data, {
+	segmentStrokeColor : "#fff",
+});
+</script>
+{% endblock %}

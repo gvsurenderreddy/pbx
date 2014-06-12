@@ -284,3 +284,39 @@ a.glyphicon:hover {
 .alert-first {
 	text-align: center;
 }
+#detailsChart {
+	width: 100%;
+}
+.legend .legend-item {
+	position: relative;
+	padding: 5px 0 0 40px;
+	margin: 20px 0;
+}
+.legend .legend-item .legend-item-color {
+	width: 30px;
+	height: 30px;
+	position: absolute;
+	top: 0;
+	left: 0;
+}
+.legend .legend-item .legend-item-color-com {
+	background-color: #F7464A;
+}
+.legend .legend-item .legend-item-color-emp {
+	background-color: #4D5360;
+}
+.legend .legend-item .legend-item-color-sub {
+	background-color: #D4CCC5;
+}
+.bill th {
+	font-size: 20px;
+}
+.bill .price {
+	text-align: right;
+}
+.bill .total-price {
+	font-size: 16px;
+}
+.bill .total-price-amount {
+	font-size: 25px;
+}
