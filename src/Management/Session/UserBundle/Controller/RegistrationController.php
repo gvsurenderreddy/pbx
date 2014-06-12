@@ -84,7 +84,7 @@ class RegistrationController extends Controller
 				$licenseSubscription = $this->container->getParameter('price_subscription');
 				$company->setLicenseSubscription($licenseSubscription ? $licenseSubscription : 20);
 				$factor = $this->container->getParameter('rate_factor');
-				$company->setFactor($factor ? $factor : 2);
+				$company->setRateFactor($factor ? $factor : 2);
 				$em->persist($company);
 				$em->flush();
 
