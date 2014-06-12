@@ -708,6 +708,7 @@ class CompanyController extends Controller
 		$em = $this->getDoctrine()->getManager();
 		$company = $this->getUser()->getCompany();
 		$company->setCredit($company->getCredit() + $credit);
+		$company->setIsTrial(false);
 		$em->flush();
 		if ($url) {
 			return $this->redirect($url);

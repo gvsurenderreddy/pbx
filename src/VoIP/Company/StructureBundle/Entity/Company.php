@@ -51,11 +51,18 @@ class Company
     private $name;
 	
     /**
-     * @var \DateTime
+     * @var boolean
      *
      * @ORM\Column(name="is_active", type="boolean")
      */
     private $isActive = true;
+	
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="is_trial", type="boolean")
+     */
+    private $isTrial = true;
 	
     /**
      * @var float
@@ -770,5 +777,28 @@ class Company
     public function getRateFactor()
     {
         return $this->rateFactor;
+    }
+
+    /**
+     * Set isTrial
+     *
+     * @param boolean $isTrial
+     * @return Company
+     */
+    public function setIsTrial($isTrial)
+    {
+        $this->isTrial = $isTrial;
+
+        return $this;
+    }
+
+    /**
+     * Get isTrial
+     *
+     * @return boolean 
+     */
+    public function getIsTrial()
+    {
+        return $this->isTrial;
     }
 }

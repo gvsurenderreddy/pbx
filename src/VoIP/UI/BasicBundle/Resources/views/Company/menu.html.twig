@@ -4,6 +4,7 @@
 	</div>
 	<div class="company-name">{{ company.name }}</div>
 	<div class="company-since">S$ {{ company.credit|number_format(2, '.', ',') }}</div>
+	{% if company.istrial %}<div class="company-trial"><span class="label label-info">Trial</span></div>{% endif %}
 </center>
 <center>
 	<div class="btn-group btn-new">
