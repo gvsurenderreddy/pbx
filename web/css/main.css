@@ -320,3 +320,11 @@ a.glyphicon:hover {
 .bill .total-price-amount {
 	font-size: 25px;
 }
+.nav-company-name {
+	font-size: 14px;
+	text-align: center;
+}
+.title-xs {
+	font-size: 20px;
+	margin: 10px 5px 20px;
+}

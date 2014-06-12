@@ -8,8 +8,7 @@
 {% endif %}
 <div class="row bill">
 	<div class="col-lg-6">
-		<h2>Monthly Spend</h2>
-		<div class="total-price">Total paid during the month: <span class="total-price-amount">S$ {{ total|number_format(2, '.', ',') }}</span></div>
+		<h2>Monthly Spend: S$ {{ total|number_format(2, '.', ',') }}</h2>
 		<form class="form-inline" role="form" action="{{ path('ui_company_bill') }}" method="GET">
 			<div class="form-group">
 				<label class="" for="month">Find previous bills</label>

@@ -20,6 +20,9 @@
 				<a class="pull-right nav-logout" href="{{ path('fos_user_security_logout') }}"><span class="glyphicon glyphicon-off"></span> Logout</a>
 			</h1>
 		</div>
+		<div class="title-xs visible-xs">
+			{{ block('headertitle') }}
+		</div>
 		{% endblock header %}
 		{% block container %}{% endblock container %}
 	</div>
