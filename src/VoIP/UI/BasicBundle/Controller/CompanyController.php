@@ -304,9 +304,7 @@ class CompanyController extends Controller
 		*/
 		$date = new \DateTime('2015-01-01');
 		
-		$license = $this->container->getParameter('price_employee');
-		if (!$license) $license = $this->container->getParameter('price_phone');;
-		$employee->setLicense($license);
+		$employee->setLicense($company->getLicenseEmployee());
 		
 		$employee->setActivatedUntil($date);
 		
@@ -406,9 +404,7 @@ class CompanyController extends Controller
 		$date = new \DateTime('2015-01-01');
 		$subscription->setActivatedUntil($date);
 		
-		$license = $this->container->getParameter('price_subscription');
-		if (!$license) $license = 10;
-		$subscription->setLicense($license);
+		$subscription->setLicense($company->getLicenseSubscription());
 		
 		$subscription->setRecordVM($record);
 		
@@ -422,13 +418,6 @@ class CompanyController extends Controller
 		$em->flush();
 		
 		$sync = new Sync();
-		
-		/*
-		$astPeer = $sync->subscriptionToPeer($subscription);
-		$em->persist($astPeer);
-		$subscription->setAstPeer($astPeer);
-		$em->flush();
-		*/
 		
 		$astVoicemail = $sync->voicemailToVoicemail($voicemail);
 		$em->persist($astVoicemail);

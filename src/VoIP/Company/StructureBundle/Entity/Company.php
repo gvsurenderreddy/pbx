@@ -63,6 +63,27 @@ class Company
      * @ORM\Column(name="credit", type="float")
      */
     private $credit = 0;
+	
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="license_subscription", type="float")
+     */
+    private $licenseSubscription = 0;
+	
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="license_employee", type="float")
+     */
+    private $licenseEmployee = 0;
+	
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="rate_factor", type="float")
+     */
+    private $rateFactor = 0;
 
     /**
      * @var string
@@ -126,6 +147,7 @@ class Company
 	 * @ORM\JoinColumn(name="outgroup_id", referencedColumnName="id", onDelete="CASCADE")
      */
     private $outGroup;
+	
 	
 	/**
 	 * @ORM\PrePersist

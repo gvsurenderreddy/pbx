@@ -79,6 +79,12 @@ class RegistrationController extends Controller
 					$company->setOutGroup($outGroup);
 				}
 				$company->setCredit(10);
+				$licenseEmployee = $this->container->getParameter('price_employee');
+				$company->setLicenseEmployee($licenseEmployee ? $licenseEmployee : 10);
+				$licenseSubscription = $this->container->getParameter('price_subscription');
+				$company->setLicenseSubscription($licenseSubscription ? $licenseSubscription : 20);
+				$factor = $this->container->getParameter('rate_factor');
+				$company->setFactor($factor ? $factor : 2);
 				$em->persist($company);
 				$em->flush();
 

@@ -21,3 +21,4 @@ parameters:
     aws_cloudfront_pem: YOUR_CLOUDFRONT_PRIVATE_KEY_PEM
     price_employee: 10
     price_subscription: 15
+    rate_factor: 2
