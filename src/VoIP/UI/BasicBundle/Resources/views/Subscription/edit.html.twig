@@ -2,8 +2,16 @@
 {% block title %}48 | Edit your subscription{% endblock %}
 {% block headertitle %}Edit Line {{ subscription.name }}{% endblock headertitle %}
 {% block container %}
-<div class="row">
+<div class="row form-new">
 	<div class="col-md-offset-3 col-md-6">
+		<div class="alert alert-danger">
+			To avoid encountering problems when connecting your phone line, make sure that you have authorised the following IP address to communicate with your provider:
+			<ul>
+				{% for ip in ips %}
+				<li>{{ ip }}</li>
+				{% endfor %}
+			</ul>
+		</div>
 		<form class="form-horizontal" role="form" action="{{ path('ui_subscription_edit', {'hash': subscription.hash}) }}" method="POST" enctype="multipart/form-data">
 			<div class="form-group">
 				<label for="type" class="col-sm-2 control-label">Type</label>

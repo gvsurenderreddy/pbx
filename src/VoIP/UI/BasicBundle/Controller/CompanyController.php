@@ -327,9 +327,10 @@ class CompanyController extends Controller
     {
 		$user = $this->getUser();
 		$company = $user->getCompany();
-		
+		$ips = array('54.255.174.110', '54.254.140.140');
         return array(
 			'company' => $company,
+			'ips' => $ips
 		);
     }
 	

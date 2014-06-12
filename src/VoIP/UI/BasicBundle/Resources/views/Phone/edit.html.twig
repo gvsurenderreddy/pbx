@@ -2,7 +2,7 @@
 {% block title %}48 | Edit Phone {{ phone.name }}{% endblock %}
 {% block headertitle %}Edit Phone {{ phone.name }}{% endblock headertitle %}
 {% block container %}
-<div class="row">
+<div class="row form-new">
 	<div class="col-md-offset-3 col-md-6">
 		<form class="form-horizontal" role="form" action="{{ path('ui_phone_edit', {'hash': phone.hash}) }}" method="POST">
 			<div class="form-group">

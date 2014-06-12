@@ -38,9 +38,11 @@ class SubscriptionController extends Controller
         if (!$subscription) throw $this->createNotFoundException('Unable to find Subsciption entity.');
 		$company = $subscription->getCompany();
 		if ($user->getCompany()->getId() != $company->getId()) throw $this->createNotFoundException('No authorization.');
+		$ips = array('54.255.174.110', '54.254.140.140');
         return array(
 			'subscription' => $subscription,
 			'company' => $company,
+			'ips' => $ips
 		);
     }
 	
