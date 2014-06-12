@@ -755,9 +755,46 @@ class CompanyController extends Controller
 		$em->flush();
 		return $this->redirect($this->generateUrl('ui_company'));
     }
+
+    /**
+     * @Route("/parameters/info", name="ui_company_parameters_info")
+     * @Template()
+	 * @Method("GET")
+	 * @Security("has_role('ROLE_USER')")
+     */
+    public function infoAction()
+    {
+		$user = $this->getUser();
+		$company = $this->getUser()->getCompany();
+        return array(
+			'company' => $company,
+		);
+    }
 	
     /**
-     * @Route("/image", name="ui_company_image")
+     * @Route("/parameters/info")
+     * @Template()
+	 * @Method("POST")
+	 * @Security("has_role('ROLE_USER')")
+     */
+    public function updateInfoAction()
+    {
+		$user = $this->getUser();
+		$em = $this->getDoctrine()->getManager();
+		$company = $this->getUser()->getCompany();
+		$request = $this->getRequest();
+		
+		$name = $request->get('name');
+		
+		$company->setName($name);
+		
+		$em->flush();
+		
+		return $this->redirect($this->generateUrl('ui_company'));
+    }
+	
+    /**
+     * @Route("/parameters/image", name="ui_company_parameters_image")
      * @Template()
 	 * @Method("GET")
 	 * @Security("has_role('ROLE_USER')")
@@ -772,7 +809,7 @@ class CompanyController extends Controller
     }
 	
     /**
-     * @Route("/image")
+     * @Route("/parameters/image")
      * @Template()
 	 * @Method("POST")
 	 * @Security("has_role('ROLE_USER')")

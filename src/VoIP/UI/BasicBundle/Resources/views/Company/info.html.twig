@@ -1,15 +1,15 @@
 {% extends "VoIPUIBasicBundle::layout_parameters.html.twig" %}
-{% block title %}48 | Change image{% endblock %}
-{% block headertitle %}Change image{% endblock headertitle %}
+{% block title %}48 | Edit Company{% endblock %}
+{% block headertitle %}Edit Company{% endblock headertitle %}
 {% block container %}
 {{ parent() }}
 <div class="row form-new">
 	<div class="col-md-offset-3 col-md-6">
-		<form class="form-horizontal" role="form" action="{{ path('ui_company_parameters_image') }}" method="POST" enctype="multipart/form-data">
+		<form class="form-horizontal" role="form" action="{{ path('ui_company_parameters_info') }}" method="POST" enctype="multipart/form-data">
 			<div class="form-group">
-				<label for="image" class="col-sm-2 control-label">Image</label>
+				<label for="name" class="col-sm-2 control-label">Name</label>
 				<div class="col-sm-10">
-					<input type="file" class="form-control" id="image" name="image">
+					<input type="text" class="form-control" id="name" name="name" value="{{ company.name }}" required>
 				</div>
 			</div>
 			<div class="form-group">

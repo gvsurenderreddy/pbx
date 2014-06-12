@@ -1,6 +1,6 @@
 <center class="company-part">
 	<div class="company-image">
-		<a href="{{ path('ui_company_image') }}"><img src="{% if company.imageurl %}{{ company.imageurl }}{% else %}https://s3-ap-southeast-1.amazonaws.com/fortyeight/companies/images/3a1225ee_256.png{% endif %}" alt="{{ company.name }}" class="img-circle"></a>
+		<a href="{{ path('ui_company') }}"><img src="{% if company.imageurl %}{{ company.imageurl }}{% else %}https://s3-ap-southeast-1.amazonaws.com/fortyeight/companies/images/3a1225ee_256.png{% endif %}" alt="{{ company.name }}" class="img-circle"></a>
 	</div>
 	<div class="company-name">{{ company.name }}</div>
 	<div class="company-since">S$ {{ company.credit|number_format(2, '.', ',') }}</div>
@@ -25,7 +25,7 @@
 	<li class="{{ route == 'ui_company' ? 'active' }}"><a href="{{ path('ui_company') }}"><span class="glyphicon glyphicon-th"></span> Switchboard</a></li>
 	<li class="{{ route == 'ui_company_mailbox' ? 'active' }}"><a href="{{ path('ui_company_mailbox') }}"><span class="glyphicon glyphicon-play"></span> Mailbox{% if newmessages %} <span class="badge pull-right">{{ newmessages }}</span>{% endif %}</a></li>
 	<li class="{{ route == 'ui_company_cdr' ? 'active' }}"><a href="{{ path('ui_company_cdr') }}"><span class="glyphicon glyphicon-list"></span> Call details</a></li>
-	<li class="{{ route == 'fos_user_change_password' ? 'active' }}"><a href="{{ path('fos_user_change_password') }}"><span class="glyphicon glyphicon-cog"></span> Parameters</a></li>
+	<li class="{{ (route == 'fos_user_change_password' or 'ui_company_parameters' in route) ? 'active' }}"><a href="{{ path('ui_company_parameters_info') }}"><span class="glyphicon glyphicon-cog"></span> Parameters</a></li>
 	<li class="{{ route == 'ui_company_bill' ? 'active' }}"><a href="{{ path('ui_company_bill') }}"><span class="glyphicon glyphicon-usd"></span> My bill</a></li>
-	<li class="{{ route == 'ui_company_topup' ? 'active' }}"><a href="{{ path('ui_company_topup') }}"><span class="glyphicon glyphicon-circle-arrow-up"></span> Top up</a></li>
+	{# <li class="{{ route == 'ui_company_topup' ? 'active' }}"><a href="{{ path('ui_company_topup') }}"><span class="glyphicon glyphicon-circle-arrow-up"></span> Top up</a></li> #}
 </ul>
