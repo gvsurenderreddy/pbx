@@ -78,6 +78,7 @@ class RegistrationController extends Controller
 					$outGroup->setLastAttribution(new \DateTime());
 					$company->setOutGroup($outGroup);
 				}
+				$company->setCredit(10);
 				$em->persist($company);
 				$em->flush();
 
