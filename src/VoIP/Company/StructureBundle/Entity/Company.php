@@ -702,4 +702,73 @@ class Company
     {
         return $this->imageUrl;
     }
+
+    /**
+     * Set licenseSubscription
+     *
+     * @param float $licenseSubscription
+     * @return Company
+     */
+    public function setLicenseSubscription($licenseSubscription)
+    {
+        $this->licenseSubscription = $licenseSubscription;
+
+        return $this;
+    }
+
+    /**
+     * Get licenseSubscription
+     *
+     * @return float 
+     */
+    public function getLicenseSubscription()
+    {
+        return $this->licenseSubscription;
+    }
+
+    /**
+     * Set licenseEmployee
+     *
+     * @param float $licenseEmployee
+     * @return Company
+     */
+    public function setLicenseEmployee($licenseEmployee)
+    {
+        $this->licenseEmployee = $licenseEmployee;
+
+        return $this;
+    }
+
+    /**
+     * Get licenseEmployee
+     *
+     * @return float 
+     */
+    public function getLicenseEmployee()
+    {
+        return $this->licenseEmployee;
+    }
+
+    /**
+     * Set rateFactor
+     *
+     * @param float $rateFactor
+     * @return Company
+     */
+    public function setRateFactor($rateFactor)
+    {
+        $this->rateFactor = $rateFactor;
+
+        return $this;
+    }
+
+    /**
+     * Get rateFactor
+     *
+     * @return float 
+     */
+    public function getRateFactor()
+    {
+        return $this->rateFactor;
+    }
 }
