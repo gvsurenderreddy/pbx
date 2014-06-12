@@ -41,17 +41,26 @@ body {
 	background-color: #00547f;
 }
 .btn-danger {
+	/*
 	background-color: #d9534f;
 	border-color: #9E2824;
+	*/
+	background-color: #d9534f;
+	background: -webkit-linear-gradient(top,#7ddc1f 0,#64c306 100%);
 	color: #fff;
+	border-color: #4F7C22;
 }
 .btn-danger:focus,
 .btn-danger:active,
 .btn-danger.active,
 .btn-danger:hover,
 .open .dropdown-toggle.btn-danger {
+	/*
 	background-color: #C03A35;
 	border-color: #9E2824;
+	*/
+	background: #64c306;
+	border-color: #4F7C22;
 }
 a {
 	color: #121212;
