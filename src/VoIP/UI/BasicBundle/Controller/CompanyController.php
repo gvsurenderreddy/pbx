@@ -152,9 +152,7 @@ class CompanyController extends Controller
 				'hash' => $phone->getHash()
 			)));
 		} else {
-			return $this->redirect($this->generateUrl('ui_company', array(
-				'hash' => $company->getHash()
-			)));
+			return $this->redirect($this->generateUrl('ui_company'));
 		}
 		
     }
