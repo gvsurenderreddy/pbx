@@ -30,12 +30,6 @@ class User extends BaseUser
      */
     protected $conditionsAccepted = false;
 	
-	/**
-	 * @ORM\ManyToMany(targetEntity="\VoIP\Company\StructureBundle\Entity\Company", mappedBy="users")
-	 * @ORM\OrderBy({"name" = "ASC"})
-	 */
-	protected $companies;
-	
     /**
      * @ORM\Column(name="company_name", type="string", length=255, nullable=true)
      *

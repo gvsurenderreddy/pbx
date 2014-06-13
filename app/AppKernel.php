@@ -17,7 +17,6 @@ class AppKernel extends Kernel
             new Doctrine\Bundle\DoctrineBundle\DoctrineBundle(),
             new Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
             new VoIP\PBX\RealTimeBundle\VoIPPBXRealTimeBundle(),
-            new VoIP\DynamicIP\DaemonBundle\VoIPDynamicIPDaemonBundle(),
 			new Cybernox\AmazonWebServicesBundle\CybernoxAmazonWebServicesBundle(),
 			new FOS\UserBundle\FOSUserBundle(),
             new Management\Session\UserBundle\ManagementSessionUserBundle(),
