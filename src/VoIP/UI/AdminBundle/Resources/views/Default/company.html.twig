@@ -1,0 +1,61 @@
+{% extends '::admin.html.twig' %}
+{% block container %}
+<table class="table table-condensed table-hover">
+	<tr>
+		<th>Name</th>
+		<td>{{ company.name }}</td>
+	</tr>
+	<tr>
+		<th>Image</th>
+		<td>{{ company.imageurl }}</td>
+	</tr>
+	<tr>
+		<th>Hash</th>
+		<td>{{ company.hash }}</td>
+	</tr>
+	<tr>
+		<th>Credit</th>
+		<td>{{ company.credit }}</td>
+	</tr>
+	<tr>
+		<th>Since</th>
+		<td>{{ company.createdat|date('d/m/Y') }}</td>
+	</tr>
+	<tr>
+		<th>License employee</th>
+		<td>{{ company.licenseemployee }}</td>
+	</tr>
+	<tr>
+		<th>License subscription</th>
+		<td>{{ company.licensesubscription }}</td>
+	</tr>
+	<tr>
+		<th>Factor</th>
+		<td>{{ company.ratefactor }}</td>
+	</tr>
+	{% for employee  in company.employees %}
+	<tr>
+		{% if loop.first %}<th rowspan="{{ company.employees|length }}">Buddies</th>{% endif %}
+		<td>{{ employee.name }}</td>
+		<td>{{ employee.extension }}</td>
+		<td>{{ employee.hash }}</td>
+	</tr>
+	{% endfor %}
+	{% for phone  in company.phones %}
+	<tr>
+		{% if loop.first %}<th rowspan="{{ company.phones|length }}">Phones</th>{% endif %}
+		<td>{{ phone.name }}</td>
+		<td>{{ phone.type }}</td>
+		<td>{{ phone.hash }}</td>
+	</tr>
+	{% endfor %}
+	{% for subscription  in company.subscriptions %}
+	<tr>
+		{% if loop.first %}<th rowspan="{{ company.subscriptions|length }}">Numbers</th>{% endif %}
+		<td>{{ subscription.name }}</td>
+		<td>{{ subscription.type }}</td>
+		<td>{{ subscription.hash }}</td>
+	</tr>
+	{% endfor %}
+</table>
+{% endblock %}
