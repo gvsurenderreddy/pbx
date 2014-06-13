@@ -6,6 +6,11 @@
 		<th>Since</th>
 		<th>Credit</th>
 		<th>Trial</th>
+		<th>Buddies</th>
+		<th>Phones</th>
+		<th>Numbers</th>
+		<th>Group</th>
+		<th></th>
 	</tr>
 	{% for company in companies %}
 	<tr>
@@ -14,6 +19,19 @@
 		<td>{{ company.createdat|date('d/m/Y') }}</td>
 		<td>{{ company.credit }}</td>
 		<td>{% if company.istrial %}<span class="glyphicon glyphicon-ok"></span>{% endif %}</td>
+		<td>{{ company.employees|length }}</td>
+		<td>{{ company.phones|length }}</td>
+		<td>{{ company.subscriptions|length }}</td>
+		<td>
+			{% if not company.outgroup %}
+			<a href="{{ path('outgroups') }}"><span class="label label-danger">No group</span></a>
+			{% elseif company.outgroup.ispublic %}
+			<a href="{{ path('outgroups') }}"><span class="label label-info">Public</span></a>
+			{% else %}
+			<a href="{{ path('outgroups') }}"><span class="label label-primary">Private</span></a>
+			{% endif %}
+		</td>
+		<td><a href="{{ path('admin_company', {'reference': company.hash}) }}">show</a></td>
 	</tr>
 	{% endfor %}
 </table>

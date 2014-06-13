@@ -58,4 +58,20 @@ class DefaultController extends Controller
         	'companies' => $companies
         );
     }
+    /**
+     * @Route("/company/{reference}", name="admin_company")
+     * @Template()
+     */
+    public function companyAction($reference)
+    {
+		$em = $this->getDoctrine()->getManager();
+		$company = $em->getRepository('VoIPCompanyStructureBundle:Company')->findOneBy(array(
+			'hash' => $reference
+		));
+		if (!$company) throw $this->createNotFoundException('Unable to find $company entity.');
+
+        return array(
+        	'company' => $company
+        );
+    }
 }
