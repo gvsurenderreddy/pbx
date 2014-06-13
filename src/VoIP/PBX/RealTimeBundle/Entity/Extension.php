@@ -259,27 +259,4 @@ class Extension
     {
         return $this->appdata;
     }
-
-    /**
-     * Set dialItem
-     *
-     * @param \VoIP\Company\SubscriptionsBundle\Entity\DialPlanItem $dialItem
-     * @return Extension
-     */
-    public function setDialItem(\VoIP\Company\SubscriptionsBundle\Entity\DialPlanItem $dialItem = null)
-    {
-        $this->dialItem = $dialItem;
-
-        return $this;
-    }
-
-    /**
-     * Get dialItem
-     *
-     * @return \VoIP\Company\SubscriptionsBundle\Entity\DialPlanItem 
-     */
-    public function getDialItem()
-    {
-        return $this->dialItem;
-    }
 }
