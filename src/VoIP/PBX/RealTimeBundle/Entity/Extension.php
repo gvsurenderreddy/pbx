@@ -72,11 +72,6 @@ class Extension
     private $appdata;
 	
 	/**
-     * @ORM\OneToOne(targetEntity="\VoIP\Company\SubscriptionsBundle\Entity\DialPlanItem", mappedBy="astExtension")
-     */
-    private $dialItem;
-	
-	/**
 	 * @ORM\PrePersist
 	 */
 	public function prePersist()

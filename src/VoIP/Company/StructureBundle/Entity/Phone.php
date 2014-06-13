@@ -67,13 +67,6 @@ class Phone
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="activated_until", type="datetime", nullable=true)
-     */
-    private $activatedUntil;
-	
-    /**
-     * @var \DateTime
-     *
      * @ORM\Column(name="is_active", type="boolean")
      */
     private $isActive = true;
@@ -297,29 +290,6 @@ class Phone
     public function getName()
     {
         return $this->name;
-    }
-
-    /**
-     * Set activatedUntil
-     *
-     * @param \DateTime $activatedUntil
-     * @return Phone
-     */
-    public function setActivatedUntil($activatedUntil)
-    {
-        $this->activatedUntil = $activatedUntil;
-
-        return $this;
-    }
-
-    /**
-     * Get activatedUntil
-     *
-     * @return \DateTime 
-     */
-    public function getActivatedUntil()
-    {
-        return $this->activatedUntil;
     }
 
     /**

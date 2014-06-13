@@ -1,5 +1,5 @@
-{% extends '::base.html.twig' %}
-{% block body %}
+{% extends '::admin.html.twig' %}
+{% block container %}
 <form class="form-horizontal" role="form" action="{{ outgroup is defined ? path('outgroup_update', {'id': outgroup.id}) : path('outgroup_create') }}" method="POST">
 	<div class="form-group">
 		<label for="ispublic" class="col-sm-2 control-label">Is public</label>

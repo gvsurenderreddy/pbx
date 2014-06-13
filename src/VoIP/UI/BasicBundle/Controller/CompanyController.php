@@ -157,83 +157,6 @@ class CompanyController extends Controller
 			)));
 		}
 		
-		
-    }
-	
-    /**
-     * @Route("/new-buddy-phone", name="ui_company_newphoneemployee")
-     * @Template()
-	 * @Method("GET")
-	 * @Security("has_role('ROLE_USER')")
-     */
-    public function newPhoneEmployeeAction()
-    {
-		$user = $this->getUser();
-		$company = $user->getCompany();
-		$extensions = range(100, 999);
-		foreach ($company->getEmployees() as $e) {
-			if ($e->getIsActive()) unset($extensions[($e->getExtension() - 100)]);
-		}
-        return array(
-        	'extensions' => $extensions,
-        );
-    }
-	
-    /**
-     * @Route("/new-buddy-phone")
-     * @Template()
-	 * @Method("POST")
-	 * @Security("has_role('ROLE_USER')")
-     */
-    public function createPhoneEmployeeAction()
-    {
-		$user = $this->getUser();
-		$company = $user->getCompany();
-		$em = $this->getDoctrine()->getManager();
-		
-		$request = $this->getRequest();
-		$name = $request->get('name');
-		$extension = $request->get('extension');
-		$type = $request->get('type');
-		
-		$employee = new Employee();
-		$employee->setName($name);
-		$employee->setExtension($extension);
-		$employee->setCompany($company);
-		
-		$phone = new Phone();
-		$phone->setType($type);
-		$phone->setName($name."'s phone");
-		$phone->setCompany($company);
-		
-		$phone->addEmployee($employee);
-		$employee->addPhone($phone);
-		
-		$em->persist($employee);
-		$em->persist($phone);
-		
-		$sync = new Sync();
-		
-		$em->flush();
-		
-		$astPeer = $sync->phoneToPeer($phone);
-		$em->persist($astPeer);
-		
-		$phone->setAstPeer($astPeer);
-		
-		$em->flush();
-		
-		if (strpos($phone->getType(), 'cisco.') !== false) {
-			return $this->redirect($this->generateUrl('ui_phone_configure', array(
-				'hash' => $phone->getHash()
-			)));
-		} else {
-			return $this->redirect($this->generateUrl('ui_company', array(
-				'hash' => $company->getHash()
-			)));
-		}
-		
-		
     }
 	
     /**
@@ -302,11 +225,8 @@ class CompanyController extends Controller
 			$employee->setThumbUrl($image->getPaths('64'));
 		}
 		*/
-		$date = new \DateTime('2015-01-01');
 		
 		$employee->setLicense($company->getLicenseEmployee());
-		
-		$employee->setActivatedUntil($date);
 		
 		$em->persist($employee);
 
@@ -400,9 +320,6 @@ class CompanyController extends Controller
 			));
 			$subscription->setVmFile($fileName);
 		}
-		
-		$date = new \DateTime('2015-01-01');
-		$subscription->setActivatedUntil($date);
 		
 		$subscription->setLicense($company->getLicenseSubscription());
 		

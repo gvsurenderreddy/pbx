@@ -1,5 +1,5 @@
-{% extends '::base.html.twig' %}
-{% block body %}
+{% extends '::admin.html.twig' %}
+{% block container %}
 <form class="form-horizontal" role="form" action="{{ outline is defined ? path('outline_update', {'id': outline.id}) : path('outline_create') }}" method="POST">
 	<div class="form-group">
 		<label for="name" class="col-sm-2 control-label">Name</label>

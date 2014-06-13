@@ -1,5 +1,5 @@
-{% extends '::base.html.twig' %}
-{% block body %}
+{% extends '::admin.html.twig' %}
+{% block container %}
 <form class="form-horizontal" role="form" action="{{ path('outgroup_outlines', {'id': outgroup.id}) }}" method="POST">
 	<div class="form-group">
 		<label for="outlines" class="col-sm-2 control-label">Outlines</label>

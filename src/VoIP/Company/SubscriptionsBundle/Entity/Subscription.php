@@ -93,13 +93,6 @@ class Subscription
     private $hash;
 	
     /**
-     * @var \DateTime
-     *
-     * @ORM\Column(name="activated_until", type="datetime", nullable=true)
-     */
-    private $activatedUntil;
-	
-    /**
      * @var boolean
      *
      * @ORM\Column(name="is_active", type="boolean")
@@ -174,15 +167,6 @@ class Subscription
     private $voicemail;
 	
 	/**
-	 * @ORM\ManyToMany(targetEntity="\VoIP\Company\SubscriptionsBundle\Entity\Country", inversedBy="subscriptions")
-	 * @ORM\JoinTable(name="structure_subscription_has_country",
-	 *      joinColumns={@ORM\JoinColumn(name="subscription_id", referencedColumnName="id")},
-	 *      inverseJoinColumns={@ORM\JoinColumn(name="country_id", referencedColumnName="id")}
-	 *      )
-	 */
-	protected $countries;
-	
-	/**
 	 * @ORM\ManyToMany(targetEntity="\VoIP\Company\StructureBundle\Entity\Employee", inversedBy="subscriptions")
 	 * @ORM\JoinTable(name="structure_subscription_has_employee",
 	 *      joinColumns={@ORM\JoinColumn(name="subscription_id", referencedColumnName="id")},
@@ -193,28 +177,10 @@ class Subscription
 	protected $employees;
 	
 	/**
-     * @ORM\OneToOne(targetEntity="\VoIP\Company\SubscriptionsBundle\Entity\DialPlanItem", inversedBy="subscription")
-	 * @ORM\JoinColumn(name="dialplan_firstitem_id", referencedColumnName="id", onDelete="CASCADE")
-     */
-    private $dialPlanFirstItem;
-	
-	/**
      * @ORM\OneToMany(targetEntity="\VoIP\Company\SubscriptionsBundle\Entity\SubscriptionPayment", mappedBy="subscription")
 	 * @ORM\OrderBy({"createdAt" = "ASC"})
      */
     private $payments;
-	
-	public function getDayLeft()
-	{
-		$now = new \DateTime();
-		if (!$date = $this->getActivatedUntil()) return '0 day';
-		else {
-			$days = (int)(($date->getTimestamp() - $now->getTimestamp()) / (60 * 60 * 24));
-			if ($days <= 0) return '0 day';
-			if ($days == 1) return '1 day';
-			return $days . ' days';
-		}
-	}
 	
 	/**
 	 * @ORM\PrePersist
@@ -240,12 +206,6 @@ class Subscription
 	public function generateHash()
 	{
 		$this->hash = hexdec(hash('crc32b', uniqid('', true)));
-	}
-	
-	public function getDepth()
-	{
-		if (!($firstItem = $this->getDialPlanFirstItem())) return 0;
-		else return $firstItem->getDepth() + 1;
 	}
 	
 	public function genRegistrationCode()
@@ -277,67 +237,6 @@ class Subscription
 		if (!$test) return 'warning';
 		return 'default';
 	}
-	
-	public function isValidDetails()
-	{
-		if (!$date = $this->getActivatedUntil()) return 0;
-		$now = new \DateTime();
-		if ($date < $now) return 1;
-		$now->modify('+5 days');
-		if ($date < $now) return 2;
-		return 3;
-	}
-	public function isValid()
-	{
-		$now = new \DateTime();
-		$date = $this->getActivatedUntil();
-		return ($date && $date > $now);
-	}
-	public function isValidStatus()
-	{
-		switch ($this->isValidDetails()) {
-			case 0:
-				return 'status-danger';
-				break;
-			case 1:
-				return 'status-danger';
-				break;
-			case 2:
-				return 'status-warning';
-				break;
-			default:
-				return 'status-success';
-				break;
-		}
-	}
-	
-	public function getRealTime($start, $end)
-	{
-		if ($this->getCreatedAt() >= $end) return 0;
-		if ($this->getCanceledAt() && $this->getCanceledAt() < $start) return 0;
-		if ($this->getCreatedAt() > $start) $start = $this->getCreatedAt();
-		if ($this->getCanceledAt() && $this->getCanceledAt() < $end) $end = $this->getCanceledAt();
-		return  $start->getTimestamp() - $end->getTimestamp();
-	}
-	
-	public function getStringTime($start, $end)
-	{
-		$total = $start->getTimestamp() - $end->getTimestamp();
-		if ($total == 0) return null; 
-		$sec = $this->getRealTime($start, $end);
-		if ($sec < 3600) null;
-		if ($sec < 86400) return ((int)($sec / 3600)).' hours';
-		else return ((int)($sec / 86400)).' days';
-	}
-	public function getRateTime($start, $end)
-	{
-		$total = $start->getTimestamp() - $end->getTimestamp();
-		if ($total == 0) return 0; 
-		$sec = $this->getRealTime($start, $end);
-		if ($sec < 3600) 0;
-		if ($sec < 86400) return $sec/$total;
-		else return $sec/$total;
-	}
 
     /**
      * Get id
@@ -353,7 +252,6 @@ class Subscription
      */
     public function __construct()
     {
-        $this->countries = new \Doctrine\Common\Collections\ArrayCollection();
         $this->employees = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
@@ -565,29 +463,6 @@ class Subscription
     }
 
     /**
-     * Set activatedUntil
-     *
-     * @param \DateTime $activatedUntil
-     * @return Subscription
-     */
-    public function setActivatedUntil($activatedUntil)
-    {
-        $this->activatedUntil = $activatedUntil;
-
-        return $this;
-    }
-
-    /**
-     * Get activatedUntil
-     *
-     * @return \DateTime 
-     */
-    public function getActivatedUntil()
-    {
-        return $this->activatedUntil;
-    }
-
-    /**
      * Set isActive
      *
      * @param boolean $isActive
@@ -772,39 +647,6 @@ class Subscription
     }
 
     /**
-     * Add countries
-     *
-     * @param \VoIP\Company\SubscriptionsBundle\Entity\Country $countries
-     * @return Subscription
-     */
-    public function addCountry(\VoIP\Company\SubscriptionsBundle\Entity\Country $countries)
-    {
-        $this->countries[] = $countries;
-
-        return $this;
-    }
-
-    /**
-     * Remove countries
-     *
-     * @param \VoIP\Company\SubscriptionsBundle\Entity\Country $countries
-     */
-    public function removeCountry(\VoIP\Company\SubscriptionsBundle\Entity\Country $countries)
-    {
-        $this->countries->removeElement($countries);
-    }
-
-    /**
-     * Get countries
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getCountries()
-    {
-        return $this->countries;
-    }
-
-    /**
      * Add employees
      *
      * @param \VoIP\Company\StructureBundle\Entity\Employee $employees
@@ -835,29 +677,6 @@ class Subscription
     public function getEmployees()
     {
         return $this->employees;
-    }
-
-    /**
-     * Set dialPlanFirstItem
-     *
-     * @param \VoIP\Company\SubscriptionsBundle\Entity\DialPlanItem $dialPlanFirstItem
-     * @return Subscription
-     */
-    public function setDialPlanFirstItem(\VoIP\Company\SubscriptionsBundle\Entity\DialPlanItem $dialPlanFirstItem = null)
-    {
-        $this->dialPlanFirstItem = $dialPlanFirstItem;
-
-        return $this;
-    }
-
-    /**
-     * Get dialPlanFirstItem
-     *
-     * @return \VoIP\Company\SubscriptionsBundle\Entity\DialPlanItem 
-     */
-    public function getDialPlanFirstItem()
-    {
-        return $this->dialPlanFirstItem;
     }
 
     /**

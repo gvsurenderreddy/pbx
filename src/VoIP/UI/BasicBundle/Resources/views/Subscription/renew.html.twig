@@ -1,7 +1,0 @@
-{% extends "VoIPUIBasicBundle::layout.html.twig" %}
-{% block title %}48 | Renew Line {{ subscription.name }}{% endblock %}
-{% block headertitle %}Renew Line {{ subscription.name }}{% endblock headertitle %}
-{% block container %}
-<a href="{{ path('ui_subscription_credit', {'hash': subscription.hash, 'period': 'month'}) }}">Add a month</a>
-<a href="{{ path('ui_subscription_credit', {'hash': subscription.hash, 'period': 'year'}) }}">Add a year</a>
-{% endblock container %}

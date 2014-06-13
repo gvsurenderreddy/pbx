@@ -91,13 +91,6 @@ class Employee
      */
     private $thumbUrl;
 	
-    /**
-     * @var \DateTime
-     *
-     * @ORM\Column(name="activated_until", type="datetime", nullable=true)
-     */
-    private $activatedUntil;
-	
 	/**
      * @ORM\ManyToOne(targetEntity="\VoIP\Company\StructureBundle\Entity\Company", inversedBy="employees")
 	 * @ORM\JoinColumn(name="company_id", referencedColumnName="id", onDelete="CASCADE")
@@ -153,85 +146,11 @@ class Employee
 	
 	public function getStatus()
 	{
-		if (!$this->isValid()) return 'no-credit';
 		if (count($this->getPhones()) == 0) return 'danger';
 		elseif(count($this->getPhones()->filter(function($p){
 			return $p->getAmiStatusOk();
 		})) == 0) return 'warning';
 		return 'default';
-	}
-
-	public function isValidDetails()
-	{
-		if (!$date = $this->getActivatedUntil()) return 0;
-		$now = new \DateTime();
-		if ($date < $now) return 1;
-		$now->modify('+5 days');
-		if ($date < $now) return 2;
-		return 3;
-	}
-	public function isValid()
-	{
-		$now = new \DateTime();
-		$date = $this->getActivatedUntil();
-		return ($date && $date > $now);
-	}
-	public function isValidStatus()
-	{
-		switch ($this->isValidDetails()) {
-			case 0:
-				return 'status-danger';
-				break;
-			case 1:
-				return 'status-danger';
-				break;
-			case 2:
-				return 'status-warning';
-				break;
-			default:
-				return 'status-success';
-				break;
-		}
-	}
-	
-	public function getDayLeft()
-	{
-		$now = new \DateTime();
-		if (!$date = $this->getActivatedUntil()) return '0 day';
-		else {
-			$days = (int)(($date->getTimestamp() - $now->getTimestamp()) / (60 * 60 * 24));
-			if ($days <= 0) return '0 day';
-			if ($days == 1) return '1 day';
-			return $days . ' days';
-		}
-	}
-	
-	public function getRealTime($start, $end)
-	{
-		if ($this->getCreatedAt() >= $end) return 0;
-		if ($this->getCanceledAt() && $this->getCanceledAt() < $start) return 0;
-		if ($this->getCreatedAt() > $start) $start = $this->getCreatedAt();
-		if ($this->getCanceledAt() && $this->getCanceledAt() < $end) $end = $this->getCanceledAt();
-		return  $start->getTimestamp() - $end->getTimestamp();
-	}
-	
-	public function getStringTime($start, $end)
-	{
-		$total = $start->getTimestamp() - $end->getTimestamp();
-		if ($total == 0) return null; 
-		$sec = $this->getRealTime($start, $end);
-		if ($sec < 3600) null;
-		if ($sec < 86400) return ((int)($sec / 3600)).' hours';
-		else return ((int)($sec / 86400)).' days';
-	}
-	public function getRateTime($start, $end)
-	{
-		$total = $start->getTimestamp() - $end->getTimestamp();
-		if ($total == 0) return 0; 
-		$sec = $this->getRealTime($start, $end);
-		if ($sec < 3600) 0;
-		if ($sec < 86400) return $sec/$total;
-		else return $sec/$total;
 	}
 
     /**
@@ -522,29 +441,6 @@ class Employee
     public function getThumbUrl()
     {
         return $this->thumbUrl;
-    }
-
-    /**
-     * Set activatedUntil
-     *
-     * @param \DateTime $activatedUntil
-     * @return Employee
-     */
-    public function setActivatedUntil($activatedUntil)
-    {
-        $this->activatedUntil = $activatedUntil;
-
-        return $this;
-    }
-
-    /**
-     * Get activatedUntil
-     *
-     * @return \DateTime 
-     */
-    public function getActivatedUntil()
-    {
-        return $this->activatedUntil;
     }
 
     /**

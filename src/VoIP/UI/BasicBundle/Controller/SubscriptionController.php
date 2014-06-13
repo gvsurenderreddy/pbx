@@ -118,12 +118,6 @@ class SubscriptionController extends Controller
 		$voicemail->setAstVoicemail($astVoicemail);
 		$em->flush();
 		
-		/*
-		$astPeer = $sync->subscriptionToPeer($subscription);
-		$subscription->setAstPeer($astPeer);
-		$em->flush();
-		*/
-		
 		return $this->redirect($this->generateUrl('ui_company', array(
 			'hash' => $company->getHash()
 		)));
@@ -190,84 +184,6 @@ class SubscriptionController extends Controller
 			}
 		}
 
-		$em->flush();
-		
-		return $this->redirect($this->generateUrl('ui_company'));
-    }
-	
-    /**
-     * @Route("/{hash}/renew", name="ui_subscription_renew")
-     * @Template()
-	 * @Method("GET")
-	 * @Security("has_role('ROLE_USER')")
-     */
-    public function renewAction($hash)
-    {
-		$user = $this->getUser();
-		$em = $this->getDoctrine()->getManager();
-		$subscription = $em->getRepository('VoIPCompanySubscriptionsBundle:Subscription')->findOneBy(array(
-			'hash' => $hash
-		));
-        if (!$subscription) throw $this->createNotFoundException('Unable to find Subscription entity.');
-		$company = $subscription->getCompany();
-		if ($user->getCompany()->getId() != $company->getId()) throw $this->createNotFoundException('No authorization.');
-		
-		return array(
-			'subscription' => $subscription
-		);
-    }
-	
-    /**
-     * @Route("/{hash}/add-credit", name="ui_subscription_credit")
-	 * @Method("GET")
-	 * @Security("has_role('ROLE_USER')")
-     */
-    public function addCreditAction($hash)
-    {
-		$user = $this->getUser();
-		$em = $this->getDoctrine()->getManager();
-		$subscription = $em->getRepository('VoIPCompanySubscriptionsBundle:Subscription')->findOneBy(array(
-			'hash' => $hash
-		));
-        if (!$subscription) throw $this->createNotFoundException('Unable to find Subscription entity.');
-		$company = $subscription->getCompany();
-		if ($user->getCompany()->getId() != $company->getId()) throw $this->createNotFoundException('No authorization.');
-		
-		$request = $this->getRequest();
-		$period = $request->get('period');
-		
-		$now = new \DateTime();
-		
-		if (!$subscription->getActivatedUntil() || $now > $subscription->getActivatedUntil()) {
-			$date = $now;
-		} else {
-			$date = new \DateTime($subscription->getActivatedUntil()->format('Y-m-d'));
-		}
-		
-		$license = $subscription->getLicense();
-		
-		switch ($period) {
-			case 'month':
-				$date->modify('+1 month');
-				$price = $license;
-				break;
-			case 'year':
-				$date->modify('+1 year');
-				$price = 12 * $license;
-				break;
-		}
-		
-		if ($company->getCredit() < ($price + 5)) {
-			return $this->redirect($this->generateUrl('ui_company_topup', array(
-				'url' => $this->generateUrl('ui_subscription_renew', array(
-					'hash' => $hash
-				))
-			)));
-		}
-		
-		$company->setCredit($company->getCredit() - $price);
-		$subscription->setActivatedUntil($date);
-		
 		$em->flush();
 		
 		return $this->redirect($this->generateUrl('ui_company'));

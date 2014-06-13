@@ -13,7 +13,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 class DefaultController extends Controller
 {
     /**
-     * @Route("/")
+     * @Route("/", name="admin")
      * @Template()
      */
     public function indexAction()
@@ -22,7 +22,7 @@ class DefaultController extends Controller
     }
 	
     /**
-     * @Route("/subscriptions")
+     * @Route("/subscriptions", name="admin_subscriptions")
      * @Template()
      */
     public function subscriptionsAction()
@@ -37,6 +37,25 @@ class DefaultController extends Controller
 		$subscriptions = $query->getResult();
         return array(
         	'subscriptions' => $subscriptions
+        );
+    }
+	
+    /**
+     * @Route("/clients", name="admin_clients")
+     * @Template()
+     */
+    public function clientsAction()
+    {
+		$em = $this->getDoctrine()->getManager();
+		$query = $em->createQuery(
+		    'SELECT c
+		    FROM VoIPCompanyStructureBundle:Company c
+		    ORDER BY c.name ASC'
+		);
+
+		$companies = $query->getResult();
+        return array(
+        	'companies' => $companies
         );
     }
 }

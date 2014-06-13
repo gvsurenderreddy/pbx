@@ -1,6 +1,0 @@
-<tr>
-	<td>{{ item.absolutepriority }}</td>
-	<td>{{ item.type }}</td>
-	<td><a href="{{ path('ui_subscription_adddialplan', {'hash': item.absolutesubscription.hash, 'previousItemHash':item.hash}) }}">insert after</a></td>
-</tr>
-{% if item.nextitem %}{{ include('VoIPUIBasicBundle:DialPlanItem:show.html.twig',{ 'item': item.nextitem }) }}{% endif %}
