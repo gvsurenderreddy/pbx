@@ -163,9 +163,11 @@ class EmployeeController extends Controller
 		$company = $employee->getCompany();
 		if ($user->getCompany()->getId() != $company->getId()) throw $this->createNotFoundException('No authorization.');
 		
-		$employee->setIsActive(false);
-		$employee->setCanceledAt(new \DateTime());
-		$em->flush();
+		if (!$employee->isMain()) {
+			$employee->setIsActive(false);
+			$employee->setCanceledAt(new \DateTime());
+			$em->flush();
+		}
 		
 		return $this->redirect($this->generateUrl('ui_company'));
     }

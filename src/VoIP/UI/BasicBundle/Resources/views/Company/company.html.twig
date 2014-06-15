@@ -44,9 +44,11 @@
 					<div class="btn-group">
 						<a href="{{ path('ui_employee_edit', {'hash': employee.hash}) }}" data-toggle="tooltip" data-placement="bottom" title="Edit" class="tooltip-flag btn btn-default"><span class="glyphicon glyphicon-cog"></span></a>
 					</div>
+					{% if not employee.ismain %}
 					<div class="btn-group">
 						<a href="{{ path('ui_employee_delete', {'hash': employee.hash}) }}" data-toggle="tooltip" data-placement="bottom" title="Delete" class="tooltip-flag btn btn-default btn-trash"><span class="glyphicon glyphicon-trash"></span></a>
 					</div>
+					{% endif %}
 				</div>
 			</div>
 			<div class="status status-{{ employee.status }} tooltip-flag" data-toggle="tooltip" data-placement="bottom" title="Connected"></div>
