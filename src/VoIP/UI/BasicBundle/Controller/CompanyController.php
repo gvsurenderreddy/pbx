@@ -175,7 +175,7 @@ class CompanyController extends Controller
         return array(
 			'company' => $company,
 			'phones' => $phones,
-			'extensions' => $extensions,
+			'extensions' => array_values($extensions),
 		);
     }
 	

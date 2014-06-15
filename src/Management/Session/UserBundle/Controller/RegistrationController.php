@@ -24,6 +24,7 @@ use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use FOS\UserBundle\Model\UserInterface;
 use VoIP\Company\StructureBundle\Entity\Company;
+use VoIP\Company\StructureBundle\Entity\Employee;
 
 /**
  * Controller managing the registration
@@ -81,11 +82,20 @@ class RegistrationController extends Controller
 				$company->setCredit(10);
 				$licenseEmployee = $this->container->getParameter('price_employee');
 				$company->setLicenseEmployee($licenseEmployee ? $licenseEmployee : 10);
+				$firstEmployeeLicense = 48;
+				$company->setLicenseFirstEmployee($firstEmployeeLicense);
 				$licenseSubscription = $this->container->getParameter('price_subscription');
 				$company->setLicenseSubscription($licenseSubscription ? $licenseSubscription : 20);
 				$factor = $this->container->getParameter('rate_factor');
 				$company->setRateFactor($factor ? $factor : 2);
 				$em->persist($company);
+				$employee = new Employee();
+				$employee->setIsMain(true);
+				$employee->setName($user->getUserName());
+				$employee->setExtension(100);
+				$employee->setCompany($company);
+				$employee->setLicense($firstEmployeeLicense);
+				$em->persist($employee);
 				$em->flush();
 
                 if (null === $response = $event->getResponse()) {

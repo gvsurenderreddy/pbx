@@ -88,6 +88,13 @@ class Company
     /**
      * @var float
      *
+     * @ORM\Column(name="license_first_employee", type="float")
+     */
+    private $licenseFirstEmployee = 48;
+	
+    /**
+     * @var float
+     *
      * @ORM\Column(name="rate_factor", type="float")
      */
     private $rateFactor = 0;
@@ -800,5 +807,28 @@ class Company
     public function getIsTrial()
     {
         return $this->isTrial;
+    }
+
+    /**
+     * Set licenseFirstEmployee
+     *
+     * @param float $licenseFirstEmployee
+     * @return Company
+     */
+    public function setLicenseFirstEmployee($licenseFirstEmployee)
+    {
+        $this->licenseFirstEmployee = $licenseFirstEmployee;
+
+        return $this;
+    }
+
+    /**
+     * Get licenseFirstEmployee
+     *
+     * @return float 
+     */
+    public function getLicenseFirstEmployee()
+    {
+        return $this->licenseFirstEmployee;
     }
 }

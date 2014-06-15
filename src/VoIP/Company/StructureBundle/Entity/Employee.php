@@ -79,6 +79,13 @@ class Employee
     private $isActive = true;
 	
     /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="is_main", type="boolean")
+     */
+    private $isMain = false;
+	
+    /**
      * @var string
      *
      * @ORM\Column(name="image_url", type="string", length=255, nullable=true)
@@ -520,5 +527,28 @@ class Employee
     public function getPayments()
     {
         return $this->payments;
+    }
+
+    /**
+     * Set isMain
+     *
+     * @param boolean $isMain
+     * @return Employee
+     */
+    public function setIsMain($isMain)
+    {
+        $this->isMain = $isMain;
+
+        return $this;
+    }
+
+    /**
+     * Get isMain
+     *
+     * @return boolean 
+     */
+    public function getIsMain()
+    {
+        return $this->isMain;
     }
 }
