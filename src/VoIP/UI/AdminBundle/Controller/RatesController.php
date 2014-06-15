@@ -8,6 +8,8 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use VoIP\Company\SubscriptionsBundle\Entity\OutGroup;
 use VoIP\PBX\RealTimeBundle\Extra\Sync;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use VoIP\PBX\BillBundle\Entity\Rate;
 
 /**
  * @Route("/admin/rates")
@@ -175,5 +177,61 @@ class RatesController extends Controller
 		}
 		$em->flush();
         return $this->redirect($this->generateUrl('outgroups'));
+    }
+    /**
+     * @Route("/csv", name="rate_csv")
+     * @Template()
+     * @Method("GET")
+     */
+    public function csvAction()
+    {
+		return array();
+    }
+    /**
+     * @Route("/csv")
+     * @Template()
+     * @Method("POST")
+     */
+    public function csvPostAction()
+    {
+		$request = $this->getRequest();
+		$em = $this->getDoctrine()->getManager();
+		$csv = $request->files->get('file');
+		$string = file_get_contents($csv);
+		$tmp = explode("\n", $string);
+		unset($tmp[0]);
+		$data = array();
+		foreach ($tmp as $t) {
+			$row = explode(',', $t);
+			if (isset($row[2])) {
+				$rate = $em->getRepository('VoIPPBXBillBundle:Rate')->findOneBy(array(
+					'code' => $row[0],
+					'prefix' => $row[2]
+				));
+				if (!$rate) {
+					$rate = new Rate();
+					$rate->setCode($row[0]);
+					$rate->setName($row[1]);
+					$rate->setPrefix($row[2]);
+					$rate->setRateIn(0);
+					$rate->setPrecision(strlen($row[2]));
+					$rate->setRate($row[3]);
+					$rate->setUpdatedAt(new \DateTime());
+					$em->persist($rate);
+				} else {
+					$rate->setRate($row[3]);
+					$rate->setUpdatedAt(new \DateTime());
+				}
+				
+				$row[4] = $rate->getId();
+				$data[] = $row;
+			}
+			
+		}
+		$em->flush();
+		$now = new \DateTime();
+		return $this->redirect($this->generateUrl('rate_csv', array(
+			'updated' => $now->format('Y-m-d_H-i-s')
+		)));
     }
 }
