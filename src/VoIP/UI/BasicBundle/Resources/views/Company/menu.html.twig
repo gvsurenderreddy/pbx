@@ -3,7 +3,7 @@
 		<a href="{{ path('ui_company') }}"><img src="{% if company.imageurl %}{{ company.imageurl }}{% else %}https://s3-ap-southeast-1.amazonaws.com/fortyeight/companies/images/3a1225ee_256.png{% endif %}" alt="{{ company.name }}" class="img-circle"></a>
 	</div>
 	<div class="company-name">{{ company.name }}</div>
-	<div class="company-since">S$ {{ company.credit|number_format(2, '.', ',') }}</div>
+	<div class="company-since">$ {{ company.credit|number_format(2, '.', ',') }}</div>
 	{% if company.istrial %}<div class="company-trial"><span class="label label-info">Trial</span></div>{% endif %}
 </center>
 <center>

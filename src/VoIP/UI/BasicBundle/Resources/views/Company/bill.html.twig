@@ -8,7 +8,7 @@
 {% endif %}
 <div class="row bill">
 	<div class="col-lg-6">
-		<h2>Monthly Spend: S$ {{ total|number_format(2, '.', ',') }}</h2>
+		<h2>Monthly Spend: $ {{ total|number_format(2, '.', ',') }}</h2>
 		<form class="form-inline" role="form" action="{{ path('ui_company_bill') }}" method="GET">
 			<div class="form-group">
 				<label class="" for="month">Find previous bills</label>
@@ -38,7 +38,7 @@
 				</div>
 				<div class="legend-item">
 					<div class="legend-item-color legend-item-color-sub"></div>
-					<div class="legend-item-text">Subscriptions</div>
+					<div class="legend-item-text">Numbers</div>
 				</div>
 			</div>
 		</div>
@@ -48,27 +48,27 @@
 				<table class="table table-hover">
 					<tr>
 						<td>Communication</td>
-						<td class="price">S$ {{ communication|number_format(3, '.', ',') }}</td>
+						<td class="price">$ {{ communication|number_format(3, '.', ',') }}</td>
 					</tr>
 					<tr>
 						<td>Buddies</td>
-						<td class="price">S$ {{ employees|number_format(3, '.', ',') }}</td>
+						<td class="price">$ {{ employees|number_format(3, '.', ',') }}</td>
 					</tr>
 					<tr>
 						<td>Numbers</td>
-						<td class="price">S$ {{ subscriptions|number_format(3, '.', ',') }}</td>
+						<td class="price">$ {{ subscriptions|number_format(3, '.', ',') }}</td>
 					</tr>
 					<tr>
 						<td>Other services</td>
-						<td class="price">S$ 0.00</td>
+						<td class="price">$ 0.00</td>
 					</tr>
 					<tr>
 						<td>Tax</td>
-						<td class="price">S$ 0.00</td>
+						<td class="price">$ 0.00</td>
 					</tr>
 					<tr>
 						<th>Total paid</th>
-						<th class="price">S$ {{ total|number_format(2, '.', ',') }}</th>
+						<th class="price">$ {{ total|number_format(2, '.', ',') }}</th>
 					</tr>
 				</table>
 			</div>
