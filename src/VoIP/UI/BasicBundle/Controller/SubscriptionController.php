@@ -72,6 +72,7 @@ class SubscriptionController extends Controller
 		$host = 'siptrunk.hoiio.com';
 		$file = $request->files->get('announcement');
 		$record = $request->get('record');
+		$prefix = '' . $request->get('prefix');
 		
 		if ($file) {
 	        $fileName = hash('crc32b', uniqid(mt_rand(), true)).'.mp3';
@@ -96,6 +97,7 @@ class SubscriptionController extends Controller
 		$subscription->setNumber($number);
 		$subscription->setUsername($username);
 		$subscription->setSecret($secret);
+		$subscription->setPrefix($prefix);
 		switch ($type) {
 			case 'hoiio':
 				$host = 'siptrunk.hoiio.com';

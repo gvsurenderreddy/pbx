@@ -270,6 +270,7 @@ class CompanyController extends Controller
 		$secret = $request->get('secret');
 		$file = $request->files->get('announcement');
 		$record = $request->get('record');
+		$prefix = '' . $request->get('prefix');
 		
 		
 		switch ($type) {
@@ -293,6 +294,7 @@ class CompanyController extends Controller
 		$subscription->setSecret($secret);
 		$subscription->setHost($host);
 		$subscription->setCompany($company);
+		$subscription->setPrefix($prefix);
 		if ($employees) {
 			foreach ($employees as $employeeId) {
 				$employee = $em->getRepository('VoIPCompanyStructureBundle:Employee')->find($employeeId);

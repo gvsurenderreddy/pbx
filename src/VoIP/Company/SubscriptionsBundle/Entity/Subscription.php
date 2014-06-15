@@ -93,6 +93,13 @@ class Subscription
     private $hash;
 	
     /**
+     * @var string
+     *
+     * @ORM\Column(name="prefix", type="string", length=20)
+     */
+    private $prefix = '';
+	
+    /**
      * @var boolean
      *
      * @ORM\Column(name="is_active", type="boolean")
@@ -802,5 +809,28 @@ class Subscription
     public function getPayments()
     {
         return $this->payments;
+    }
+
+    /**
+     * Set prefix
+     *
+     * @param string $prefix
+     * @return Subscription
+     */
+    public function setPrefix($prefix)
+    {
+        $this->prefix = $prefix;
+
+        return $this;
+    }
+
+    /**
+     * Get prefix
+     *
+     * @return string 
+     */
+    public function getPrefix()
+    {
+        return $this->prefix;
     }
 }
