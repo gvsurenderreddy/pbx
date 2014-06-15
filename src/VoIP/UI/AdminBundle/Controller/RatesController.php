@@ -196,8 +196,11 @@ class RatesController extends Controller
     {
 		$request = $this->getRequest();
 		$em = $this->getDoctrine()->getManager();
-		$csv = $request->files->get('file');
-		$string = file_get_contents($csv);
+		if ($csv = $request->files->get('file')) {
+			$string = file_get_contents($csv);
+		} else {
+			$string = file_get_contents($request->get('wget'));
+		}
 		$tmp = explode("\n", $string);
 		unset($tmp[0]);
 		$data = array();
