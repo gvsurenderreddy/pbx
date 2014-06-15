@@ -201,6 +201,7 @@ class RatesController extends Controller
 		$tmp = explode("\n", $string);
 		unset($tmp[0]);
 		$data = array();
+		$factor = 1.05;
 		foreach ($tmp as $t) {
 			$row = explode(',', $t);
 			if (isset($row[2])) {
@@ -215,11 +216,11 @@ class RatesController extends Controller
 					$rate->setPrefix($row[2]);
 					$rate->setRateIn(0);
 					$rate->setPrecision(strlen($row[2]));
-					$rate->setRate($row[3]);
+					$rate->setRate($factor * $row[3]);
 					$rate->setUpdatedAt(new \DateTime());
 					$em->persist($rate);
 				} else {
-					$rate->setRate($row[3]);
+					$rate->setRate($factor * $row[3]);
 					$rate->setUpdatedAt(new \DateTime());
 				}
 				

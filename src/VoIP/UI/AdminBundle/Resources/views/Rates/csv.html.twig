@@ -1,6 +1,12 @@
 {% extends '::admin.html.twig' %}
 {% block container %}
 <div class="container">
+	{% if app.request.get('updated') %}
+	<div class="alert alert-success alert-dismissable">
+		<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+		<strong>Rates updated</strong>
+	</div>
+	{% endif %}
 	<form class="form-horizontal" role="form" action="{{ path('rate_csv') }}" method="POST" enctype="multipart/form-data">
 		<div class="form-group">
 			<label for="file" class="col-sm-2 control-label">File</label>
