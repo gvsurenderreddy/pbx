@@ -663,7 +663,7 @@ class CompanyController extends Controller
     }
 
     /**
-     * @Route("/parameters/info", name="ui_company_parameters_info")
+     * @Route("/settings/info", name="ui_company_parameters_info")
      * @Template()
 	 * @Method("GET")
 	 * @Security("has_role('ROLE_USER')")
@@ -678,7 +678,7 @@ class CompanyController extends Controller
     }
 	
     /**
-     * @Route("/parameters/info")
+     * @Route("/settings/info")
      * @Template()
 	 * @Method("POST")
 	 * @Security("has_role('ROLE_USER')")
@@ -700,7 +700,7 @@ class CompanyController extends Controller
     }
 	
     /**
-     * @Route("/parameters/image", name="ui_company_parameters_image")
+     * @Route("/settings/image", name="ui_company_parameters_image")
      * @Template()
 	 * @Method("GET")
 	 * @Security("has_role('ROLE_USER')")
@@ -715,7 +715,7 @@ class CompanyController extends Controller
     }
 	
     /**
-     * @Route("/parameters/image")
+     * @Route("/settings/image")
      * @Template()
 	 * @Method("POST")
 	 * @Security("has_role('ROLE_USER')")

@@ -26,6 +26,6 @@
 	<li class="{{ route == 'ui_company' ? 'active' }}"><a href="{{ path('ui_company') }}"><span class="glyphicon glyphicon-th"></span> Switchboard</a></li>
 	<li class="{{ route == 'ui_company_mailbox' ? 'active' }}"><a href="{{ path('ui_company_mailbox') }}"><span class="glyphicon glyphicon-play"></span> Mailbox{% if newmessages %} <span class="badge pull-right">{{ newmessages }}</span>{% endif %}</a></li>
 	<li class="{{ route == 'ui_company_cdr' ? 'active' }}"><a href="{{ path('ui_company_cdr') }}"><span class="glyphicon glyphicon-list"></span> Call details</a></li>
-	<li class="{{ (route == 'fos_user_change_password' or 'ui_company_parameters' in route) ? 'active' }}"><a href="{{ path('ui_company_parameters_info') }}"><span class="glyphicon glyphicon-cog"></span> Parameters</a></li>
+	<li class="{{ (route == 'fos_user_change_password' or 'ui_company_parameters' in route) ? 'active' }}"><a href="{{ path('ui_company_parameters_info') }}"><span class="glyphicon glyphicon-cog"></span> Settings</a></li>
 	<li class="{{ route == 'ui_company_bill' ? 'active' }}"><a href="{{ path('ui_company_bill') }}"><span class="glyphicon glyphicon-usd"></span> My bill</a></li>
 </ul>
