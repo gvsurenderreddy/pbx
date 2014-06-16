@@ -46,6 +46,13 @@ class OutGroup
     /**
      * @var string
      *
+     * @ORM\Column(name="name", type="string", length=128)
+     */
+    private $name;
+
+    /**
+     * @var string
+     *
      * @ORM\Column(name="hash", type="string", length=8)
      */
     private $hash;
@@ -324,5 +331,28 @@ class OutGroup
     public function getOutLines()
     {
         return $this->outLines;
+    }
+
+    /**
+     * Set name
+     *
+     * @param string $name
+     * @return OutGroup
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
+
+        return $this;
+    }
+
+    /**
+     * Get name
+     *
+     * @return string 
+     */
+    public function getName()
+    {
+        return $this->name;
     }
 }

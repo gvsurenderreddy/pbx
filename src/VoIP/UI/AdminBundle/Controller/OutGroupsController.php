@@ -65,8 +65,10 @@ class OutGroupsController extends Controller
 		
 		$request = $this->getRequest();
 		$isPublic = $request->get('ispublic');
+		$name = $request->get('name');
 		
 		$outGroup->setIsPublic($isPublic);
+		$outGroup->setName($name);
 		
 		$em->persist($outGroup);
 		$em->flush();
@@ -87,8 +89,10 @@ class OutGroupsController extends Controller
 		
 		$request = $this->getRequest();
 		$isPublic = $request->get('ispublic');
+		$name = $request->get('name');
 		
 		$outGroup->setIsPublic($isPublic);
+		$outGroup->setName($name);
 		
 		$em->persist($outGroup);
 		$em->flush();

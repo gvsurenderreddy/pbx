@@ -99,6 +99,13 @@ class OutLine
      */
     private $showNumber = false;
 	
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="prec", type="integer")
+     */
+    private $precision = 0;
+	
 	/**
      * @ORM\OneToOne(targetEntity="\VoIP\PBX\RealTimeBundle\Entity\SipPeer", inversedBy="subscription")
 	 * @ORM\JoinColumn(name="ast_sippeer_id", referencedColumnName="id", onDelete="CASCADE")
@@ -503,5 +510,28 @@ class OutLine
     public function getRates()
     {
         return $this->rates;
+    }
+
+    /**
+     * Set precision
+     *
+     * @param integer $precision
+     * @return OutLine
+     */
+    public function setPrecision($precision)
+    {
+        $this->precision = $precision;
+
+        return $this;
+    }
+
+    /**
+     * Get precision
+     *
+     * @return integer 
+     */
+    public function getPrecision()
+    {
+        return $this->precision;
     }
 }

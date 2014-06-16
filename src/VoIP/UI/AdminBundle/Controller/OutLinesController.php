@@ -71,6 +71,7 @@ class OutLinesController extends Controller
 		$isPublic = $request->get('ispublic');
 		$showNumber = $request->get('shownumber');
 		$name = $request->get('name');
+		$precision = $request->get('precision');
 		
 		$outLine->setName($name);
 		$outLine->setType($type);
@@ -79,6 +80,7 @@ class OutLinesController extends Controller
 		$outLine->setHost($host);
 		$outLine->setIsPublic($isPublic);
 		$outLine->setShowNumber($showNumber);
+		$outLine->setPrecision($precision);
 		
 		$em->persist($outLine);
 		$em->flush();
@@ -112,6 +114,7 @@ class OutLinesController extends Controller
 		$isPublic = $request->get('ispublic');
 		$showNumber = $request->get('shownumber');
 		$name = $request->get('name');
+		$precision = $request->get('precision');
 		
 		$outLine->setName($name);
 		$outLine->setType($type);
@@ -120,6 +123,7 @@ class OutLinesController extends Controller
 		$outLine->setHost($host);
 		$outLine->setIsPublic($isPublic);
 		$outLine->setShowNumber($showNumber);
+		$outLine->setPrecision($precision);
 		
 		$em->persist($outLine);
 		$em->flush();

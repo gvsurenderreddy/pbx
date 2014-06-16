@@ -9,6 +9,7 @@
 		<th>Hash</th>
 		<th colspan="2">Companies</th>
 		<th colspan="2">Lines</th>
+		<th>Name</th>
 		<th>Public</th>
 		<th>Actions</th>
 	</tr>
@@ -29,6 +30,7 @@
 			<a href="{{ path('outline_edit', {'id': outline.id}) }}">{{ outline.hash }}</a>{% if not loop.last %}<br>{% endif %}
 			{% endfor %}
 		</td>
+		<td>{{ outgroup.name }}</td>
 		<td>{% if outgroup.ispublic %}<span class="glyphicon glyphicon-ok"></span>{% endif %}</td>
 		<td>
 			<a href="{{ path('outgroup_edit', {'id': outgroup.id}) }}">edit</a>
