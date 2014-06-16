@@ -6,7 +6,7 @@
 		<div class="col-sm-10">
 			<select class="form-control" id="outlines" name="outlines[]" multiple size="20">
 				{% for outline in outlines %}
-				<option value="{{ outline.id }}" {% if outline in outgroup.outlines %}selected{% endif %}>{{ outline.hash }}</option>
+				<option value="{{ outline.id }}" {% if outline in outgroup.outlines %}selected{% endif %}>{{ outline.name }} ({{ outline.hash }})</option>
 				{% endfor %}
 			</select>
 		</div>
