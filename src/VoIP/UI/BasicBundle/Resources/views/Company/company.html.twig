@@ -106,7 +106,7 @@
 		<div class="switchboard-card switchboard-subscription {% for employee in subscription.employees %} emp{{ employee.hash }} {% for phone in employee.phones %} pho{{ phone.hash }}{% endfor %}{% endfor %}" data-hash="{{ subscription.hash }}">
 			<div class="contentbox">
 				<div>
-					{{ subscription.number }}
+					{{ subscription.number }} {% if subscription.vmfile %} <span class="glyphicon glyphicon-music tooltip-flag" data-toggle="tooltip" data-placement="bottom" title="Personal voicemail"></span>{% endif %}{% if subscription.recordvm %} <span class="glyphicon glyphicon-record tooltip-flag" data-toggle="tooltip" data-placement="bottom" title="Record voicemail"></span>{% endif %}
 				</div>
 				<div>
 					{% for employee in subscription.employees if employee.isactive %}
