@@ -70,6 +70,78 @@ class SubscriptionController extends Controller
 		$username = $request->get('username');
 		$secret = $request->get('secret');
 		$host = 'siptrunk.hoiio.com';
+		
+		$subscription->setName($number);
+		$subscription->setType($type);
+		$subscription->setNumber($number);
+		$subscription->setUsername($username);
+		$subscription->setSecret($secret);
+		switch ($type) {
+			case 'hoiio':
+				$host = 'siptrunk.hoiio.com';
+				break;
+			default:
+				$host = 'dynamic';
+				break;
+		}
+		$subscription->setCompany($company);
+		
+		$em->flush();
+		
+		$voicemail = $subscription->getVoicemail();
+		$em->persist($voicemail);
+		$em->flush();
+		
+		$sync = new Sync();
+		$astVoicemail = $sync->voicemailToVoicemail($voicemail);
+		$em->persist($astVoicemail);
+		$voicemail->setAstVoicemail($astVoicemail);
+		$em->flush();
+		
+		return $this->redirect($this->generateUrl('ui_company', array(
+			'hash' => $company->getHash()
+		)));
+    }
+	
+    /**
+     * @Route("/{hash}/settings", name="ui_subscription_settings")
+     * @Template()
+	 * @Method("GET")
+	 * @Security("has_role('ROLE_USER')")
+     */
+    public function settingsAction($hash)
+    {
+		$user = $this->getUser();
+		$em = $this->getDoctrine()->getManager();
+		$subscription = $em->getRepository('VoIPCompanySubscriptionsBundle:Subscription')->findOneBy(array(
+			'hash' => $hash
+		));
+        if (!$subscription) throw $this->createNotFoundException('Unable to find Subsciption entity.');
+		$company = $subscription->getCompany();
+		if ($user->getCompany()->getId() != $company->getId()) throw $this->createNotFoundException('No authorization.');
+        return array(
+			'subscription' => $subscription,
+			'company' => $company
+		);
+    }
+	
+    /**
+     * @Route("/{hash}/settings")
+     * @Template()
+	 * @Method("POST")
+	 * @Security("has_role('ROLE_USER')")
+     */
+    public function updateSettingsAction($hash)
+    {
+		$user = $this->getUser();
+		$em = $this->getDoctrine()->getManager();
+		$subscription = $em->getRepository('VoIPCompanySubscriptionsBundle:Subscription')->findOneBy(array(
+			'hash' => $hash
+		));
+        if (!$subscription) throw $this->createNotFoundException('Unable to find Subsciption entity.');
+		$company = $subscription->getCompany();
+		if ($user->getCompany()->getId() != $company->getId()) throw $this->createNotFoundException('No authorization.');
+		
 		$file = $request->files->get('announcement');
 		$record = $request->get('record');
 		$prefix = '' . $request->get('prefix');
@@ -92,32 +164,8 @@ class SubscriptionController extends Controller
 		}
 		
 		$subscription->setRecordVM($record);
-		$subscription->setName($number);
-		$subscription->setType($type);
-		$subscription->setNumber($number);
-		$subscription->setUsername($username);
-		$subscription->setSecret($secret);
 		$subscription->setPrefix($prefix);
-		switch ($type) {
-			case 'hoiio':
-				$host = 'siptrunk.hoiio.com';
-				break;
-			default:
-				$host = 'dynamic';
-				break;
-		}
-		$subscription->setCompany($company);
-		
-		$em->flush();
-		
-		$voicemail = $subscription->getVoicemail();
-		$em->persist($voicemail);
-		$em->flush();
-		
-		$sync = new Sync();
-		$astVoicemail = $sync->voicemailToVoicemail($voicemail);
-		$em->persist($astVoicemail);
-		$voicemail->setAstVoicemail($astVoicemail);
+	
 		$em->flush();
 		
 		return $this->redirect($this->generateUrl('ui_company', array(

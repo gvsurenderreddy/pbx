@@ -80,6 +80,7 @@ class RegistrationController extends Controller
 					$company->setOutGroup($outGroup);
 				}
 				$company->setCredit(10);
+				$company->setIsMaster(false);
 				$licenseEmployee = $this->container->getParameter('price_employee');
 				$company->setLicenseEmployee($licenseEmployee ? $licenseEmployee : 10);
 				$firstEmployeeLicense = 48;

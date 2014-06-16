@@ -1,5 +1,6 @@
 {% extends '::admin.html.twig' %}
 {% block container %}
+<a href="{{ path('admin_company_edit', {'reference': company.hash}) }}">Edit</a>
 <table class="table table-condensed table-hover">
 	<tr>
 		<th>Name</th>
@@ -16,6 +17,10 @@
 	<tr>
 		<th>Credit</th>
 		<td>{{ company.credit }}</td>
+	</tr>
+	<tr>
+		<th>Master</th>
+		<td>{{ company.ismaster ? 'yes' : 'no' }}</td>
 	</tr>
 	<tr>
 		<th>Since</th>

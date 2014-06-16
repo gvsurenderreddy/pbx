@@ -65,6 +65,13 @@ class Company
     private $isTrial = true;
 	
     /**
+     * @var boolean
+     *
+     * @ORM\Column(name="is_master", type="boolean")
+     */
+    private $isMaster = false;
+	
+    /**
      * @var float
      *
      * @ORM\Column(name="credit", type="float")
@@ -830,5 +837,28 @@ class Company
     public function getLicenseFirstEmployee()
     {
         return $this->licenseFirstEmployee;
+    }
+
+    /**
+     * Set isMaster
+     *
+     * @param boolean $isMaster
+     * @return Company
+     */
+    public function setIsMaster($isMaster)
+    {
+        $this->isMaster = $isMaster;
+
+        return $this;
+    }
+
+    /**
+     * Get isMaster
+     *
+     * @return boolean 
+     */
+    public function getIsMaster()
+    {
+        return $this->isMaster;
     }
 }

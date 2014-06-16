@@ -284,7 +284,6 @@ class CompanyController extends Controller
 		
 		$prefix = $request->get('prefix');
 		$receive = true;
-		$employees = $request->get('employees');
 		
 		$subscription = new Subscription();
 		$subscription->setName($number);
@@ -295,35 +294,11 @@ class CompanyController extends Controller
 		$subscription->setHost($host);
 		$subscription->setCompany($company);
 		$subscription->setPrefix($prefix);
-		if ($employees) {
-			foreach ($employees as $employeeId) {
-				$employee = $em->getRepository('VoIPCompanyStructureBundle:Employee')->find($employeeId);
-				if (!$employee) throw $this->createNotFoundException('Unable to find Employee entity.');
-				$subscription->addEmployee($employee);
-				$employee->addSubscription($subscription);
-			}
-		}
-		
-		if ($file) {
-	        $fileName = hash('crc32b', uniqid(mt_rand(), true)).'.mp3';
-			$filePath = __DIR__.'/../../../../../web/tmp/';
-	        $file->move($filePath, $fileName);
-			$s3 = $this->container->get('aws_s3');
-			$s3->create_object('fortyeight', 'ging/'.$fileName, array(
-				'fileUpload' => $filePath.$fileName,
-				'acl' => \AmazonS3::ACL_PUBLIC,
-				'headers' => array(
-					'Cache-Control'    => 'max-age=8000000',
-					'Content-Language' => 'en-US',
-					'Expires'          => 'Tue, 01 Jan 2030 03:54:42 GMT',
-				)
-			));
-			$subscription->setVmFile($fileName);
-		}
+		$subscription->setIsEditable($company->getIsMaster());
 		
 		$subscription->setLicense($company->getLicenseSubscription());
 		
-		$subscription->setRecordVM($record);
+		$subscription->setRecordVM(false);
 		
 		$em->persist($subscription);
 		$em->flush();

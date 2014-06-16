@@ -5,6 +5,7 @@ namespace VoIP\UI\AdminBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 
 /**
  * @Route("/admin")
@@ -73,5 +74,43 @@ class DefaultController extends Controller
         return array(
         	'company' => $company
         );
+    }
+    /**
+     * @Route("/company/{reference}/edit", name="admin_company_edit")
+	 * @Method("GET")
+     * @Template()
+     */
+    public function editCompanyAction($reference)
+    {
+		$em = $this->getDoctrine()->getManager();
+		$company = $em->getRepository('VoIPCompanyStructureBundle:Company')->findOneBy(array(
+			'hash' => $reference
+		));
+		if (!$company) throw $this->createNotFoundException('Unable to find $company entity.');
+
+        return array(
+        	'company' => $company
+        );
+    }
+    /**
+     * @Route("/company/{reference}/edit")
+	 * @Method("POST")
+     * @Template()
+     */
+    public function updateCompanyAction($reference)
+    {
+		$em = $this->getDoctrine()->getManager();
+		$company = $em->getRepository('VoIPCompanyStructureBundle:Company')->findOneBy(array(
+			'hash' => $reference
+		));
+		if (!$company) throw $this->createNotFoundException('Unable to find $company entity.');
+		$request = $this->getRequest();
+		$master = $request->get('master');
+		$company->setIsMaster($master);
+		$em->flush();
+
+        return $this->redirect($this->generateUrl('admin_company', array(
+        	'reference' => $reference
+        )));
     }
 }
