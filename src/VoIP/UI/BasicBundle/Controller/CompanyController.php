@@ -147,8 +147,8 @@ class CompanyController extends Controller
 		
 		$em->flush();
 		
-		if (strpos($phone->getType(), 'cisco.') !== false) {
-			return $this->redirect($this->generateUrl('ui_phone_configure', array(
+		if (count($phone->getEmployees()) == 0) {
+			return $this->redirect($this->generateUrl('ui_phone_employees', array(
 				'hash' => $phone->getHash()
 			)));
 		} else {
@@ -316,7 +316,15 @@ class CompanyController extends Controller
 		$voicemail->setAstVoicemail($astVoicemail);
 		$em->flush();
 		
-		return $this->redirect($this->generateUrl('ui_company'));
+		if (count($subscription->getEmployees()) == 0) {
+			return $this->redirect($this->generateUrl('ui_subscription_buddies', array(
+				'hash' => $subscription->getHash()
+			)));
+		} else {
+			return $this->redirect($this->generateUrl('ui_company'));
+		}
+		
+		
     }
 	
     /**

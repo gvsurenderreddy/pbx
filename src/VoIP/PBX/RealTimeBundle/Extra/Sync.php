@@ -70,7 +70,7 @@ class Sync {
 		$sippeer->setAllow('gsm');
 		$sippeer->setPermit('0.0.0.0/0.0.0.0');
 		$sippeer->setDynamic('yes');
-		$sippeer->setQualify(200);
+		$sippeer->setQualify(2000);
 		$sippeer->setDirectmedia('no');
 		$sippeer->setDisallow(null);
 		$sippeer->setFromUser(null);
