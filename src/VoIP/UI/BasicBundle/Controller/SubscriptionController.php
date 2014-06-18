@@ -140,6 +140,8 @@ class SubscriptionController extends Controller
 		$company = $subscription->getCompany();
 		if ($user->getCompany()->getId() != $company->getId()) throw $this->createNotFoundException('No authorization.');
 		
+		$request = $this->getRequest();
+		
 		$file = $request->files->get('announcement');
 		$record = $request->get('record');
 		$prefix = '' . $request->get('prefix');
