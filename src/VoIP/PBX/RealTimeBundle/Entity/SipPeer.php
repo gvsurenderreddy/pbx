@@ -241,6 +241,13 @@ class SipPeer
     /**
      * @var string
      *
+     * @ORM\Column(name="qualifyfreq", type="string", length=10, nullable=true)
+     */
+    private $qualifyfreq;
+	
+    /**
+     * @var string
+     *
      * @ORM\Column(name="fromuser", type="string", length=80, nullable=true)
      */
     private $fromuser;
@@ -1152,5 +1159,28 @@ class SipPeer
     public function getSubscription()
     {
         return $this->subscription;
+    }
+
+    /**
+     * Set qualifyfreq
+     *
+     * @param string $qualifyfreq
+     * @return SipPeer
+     */
+    public function setQualifyfreq($qualifyfreq)
+    {
+        $this->qualifyfreq = $qualifyfreq;
+
+        return $this;
+    }
+
+    /**
+     * Get qualifyfreq
+     *
+     * @return string 
+     */
+    public function getQualifyfreq()
+    {
+        return $this->qualifyfreq;
     }
 }
