@@ -4,40 +4,26 @@
 {% block container %}
 <div class="row form-new">
 	<div class="col-md-offset-3 col-md-6">
-		<div class="alert alert-danger">
-			To avoid encountering problems when connecting your phone line, make sure that you have authorised the following IP address to communicate with your provider:
-			<ul>
-				{% for ip in ips %}
-				<li>{{ ip }}</li>
-				{% endfor %}
-			</ul>
-		</div>
 		<form class="form-horizontal" role="form" action="{{ path('ui_subscription_edit', {'hash': subscription.hash}) }}" method="POST" enctype="multipart/form-data">
 			<div class="form-group">
-				<label for="type" class="col-sm-2 control-label">Type</label>
+				<label for="prefix" class="col-sm-2 control-label">Prefix</label>
 				<div class="col-sm-10">
-					<select type="text" class="form-control" id="type" name="type" required>
-						<option value="hoiio" {% if subscription.type == 'hoiio' %}selected="selected"{% endif %}>Hoiio.com</option>
-						{#<option value="spa3102" {% if subscription.type == 'spa3102' %}selected="selected"{% endif %}>SPA 3102</option> #}
+					<input type="text" class="form-control" id="prefix" name="prefix" value="{{ subscription.prefix }}">
+				</div>
+			</div>
+			<div class="form-group">
+				<label for="announcement" class="col-sm-2 control-label">Voicemail</label>
+				<div class="col-sm-10">
+					<input type="file" class="form-control" id="announcement" name="announcement">
+				</div>
+			</div>
+			<div class="form-group">
+				<label for="record" class="col-sm-2 control-label">Record VM</label>
+				<div class="col-sm-10">
+					<select type="text" class="form-control" id="record" name="record" required>
+						<option value="1" {% if subscription.recordvm %}selected="selected"{% endif %}>Yes</option>
+						<option value="0" {% if not subscription.recordvm %}selected="selected"{% endif %}>No</option>
 					</select>
-				</div>
-			</div>
-			<div class="form-group">
-				<label for="number" class="col-sm-2 control-label">Number</label>
-				<div class="col-sm-10">
-					<input type="text" class="form-control" id="number" name="number" placeholder="+6512344321" value="{{ subscription.number }}" required>
-				</div>
-			</div>
-			<div class="form-group">
-				<label for="username" class="col-sm-2 control-label">Username</label>
-				<div class="col-sm-10">
-					<input class="form-control" id="username" name="username" value="{{ subscription.username }}" required>
-				</div>
-			</div>
-			<div class="form-group">
-				<label for="secret" class="col-sm-2 control-label">Secret</label>
-				<div class="col-sm-10">
-					<input type="text" class="form-control" id="secret" name="secret" value="{{ subscription.secret }}" required>
 				</div>
 			</div>
 			<div class="form-group">
