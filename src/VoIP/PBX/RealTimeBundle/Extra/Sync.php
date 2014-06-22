@@ -61,6 +61,7 @@ class Sync {
 		$fields = array(
 			'name' => urlencode($phone->getHash()),
 			'secret' => urlencode($phone->getSecret()),
+			'context' => 'internal',
 			'host' => urlencode('dynamic'),
 			'nat' => urlencode('force_rport,comedia'),
 			'type' => urlencode('friend'),
