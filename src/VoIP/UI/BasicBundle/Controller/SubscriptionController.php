@@ -84,18 +84,7 @@ class SubscriptionController extends Controller
 				$host = 'dynamic';
 				break;
 		}
-		$subscription->setCompany($company);
 		
-		$em->flush();
-		
-		$voicemail = $subscription->getVoicemail();
-		$em->persist($voicemail);
-		$em->flush();
-		
-		$sync = new Sync();
-		$astVoicemail = $sync->voicemailToVoicemail($voicemail);
-		$em->persist($astVoicemail);
-		$voicemail->setAstVoicemail($astVoicemail);
 		$em->flush();
 		
 		return $this->redirect($this->generateUrl('ui_company'));

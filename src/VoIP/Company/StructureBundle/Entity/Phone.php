@@ -60,6 +60,13 @@ class Phone
     /**
      * @var string
      *
+     * @ORM\Column(name="secret", type="string", length=40)
+     */
+    private $secret;
+	
+    /**
+     * @var string
+     *
      * @ORM\Column(name="name", type="string", length=255)
      */
     private $name;
@@ -103,7 +110,8 @@ class Phone
 	{
 		$this->createdAt = new \DateTime();
 	    $this->updatedAt = new \DateTime();
-		if (!$this->hash) $this->generateHash();
+		$this->hash = hash('crc32b', uniqid('', true));
+		$this->secret = hash('sha1', uniqid('', true));
 	}
 	
 	/**
@@ -112,7 +120,6 @@ class Phone
 	public function preUpdate()
 	{
 	    $this->updatedAt = new \DateTime();
-		if (!$this->hash) $this->generateHash();
 	}
 	
 	public function generateHash()
@@ -399,5 +406,28 @@ class Phone
     public function getCanceledAt()
     {
         return $this->canceledAt;
+    }
+
+    /**
+     * Set secret
+     *
+     * @param string $secret
+     * @return Phone
+     */
+    public function setSecret($secret)
+    {
+        $this->secret = $secret;
+
+        return $this;
+    }
+
+    /**
+     * Get secret
+     *
+     * @return string 
+     */
+    public function getSecret()
+    {
+        return $this->secret;
     }
 }

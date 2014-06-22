@@ -75,11 +75,6 @@ class PhoneController extends Controller
 		$sync = new Sync();
 		
 		$astPeer = $sync->phoneToPeer($phone);
-		$phone->setAstPeer($astPeer);
-		
-		$em->persist($astPeer);
-		
-		$em->flush();
 		
 		if (strpos($phone->getType(), 'cisco.') !== false) {
 			return $this->redirect($this->generateUrl('ui_phone_configure', array(
@@ -180,10 +175,9 @@ class PhoneController extends Controller
 		$company = $phone->getCompany();
 		if ($user->getCompany()->getId() != $company->getId()) throw $this->createNotFoundException('No authorization.');
 		
-		if ($peer = $phone->getAstPeer()) {
-			$phone->setAstPeer(null);
-			$em->remove($peer);
-		}
+		$sync = new Sync();
+		$sync->removePeer($phone->getHash());
+
 		$phone->setIsActive(false);
 		$phone->setCanceledAt(new \DateTime());
 		$em->flush();
