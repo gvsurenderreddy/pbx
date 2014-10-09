@@ -211,7 +211,7 @@ class Phone
 	    $this->setUpdatedAt(new \DateTime());
 		$this->setHash(hash('crc32b', uniqid('', true)));
 		$this->setSecret(hash('sha1', uniqid('', true)));
-		$this->setName($this->getPhoneName());
+		$this->setName($this->getHash());
 		$this->setDefaultuser($this->getHash());
 	}
 	
