@@ -602,29 +602,6 @@ class Subscription
     }
 
     /**
-     * Set astPeer
-     *
-     * @param \VoIP\PBX\RealTimeBundle\Entity\SipPeer $astPeer
-     * @return Subscription
-     */
-    public function setAstPeer(\VoIP\PBX\RealTimeBundle\Entity\SipPeer $astPeer = null)
-    {
-        $this->astPeer = $astPeer;
-
-        return $this;
-    }
-
-    /**
-     * Get astPeer
-     *
-     * @return \VoIP\PBX\RealTimeBundle\Entity\SipPeer 
-     */
-    public function getAstPeer()
-    {
-        return $this->astPeer;
-    }
-
-    /**
      * Set voicemail
      *
      * @param \VoIP\Company\VoicemailBundle\Entity\Voicemail $voicemail
