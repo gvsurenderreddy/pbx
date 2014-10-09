@@ -84,7 +84,7 @@
 					<div class="btn-group">
 						<a href="{{ path('ui_phone_delete', {'hash': phone.hash}) }}" data-toggle="tooltip" data-placement="bottom" title="Delete" class="tooltip-flag btn btn-default btn-trash"><span class="glyphicon glyphicon-trash"></span></a>
 					</div>
-					{% if 'cisco' in phone.type %}
+					{% if 'cisco' in phone.model %}
 					<div class="btn-group">
 						<a href="{{ path('ui_phone_configure', {'hash': phone.hash}) }}" data-toggle="tooltip" data-placement="bottom" title="Configure" class="tooltip-flag btn btn-default"><span class="glyphicon glyphicon-wrench"></span></a>
 					</div>
