@@ -418,29 +418,6 @@ class OutLine
     }
 
     /**
-     * Set astPeer
-     *
-     * @param \VoIP\PBX\RealTimeBundle\Entity\SipPeer $astPeer
-     * @return OutLine
-     */
-    public function setAstPeer(\VoIP\PBX\RealTimeBundle\Entity\SipPeer $astPeer = null)
-    {
-        $this->astPeer = $astPeer;
-
-        return $this;
-    }
-
-    /**
-     * Get astPeer
-     *
-     * @return \VoIP\PBX\RealTimeBundle\Entity\SipPeer 
-     */
-    public function getAstPeer()
-    {
-        return $this->astPeer;
-    }
-
-    /**
      * Add outGroups
      *
      * @param \VoIP\Company\SubscriptionsBundle\Entity\OutGroup $outGroups
