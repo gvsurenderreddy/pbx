@@ -162,12 +162,6 @@ class Subscription
     private $company;
 	
 	/**
-     * @ORM\OneToOne(targetEntity="\VoIP\PBX\RealTimeBundle\Entity\SipPeer", inversedBy="subscription")
-	 * @ORM\JoinColumn(name="ast_sippeer_id", referencedColumnName="id", onDelete="CASCADE")
-     */
-    private $astPeer;
-	
-	/**
      * @ORM\OneToOne(targetEntity="\VoIP\Company\VoicemailBundle\Entity\Voicemail", inversedBy="subscription")
 	 * @ORM\JoinColumn(name="voicemail_id", referencedColumnName="id", onDelete="CASCADE")
      */

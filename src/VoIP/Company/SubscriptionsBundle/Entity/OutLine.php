@@ -107,12 +107,6 @@ class OutLine
     private $precision = 0;
 	
 	/**
-     * @ORM\OneToOne(targetEntity="\VoIP\PBX\RealTimeBundle\Entity\SipPeer", inversedBy="subscription")
-	 * @ORM\JoinColumn(name="ast_sippeer_id", referencedColumnName="id", onDelete="CASCADE")
-     */
-    private $astPeer;
-	
-	/**
 	 * @ORM\ManyToMany(targetEntity="\VoIP\Company\SubscriptionsBundle\Entity\OutGroup", mappedBy="outLines")
 	 * @ORM\OrderBy({"hash" = "ASC"})
 	 */
