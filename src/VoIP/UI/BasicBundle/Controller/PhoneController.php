@@ -50,21 +50,19 @@ class PhoneController extends Controller
 		
 		$phone = new Phone();
 		$phone->setModel($type);
-		$phone->setName($phoneName);
+		$phone->setAlias($phoneName);
 		$phone->setCompany($company);
 		
 		$phone->setContext('internal');
 		$phone->setHost('dynamic');
 		$phone->setNat('force_rport,comedia');
 		$phone->setType('friend');
-		$phone->setAllow('gsm');
-		$phone->setPermit('0.0.0.0/0.0.0.0');
+		//$phone->setAllow('gsm');
+		//$phone->setPermit('0.0.0.0/0.0.0.0');
 		$phone->setDynamic('yes');
 		$phone->setQualify(5000);
 		$phone->setQualifyfreq(20);
-		$phone->setDirectmedia('no');
-		$phone->setDisallow(null);
-		$phone->setFromUser(null);
+		//$phone->setDirectmedia('no');
 		
 		$em->persist($phone);
 		$em->flush();
@@ -120,7 +118,7 @@ class PhoneController extends Controller
 		
 		$prevName = $phone->getName();
 		
-		$phone->setName($name);
+		$phone->setAlias($name);
 		$phone->setModel($type);
 		
 		$em->flush();

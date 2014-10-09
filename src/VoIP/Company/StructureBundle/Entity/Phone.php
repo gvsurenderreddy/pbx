@@ -60,9 +60,9 @@ class Phone
     /**
      * @var string
      *
-     * @ORM\Column(name="name", type="string", length=127)
+     * @ORM\Column(name="alias", type="string", length=127)
      */
-    private $name;
+    private $alias;
 	
     /**
      * @var \DateTime
@@ -70,6 +70,13 @@ class Phone
      * @ORM\Column(name="is_active", type="boolean")
      */
     private $isActive = true;
+	
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="name", type="string", length=8)
+     */
+    private $name;
 	
     /**
      * @var string
@@ -125,14 +132,14 @@ class Phone
      *
      * @ORM\Column(name="host", type="string", length=255)
      */
-    private $host = 'dynamic';
+    private $host;
 	
     /**
      * @var string
      *
      * @ORM\Column(name="type", type="string", length=10)
      */
-    private $type = 'friend';
+    private $type;
 	
     /**
      * @var string
@@ -144,20 +151,6 @@ class Phone
     /**
      * @var string
      *
-     * @ORM\Column(name="permit", type="string", length=40, nullable=true)
-     */
-    private $permit;
-	
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="deny", type="string", length=40, nullable=true)
-     */
-    private $deny;
-	
-    /**
-     * @var string
-     *
      * @ORM\Column(name="secret", type="string", length=40, nullable=true)
      */
     private $secret;
@@ -165,100 +158,9 @@ class Phone
     /**
      * @var string
      *
-     * @ORM\Column(name="md5", type="string", length=40, nullable=true)
-     */
-    private $md5;
-	
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="remotesecret", type="string", length=40, nullable=true)
-     */
-    private $remotesecret;
-	
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="transport", type="string", length=10, nullable=true)
-     */
-    private $transport;
-	
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="dtmfmode", type="string", length=20, nullable=true)
-     */
-    private $dtmfmode;
-	
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="directmedia", type="string", length=10, nullable=true)
-     */
-    private $directmedia;
-	
-    /**
-     * @var string
-     *
      * @ORM\Column(name="nat", type="string", length=20, nullable=true)
      */
-    private $nat = 'route';
-	
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="callgroup", type="string", length=10, nullable=true)
-     */
-    private $callgroup;
-	
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="pickupgroup", type="string", length=10, nullable=true)
-     */
-    private $pickupgroup;
-	
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="language", type="string", length=10, nullable=true)
-     */
-    private $language;
-	
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="allow", type="string", length=40, nullable=true)
-     */
-    private $allow;
-	
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="disallow", type="string", length=40, nullable=true)
-     */
-    private $disallow;
-	
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="insecure", type="string", length=40, nullable=true)
-     */
-    private $insecure;
-	
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="trustrpid", type="string", length=10, nullable=true)
-     */
-    private $trustrpid;
-	
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="progressinband", type="string", length=10, nullable=true)
-     */
-    private $progressinband;
+    private $nat;
 	
     /**
      * @var string
@@ -266,13 +168,6 @@ class Phone
      * @ORM\Column(name="qualify", type="string", length=40, nullable=true)
      */
     private $qualify;
-	
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="callbackextension", type="string", length=40, nullable=true)
-     */
-    private $callbackextension;
 	
     /**
      * @var string
@@ -291,23 +186,9 @@ class Phone
     /**
      * @var string
      *
-     * @ORM\Column(name="fromuser", type="string", length=80, nullable=true)
-     */
-    private $fromuser;
-	
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="defaultuser", type="string", length=80, nullable=true)
+     * @ORM\Column(name="defaultuser", type="string", length=8, nullable=true)
      */
     private $defaultuser;
-	
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="dtfmode", type="string", length=80, nullable=true)
-     */
-    private $dtfmode;
 	
 	/**
      * @ORM\ManyToOne(targetEntity="\VoIP\Company\StructureBundle\Entity\Company", inversedBy="phones")
@@ -473,26 +354,26 @@ class Phone
     }
 
     /**
-     * Set name
+     * Set alias
      *
-     * @param string $name
+     * @param string $alias
      * @return Phone
      */
-    public function setName($name)
+    public function setAlias($alias)
     {
-        $this->name = $name;
+        $this->alias = $alias;
 
         return $this;
     }
 
     /**
-     * Get name
+     * Get alias
      *
      * @return string 
      */
-    public function getName()
+    public function getAlias()
     {
-        return $this->name;
+        return $this->alias;
     }
 
     /**
@@ -516,6 +397,29 @@ class Phone
     public function getIsActive()
     {
         return $this->isActive;
+    }
+
+    /**
+     * Set name
+     *
+     * @param string $name
+     * @return Phone
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
+
+        return $this;
+    }
+
+    /**
+     * Get name
+     *
+     * @return string 
+     */
+    public function getName()
+    {
+        return $this->name;
     }
 
     /**
@@ -749,52 +653,6 @@ class Phone
     }
 
     /**
-     * Set permit
-     *
-     * @param string $permit
-     * @return Phone
-     */
-    public function setPermit($permit)
-    {
-        $this->permit = $permit;
-
-        return $this;
-    }
-
-    /**
-     * Get permit
-     *
-     * @return string 
-     */
-    public function getPermit()
-    {
-        return $this->permit;
-    }
-
-    /**
-     * Set deny
-     *
-     * @param string $deny
-     * @return Phone
-     */
-    public function setDeny($deny)
-    {
-        $this->deny = $deny;
-
-        return $this;
-    }
-
-    /**
-     * Get deny
-     *
-     * @return string 
-     */
-    public function getDeny()
-    {
-        return $this->deny;
-    }
-
-    /**
      * Set secret
      *
      * @param string $secret
@@ -815,121 +673,6 @@ class Phone
     public function getSecret()
     {
         return $this->secret;
-    }
-
-    /**
-     * Set md5
-     *
-     * @param string $md5
-     * @return Phone
-     */
-    public function setMd5($md5)
-    {
-        $this->md5 = $md5;
-
-        return $this;
-    }
-
-    /**
-     * Get md5
-     *
-     * @return string 
-     */
-    public function getMd5()
-    {
-        return $this->md5;
-    }
-
-    /**
-     * Set remotesecret
-     *
-     * @param string $remotesecret
-     * @return Phone
-     */
-    public function setRemotesecret($remotesecret)
-    {
-        $this->remotesecret = $remotesecret;
-
-        return $this;
-    }
-
-    /**
-     * Get remotesecret
-     *
-     * @return string 
-     */
-    public function getRemotesecret()
-    {
-        return $this->remotesecret;
-    }
-
-    /**
-     * Set transport
-     *
-     * @param string $transport
-     * @return Phone
-     */
-    public function setTransport($transport)
-    {
-        $this->transport = $transport;
-
-        return $this;
-    }
-
-    /**
-     * Get transport
-     *
-     * @return string 
-     */
-    public function getTransport()
-    {
-        return $this->transport;
-    }
-
-    /**
-     * Set dtmfmode
-     *
-     * @param string $dtmfmode
-     * @return Phone
-     */
-    public function setDtmfmode($dtmfmode)
-    {
-        $this->dtmfmode = $dtmfmode;
-
-        return $this;
-    }
-
-    /**
-     * Get dtmfmode
-     *
-     * @return string 
-     */
-    public function getDtmfmode()
-    {
-        return $this->dtmfmode;
-    }
-
-    /**
-     * Set directmedia
-     *
-     * @param string $directmedia
-     * @return Phone
-     */
-    public function setDirectmedia($directmedia)
-    {
-        $this->directmedia = $directmedia;
-
-        return $this;
-    }
-
-    /**
-     * Get directmedia
-     *
-     * @return string 
-     */
-    public function getDirectmedia()
-    {
-        return $this->directmedia;
     }
 
     /**
@@ -956,190 +699,6 @@ class Phone
     }
 
     /**
-     * Set callgroup
-     *
-     * @param string $callgroup
-     * @return Phone
-     */
-    public function setCallgroup($callgroup)
-    {
-        $this->callgroup = $callgroup;
-
-        return $this;
-    }
-
-    /**
-     * Get callgroup
-     *
-     * @return string 
-     */
-    public function getCallgroup()
-    {
-        return $this->callgroup;
-    }
-
-    /**
-     * Set pickupgroup
-     *
-     * @param string $pickupgroup
-     * @return Phone
-     */
-    public function setPickupgroup($pickupgroup)
-    {
-        $this->pickupgroup = $pickupgroup;
-
-        return $this;
-    }
-
-    /**
-     * Get pickupgroup
-     *
-     * @return string 
-     */
-    public function getPickupgroup()
-    {
-        return $this->pickupgroup;
-    }
-
-    /**
-     * Set language
-     *
-     * @param string $language
-     * @return Phone
-     */
-    public function setLanguage($language)
-    {
-        $this->language = $language;
-
-        return $this;
-    }
-
-    /**
-     * Get language
-     *
-     * @return string 
-     */
-    public function getLanguage()
-    {
-        return $this->language;
-    }
-
-    /**
-     * Set allow
-     *
-     * @param string $allow
-     * @return Phone
-     */
-    public function setAllow($allow)
-    {
-        $this->allow = $allow;
-
-        return $this;
-    }
-
-    /**
-     * Get allow
-     *
-     * @return string 
-     */
-    public function getAllow()
-    {
-        return $this->allow;
-    }
-
-    /**
-     * Set disallow
-     *
-     * @param string $disallow
-     * @return Phone
-     */
-    public function setDisallow($disallow)
-    {
-        $this->disallow = $disallow;
-
-        return $this;
-    }
-
-    /**
-     * Get disallow
-     *
-     * @return string 
-     */
-    public function getDisallow()
-    {
-        return $this->disallow;
-    }
-
-    /**
-     * Set insecure
-     *
-     * @param string $insecure
-     * @return Phone
-     */
-    public function setInsecure($insecure)
-    {
-        $this->insecure = $insecure;
-
-        return $this;
-    }
-
-    /**
-     * Get insecure
-     *
-     * @return string 
-     */
-    public function getInsecure()
-    {
-        return $this->insecure;
-    }
-
-    /**
-     * Set trustrpid
-     *
-     * @param string $trustrpid
-     * @return Phone
-     */
-    public function setTrustrpid($trustrpid)
-    {
-        $this->trustrpid = $trustrpid;
-
-        return $this;
-    }
-
-    /**
-     * Get trustrpid
-     *
-     * @return string 
-     */
-    public function getTrustrpid()
-    {
-        return $this->trustrpid;
-    }
-
-    /**
-     * Set progressinband
-     *
-     * @param string $progressinband
-     * @return Phone
-     */
-    public function setProgressinband($progressinband)
-    {
-        $this->progressinband = $progressinband;
-
-        return $this;
-    }
-
-    /**
-     * Get progressinband
-     *
-     * @return string 
-     */
-    public function getProgressinband()
-    {
-        return $this->progressinband;
-    }
-
-    /**
      * Set qualify
      *
      * @param string $qualify
@@ -1160,29 +719,6 @@ class Phone
     public function getQualify()
     {
         return $this->qualify;
-    }
-
-    /**
-     * Set callbackextension
-     *
-     * @param string $callbackextension
-     * @return Phone
-     */
-    public function setCallbackextension($callbackextension)
-    {
-        $this->callbackextension = $callbackextension;
-
-        return $this;
-    }
-
-    /**
-     * Get callbackextension
-     *
-     * @return string 
-     */
-    public function getCallbackextension()
-    {
-        return $this->callbackextension;
     }
 
     /**
@@ -1232,29 +768,6 @@ class Phone
     }
 
     /**
-     * Set fromuser
-     *
-     * @param string $fromuser
-     * @return Phone
-     */
-    public function setFromuser($fromuser)
-    {
-        $this->fromuser = $fromuser;
-
-        return $this;
-    }
-
-    /**
-     * Get fromuser
-     *
-     * @return string 
-     */
-    public function getFromuser()
-    {
-        return $this->fromuser;
-    }
-
-    /**
      * Set defaultuser
      *
      * @param string $defaultuser
@@ -1275,29 +788,6 @@ class Phone
     public function getDefaultuser()
     {
         return $this->defaultuser;
-    }
-
-    /**
-     * Set dtfmode
-     *
-     * @param string $dtfmode
-     * @return Phone
-     */
-    public function setDtfmode($dtfmode)
-    {
-        $this->dtfmode = $dtfmode;
-
-        return $this;
-    }
-
-    /**
-     * Get dtfmode
-     *
-     * @return string 
-     */
-    public function getDtfmode()
-    {
-        return $this->dtfmode;
     }
 
     /**
