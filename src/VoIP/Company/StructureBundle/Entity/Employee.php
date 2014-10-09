@@ -153,10 +153,10 @@ class Employee
 	
 	public function getStatus()
 	{
-		if (count($this->getPhones()) == 0) return 'danger';
+		/*if (count($this->getPhones()) == 0) return 'danger';
 		elseif(count($this->getPhones()->filter(function($p){
 			return $p->getAmiStatusOk();
-		})) == 0) return 'warning';
+		})) == 0) return 'warning';*/
 		return 'default';
 	}
 

@@ -99,65 +99,6 @@ class CompanyController extends Controller
     }
 	
     /**
-     * @Route("/new-phone", name="ui_company_newphone")
-     * @Template()
-	 * @Method("GET")
-	 * @Security("has_role('ROLE_USER')")
-     */
-    public function newPhoneAction()
-    {
-		$user = $this->getUser();
-		$company = $user->getCompany();
-        return array(
-			'company' => $company
-		);
-    }
-	
-    /**
-     * @Route("/new-phone")
-     * @Template()
-	 * @Method("POST")
-	 * @Security("has_role('ROLE_USER')")
-     */
-    public function createPhoneAction()
-    {
-		$user = $this->getUser();
-		$company = $user->getCompany();
-		$em = $this->getDoctrine()->getManager();
-		
-		$request = $this->getRequest();
-		$phoneName = $request->get('phonename');
-		$type = $request->get('type');
-		
-		$phone = new Phone();
-		$phone->setType($type);
-		$phone->setName($phoneName);
-		$phone->setCompany($company);
-		
-		$em->persist($phone);
-		$em->flush();
-		
-		$sync = new Sync();
-		
-		$astPeer = $sync->phoneToPeer($phone);
-		
-		$em->persist($astPeer);
-		
-		$phone->setAstPeer($astPeer);
-		
-		$em->flush();
-		
-		if (count($phone->getEmployees()) == 0) {
-			return $this->redirect($this->generateUrl('ui_phone_employees', array(
-				'hash' => $phone->getHash()
-			)));
-		} else {
-			return $this->redirect($this->generateUrl('ui_company'));
-		}
-		
-    }
-	
-    /**
      * @Route("/new-buddy", name="ui_company_newemployee")
      * @Template()
 	 * @Method("GET")

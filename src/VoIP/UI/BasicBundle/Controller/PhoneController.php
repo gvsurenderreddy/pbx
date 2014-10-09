@@ -15,15 +15,68 @@ use VoIP\UI\BasicBundle\Extra\Configuration;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 
-/**
- * @Route("/p")
- */
-
 class PhoneController extends Controller
 {	
+    /**
+     * @Route("/new-phone", name="ui_company_newphone")
+     * @Template()
+	 * @Method("GET")
+	 * @Security("has_role('ROLE_USER')")
+     */
+    public function newPhoneAction()
+    {
+		$user = $this->getUser();
+		$company = $user->getCompany();
+        return array(
+			'company' => $company
+		);
+    }
 	
     /**
-     * @Route("/{hash}/edit", name="ui_phone_edit")
+     * @Route("/new-phone")
+     * @Template()
+	 * @Method("POST")
+	 * @Security("has_role('ROLE_USER')")
+     */
+    public function createPhoneAction()
+    {
+		$user = $this->getUser();
+		$company = $user->getCompany();
+		$em = $this->getDoctrine()->getManager();
+		
+		$request = $this->getRequest();
+		$phoneName = $request->get('phonename');
+		$type = $request->get('type');
+		
+		$phone = new Phone();
+		$phone->setModel($type);
+		$phone->setName($phoneName);
+		$phone->setCompany($company);
+		
+		$phone->setContext('internal');
+		$phone->setHost('dynamic');
+		$phone->setNat('force_rport,comedia');
+		$phone->setType('friend');
+		$phone->setAllow('gsm');
+		$phone->setPermit('0.0.0.0/0.0.0.0');
+		$phone->setDynamic('yes');
+		$phone->setQualify(5000);
+		$phone->setQualifyfreq(20);
+		$phone->setDirectmedia('no');
+		$phone->setDisallow(null);
+		$phone->setFromUser(null);
+		
+		$em->persist($phone);
+		$em->flush();
+		
+		return $this->redirect($this->generateUrl('ui_phone_employees', array(
+			'hash' => $phone->getHash()
+		)));
+		
+    }
+	
+    /**
+     * @Route("/phone/{hash}/edit", name="ui_phone_edit")
      * @Template()
 	 * @Method("GET")
 	 * @Security("has_role('ROLE_USER')")
@@ -45,7 +98,7 @@ class PhoneController extends Controller
     }
 	
     /**
-     * @Route("/{hash}/edit")
+     * @Route("/phone/{hash}/edit")
      * @Template()
 	 * @Method("POST")
 	 * @Security("has_role('ROLE_USER')")
@@ -68,37 +121,15 @@ class PhoneController extends Controller
 		$prevName = $phone->getName();
 		
 		$phone->setName($name);
-		$phone->setType($type);
-		
-		$em->flush();
-			
-		$sync = new Sync();
-		
-		$astPeer = $sync->phoneToPeer($phone);
-		
-		$phone->setAstPeer($astPeer);
-		
-		$em->persist($astPeer);
+		$phone->setModel($type);
 		
 		$em->flush();
 		
-		if (strpos($phone->getType(), 'cisco.') !== false) {
-			return $this->redirect($this->generateUrl('ui_phone_configure', array(
-				'hash' => $phone->getHash()
-			)));
-		} else {
-			return $this->redirect($this->generateUrl('ui_company', array(
-				'hash' => $company->getHash()
-			)));
-		}
-		
-		return $this->redirect($this->generateUrl('ui_company', array(
-			'hash' => $company->getHash()
-		)));
+		return $this->redirect($this->generateUrl('ui_company'));
     }
 	
     /**
-     * @Route("/{hash}/buddies", name="ui_phone_employees")
+     * @Route("/phone/{hash}/buddies", name="ui_phone_employees")
      * @Template()
 	 * @Method("GET")
 	 * @Security("has_role('ROLE_USER')")
@@ -126,7 +157,7 @@ class PhoneController extends Controller
     }
 	
     /**
-     * @Route("/{hash}/buddies")
+     * @Route("/phone/{hash}/buddies")
      * @Template()
 	 * @Method("POST")
 	 * @Security("has_role('ROLE_USER')")
@@ -165,7 +196,7 @@ class PhoneController extends Controller
     }
 	
     /**
-     * @Route("/{hash}/delete", name="ui_phone_delete")
+     * @Route("/phone/{hash}/delete", name="ui_phone_delete")
      * @Template()
 	 * @Method("GET")
 	 * @Security("has_role('ROLE_USER')")
@@ -194,7 +225,7 @@ class PhoneController extends Controller
     }
 	
     /**
-     * @Route("/{hash}/credentials", name="ui_phone_credentials")
+     * @Route("/phone/{hash}/credentials", name="ui_phone_credentials")
      * @Template()
 	 * @Method("GET")
 	 * @Security("has_role('ROLE_USER')")
@@ -216,7 +247,7 @@ class PhoneController extends Controller
     }
 	
     /**
-     * @Route("/{hash}/setup", name="ui_phone_setup")
+     * @Route("/phone/{hash}/setup", name="ui_phone_setup")
      * @Template()
 	 * @Method("GET")
 	 * @Security("has_role('ROLE_USER')")
@@ -243,7 +274,7 @@ class PhoneController extends Controller
     }
 	
     /**
-     * @Route("/{hash}/configure", name="ui_phone_configure")
+     * @Route("/phone/{hash}/configure", name="ui_phone_configure")
      * @Template()
 	 * @Method("GET")
 	 * @Security("has_role('ROLE_USER')")
@@ -267,7 +298,7 @@ class PhoneController extends Controller
 		);
     }
     /**
-     * @Route("/{hash}/configure.js", name="ui_phone_configure_js")
+     * @Route("/phone/{hash}/configure.js", name="ui_phone_configure_js")
 	 * @Method("GET")
 	 * @Security("has_role('ROLE_USER')")
      */
