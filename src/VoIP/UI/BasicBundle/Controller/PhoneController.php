@@ -207,16 +207,12 @@ class PhoneController extends Controller
 			'hash' => $hash
 		));
         if (!$phone) throw $this->createNotFoundException('Unable to find Phone entity.');
+		
 		$company = $phone->getCompany();
 		if ($user->getCompany()->getId() != $company->getId()) throw $this->createNotFoundException('No authorization.');
-		
-		if ($peer = $phone->getAstPeer()) {
-			$phone->setAstPeer(null);
-			$em->remove($peer);
-		}
 
-		$phone->setIsActive(false);
-		$phone->setCanceledAt(new \DateTime());
+		$em->remove($phone);
+		
 		$em->flush();
 		
 		return $this->redirect($this->generateUrl('ui_company'));
