@@ -64,7 +64,7 @@
 		{% for employee in phone.employees %}emp{{ employee.hash }} {% for subscription in employee.subscriptions %} sub{{ subscription.hash }} {% endfor %}{% endfor %}" data-hash="{{ phone.hash }}">
 			<div class="contentbox">
 				<div>
-					{{ phone.name }}
+					{{ phone.phonename }}
 				</div>
 				<div>
 					{% for employee in phone.employees if employee.isactive %}
