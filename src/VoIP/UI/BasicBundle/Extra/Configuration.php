@@ -14,7 +14,7 @@ class Configuration {
 	function __construct($ip, $phone) {
 		$this->reference = $phone->getModel();
 		$this->ip = $ip;
-		$this->phoneName = $phone->getAlias();
+		$this->phoneName = $phone->getPhoneName();
 		$this->defaultUser = $phone->getDefaultuser();
 		$this->secret = $phone->getSecret();
 		$this->getConf();

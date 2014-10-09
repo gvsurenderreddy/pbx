@@ -60,9 +60,9 @@ class Phone
     /**
      * @var string
      *
-     * @ORM\Column(name="alias", type="string", length=127)
+     * @ORM\Column(name="phone_name", type="string", length=127)
      */
-    private $alias;
+    private $phoneName;
 	
     /**
      * @var \DateTime
@@ -353,29 +353,6 @@ class Phone
     public function getHash()
     {
         return $this->hash;
-    }
-
-    /**
-     * Set alias
-     *
-     * @param string $alias
-     * @return Phone
-     */
-    public function setAlias($alias)
-    {
-        $this->alias = $alias;
-
-        return $this;
-    }
-
-    /**
-     * Get alias
-     *
-     * @return string 
-     */
-    public function getAlias()
-    {
-        return $this->alias;
     }
 
     /**
@@ -846,5 +823,28 @@ class Phone
     public function getEmployees()
     {
         return $this->employees;
+    }
+
+    /**
+     * Set phoneName
+     *
+     * @param string $phoneName
+     * @return Phone
+     */
+    public function setPhoneName($phoneName)
+    {
+        $this->phoneName = $phoneName;
+
+        return $this;
+    }
+
+    /**
+     * Get phoneName
+     *
+     * @return string 
+     */
+    public function getPhoneName()
+    {
+        return $this->phoneName;
     }
 }

@@ -50,7 +50,7 @@ class PhoneController extends Controller
 		
 		$phone = new Phone();
 		$phone->setModel($type);
-		$phone->setAlias($phoneName);
+		$phone->setPhoneName($phoneName);
 		$phone->setCompany($company);
 		
 		$phone->setContext('internal');
@@ -118,7 +118,7 @@ class PhoneController extends Controller
 		
 		$prevName = $phone->getName();
 		
-		$phone->setAlias($name);
+		$phone->setPhoneName($name);
 		$phone->setModel($type);
 		
 		$em->flush();
