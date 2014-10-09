@@ -12,7 +12,7 @@ class Configuration {
 	private $defaultUser;
 	private $secret;
 	function __construct($ip, $phone) {
-		$this->reference = $phone->getType();
+		$this->reference = $phone->getModel();
 		$this->ip = $ip;
 		$this->phoneName = $phone->getAlias();
 		$this->defaultUser = $phone->getDefaultuser();
