@@ -212,7 +212,7 @@ class Phone
 		$this->setHash(hash('crc32b', uniqid('', true)));
 		$this->setSecret(hash('sha1', uniqid('', true)));
 		$this->setName($this->getPhoneName());
-		$this->setDefaultuser($this->getName());
+		$this->setDefaultuser($this->getHash());
 	}
 	
 	/**
