@@ -57,13 +57,11 @@ class RegistrationController extends Controller
         $form->handleRequest($request);
 
         if ($form->isValid()) {
-			$em = $this->getDoctrine()->getManager();
-			
             $event = new FormEvent($form, $request);
             $dispatcher->dispatch(FOSUserEvents::REGISTRATION_SUCCESS, $event);
 
             $userManager->updateUser($user);
-			
+			$em = $this->getDoctrine()->getManager();
 			$company = new Company();
 			$company->setName($user->getCompanyName());
 			$user->setCompany($company);
@@ -174,9 +172,8 @@ class RegistrationController extends Controller
             throw new AccessDeniedException('This user does not have access to this section.');
         }
 
-        return $this->render('FOSUserBundle:Registration:confirmed.html.twig', array(
+        return $this->container->get('templating')->renderResponse('FOSUserBundle:Registration:confirmed.html.'.$this->getEngine(), array(
             'user' => $user,
         ));
     }
 }
-

@@ -11,98 +11,73 @@ class Sync {
 	
 	public function voicemailToVoicemail($voicemail)
 	{
-		$fields = array(
-			'mailbox' => urlencode($voicemail->getHash()),
-			'context' => urlencode('mailbox'),
-			'password' => urlencode(rand(1000,9999)),
-			'fullname' => urlencode($voicemail->getSubscription()->getCompany()->getName()),
-			'email' => urlencode('adrien@eudes.co'),
-		);
-		$fields_string = '';
-		foreach($fields as $key=>$value) { $fields_string .= $key.'='.$value.'&'; }
-		rtrim($fields_string, '&');
-		$ch = curl_init();
-		curl_setopt($ch,CURLOPT_URL, 'http://api.fortyeight.co/rt/api/vm/edit');
-		curl_setopt($ch,CURLOPT_POST, count($fields));
-		curl_setopt($ch,CURLOPT_POSTFIELDS, $fields_string);
-		$response = json_decode(curl_exec($ch));
-		curl_close($ch);
-		return null;
+		if (!$vm = $voicemail->getAstVoicemail()) $vm = new VoiceMail();
+		$vm->setMailbox($voicemail->getHash());
+		$vm->setContext('mailbox');
+		$vm->setPassword(rand(1000,9999));
+		$vm->setFullname($voicemail->getSubscription()->getCompany()->getName());
+		$vm->setEmail('adrien@eudes.co');
+		return $vm;
 	}
 	
 	public function outLineToPeer($outLine)
 	{
 		
-		$fields = array(
-			'name' => urlencode($outLine->getUsername()),
-			'secret' => urlencode($outLine->getSecret()),
-			'host' => urlencode($outLine->getHost()),
-			'type' => urlencode('peer'),
-			'allow' => urlencode('gsm'),
-			//'dynamic' => urlencode('yes'), //SPA3102
-			'defaultuser' => urlencode($outLine->getUsername()),
-			'insecure' => urlencode('invite'),
-			'dtfmode' => urlencode('rfc2833')
-		);
-		$fields_string = '';
-		foreach($fields as $key=>$value) { $fields_string .= $key.'='.$value.'&'; }
-		rtrim($fields_string, '&');
-		$ch = curl_init();
-		curl_setopt($ch,CURLOPT_URL, 'http://api.fortyeight.co/rt/api/peer/edit');
-		curl_setopt($ch,CURLOPT_POST, count($fields));
-		curl_setopt($ch,CURLOPT_POSTFIELDS, $fields_string);
-		$response = json_decode(curl_exec($ch));
-		curl_close($ch);
-		return null;
+		if (!$peer = $subscription->getAstPeer()) $peer = new SipPeer();
+		$peer->setName($subscription->getUsername());
+		$peer->setSecret($subscription->getSecret());
+		$peer->setHost($subscription->getHost());
+		$peer->setType('peer');
+		$peer->setAllow('gsm');
+		$peer->setDefaultUser($subscription->getUsername());
+		$peer->setInsecure('invite');
+		$peer->setDtfmode('rfc2833');
+		if ($subscription->getType() == 'spa3102') {
+			$peer->setDynamic('yes');
+		}
+		return $peer;
 	}
 	
 	public function phoneToPeer($phone)
 	{
-		$fields = array(
-			'name' => urlencode($phone->getHash()),
-			'secret' => urlencode($phone->getSecret()),
-			'context' => 'internal',
-			'host' => urlencode('dynamic'),
-			'nat' => urlencode('force_rport,comedia'),
-			'type' => urlencode('friend'),
-			'allow' => urlencode('gsm'),
-			'permit' => urlencode('0.0.0.0/0.0.0.0'),
-			'dynamic' => urlencode('yes'),
-			'qualify' => urlencode(5000),
-			'qualifyfreq' => urlencode(20),
-			'directmedia' => urlencode('no'),
-			'disallow' => urlencode(null),
-			'fromuser' => urlencode(null),
-			'defaultuser' => urlencode($phone->getHash()),
-			'insecure' => urlencode(null),
-			'dtfmode' => urlencode(null)
-		);
-		$fields_string = '';
-		foreach($fields as $key=>$value) { $fields_string .= $key.'='.$value.'&'; }
-		rtrim($fields_string, '&');
-		$ch = curl_init();
-		curl_setopt($ch,CURLOPT_URL, 'http://api.fortyeight.co/rt/api/peer/edit');
-		curl_setopt($ch,CURLOPT_POST, count($fields));
-		curl_setopt($ch,CURLOPT_POSTFIELDS, $fields_string);
-		$response = json_decode(curl_exec($ch));
-		curl_close($ch);
-		return null;
+		if (!$sippeer = $phone->getAstPeer()) $sippeer = new SipPeer();
+		$sippeer->setName($phone->getHash());
+		$sippeer->setSecret($sippeer->getSecret() ? $sippeer->getSecret() : hash('sha1', uniqid('', true)));
+		$sippeer->setContext('internal');
+		$sippeer->setHost('dynamic');
+		$sippeer->setNat('force_rport,comedia');
+		$sippeer->setType('friend');
+		$sippeer->setAllow('gsm');
+		$sippeer->setPermit('0.0.0.0/0.0.0.0');
+		$sippeer->setDynamic('yes');
+		$sippeer->setQualify(5000);
+		$sippeer->setQualifyfreq(20);
+		$sippeer->setDirectmedia('no');
+		$sippeer->setDisallow(null);
+		$sippeer->setFromUser(null);
+		$sippeer->setDefaultUser($phone->getHash());
+		return $sippeer;
 	}
 	
-	public function removePeer($name)
+	public function itemToExtension($subscription, $item, $n)
 	{
-		$fields = array(
-			'name' => urlencode($name),
-		);
-		$fields_string = '';
-		foreach($fields as $key=>$value) { $fields_string .= $key.'='.$value.'&'; }
-		rtrim($fields_string, '&');
-		$ch = curl_init();
-		curl_setopt($ch,CURLOPT_URL, 'http://api.fortyeight.co/rt/api/peer/remove');
-		curl_setopt($ch,CURLOPT_POST, count($fields));
-		curl_setopt($ch,CURLOPT_POSTFIELDS, $fields_string);
-		$response = json_decode(curl_exec($ch));
-		curl_close($ch);
-		return null;
+		if (!$extension = $item->getAstExtension()) $extension = new Extension();
+		$extension->setContext('public');
+		$extension->setExten($subscription->getHash());
+		$extension->setPriority($n);
+		switch ($item->getType()) {
+			case 'extension':
+				$app = 'Dial';
+				$appData = 'SIP/'.$item->getPhone()->getHash();
+				break;
+			
+			default:
+				# code...
+				break;
+		}
+		$extension->setApp($app);
+		$extension->setAppdata($appData);
+		return $extension;
+		
 	}
 }

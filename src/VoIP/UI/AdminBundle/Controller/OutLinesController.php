@@ -129,7 +129,10 @@ class OutLinesController extends Controller
 		$em->flush();
 		
 		$sync = new Sync();
-		$sync->outLineToPeer($outLine);
+		$astPeer = $sync->outLineToPeer($outLine);
+		$em->persist($astPeer);
+		$outLine->setAstPeer($astPeer);
+		$em->flush();
 		
 		return $this->redirect($this->generateUrl('outlines'));
     }

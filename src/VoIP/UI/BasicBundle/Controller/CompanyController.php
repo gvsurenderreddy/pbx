@@ -141,6 +141,12 @@ class CompanyController extends Controller
 		
 		$astPeer = $sync->phoneToPeer($phone);
 		
+		$em->persist($astPeer);
+		
+		$phone->setAstPeer($astPeer);
+		
+		$em->flush();
+		
 		if (count($phone->getEmployees()) == 0) {
 			return $this->redirect($this->generateUrl('ui_phone_employees', array(
 				'hash' => $phone->getHash()
@@ -306,6 +312,10 @@ class CompanyController extends Controller
 		$sync = new Sync();
 		
 		$astVoicemail = $sync->voicemailToVoicemail($voicemail);
+		
+		$em->persist($astVoicemail);
+		$voicemail->setAstVoicemail($astVoicemail);
+		$em->flush();
 		
 		if (count($subscription->getEmployees()) == 0) {
 			return $this->redirect($this->generateUrl('ui_subscription_buddies', array(
