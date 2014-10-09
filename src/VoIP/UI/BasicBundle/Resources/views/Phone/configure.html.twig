@@ -13,10 +13,10 @@
 			</div>
 			<div class="form-group">
 				<div class="col-sm-offset-4 col-sm-8">
-					<a href="{{ path('ui_company', {'hash': phone.company.hash}) }}" class="btn btn-default" ng-show="!configured">Not now</a>
+					<a href="{{ path('ui_company') }}" class="btn btn-default" ng-show="!configured">Not now</a>
 					<button type="button" class="btn btn-default" ng-show="(form.ip.$error.required || form.ip.$error.pattern)">Configure</button>
 					<button type="submit" class="btn btn-primary" ng-show="!(form.ip.$error.required || form.ip.$error.pattern)" ng-click="submit()">Configure</button>
-					<a href="{{ path('ui_company', {'hash': phone.company.hash}) }}" class="btn btn-success" ng-show="configured">Back to dashboard</a>
+					<a href="{{ path('ui_company') }}" class="btn btn-success" ng-show="configured">Back to dashboard</a>
 				</div>
 			</div>
 		</form>
