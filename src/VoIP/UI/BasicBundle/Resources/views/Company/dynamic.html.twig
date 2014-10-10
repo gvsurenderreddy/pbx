@@ -23,7 +23,7 @@
 	</tr>
 	{% endfor %}
 </table>
-{% if !ip %}<p>Your IP is already in the list</p>{% endif %}
+{% if not ip %}<p>Your IP is already in the list</p>{% endif %}
 <form class="form-inline" role="form" action="{{ path('ui_company_dynamic_addip') }}">
 	<div class="form-group">
 		<input type="text" name="title" class="form-control" id="inputTitle" placeholder="Enter title">
