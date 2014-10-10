@@ -1,0 +1,41 @@
+<h2 class="title-switchboard"><a class="pull-right btn btn-danger" href="{{ path('ui_company_newphone') }}">New phone</a>{# <a href="{{ path('ui_company_newphone') }}"><span class="glyphicon glyphicon-plus"></span></a> #} {{ company.activephones|length }} {{ company.activephones|length > 1 ? 'Phones' : 'Phone' }}</h2>
+{% for phone in company.phones if phone.isactive %}
+<div class="switchboard-card switchboard-phone
+{% for employee in phone.employees %}emp{{ employee.hash }} {% for subscription in employee.subscriptions %} sub{{ subscription.hash }} {% endfor %}{% endfor %}" data-hash="{{ phone.hash }}">
+	<div class="contentbox">
+		<div>
+			{{ phone.phonename }}
+		</div>
+		<div>
+			{% for employee in phone.employees if employee.isactive %}
+			<img src="{{ employee.thumburl ? employee.thumburl : 'https://s3-ap-southeast-1.amazonaws.com/fortyeight/buddies/images/7ee05724_64.png' }}" class="img-circle tooltip-flag" width="30" data-toggle="tooltip" data-placement="bottom" title="{{ employee.name }} ({{ employee.extension }})">
+			{% endfor %}
+		</div>
+	</div>
+	<div class="toolbox">
+		<div class="btn-group btn-group-justified">
+			<div class="btn-group">
+				<a href="{{ path('ui_phone_employees', {'hash': phone.hash}) }}" data-toggle="tooltip" data-placement="bottom" title="Buddies" class="tooltip-flag btn btn-default"><span class="glyphicon glyphicon-user"></span></a>
+			</div>
+			<div class="btn-group">
+				<a href="{{ path('ui_phone_edit', {'hash': phone.hash}) }}" data-toggle="tooltip" data-placement="bottom" title="Edit" class="tooltip-flag btn btn-default"><span class="glyphicon glyphicon-cog"></span></a>
+			</div>
+		  
+			<div class="btn-group">
+				<a href="{{ path('ui_phone_delete', {'hash': phone.hash}) }}" data-toggle="tooltip" data-placement="bottom" title="Delete" class="tooltip-flag btn btn-default btn-trash"><span class="glyphicon glyphicon-trash"></span></a>
+			</div>
+			{% if 'cisco' in phone.model %}
+			<div class="btn-group">
+				<a href="{{ path('ui_phone_configure', {'hash': phone.hash}) }}" data-toggle="tooltip" data-placement="bottom" title="Configure" class="tooltip-flag btn btn-default"><span class="glyphicon glyphicon-wrench"></span></a>
+			</div>
+			{% endif %}
+			<div class="btn-group">
+				<a href="#" class="l-mod tooltip-flag btn btn-default" data-url="{{ path('ui_phone_credentials', {'hash': phone.hash}) }}" data-toggle="tooltip" data-placement="bottom" title="Credentials"><span class="glyphicon glyphicon-lock"></span></a>
+			</div>
+		</div>
+	</div>
+	<div class="status status-{{ phone.lastms > 0 ? 'default' : 'danger' }} tooltip-flag" data-toggle="tooltip" data-placement="bottom" title="{{ phone.lastms > 0 ? 'Connected' : 'Not connected' }}"></div>
+</div>
+{% else %}
+<div class="alert alert-warning alert-first"><a href="{{ path('ui_company_newphone') }}" class="alert-link">Add your first phone</a></div>
+{% endfor %}
