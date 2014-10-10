@@ -7,6 +7,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use VoIP\Company\DynIPBundle\Entity\DynIP;
 use VoIP\Company\StructureBundle\Entity\Company;
 use VoIP\Company\StructureBundle\Entity\Phone;
 use VoIP\Company\StructureBundle\Entity\Employee;
@@ -691,12 +692,279 @@ class CompanyController extends Controller
 		$user = $this->getUser();
 		$company = $this->getUser()->getCompany();
 		
-		$ip = $this->container->get('request')->getClientIp();
+		$request = $this->getRequest();
+		$query = $request->query;
 		
-		$response = new JsonResponse();
-		$response->setData(array(
-		    'ip' => $ip
+		$ip = $query->get('ip');
+		
+		if (!$ip) $ip = $this->container->get('request')->getClientIp();
+		
+		if ($ip == '::1') $ip = '182.19.255.8';
+		
+		$em = $this->getDoctrine()->getManager();
+		$dynIP = $em->getRepository('VoIPCompanyDynIPBundle:DynIP')->findOneBy(array(
+			'ip' => $ip
 		));
+		if (!$dynIP) {
+			$dynIP = new DynIP();
+			$dynIP->setCompany($company);
+			$dynIP->setIp($ip);
+			$em->persist($dynIP);
+			$em->flush();
+			
+			$ec2 = $this->container->get('aws_ec2');
+			$ec2->set_region(\AmazonEC2::REGION_SINGAPORE);
+			$authorizeResp = $ec2->authorize_security_group_ingress(array(
+				'GroupId' => 'sg-8d9c5de8',
+				'IpPermissions' => array(
+					array(
+						'IpProtocol' => 'udp',
+						'FromPort' => '5060',
+						'ToPort' => '5060',
+						'IpRanges' => array(
+							array('CidrIp' => $ip.'/32'),
+						)
+					),
+					array(
+						'IpProtocol' => 'udp',
+						'FromPort' => '10000',
+						'ToPort' => '30000',
+						'IpRanges' => array(
+							array('CidrIp' => $ip.'/32'),
+						)
+					)
+				)
+			));
+		}
+		
+		return $this->redirect($this->generateUrl('ui_company_dynamic'));
+    }
+	
+    /**
+     * @Route("/dynamic-network/remove-ip/{hash}", name="ui_company_dynamic_removeip")
+     * @Template()
+	 * @Method("GET")
+	 * @Security("has_role('ROLE_USER')")
+     */
+    public function dynamicRemoveIPAction($hash)
+    {
+		$user = $this->getUser();
+		$company = $this->getUser()->getCompany();
+		
+		$em = $this->getDoctrine()->getManager();
+		$dynIP = $em->getRepository('VoIPCompanyDynIPBundle:DynIP')->findOneBy(array(
+			'hash' => $hash,
+			'company' => $company
+		));
+		if ($dynIP) {
+			$ip = $dynIP->getIp();
+			
+			$em->remove($dynIP);
+			$em->flush();
+			
+			$ec2 = $this->container->get('aws_ec2');
+			$ec2->set_region(\AmazonEC2::REGION_SINGAPORE);
+			$revokeResp = $ec2->revoke_security_group_ingress(array(
+				'GroupId' => 'sg-8d9c5de8',
+				'IpPermissions' => array(
+					array(
+						'IpProtocol' => 'udp',
+						'FromPort' => '5060',
+						'ToPort' => '5060',
+						'IpRanges' => array(
+							array('CidrIp' => $ip.'/32'),
+						)
+					),
+					array(
+						'IpProtocol' => 'udp',
+						'FromPort' => '10000',
+						'ToPort' => '30000',
+						'IpRanges' => array(
+							array('CidrIp' => $ip.'/32'),
+						)
+					)
+				)
+			));
+		}
+			
+		return $this->redirect($this->generateUrl('ui_company_dynamic'));
+    }
+	
+    /**
+     * @Route("/dynamic-network/update-ip/{hash}", name="ui_company_dynamic_updateip")
+     * @Template()
+	 * @Method("GET")
+	 * @Security("has_role('ROLE_USER')")
+     */
+    public function dynamicUpdateIPAction($hash)
+    {
+		$request = $this->getRequest();
+		$query = $request->query;
+		$user = $this->getUser();
+		$company = $this->getUser()->getCompany();
+		
+		$em = $this->getDoctrine()->getManager();
+		$dynIP = $em->getRepository('VoIPCompanyDynIPBundle:DynIP')->findOneBy(array(
+			'hash' => $hash,
+			'company' => $company
+		));
+		if ($dynIP) {
+			$ip = $dynIP->getIp();
+			
+			$ec2 = $this->container->get('aws_ec2');
+			$ec2->set_region(\AmazonEC2::REGION_SINGAPORE);
+			$revokeResp = $ec2->revoke_security_group_ingress(array(
+				'GroupId' => 'sg-8d9c5de8',
+				'IpPermissions' => array(
+					array(
+						'IpProtocol' => 'udp',
+						'FromPort' => '5060',
+						'ToPort' => '5060',
+						'IpRanges' => array(
+							array('CidrIp' => $ip.'/32'),
+						)
+					),
+					array(
+						'IpProtocol' => 'udp',
+						'FromPort' => '10000',
+						'ToPort' => '30000',
+						'IpRanges' => array(
+							array('CidrIp' => $ip.'/32'),
+						)
+					)
+				)
+			));
+		
+			$ip = $query->get('ip');
+		
+			if (!$ip) $ip = $this->container->get('request')->getClientIp();
+		
+			if ($ip == '::1') $ip = '182.19.255.8';
+			
+			$dynIP->setIp($ip);
+			$em->flush();
+			
+			$authorizeResp = $ec2->authorize_security_group_ingress(array(
+				'GroupId' => 'sg-8d9c5de8',
+				'IpPermissions' => array(
+					array(
+						'IpProtocol' => 'udp',
+						'FromPort' => '5060',
+						'ToPort' => '5060',
+						'IpRanges' => array(
+							array('CidrIp' => $ip.'/32'),
+						)
+					),
+					array(
+						'IpProtocol' => 'udp',
+						'FromPort' => '10000',
+						'ToPort' => '30000',
+						'IpRanges' => array(
+							array('CidrIp' => $ip.'/32'),
+						)
+					)
+				)
+			));
+		}
+			
+		return $this->redirect($this->generateUrl('ui_company_dynamic'));
+    }
+	
+    /**
+     * @Route("/dynamic-ip/{token}", name="dynamicip")
+     * @Template()
+	 * @Method("GET")
+     */
+    public function dynamicIPAction($token)
+    {
+		$request = $this->getRequest();
+		$query = $request->query;
+		
+		$em = $this->getDoctrine()->getManager();
+		$dynIP = $em->getRepository('VoIPCompanyDynIPBundle:DynIP')->findOneBy(array(
+			'token' => $token
+		));
+		$response = new JsonResponse();
+		if ($dynIP) {
+			
+			$newip = $query->get('ip');
+	
+			if (!$newip) $newip = $this->container->get('request')->getClientIp();
+	
+			if ($newip == '::1') $newip = '182.19.255.8';
+			
+			if ($newip != $dynIP->getIp()) {
+				$ip = $dynIP->getIp();
+			
+				$ec2 = $this->container->get('aws_ec2');
+				$ec2->set_region(\AmazonEC2::REGION_SINGAPORE);
+				$revokeResp = $ec2->revoke_security_group_ingress(array(
+					'GroupId' => 'sg-8d9c5de8',
+					'IpPermissions' => array(
+						array(
+							'IpProtocol' => 'udp',
+							'FromPort' => '5060',
+							'ToPort' => '5060',
+							'IpRanges' => array(
+								array('CidrIp' => $ip.'/32'),
+							)
+						),
+						array(
+							'IpProtocol' => 'udp',
+							'FromPort' => '10000',
+							'ToPort' => '30000',
+							'IpRanges' => array(
+								array('CidrIp' => $ip.'/32'),
+							)
+						)
+					)
+				));
+			
+				$dynIP->setIp($newip);
+				$em->flush();
+			
+				$authorizeResp = $ec2->authorize_security_group_ingress(array(
+					'GroupId' => 'sg-8d9c5de8',
+					'IpPermissions' => array(
+						array(
+							'IpProtocol' => 'udp',
+							'FromPort' => '5060',
+							'ToPort' => '5060',
+							'IpRanges' => array(
+								array('CidrIp' => $newip.'/32'),
+							)
+						),
+						array(
+							'IpProtocol' => 'udp',
+							'FromPort' => '10000',
+							'ToPort' => '30000',
+							'IpRanges' => array(
+								array('CidrIp' => $newip.'/32'),
+							)
+						)
+					)
+				));
+			
+				$response->setData(array(
+				    'auth' => $authorizeResp->isOK() ? true : false,
+					'rev' => $revokeResp->isOK() ? true : false,
+					'previp' => $ip,
+					'newip' => $newip
+				));
+			} else {
+				$response->setData(array(
+				    'auth' => 'no change',
+					'rev' => 'no change',
+					'ip' => $newip
+				));
+			}
+			
+			
+		} else {
+			$response->setData(array(
+			    'dyn-ip' => 'not found'
+			));
+		}
 		return $response;
     }
     

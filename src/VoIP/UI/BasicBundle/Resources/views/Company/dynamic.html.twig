@@ -4,20 +4,22 @@
 {% block container %}
 <table class="table table-hover">
 	<tr>
+		<th>IP</th>
 		<th>Created at</th>
 		<th>Updated at</th>
-		<th>IP</th>
-		<th>Hash</th>
-		<th>Token</th>
+		<th>Actions</th>
 	</tr>
 	{% for ip in company.dynips %}
 	<tr>
+		<td>{{ ip.ip }}</td>
 		<td>{{ ip.createdat | date('d/m/Y H:i:s') }}</td>
 		<td>{{ ip.updatedat | date('d/m/Y H:i:s') }}</td>
-		<td>{{ ip.ip }}</td>
-		<td>{{ ip.hash }}</td>
-		<td>{{ ip.token }}</td>
+		<td>
+			<a href="{{ path('ui_company_dynamic_removeip', {'hash': ip.hash}) }}"><span class="glyphicon glyphicon-trash"></span></a>
+			<a href="{{ path('ui_company_dynamic_updateip', {'hash': ip.hash}) }}"><span class="glyphicon glyphicon-refresh"></span></a>
+		</td>
 	</tr>
 	{% endfor %}
 </table>
+<a class="btn btn-info" href="{{ path('ui_company_dynamic_addip') }}">Add my IP</a>
 {% endblock container %}
