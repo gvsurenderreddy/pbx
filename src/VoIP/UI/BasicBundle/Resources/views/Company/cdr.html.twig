@@ -15,8 +15,8 @@
 	{% for cdr in cdrs %}
 	<tr>
 		<td>{{ cdr.end|date('d/m/Y H:i:s') }}</td>
-		<td>{{ cdr.dialer }}</td>
-		<td>{{ cdr.receiver }}</td>
+		<td>{{ cdr.dialerphone.phonename }}</td>
+		<td>{{ cdr.receiveremployee.name }}</td>
 		<td>S$ {{ cdr.rate|number_format(3, '.', ',') }} / min</td>
 		<td>S$ {{ (cdr.rate/60)|number_format(5, '.', ',') }} / sec</td>
 		<td>{{ cdr.writtentime }}</td>
