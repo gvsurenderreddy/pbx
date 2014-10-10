@@ -5,6 +5,7 @@
 <table class="table table-hover">
 	<tr>
 		<th>IP</th>
+		<th>Title</th>
 		<th>Created at</th>
 		<th>Updated at</th>
 		<th>Actions</th>
@@ -12,6 +13,7 @@
 	{% for ip in company.dynips %}
 	<tr>
 		<td>{{ ip.ip }}</td>
+		<td>{{ ip.title }}</td>
 		<td>{{ ip.createdat | date('d/m/Y H:i:s') }}</td>
 		<td>{{ ip.updatedat | date('d/m/Y H:i:s') }}</td>
 		<td>
@@ -21,5 +23,15 @@
 	</tr>
 	{% endfor %}
 </table>
-<a class="btn btn-info" href="{{ path('ui_company_dynamic_addip') }}">Add my IP</a>
+{% if ip %}
+<form class="form-inline" role="form" action="{{ path('ui_company_dynamic_addip') }}">
+	<div class="form-group">
+		<input type="text" name="title" class="form-control" id="inputTitle" placeholder="Enter title">
+	</div>
+	<div class="form-group">
+		<input type="text" name="ip" class="form-control" id="inputIP" placeholder="IP" value="{{ ip }}">
+	</div>
+	<button type="submit" class="btn btn-info">Add my IP</button>
+</form>
+{% endif %}
 {% endblock container %}

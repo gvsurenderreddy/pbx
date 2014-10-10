@@ -39,6 +39,13 @@ class DynIP
     /**
      * @var string
      *
+     * @ORM\Column(name="title", type="string", length=127, nullable=true)
+     */
+    private $title;
+
+    /**
+     * @var string
+     *
      * @ORM\Column(name="hash", type="string", length=8, unique=true)
      */
     private $hash;
@@ -229,5 +236,28 @@ class DynIP
     public function getCompany()
     {
         return $this->company;
+    }
+
+    /**
+     * Set title
+     *
+     * @param string $title
+     * @return DynIP
+     */
+    public function setTitle($title)
+    {
+        $this->title = $title;
+
+        return $this;
+    }
+
+    /**
+     * Get title
+     *
+     * @return string 
+     */
+    public function getTitle()
+    {
+        return $this->title;
     }
 }

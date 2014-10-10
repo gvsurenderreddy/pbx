@@ -676,8 +676,18 @@ class CompanyController extends Controller
     {
 		$user = $this->getUser();
 		$company = $this->getUser()->getCompany();
+		$ip = $this->container->get('request')->getClientIp();
+		if ($ip == '::1') $ip = '182.19.255.8';
+		
+		$em = $this->getDoctrine()->getManager();
+		$dynIP = $em->getRepository('VoIPCompanyDynIPBundle:DynIP')->findOneBy(array(
+			'ip' => $ip
+		));
+		if ($dynIP) $ip = null;
+		
         return array(
 			'company' => $company,
+			'ip' => $ip
 		);
     }
 	
@@ -696,6 +706,7 @@ class CompanyController extends Controller
 		$query = $request->query;
 		
 		$ip = $query->get('ip');
+		$title = $query->get('title');
 		
 		if (!$ip) $ip = $this->container->get('request')->getClientIp();
 		
@@ -709,6 +720,7 @@ class CompanyController extends Controller
 			$dynIP = new DynIP();
 			$dynIP->setCompany($company);
 			$dynIP->setIp($ip);
+			$dynIP->setTitle($title);
 			$em->persist($dynIP);
 			$em->flush();
 			
