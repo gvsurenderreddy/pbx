@@ -23,15 +23,14 @@
 	</tr>
 	{% endfor %}
 </table>
-{% if ip %}
+{% if ip %}<p>Your IP is already in the list</p>{% endif %}
 <form class="form-inline" role="form" action="{{ path('ui_company_dynamic_addip') }}">
 	<div class="form-group">
 		<input type="text" name="title" class="form-control" id="inputTitle" placeholder="Enter title">
 	</div>
 	<div class="form-group">
-		<input type="text" name="ip" class="form-control" id="inputIP" placeholder="IP" value="{{ ip }}">
+		<input type="text" name="ip" class="form-control" id="inputIP" placeholder="IP you want to add" value="{{ ip }}">
 	</div>
 	<button type="submit" class="btn btn-info">Add my IP</button>
 </form>
-{% endif %}
 {% endblock container %}
