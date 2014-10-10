@@ -169,6 +169,12 @@ class Company
      */
     private $outGroup;
 	
+	/**
+     * @ORM\OneToMany(targetEntity="\VoIP\Company\DynIPBundle\Entity\DynIP", mappedBy="company")
+	 * @ORM\OrderBy({"createdAt" = "ASC"})
+     */
+    private $dynIPs;
+	
 	
 	/**
 	 * @ORM\PrePersist
@@ -860,5 +866,38 @@ class Company
     public function getIsMaster()
     {
         return $this->isMaster;
+    }
+
+    /**
+     * Add dynIPs
+     *
+     * @param \VoIP\Company\DynIPBundle\Entity\DynIP $dynIPs
+     * @return Company
+     */
+    public function addDynIP(\VoIP\Company\DynIPBundle\Entity\DynIP $dynIPs)
+    {
+        $this->dynIPs[] = $dynIPs;
+
+        return $this;
+    }
+
+    /**
+     * Remove dynIPs
+     *
+     * @param \VoIP\Company\DynIPBundle\Entity\DynIP $dynIPs
+     */
+    public function removeDynIP(\VoIP\Company\DynIPBundle\Entity\DynIP $dynIPs)
+    {
+        $this->dynIPs->removeElement($dynIPs);
+    }
+
+    /**
+     * Get dynIPs
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getDynIPs()
+    {
+        return $this->dynIPs;
     }
 }

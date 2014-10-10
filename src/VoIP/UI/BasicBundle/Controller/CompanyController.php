@@ -14,6 +14,7 @@ use VoIP\Company\SubscriptionsBundle\Entity\Subscription;
 use VoIP\Company\VoicemailBundle\Entity\Voicemail;
 use VoIP\PBX\RealTimeBundle\Extra\Sync;
 use VoIP\UI\BasicBundle\Extra\Image;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 class CompanyController extends Controller
 {
@@ -662,6 +663,41 @@ class CompanyController extends Controller
 		$em->flush();
 		
 		return $this->redirect($this->generateUrl('ui_company'));
+    }
+	
+    /**
+     * @Route("/dynamic-network", name="ui_company_dynamic")
+     * @Template()
+	 * @Method("GET")
+	 * @Security("has_role('ROLE_USER')")
+     */
+    public function dynamicAction()
+    {
+		$user = $this->getUser();
+		$company = $this->getUser()->getCompany();
+        return array(
+			'company' => $company,
+		);
+    }
+	
+    /**
+     * @Route("/dynamic-network/add-ip", name="ui_company_dynamic_addip")
+     * @Template()
+	 * @Method("GET")
+	 * @Security("has_role('ROLE_USER')")
+     */
+    public function dynamicAddIPAction()
+    {
+		$user = $this->getUser();
+		$company = $this->getUser()->getCompany();
+		
+		$ip = $this->container->get('request')->getClientIp();
+		
+		$response = new JsonResponse();
+		$response->setData(array(
+		    'ip' => $ip
+		));
+		return $response;
     }
     
 	

@@ -1,0 +1,233 @@
+<?php
+
+namespace VoIP\Company\DynIPBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * DynIP
+ *
+ * @ORM\Table(name="structure_dynip")
+ * @ORM\Entity
+ * @ORM\HasLifecycleCallbacks()
+ */
+class DynIP
+{
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    private $id;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="created_at", type="datetime")
+     */
+    private $createdAt;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="updated_at", type="datetime")
+     */
+    private $updatedAt;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="hash", type="string", length=8, unique=true)
+     */
+    private $hash;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="ip", type="string", length=15, unique=true)
+     */
+    private $ip;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="token", type="string", length=32, unique=true)
+     */
+    private $token;
+	
+	/**
+     * @ORM\ManyToOne(targetEntity="\VoIP\Company\StructureBundle\Entity\Company", inversedBy="dynIPs")
+	 * @ORM\JoinColumn(name="company_id", referencedColumnName="id", onDelete="CASCADE")
+     */
+    private $company;
+	
+	/**
+	 * @ORM\PrePersist
+	 */
+	public function prePersist()
+	{
+		$this->setCreatedAt(new \DateTime());
+		$this->setUpdatedAt(new \DateTime());
+		$this->setHash(hash('crc32b', uniqid()));
+	    $this->setToken(hash('md5', uniqid()));
+	}
+	
+	/**
+	 * @ORM\PreUpdate
+	 */
+	public function preUpdate()
+	{
+	    $this->setUpdatedAt(new \DateTime());
+	}
+
+
+    /**
+     * Get id
+     *
+     * @return integer 
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set createdAt
+     *
+     * @param \DateTime $createdAt
+     * @return DynIP
+     */
+    public function setCreatedAt($createdAt)
+    {
+        $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    /**
+     * Get createdAt
+     *
+     * @return \DateTime 
+     */
+    public function getCreatedAt()
+    {
+        return $this->createdAt;
+    }
+
+    /**
+     * Set updatedAt
+     *
+     * @param \DateTime $updatedAt
+     * @return DynIP
+     */
+    public function setUpdatedAt($updatedAt)
+    {
+        $this->updatedAt = $updatedAt;
+
+        return $this;
+    }
+
+    /**
+     * Get updatedAt
+     *
+     * @return \DateTime 
+     */
+    public function getUpdatedAt()
+    {
+        return $this->updatedAt;
+    }
+
+    /**
+     * Set hash
+     *
+     * @param string $hash
+     * @return DynIP
+     */
+    public function setHash($hash)
+    {
+        $this->hash = $hash;
+
+        return $this;
+    }
+
+    /**
+     * Get hash
+     *
+     * @return string 
+     */
+    public function getHash()
+    {
+        return $this->hash;
+    }
+
+    /**
+     * Set ip
+     *
+     * @param string $ip
+     * @return DynIP
+     */
+    public function setIp($ip)
+    {
+        $this->ip = $ip;
+
+        return $this;
+    }
+
+    /**
+     * Get ip
+     *
+     * @return string 
+     */
+    public function getIp()
+    {
+        return $this->ip;
+    }
+
+    /**
+     * Set token
+     *
+     * @param string $token
+     * @return DynIP
+     */
+    public function setToken($token)
+    {
+        $this->token = $token;
+
+        return $this;
+    }
+
+    /**
+     * Get token
+     *
+     * @return string 
+     */
+    public function getToken()
+    {
+        return $this->token;
+    }
+
+    /**
+     * Set company
+     *
+     * @param \VoIP\Company\StructureBundle\Entity\Company $company
+     * @return DynIP
+     */
+    public function setCompany(\VoIP\Company\StructureBundle\Entity\Company $company = null)
+    {
+        $this->company = $company;
+
+        return $this;
+    }
+
+    /**
+     * Get company
+     *
+     * @return \VoIP\Company\StructureBundle\Entity\Company 
+     */
+    public function getCompany()
+    {
+        return $this->company;
+    }
+}

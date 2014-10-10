@@ -1,3 +1,8 @@
+vo_ip_company_dyn_ip:
+    resource: "@VoIPCompanyDynIPBundle/Controller/"
+    type:     annotation
+    prefix:   /
+
 vo_ipui_admin:
     resource: "@VoIPUIAdminBundle/Controller/"
     type:     annotation
