@@ -28,6 +28,9 @@ class CompanyController extends Controller
      */
     public function companyAction()
     {
+		if (false === $this->get('security.context')->isGranted('ROLE_USER')) {
+			return $this->redirect('http://fortyeight.co/');
+		}
 		$user = $this->getUser();
 		if (!$user->getConditionsAccepted()) {
 			return $this->render('VoIPUIBasicBundle:Company:conditions.html.twig');
