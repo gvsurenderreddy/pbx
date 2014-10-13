@@ -639,29 +639,8 @@ class CompanyController extends Controller
 			$em->persist($dynIP);
 			$em->flush();
 			
-			$ec2 = $this->container->get('aws_ec2');
-			$ec2->set_region(\AmazonEC2::REGION_SINGAPORE);
-			$authorizeResp = $ec2->authorize_security_group_ingress(array(
-				'GroupId' => 'sg-8d9c5de8',
-				'IpPermissions' => array(
-					array(
-						'IpProtocol' => 'udp',
-						'FromPort' => '5060',
-						'ToPort' => '5060',
-						'IpRanges' => array(
-							array('CidrIp' => $ip.'/32'),
-						)
-					),
-					array(
-						'IpProtocol' => 'udp',
-						'FromPort' => '10000',
-						'ToPort' => '30000',
-						'IpRanges' => array(
-							array('CidrIp' => $ip.'/32'),
-						)
-					)
-				)
-			));
+			$authorizeResp = $this->firewallAddIP($ip, 'sg-8d9c5de8');
+			$authorizeResp = $this->firewallAddIP($ip, 'sg-2f4a8b7a');
 		}
 		
 		$this->get('session')->getFlashBag()->add(
@@ -694,29 +673,9 @@ class CompanyController extends Controller
 			$em->remove($dynIP);
 			$em->flush();
 			
-			$ec2 = $this->container->get('aws_ec2');
-			$ec2->set_region(\AmazonEC2::REGION_SINGAPORE);
-			$revokeResp = $ec2->revoke_security_group_ingress(array(
-				'GroupId' => 'sg-8d9c5de8',
-				'IpPermissions' => array(
-					array(
-						'IpProtocol' => 'udp',
-						'FromPort' => '5060',
-						'ToPort' => '5060',
-						'IpRanges' => array(
-							array('CidrIp' => $ip.'/32'),
-						)
-					),
-					array(
-						'IpProtocol' => 'udp',
-						'FromPort' => '10000',
-						'ToPort' => '30000',
-						'IpRanges' => array(
-							array('CidrIp' => $ip.'/32'),
-						)
-					)
-				)
-			));
+			$revokeResp = $this->firewallRemoveIP($ip, 'sg-8d9c5de8');
+			$revokeResp = $this->firewallRemoveIP($ip, 'sg-2f4a8b7a');
+
 		}
 		
 		$this->get('session')->getFlashBag()->add(
@@ -747,30 +706,9 @@ class CompanyController extends Controller
 		));
 		if ($dynIP) {
 			$ip = $dynIP->getIp();
-			
-			$ec2 = $this->container->get('aws_ec2');
-			$ec2->set_region(\AmazonEC2::REGION_SINGAPORE);
-			$revokeResp = $ec2->revoke_security_group_ingress(array(
-				'GroupId' => 'sg-8d9c5de8',
-				'IpPermissions' => array(
-					array(
-						'IpProtocol' => 'udp',
-						'FromPort' => '5060',
-						'ToPort' => '5060',
-						'IpRanges' => array(
-							array('CidrIp' => $ip.'/32'),
-						)
-					),
-					array(
-						'IpProtocol' => 'udp',
-						'FromPort' => '10000',
-						'ToPort' => '30000',
-						'IpRanges' => array(
-							array('CidrIp' => $ip.'/32'),
-						)
-					)
-				)
-			));
+
+			$revokeResp = $this->firewallRemoveIP($ip, 'sg-8d9c5de8');
+			$revokeResp = $this->firewallRemoveIP($ip, 'sg-2f4a8b7a');
 		
 			$ip = $query->get('ip');
 		
@@ -781,27 +719,8 @@ class CompanyController extends Controller
 			$dynIP->setIp($ip);
 			$em->flush();
 			
-			$authorizeResp = $ec2->authorize_security_group_ingress(array(
-				'GroupId' => 'sg-8d9c5de8',
-				'IpPermissions' => array(
-					array(
-						'IpProtocol' => 'udp',
-						'FromPort' => '5060',
-						'ToPort' => '5060',
-						'IpRanges' => array(
-							array('CidrIp' => $ip.'/32'),
-						)
-					),
-					array(
-						'IpProtocol' => 'udp',
-						'FromPort' => '10000',
-						'ToPort' => '30000',
-						'IpRanges' => array(
-							array('CidrIp' => $ip.'/32'),
-						)
-					)
-				)
-			));
+			$authorizeResp = $this->firewallAddIP($ip, 'sg-8d9c5de8');
+			$authorizeResp = $this->firewallAddIP($ip, 'sg-2f4a8b7a');
 		}
 		
 		$this->get('session')->getFlashBag()->add(
@@ -838,54 +757,14 @@ class CompanyController extends Controller
 			if ($newip != $dynIP->getIp()) {
 				$ip = $dynIP->getIp();
 			
-				$ec2 = $this->container->get('aws_ec2');
-				$ec2->set_region(\AmazonEC2::REGION_SINGAPORE);
-				$revokeResp = $ec2->revoke_security_group_ingress(array(
-					'GroupId' => 'sg-8d9c5de8',
-					'IpPermissions' => array(
-						array(
-							'IpProtocol' => 'udp',
-							'FromPort' => '5060',
-							'ToPort' => '5060',
-							'IpRanges' => array(
-								array('CidrIp' => $ip.'/32'),
-							)
-						),
-						array(
-							'IpProtocol' => 'udp',
-							'FromPort' => '10000',
-							'ToPort' => '30000',
-							'IpRanges' => array(
-								array('CidrIp' => $ip.'/32'),
-							)
-						)
-					)
-				));
+				$revokeResp = $this->firewallRemoveIP($ip, 'sg-8d9c5de8');
+				$revokeResp = $this->firewallRemoveIP($ip, 'sg-2f4a8b7a');
 			
 				$dynIP->setIp($newip);
 				$em->flush();
 			
-				$authorizeResp = $ec2->authorize_security_group_ingress(array(
-					'GroupId' => 'sg-8d9c5de8',
-					'IpPermissions' => array(
-						array(
-							'IpProtocol' => 'udp',
-							'FromPort' => '5060',
-							'ToPort' => '5060',
-							'IpRanges' => array(
-								array('CidrIp' => $newip.'/32'),
-							)
-						),
-						array(
-							'IpProtocol' => 'udp',
-							'FromPort' => '10000',
-							'ToPort' => '30000',
-							'IpRanges' => array(
-								array('CidrIp' => $newip.'/32'),
-							)
-						)
-					)
-				));
+				$authorizeResp = $this->firewallAddIP($newip, 'sg-8d9c5de8');
+				$authorizeResp = $this->firewallAddIP($newip, 'sg-2f4a8b7a');
 			
 				$response->setData(array(
 				    'auth' => $authorizeResp->isOK() ? true : false,
@@ -910,6 +789,57 @@ class CompanyController extends Controller
 		return $response;
     }
     
-	
+	public function firewallAddIP($ip, $groupId = 'sg-8d9c5de8')
+	{
+		$ec2 = $this->container->get('aws_ec2');
+		$ec2->set_region(\AmazonEC2::REGION_SINGAPORE);
+		return $ec2->authorize_security_group_ingress(array(
+			'GroupId' => $groupId,
+			'IpPermissions' => array(
+				array(
+					'IpProtocol' => 'udp',
+					'FromPort' => '5060',
+					'ToPort' => '5060',
+					'IpRanges' => array(
+						array('CidrIp' => $ip.'/32'),
+					)
+				),
+				array(
+					'IpProtocol' => 'udp',
+					'FromPort' => '10000',
+					'ToPort' => '30000',
+					'IpRanges' => array(
+						array('CidrIp' => $ip.'/32'),
+					)
+				)
+			)
+		));
+	}
+	public function firewallRemoveIP($ip, $groupId = 'sg-8d9c5de8')
+	{
+		$ec2 = $this->container->get('aws_ec2');
+		$ec2->set_region(\AmazonEC2::REGION_SINGAPORE);
+		return $ec2->revoke_security_group_ingress(array(
+			'GroupId' => $groupId,
+			'IpPermissions' => array(
+				array(
+					'IpProtocol' => 'udp',
+					'FromPort' => '5060',
+					'ToPort' => '5060',
+					'IpRanges' => array(
+						array('CidrIp' => $ip.'/32'),
+					)
+				),
+				array(
+					'IpProtocol' => 'udp',
+					'FromPort' => '10000',
+					'ToPort' => '30000',
+					'IpRanges' => array(
+						array('CidrIp' => $ip.'/32'),
+					)
+				)
+			)
+		));
+	}
 	
 }
