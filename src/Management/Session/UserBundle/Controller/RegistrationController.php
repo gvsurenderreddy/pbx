@@ -62,7 +62,7 @@ class RegistrationController extends Controller
 
             $userManager->updateUser($user);
 			$em = $this->getDoctrine()->getManager();
-			$company = new Company();
+			/*$company = new Company();
 			$company->setName($user->getCompanyName());
 			$user->setCompany($company);
 			$outGroup = $em->getRepository('VoIPCompanySubscriptionsBundle:OutGroup')->findOneBy(array(
@@ -92,7 +92,7 @@ class RegistrationController extends Controller
 			$employee->setCompany($company);
 			$employee->setLicense($firstEmployeeLicense);
 			$em->persist($employee);
-			$em->flush();
+			$em->flush();*/
 
             if (null === $response = $event->getResponse()) {
                 $url = $this->generateUrl('fos_user_registration_confirmed');

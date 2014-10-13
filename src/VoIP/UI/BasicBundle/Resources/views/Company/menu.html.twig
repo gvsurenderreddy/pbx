@@ -1,12 +1,11 @@
+{% if app.user.company %}
 <center class="company-part">
 	<div class="company-image hidden-sm">
 		<a href="{{ path('ui_company') }}"><img src="{% if company.imageurl %}{{ company.imageurl }}{% else %}https://s3-ap-southeast-1.amazonaws.com/fortyeight/companies/images/3a1225ee_256.png{% endif %}" alt="{{ company.name }}" class="img-circle"></a>
 	</div>
 	<div class="company-name">{{ company.name }}</div>
-	<div class="company-since">$ {{ company.credit|number_format(2, '.', ',') }}</div>
-	{% if company.istrial %}<div class="company-trial"><span class="label label-info">Trial</span></div>{% endif %}
 </center>
-<center>
+{# <center>
 	<div class="btn-group btn-new">
 		<a href="{{ path('ui_company_newemployee') }}" class="btn btn-danger btn-new-main">Add a Buddy</a>
 		<button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown">
@@ -17,15 +16,42 @@
 			<li><a href="{{ path('ui_company_newemployee') }}">Add a Buddy</a></li>
 			<li><a href="{{ path('ui_company_newphone') }}">Add a Phone</a></li>
 			<li class="divider"></li>
-			{% if company.ismaster %}<li><a href="{{ path('ui_company_newsubscription') }}">Add an existing phone number</a></li>{% endif %}
 			<li><a href="{{ path('ui_company_newrequestnumber') }}">Request a phone number</a></li>
 		</ul>
 	</div>
-</center>
+</center> #}
 <ul class="nav nav-pills nav-stacked">
-	<li class="{{ route == 'ui_company' ? 'active' }}"><a href="{{ path('ui_company') }}"><span class="glyphicon glyphicon-th"></span> Switchboard</a></li>
-	<li class="{{ route == 'ui_company_mailbox' ? 'active' }}"><a href="{{ path('ui_company_mailbox') }}"><span class="glyphicon glyphicon-play"></span> Mailbox{% if newmessages %} <span class="badge pull-right">{{ newmessages }}</span>{% endif %}</a></li>
-	<li class="{{ route == 'ui_company_cdr' ? 'active' }}"><a href="{{ path('ui_company_cdr') }}"><span class="glyphicon glyphicon-list"></span> Call details</a></li>
-	<li class="{{ (route == 'fos_user_change_password' or 'ui_company_parameters' in route) ? 'active' }}"><a href="{{ path('ui_company_parameters_info') }}"><span class="glyphicon glyphicon-cog"></span> Settings</a></li>
-	<li class="{{ route == 'ui_company_bill' ? 'active' }}"><a href="{{ path('ui_company_bill') }}"><span class="glyphicon glyphicon-usd"></span> My bill</a></li>
+	<li class="{{ route == 'ui_company' ? 'active' }}">
+		<a href="{{ path('ui_company') }}">
+			<span class="glyphicon glyphicon-th"></span>
+			Switchboard
+		</a>
+	</li>
+	<li class="{{ route == 'ui_company_mailbox' ? 'active' }}">
+		<a href="{{ path('ui_company_mailbox') }}">
+			<i class="glyphicon fa fa-envelope"></i>
+			Mailbox
+			{% if newmessages %}<span class="badge pull-right">{{ newmessages }}</span>{% endif %}
+		</a>
+	</li>
+	<li class="{{ route == 'ui_company_cdr' ? 'active' }}">
+		<a href="{{ path('ui_company_cdr') }}">
+			<span class="glyphicon glyphicon-list"></span>
+			Call details
+		</a>
+	</li>
+	<li class="{{ (route == 'fos_user_change_password' or 'ui_company_parameters' in route) ? 'active' }}">
+		<a href="{{ path('ui_company_parameters_info') }}">
+			<span class="glyphicon glyphicon-cog"></span>
+			Settings
+		</a>
+	</li>
+	{# <li class="{{ route == 'ui_company_bill' ? 'active' }}"><a href="{{ path('ui_company_bill') }}"><span class="glyphicon glyphicon-usd"></span> My bill</a></li> #}
+	<li class="{{ (route == 'ui_company_dynamic' or 'ui_company_dynamic' in route) ? 'active' }}">
+		<a href="{{ path('ui_company_dynamic') }}">
+			<i class="glyphicon fa fa-code-fork"></i>
+			Network
+		</a>
+	</li>
 </ul>
+{% endif %}

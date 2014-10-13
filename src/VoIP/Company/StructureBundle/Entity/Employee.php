@@ -35,13 +35,6 @@ class Employee
      * @ORM\Column(name="updated_at", type="datetime")
      */
     private $updatedAt;
-	
-    /**
-     * @var \DateTime
-     *
-     * @ORM\Column(name="canceled_at", type="datetime", nullable=true)
-     */
-    private $canceledAt;
 
     /**
      * @var string
@@ -63,27 +56,6 @@ class Employee
      * @ORM\Column(name="extension", type="integer")
      */
     private $extension;
-	
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="license", type="integer")
-     */
-    private $license = 10;
-	
-    /**
-     * @var \DateTime
-     *
-     * @ORM\Column(name="is_active", type="boolean")
-     */
-    private $isActive = true;
-	
-    /**
-     * @var \DateTime
-     *
-     * @ORM\Column(name="is_main", type="boolean")
-     */
-    private $isMain = false;
 	
     /**
      * @var string
@@ -109,14 +81,7 @@ class Employee
 	 * @ORM\OrderBy({"name" = "ASC"})
 	 */
 	protected $subscriptions;
-	
-	/**
-     * @ORM\OneToMany(targetEntity="\VoIP\Company\StructureBundle\Entity\EmployeePayment", mappedBy="employee")
-	 * @ORM\OrderBy({"createdAt" = "ASC"})
-     */
-    private $payments;
 
-	
 	/**
 	 * @ORM\ManyToMany(targetEntity="\VoIP\Company\StructureBundle\Entity\Phone", inversedBy="employees")
 	 * @ORM\JoinTable(name="structure_employee_has_phone",
@@ -132,9 +97,9 @@ class Employee
 	 */
 	public function prePersist()
 	{
-		$this->createdAt = new \DateTime();
-	    $this->updatedAt = new \DateTime();
-		if (!$this->hash) $this->generateHash();
+		$this->setCreatedAt(new \DateTime());
+	    $this->setUpdatedAt(new \DateTime());
+		$this->setHash(hash('crc32b', uniqid('', true)));
 	}
 	
 	/**
@@ -142,23 +107,16 @@ class Employee
 	 */
 	public function preUpdate()
 	{
-	    $this->updatedAt = new \DateTime();
-		if (!$this->hash) $this->generateHash();
+	    $this->setUpdatedAt(new \DateTime());
 	}
-	
-	public function generateHash()
-	{
-		$this->hash = hash('crc32b', uniqid('', true));
-	}
-	
-	public function getStatus()
-	{
-		/*if (count($this->getPhones()) == 0) return 'danger';
-		elseif(count($this->getPhones()->filter(function($p){
-			return $p->getAmiStatusOk();
-		})) == 0) return 'warning';*/
-		return 'default';
-	}
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->subscriptions = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->phones = new \Doctrine\Common\Collections\ArrayCollection();
+    }
 
     /**
      * Get id
@@ -240,29 +198,6 @@ class Employee
     }
 
     /**
-     * Set extension
-     *
-     * @param integer $extension
-     * @return Employee
-     */
-    public function setExtension($extension)
-    {
-        $this->extension = $extension;
-
-        return $this;
-    }
-
-    /**
-     * Get extension
-     *
-     * @return integer 
-     */
-    public function getExtension()
-    {
-        return $this->extension;
-    }
-
-    /**
      * Set hash
      *
      * @param string $hash
@@ -286,122 +221,26 @@ class Employee
     }
 
     /**
-     * Set company
+     * Set extension
      *
-     * @param \VoIP\Company\StructureBundle\Entity\Company $company
+     * @param integer $extension
      * @return Employee
      */
-    public function setCompany(\VoIP\Company\StructureBundle\Entity\Company $company = null)
+    public function setExtension($extension)
     {
-        $this->company = $company;
+        $this->extension = $extension;
 
         return $this;
     }
 
     /**
-     * Get company
+     * Get extension
      *
-     * @return \VoIP\Company\StructureBundle\Entity\Company 
+     * @return integer 
      */
-    public function getCompany()
+    public function getExtension()
     {
-        return $this->company;
-    }
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->subscriptions = new \Doctrine\Common\Collections\ArrayCollection();
-    }
-
-    /**
-     * Add subscriptions
-     *
-     * @param \VoIP\Company\SubscriptionsBundle\Entity\Subscription $subscriptions
-     * @return Employee
-     */
-    public function addSubscription(\VoIP\Company\SubscriptionsBundle\Entity\Subscription $subscriptions)
-    {
-        $this->subscriptions[] = $subscriptions;
-
-        return $this;
-    }
-
-    /**
-     * Remove subscriptions
-     *
-     * @param \VoIP\Company\SubscriptionsBundle\Entity\Subscription $subscriptions
-     */
-    public function removeSubscription(\VoIP\Company\SubscriptionsBundle\Entity\Subscription $subscriptions)
-    {
-        $this->subscriptions->removeElement($subscriptions);
-    }
-
-    /**
-     * Get subscriptions
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getSubscriptions()
-    {
-        return $this->subscriptions;
-    }
-
-    /**
-     * Set isActive
-     *
-     * @param boolean $isActive
-     * @return Employee
-     */
-    public function setIsActive($isActive)
-    {
-        $this->isActive = $isActive;
-
-        return $this;
-    }
-
-    /**
-     * Get isActive
-     *
-     * @return boolean 
-     */
-    public function getIsActive()
-    {
-        return $this->isActive;
-    }
-
-    /**
-     * Add phones
-     *
-     * @param \VoIP\Company\StructureBundle\Entity\Phone $phones
-     * @return Employee
-     */
-    public function addPhone(\VoIP\Company\StructureBundle\Entity\Phone $phones)
-    {
-        $this->phones[] = $phones;
-
-        return $this;
-    }
-
-    /**
-     * Remove phones
-     *
-     * @param \VoIP\Company\StructureBundle\Entity\Phone $phones
-     */
-    public function removePhone(\VoIP\Company\StructureBundle\Entity\Phone $phones)
-    {
-        $this->phones->removeElement($phones);
-    }
-
-    /**
-     * Get phones
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getPhones()
-    {
-        return $this->phones;
+        return $this->extension;
     }
 
     /**
@@ -451,104 +290,91 @@ class Employee
     }
 
     /**
-     * Set license
+     * Set company
      *
-     * @param integer $license
+     * @param \VoIP\Company\StructureBundle\Entity\Company $company
      * @return Employee
      */
-    public function setLicense($license)
+    public function setCompany(\VoIP\Company\StructureBundle\Entity\Company $company = null)
     {
-        $this->license = $license;
+        $this->company = $company;
 
         return $this;
     }
 
     /**
-     * Get license
+     * Get company
      *
-     * @return integer 
+     * @return \VoIP\Company\StructureBundle\Entity\Company 
      */
-    public function getLicense()
+    public function getCompany()
     {
-        return $this->license;
+        return $this->company;
     }
 
     /**
-     * Set canceledAt
+     * Add subscriptions
      *
-     * @param \DateTime $canceledAt
+     * @param \VoIP\Company\SubscriptionsBundle\Entity\Subscription $subscriptions
      * @return Employee
      */
-    public function setCanceledAt($canceledAt)
+    public function addSubscription(\VoIP\Company\SubscriptionsBundle\Entity\Subscription $subscriptions)
     {
-        $this->canceledAt = $canceledAt;
+        $this->subscriptions[] = $subscriptions;
 
         return $this;
     }
 
     /**
-     * Get canceledAt
+     * Remove subscriptions
      *
-     * @return \DateTime 
+     * @param \VoIP\Company\SubscriptionsBundle\Entity\Subscription $subscriptions
      */
-    public function getCanceledAt()
+    public function removeSubscription(\VoIP\Company\SubscriptionsBundle\Entity\Subscription $subscriptions)
     {
-        return $this->canceledAt;
+        $this->subscriptions->removeElement($subscriptions);
     }
 
     /**
-     * Add payments
-     *
-     * @param \VoIP\Company\StructureBundle\Entity\EmployeePayment $payments
-     * @return Employee
-     */
-    public function addPayment(\VoIP\Company\StructureBundle\Entity\EmployeePayment $payments)
-    {
-        $this->payments[] = $payments;
-
-        return $this;
-    }
-
-    /**
-     * Remove payments
-     *
-     * @param \VoIP\Company\StructureBundle\Entity\EmployeePayment $payments
-     */
-    public function removePayment(\VoIP\Company\StructureBundle\Entity\EmployeePayment $payments)
-    {
-        $this->payments->removeElement($payments);
-    }
-
-    /**
-     * Get payments
+     * Get subscriptions
      *
      * @return \Doctrine\Common\Collections\Collection 
      */
-    public function getPayments()
+    public function getSubscriptions()
     {
-        return $this->payments;
+        return $this->subscriptions;
     }
 
     /**
-     * Set isMain
+     * Add phones
      *
-     * @param boolean $isMain
+     * @param \VoIP\Company\StructureBundle\Entity\Phone $phones
      * @return Employee
      */
-    public function setIsMain($isMain)
+    public function addPhone(\VoIP\Company\StructureBundle\Entity\Phone $phones)
     {
-        $this->isMain = $isMain;
+        $this->phones[] = $phones;
 
         return $this;
     }
 
     /**
-     * Get isMain
+     * Remove phones
      *
-     * @return boolean 
+     * @param \VoIP\Company\StructureBundle\Entity\Phone $phones
      */
-    public function getIsMain()
+    public function removePhone(\VoIP\Company\StructureBundle\Entity\Phone $phones)
     {
-        return $this->isMain;
+        $this->phones->removeElement($phones);
+    }
+
+    /**
+     * Get phones
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getPhones()
+    {
+        return $this->phones;
     }
 }

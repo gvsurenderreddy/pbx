@@ -1,0 +1,38 @@
+<h2 class="title-switchboard">
+	<a class="pull-right btn btn-danger" href="{{ path('ui_company_newemployee') }}">New buddy</a>
+	<span>{{ company.employees | length }} Buddies</span>
+</h2>
+{% for employee in company.employees %}
+<div class="switchboard-card switchboard-buddy
+{% for subscription in employee.subscriptions %} sub{{ subscription.hash }}{% endfor %}
+{% for phone in employee.phones %} pho{{ phone.hash }}{% endfor %}" data-hash="{{ employee.hash }}">
+	<div class="contentbox">
+		<div class="buddy-name">
+			{{ employee.extension }} <span class="bullet">&bull;</span> {{ employee.name }}
+		</div>
+		<div class="buddy-name">
+			
+		</div>
+		<div class="buddy-thumb">
+			<img src="{{ employee.thumburl ? employee.thumburl : 'https://s3-ap-southeast-1.amazonaws.com/fortyeight/buddies/images/7ee05724_64.png' }}" class="img-circle" width="50">
+		</div>
+	</div>
+	
+	<div class="toolbox">
+		<div class="btn-group btn-group-justified">
+			<div class="btn-group">
+				<a href="{{ path('ui_employee_image', {'hash': employee.hash}) }}" data-toggle="tooltip" data-placement="bottom" title="Image" class="tooltip-flag btn btn-default"><span class="glyphicon glyphicon-camera"></span></a>
+			</div>
+			<div class="btn-group">
+				<a href="{{ path('ui_employee_edit', {'hash': employee.hash}) }}" data-toggle="tooltip" data-placement="bottom" title="Edit" class="tooltip-flag btn btn-default"><span class="glyphicon glyphicon-cog"></span></a>
+			</div>
+			<div class="btn-group">
+				<a href="{{ path('ui_employee_delete', {'hash': employee.hash}) }}" data-toggle="tooltip" data-placement="bottom" title="Delete" class="tooltip-flag btn btn-default btn-trash"><span class="glyphicon glyphicon-trash"></span></a>
+			</div>
+		</div>
+	</div>
+	<div class="status status-default tooltip-flag" data-toggle="tooltip" data-placement="bottom" title="Connected"></div>
+</div>
+{% else %}
+<div class="alert alert-warning alert-first"><a href="{{ path('ui_company_newemployee') }}" class="alert-link">Add your first buddy</a></div>
+{% endfor %}

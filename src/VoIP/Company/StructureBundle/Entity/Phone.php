@@ -35,13 +35,6 @@ class Phone
      * @ORM\Column(name="updated_at", type="datetime")
      */
     private $updatedAt;
-	
-    /**
-     * @var \DateTime
-     *
-     * @ORM\Column(name="canceled_at", type="datetime", nullable=true)
-     */
-    private $canceledAt;
 
     /**
      * @var string
@@ -284,29 +277,6 @@ class Phone
     public function getUpdatedAt()
     {
         return $this->updatedAt;
-    }
-
-    /**
-     * Set canceledAt
-     *
-     * @param \DateTime $canceledAt
-     * @return Phone
-     */
-    public function setCanceledAt($canceledAt)
-    {
-        $this->canceledAt = $canceledAt;
-
-        return $this;
-    }
-
-    /**
-     * Get canceledAt
-     *
-     * @return \DateTime 
-     */
-    public function getCanceledAt()
-    {
-        return $this->canceledAt;
     }
 
     /**

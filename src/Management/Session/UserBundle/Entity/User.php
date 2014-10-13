@@ -30,20 +30,6 @@ class User extends BaseUser
      */
     protected $conditionsAccepted = false;
 	
-    /**
-     * @ORM\Column(name="company_name", type="string", length=255, nullable=true)
-     *
-     * @Assert\NotBlank(message="Please enter your company name.", groups={"Registration", "Profile"})
-     * @Assert\Length(
-     *     min=3,
-     *     max="255",
-     *     minMessage="The company name is too short.",
-     *     maxMessage="The company name is too long.",
-     *     groups={"Registration", "Profile"}
-     * )
-     */
-    protected $companyName;
-	
 	/**
      * @ORM\ManyToOne(targetEntity="\VoIP\Company\StructureBundle\Entity\Company", inversedBy="users")
 	 * @ORM\JoinColumn(name="company_id", referencedColumnName="id", onDelete="CASCADE")

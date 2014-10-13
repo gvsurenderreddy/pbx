@@ -9,7 +9,8 @@
 		<link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
 		<link rel="apple-touch-icon" href="/apple-touch-icon.png">
 		<link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/themes/smoothness/jquery-ui.css" />
-		<link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}" type="text/css" charset="utf-8" />
+		<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet">
+		<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
 		<link rel="stylesheet" href="{{ asset('css/main.css') }}" type="text/css" charset="utf-8" />
 		<link href='https://fonts.googleapis.com/css?family=Muli:300' rel='stylesheet' type='text/css'>
 		{% endblock %}
@@ -31,9 +32,8 @@
 		{% endblock %}
 		{% block modal %}<div id="modal" class="modal fade"></div>{% endblock modal %}
         {% block javascripts %}
-		<script src="{{ asset('js/jquery-2.1.0.min.js') }}"></script>
-		<script src="{{ asset('js/angular.min.js') }}"></script>
-		<script src="{{ asset('js/bootstrap.min.js') }}"></script>
+		<script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+		<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
 		<script src="{{ asset('js/autocomplete.min.js') }}"></script>
 		<script>
 		$('.l-mod').click(function(){

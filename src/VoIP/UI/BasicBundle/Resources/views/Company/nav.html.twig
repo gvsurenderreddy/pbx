@@ -1,3 +1,4 @@
+{% if app.user.company %}
 <nav class="navbar navbar-default visible-xs" role="navigation">
 	<div class="container-fluid">
 		<div class="navbar-header">
@@ -7,16 +8,17 @@
 				<span class="icon-bar"></span>
 				<span class="icon-bar"></span>
 			</button>
-			<a class="navbar-brand" href="{{ path('ui_company') }}">{{ company.name }}</a>
+			<a class="navbar-brand" href="{{ path('ui_company') }}"></a>
 		</div>
 		<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 			<ul class="nav navbar-nav">
-				<li class="nav-company-name">{{ company.name }} &bull; $ {{ company.credit|number_format(2, '.', ',') }}</li>
+				<li class="nav-company-name"> &bull; $ {{ 100 | number_format(2, '.', ',') }}</li>
 				<li><a href="{{ path('ui_company') }}">Switchboard</a></li>
 				<li><a href="{{ path('ui_company_cdr') }}">Call details</a></li>
 				<li><a href="{{ path('ui_company_parameters_info') }}">Settings</a></li>
-				<li><a href="{{ path('ui_company_bill') }}">My bill</a></li>
+				{# <li><a href="{{ path('ui_company_bill') }}">My bill</a></li> #}
 			</ul>
 		</div>
 	</div>
 </nav>
+{% endif %}

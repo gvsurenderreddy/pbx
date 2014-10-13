@@ -57,15 +57,17 @@ class PhoneController extends Controller
 		$phone->setHost('dynamic');
 		$phone->setNat('force_rport,comedia');
 		$phone->setType('friend');
-		//$phone->setAllow('gsm');
-		//$phone->setPermit('0.0.0.0/0.0.0.0');
 		$phone->setDynamic('yes');
 		$phone->setQualify(5000);
 		$phone->setQualifyfreq(20);
-		//$phone->setDirectmedia('no');
 		
 		$em->persist($phone);
 		$em->flush();
+		
+		$this->get('session')->getFlashBag()->add(
+            'notice',
+            'Your changes were saved!'
+        );
 		
 		return $this->redirect($this->generateUrl('ui_phone_employees', array(
 			'hash' => $phone->getHash()
@@ -123,6 +125,11 @@ class PhoneController extends Controller
 		
 		$em->flush();
 		
+		$this->get('session')->getFlashBag()->add(
+            'notice',
+            'Your changes were saved!'
+        );
+		
 		return $this->redirect($this->generateUrl('ui_company'));
     }
 	
@@ -144,7 +151,6 @@ class PhoneController extends Controller
 		if ($user->getCompany()->getId() != $company->getId()) throw $this->createNotFoundException('No authorization.');
 		$employees = $em->getRepository('VoIPCompanyStructureBundle:Employee')->findBy(array(
 			'company' => $company,
-			'isActive' => true,
 		), array(
 			'name' => 'ASC'
 		));
@@ -190,6 +196,11 @@ class PhoneController extends Controller
 
 		$em->flush();
 		
+		$this->get('session')->getFlashBag()->add(
+            'notice',
+            'Your changes were saved!'
+        );
+		
 		return $this->redirect($this->generateUrl('ui_company'));
     }
 	
@@ -214,6 +225,11 @@ class PhoneController extends Controller
 		$em->remove($phone);
 		
 		$em->flush();
+		
+		$this->get('session')->getFlashBag()->add(
+            'notice',
+            'Your changes were saved!'
+        );
 		
 		return $this->redirect($this->generateUrl('ui_company'));
     }

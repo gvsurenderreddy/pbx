@@ -29,19 +29,42 @@ class CompanyController extends Controller
     public function companyAction()
     {
 		$user = $this->getUser();
-		$company = $user->getCompany();
 		if (!$user->getConditionsAccepted()) {
-			return $this->redirect($this->generateUrl('ui_company_conditions'));
+			return $this->render('VoIPUIBasicBundle:Company:conditions.html.twig');
+		} elseif (!$user->getCompany()) {
+			return $this->render('VoIPUIBasicBundle:Company:new.html.twig');
 		}
-		/*
-		if (count($company->getPhones()) == 0) {
-			return $this->redirect($this->generateUrl('ui_company_newphone'))	;
-		}
-		*/
-		//$referer = $this->get('request')->server->get('HTTP_REFERER');
-        return array(
-			'company' => $company,
-		);
+        return array();
+    }
+	
+    /**
+     * @Route("/new", name="ui_company_new")
+     * @Template()
+	 * @Method("POST")
+	 * @Security("has_role('ROLE_USER')")
+     */
+    public function newAction()
+    {
+		$em = $this->getDoctrine()->getManager();
+		$user = $this->getUser();
+		$request = $this->getRequest();
+		
+		$name = $request->get('name');
+		
+		$company = new Company();
+		$company->setName($name);
+		$em->persist($company);
+		
+		$user->setCompany($company);
+		
+		$em->flush();
+		
+		$this->get('session')->getFlashBag()->add(
+            'notice',
+            'Your changes were saved!'
+        );
+		
+        return $this->redirect($this->generateUrl('ui_company'));
     }
 	
     /**
@@ -52,6 +75,7 @@ class CompanyController extends Controller
     {
 		$user = $this->getUser();
 		$company = $user->getCompany();
+		/*
 		$em = $this->getDoctrine()->getManager();
 		$query = $em->createQuery(
 		    'SELECT COUNT(m)
@@ -64,10 +88,10 @@ class CompanyController extends Controller
 			'companyId' => $company->getId()
 		));
 
-		$newMessages = $query->getSingleScalarResult();
+		$newMessages = $query->getSingleScalarResult();*/
         return array(
 			'company' => $company,
-			'newmessages' => $newMessages,
+			'newmessages' => 0,
 			'route' => $route
 		);
     }
@@ -80,7 +104,7 @@ class CompanyController extends Controller
     {
 		$user = $this->getUser();
 		$company = $user->getCompany();
-		$em = $this->getDoctrine()->getManager();
+		/*$em = $this->getDoctrine()->getManager();
 		$query = $em->createQuery(
 		    'SELECT COUNT(m)
 		    FROM VoIPCompanyVoicemailBundle:Message m
@@ -92,10 +116,10 @@ class CompanyController extends Controller
 			'companyId' => $company->getId()
 		));
 
-		$newMessages = $query->getSingleScalarResult();
+		$newMessages = $query->getSingleScalarResult();*/
         return array(
 			'company' => $company,
-			'newmessages' => $newMessages,
+			'newmessages' => 0,//$newMessages,
 			'route' => $route
 		);
     }
@@ -113,7 +137,7 @@ class CompanyController extends Controller
 		$phones = $company->getPhones();
 		$extensions = range(100, 999);
 		foreach ($company->getEmployees() as $e) {
-			if ($e->getIsActive()) unset($extensions[($e->getExtension() - 100)]);
+			unset($extensions[($e->getExtension() - 100)]);
 		}
         return array(
 			'company' => $company,
@@ -138,7 +162,6 @@ class CompanyController extends Controller
 		$request = $this->getRequest();
 		$extension = $request->get('extension');
 		$name = $request->get('name');
-		//$phones = $request->get('phones');
 		
 		if ($extension < 100 || $extension > 999) {
 			throw $this->createNotFoundException('Extension range');
@@ -149,126 +172,16 @@ class CompanyController extends Controller
 		$employee->setExtension($extension);
 		$employee->setCompany($company);
 		
-		/*
-		if ($phones) {
-			foreach ($phones as $phoneId) {
-				$phone = $em->getRepository('VoIPCompanyStructureBundle:Phone')->find($phoneId);
-				if (!$phone) throw $this->createNotFoundException('Unable to find Phone entity.');
-				$employee->addPhone($phone);
-				$phone->addEmployee($employee);
-			}
-		}
-		*/
-		/*
-		if ($imageFile = $request->files->get('image')) {
-			$image = new Image($imageFile, array('64', '256'), 'buddies/images', $this->container);
-			$employee->setImageUrl($image->getPaths('256'));
-			$employee->setThumbUrl($image->getPaths('64'));
-		}
-		*/
-		
-		$employee->setLicense($company->getLicenseEmployee());
-		
 		$em->persist($employee);
 
 		$em->flush();
 		
+		$this->get('session')->getFlashBag()->add(
+            'notice',
+            'Your changes were saved!'
+        );
+		
 		return $this->redirect($this->generateUrl('ui_company'));
-    }
-	
-    /**
-     * @Route("/add-existing-number", name="ui_company_newsubscription")
-     * @Template()
-	 * @Method("GET")
-	 * @Security("has_role('ROLE_USER')")
-     */
-    public function newSubscriptionAction()
-    {
-		$user = $this->getUser();
-		$company = $user->getCompany();
-		$ips = array('54.255.174.110', '54.254.140.140');
-        return array(
-			'company' => $company,
-			'ips' => $ips
-		);
-    }
-	
-    /**
-     * @Route("/add-existing-number")
-     * @Template()
-	 * @Method("POST")
-	 * @Security("has_role('ROLE_USER')")
-     */
-    public function createSubscriptionAction()
-    {
-		$user = $this->getUser();
-		$company = $user->getCompany();
-		
-		$em = $this->getDoctrine()->getManager();
-		
-		$request = $this->getRequest();
-		$type = $request->get('type');
-		$number = $request->get('number');
-		$username = $request->get('username');
-		$secret = $request->get('secret');
-		$file = $request->files->get('announcement');
-		$record = $request->get('record');
-		$prefix = '' . $request->get('prefix');
-		
-		
-		switch ($type) {
-			case 'hoiio':
-				$host = 'siptrunk.hoiio.com';
-				break;
-			default:
-				$host = 'dynamic';
-				break;
-		}
-		
-		$prefix = $request->get('prefix');
-		$receive = true;
-		
-		$subscription = new Subscription();
-		$subscription->setName($number);
-		$subscription->setType($type);
-		$subscription->setNumber($number);
-		$subscription->setUsername($username);
-		$subscription->setSecret($secret);
-		$subscription->setHost($host);
-		$subscription->setCompany($company);
-		$subscription->setPrefix($prefix);
-		$subscription->setIsEditable($company->getIsMaster());
-		
-		$subscription->setLicense($company->getLicenseSubscription());
-		
-		$subscription->setRecordVM(false);
-		
-		$em->persist($subscription);
-		$em->flush();
-		
-		$voicemail = new Voicemail();
-		$voicemail->setSubscription($subscription);
-		$subscription->setVoicemail($voicemail);
-		$em->persist($voicemail);
-		$em->flush();
-		
-		$sync = new Sync();
-		
-		$astVoicemail = $sync->voicemailToVoicemail($voicemail);
-		
-		$em->persist($astVoicemail);
-		$voicemail->setAstVoicemail($astVoicemail);
-		$em->flush();
-		
-		if (count($subscription->getEmployees()) == 0) {
-			return $this->redirect($this->generateUrl('ui_subscription_buddies', array(
-				'hash' => $subscription->getHash()
-			)));
-		} else {
-			return $this->redirect($this->generateUrl('ui_company'));
-		}
-		
-		
     }
 	
     /**
@@ -319,7 +232,12 @@ class CompanyController extends Controller
 	        )
 			->setContentType("text/html")
 	    ;
-	    $this->get('mailer')->send($message); 
+	    $this->get('mailer')->send($message);
+		
+		$this->get('session')->getFlashBag()->add(
+            'notice',
+            'You request has been sent to our team. We will contact you in the next hours.'
+        );
 		
 		return $this->redirect($this->generateUrl('ui_company', array('m' => 'number')));
     }
@@ -563,21 +481,6 @@ class CompanyController extends Controller
     }
 	
     /**
-     * @Route("/conditions", name="ui_company_conditions")
-     * @Template()
-	 * @Method("GET")
-	 * @Security("has_role('ROLE_USER')")
-     */
-    public function conditionsAction()
-    {
-		$user = $this->getUser();
-		if ($user->getConditionsAccepted()) {
-			return $this->redirect($this->generateUrl('ui_company'));
-		}
-		return array();
-    }
-	
-    /**
      * @Route("/conditions")
 	 * @Method("POST")
 	 * @Security("has_role('ROLE_USER')")
@@ -625,6 +528,11 @@ class CompanyController extends Controller
 		
 		$em->flush();
 		
+		$this->get('session')->getFlashBag()->add(
+            'notice',
+            'Your changes were saved!'
+        );
+		
 		return $this->redirect($this->generateUrl('ui_company'));
     }
 	
@@ -662,6 +570,11 @@ class CompanyController extends Controller
 		}
 		
 		$em->flush();
+		
+		$this->get('session')->getFlashBag()->add(
+            'notice',
+            'Your changes were saved!'
+        );
 		
 		return $this->redirect($this->generateUrl('ui_company'));
     }
@@ -749,6 +662,11 @@ class CompanyController extends Controller
 			));
 		}
 		
+		$this->get('session')->getFlashBag()->add(
+            'notice',
+            'Your changes were saved!'
+        );
+		
 		return $this->redirect($this->generateUrl('ui_company_dynamic'));
     }
 	
@@ -798,6 +716,11 @@ class CompanyController extends Controller
 				)
 			));
 		}
+		
+		$this->get('session')->getFlashBag()->add(
+            'notice',
+            'Your changes were saved!'
+        );
 			
 		return $this->redirect($this->generateUrl('ui_company_dynamic'));
     }
@@ -878,6 +801,11 @@ class CompanyController extends Controller
 				)
 			));
 		}
+		
+		$this->get('session')->getFlashBag()->add(
+            'notice',
+            'Your changes were saved!'
+        );
 			
 		return $this->redirect($this->generateUrl('ui_company_dynamic'));
     }

@@ -8,11 +8,6 @@ vo_ipui_admin:
     type:     annotation
     prefix:   /
 
-vo_ippbxami:
-    resource: "@VoIPPBXAMIBundle/Controller/"
-    type:     annotation
-    prefix:   /
-
 vo_ippbx_bill:
     resource: "@VoIPPBXBillBundle/Controller/"
     type:     annotation

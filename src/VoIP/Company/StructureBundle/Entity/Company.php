@@ -35,83 +35,13 @@ class Company
      * @ORM\Column(name="updated_at", type="datetime")
      */
     private $updatedAt;
-	
-    /**
-     * @var \DateTime
-     *
-     * @ORM\Column(name="credit_updated_at", type="datetime")
-     */
-    private $creditUpdatedAt;
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="name", type="string", length=255)
+	 *
+     * @ORM\Column(name="name", type="string", length=255, nullable=true)
      */
     private $name;
-	
-    /**
-     * @var boolean
-     *
-     * @ORM\Column(name="is_active", type="boolean")
-     */
-    private $isActive = true;
-	
-    /**
-     * @var boolean
-     *
-     * @ORM\Column(name="is_trial", type="boolean")
-     */
-    private $isTrial = true;
-	
-    /**
-     * @var boolean
-     *
-     * @ORM\Column(name="is_master", type="boolean")
-     */
-    private $isMaster = false;
-	
-    /**
-     * @var float
-     *
-     * @ORM\Column(name="credit", type="float")
-     */
-    private $credit = 0;
-	
-    /**
-     * @var float
-     *
-     * @ORM\Column(name="license_subscription", type="float")
-     */
-    private $licenseSubscription = 0;
-	
-    /**
-     * @var float
-     *
-     * @ORM\Column(name="license_employee", type="float")
-     */
-    private $licenseEmployee = 0;
-	
-    /**
-     * @var float
-     *
-     * @ORM\Column(name="license_first_employee", type="float")
-     */
-    private $licenseFirstEmployee = 48;
-	
-    /**
-     * @var float
-     *
-     * @ORM\Column(name="rate_factor", type="float")
-     */
-    private $rateFactor = 0;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="context", type="string", length=255, unique=true)
-     */
-    private $context;
 	
     /**
      * @var string
@@ -162,12 +92,6 @@ class Company
 	 * @ORM\OrderBy({"start" = "ASC"})
      */
     private $reports;
-
-	/**
-     * @ORM\ManyToOne(targetEntity="\VoIP\Company\SubscriptionsBundle\Entity\OutGroup", inversedBy="companies")
-	 * @ORM\JoinColumn(name="outgroup_id", referencedColumnName="id", onDelete="CASCADE")
-     */
-    private $outGroup;
 	
 	/**
      * @ORM\OneToMany(targetEntity="\VoIP\Company\DynIPBundle\Entity\DynIP", mappedBy="company")
@@ -181,11 +105,9 @@ class Company
 	 */
 	public function prePersist()
 	{
-		$this->createdAt = new \DateTime();
-	    $this->updatedAt = new \DateTime();
-		$this->creditUpdatedAt = new \DateTime();
-		if (!$this->context) $this->generateContext();
-		if (!$this->hash) $this->generateHash();
+		$this->setCreatedAt(new \DateTime());
+	    $this->setUpdatedAt(new \DateTime());
+		$this->setHash(hash('crc32b', uniqid('', true)));
 	}
 	
 	/**
@@ -193,41 +115,9 @@ class Company
 	 */
 	public function preUpdate()
 	{
-	    $this->updatedAt = new \DateTime();
-		if (!$this->context) $this->generateContext();
-		if (!$this->hash) $this->generateHash();
+	    $this->setUpdatedAt(new \DateTime());
 	}
 	
-	public function generateContext()
-	{
-		$this->context = hash('crc32b', uniqid('', true));
-	}
-	
-	public function generateHash()
-	{
-		$this->hash = hash('crc32b', uniqid('', true));
-	}
-	
-	public function getActiveEmployees()
-	{
-		return $this->getEmployees()->filter(function($e){
-			return $e->getIsActive();
-		});
-	}
-	public function getActivePhones()
-	{
-		return $this->getPhones()->filter(function($e){
-			return $e->getIsActive();
-		});
-	}
-	public function getActiveSubscriptions()
-	{
-		return $this->getSubscriptions()->filter(function($e){
-			return $e->getIsActive();
-		});
-	}
-
-
     /**
      * Get id
      *
@@ -236,6 +126,20 @@ class Company
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->phones = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->voicemails = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->employees = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->subscriptions = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->users = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->reports = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->dynIPs = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -308,60 +212,6 @@ class Company
     }
 
     /**
-     * Set email
-     *
-     * @param string $email
-     * @return Company
-     */
-    public function setEmail($email)
-    {
-        $this->email = $email;
-
-        return $this;
-    }
-
-    /**
-     * Get email
-     *
-     * @return string 
-     */
-    public function getEmail()
-    {
-        return $this->email;
-    }
-
-    /**
-     * Set context
-     *
-     * @param string $context
-     * @return Company
-     */
-    public function setContext($context)
-    {
-        $this->context = $context;
-
-        return $this;
-    }
-
-    /**
-     * Get context
-     *
-     * @return string 
-     */
-    public function getContext()
-    {
-        return $this->context;
-    }
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->offices = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->users = new \Doctrine\Common\Collections\ArrayCollection();
-    }
-
-    /**
      * Set hash
      *
      * @param string $hash
@@ -385,36 +235,26 @@ class Company
     }
 
     /**
-     * Add subscriptions
+     * Set imageUrl
      *
-     * @param \VoIP\Company\SubscriptionsBundle\Entity\Subscription $subscriptions
+     * @param string $imageUrl
      * @return Company
      */
-    public function addSubscription(\VoIP\Company\SubscriptionsBundle\Entity\Subscription $subscriptions)
+    public function setImageUrl($imageUrl)
     {
-        $this->subscriptions[] = $subscriptions;
+        $this->imageUrl = $imageUrl;
 
         return $this;
     }
 
     /**
-     * Remove subscriptions
+     * Get imageUrl
      *
-     * @param \VoIP\Company\SubscriptionsBundle\Entity\Subscription $subscriptions
+     * @return string 
      */
-    public function removeSubscription(\VoIP\Company\SubscriptionsBundle\Entity\Subscription $subscriptions)
+    public function getImageUrl()
     {
-        $this->subscriptions->removeElement($subscriptions);
-    }
-
-    /**
-     * Get subscriptions
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getSubscriptions()
-    {
-        return $this->subscriptions;
+        return $this->imageUrl;
     }
 
     /**
@@ -451,72 +291,6 @@ class Company
     }
 
     /**
-     * Add employees
-     *
-     * @param \VoIP\Company\StructureBundle\Entity\Employee $employees
-     * @return Company
-     */
-    public function addEmployee(\VoIP\Company\StructureBundle\Entity\Employee $employees)
-    {
-        $this->employees[] = $employees;
-
-        return $this;
-    }
-
-    /**
-     * Remove employees
-     *
-     * @param \VoIP\Company\StructureBundle\Entity\Employee $employees
-     */
-    public function removeEmployee(\VoIP\Company\StructureBundle\Entity\Employee $employees)
-    {
-        $this->employees->removeElement($employees);
-    }
-
-    /**
-     * Get employees
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getEmployees()
-    {
-        return $this->employees;
-    }
-
-    /**
-     * Add messages
-     *
-     * @param \VoIP\Company\VoicemailBundle\Entity\Message $messages
-     * @return Company
-     */
-    public function addMessage(\VoIP\Company\VoicemailBundle\Entity\Message $messages)
-    {
-        $this->messages[] = $messages;
-
-        return $this;
-    }
-
-    /**
-     * Remove messages
-     *
-     * @param \VoIP\Company\VoicemailBundle\Entity\Message $messages
-     */
-    public function removeMessage(\VoIP\Company\VoicemailBundle\Entity\Message $messages)
-    {
-        $this->messages->removeElement($messages);
-    }
-
-    /**
-     * Get messages
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getMessages()
-    {
-        return $this->messages;
-    }
-
-    /**
      * Add voicemails
      *
      * @param \VoIP\Company\VoicemailBundle\Entity\Voicemail $voicemails
@@ -550,105 +324,69 @@ class Company
     }
 
     /**
-     * Add reports
+     * Add employees
      *
-     * @param \VoIP\PBX\CDRBundle\Entity\CDR $reports
+     * @param \VoIP\Company\StructureBundle\Entity\Employee $employees
      * @return Company
      */
-    public function addReport(\VoIP\PBX\CDRBundle\Entity\CDR $reports)
+    public function addEmployee(\VoIP\Company\StructureBundle\Entity\Employee $employees)
     {
-        $this->reports[] = $reports;
+        $this->employees[] = $employees;
 
         return $this;
     }
 
     /**
-     * Remove reports
+     * Remove employees
      *
-     * @param \VoIP\PBX\CDRBundle\Entity\CDR $reports
+     * @param \VoIP\Company\StructureBundle\Entity\Employee $employees
      */
-    public function removeReport(\VoIP\PBX\CDRBundle\Entity\CDR $reports)
+    public function removeEmployee(\VoIP\Company\StructureBundle\Entity\Employee $employees)
     {
-        $this->reports->removeElement($reports);
+        $this->employees->removeElement($employees);
     }
 
     /**
-     * Get reports
+     * Get employees
      *
      * @return \Doctrine\Common\Collections\Collection 
      */
-    public function getReports()
+    public function getEmployees()
     {
-        return $this->reports;
+        return $this->employees;
     }
 
     /**
-     * Set isActive
+     * Add subscriptions
      *
-     * @param boolean $isActive
+     * @param \VoIP\Company\SubscriptionsBundle\Entity\Subscription $subscriptions
      * @return Company
      */
-    public function setIsActive($isActive)
+    public function addSubscription(\VoIP\Company\SubscriptionsBundle\Entity\Subscription $subscriptions)
     {
-        $this->isActive = $isActive;
+        $this->subscriptions[] = $subscriptions;
 
         return $this;
     }
 
     /**
-     * Get isActive
+     * Remove subscriptions
      *
-     * @return boolean 
+     * @param \VoIP\Company\SubscriptionsBundle\Entity\Subscription $subscriptions
      */
-    public function getIsActive()
+    public function removeSubscription(\VoIP\Company\SubscriptionsBundle\Entity\Subscription $subscriptions)
     {
-        return $this->isActive;
+        $this->subscriptions->removeElement($subscriptions);
     }
 
     /**
-     * Set credit
+     * Get subscriptions
      *
-     * @param float $credit
-     * @return Company
+     * @return \Doctrine\Common\Collections\Collection 
      */
-    public function setCredit($credit)
+    public function getSubscriptions()
     {
-        $this->credit = $credit;
-
-        return $this;
-    }
-
-    /**
-     * Get credit
-     *
-     * @return float 
-     */
-    public function getCredit()
-    {
-        return $this->credit;
-    }
-
-    /**
-     * Set creditUpdatedAt
-     *
-     * @param \DateTime $creditUpdatedAt
-     * @return Company
-     */
-    public function setCreditUpdatedAt($creditUpdatedAt)
-    {
-        $this->creditUpdatedAt = $creditUpdatedAt;
-
-        return $this;
-    }
-
-    /**
-     * Get creditUpdatedAt
-     *
-     * @return \DateTime 
-     */
-    public function getCreditUpdatedAt()
-    {
-        return $this->creditUpdatedAt;
+        return $this->subscriptions;
     }
 
     /**
@@ -685,187 +423,36 @@ class Company
     }
 
     /**
-     * Set outGroup
+     * Add reports
      *
-     * @param \VoIP\Company\SubscriptionsBundle\Entity\OutGroup $outGroup
+     * @param \VoIP\PBX\CDRBundle\Entity\CDR $reports
      * @return Company
      */
-    public function setOutGroup(\VoIP\Company\SubscriptionsBundle\Entity\OutGroup $outGroup = null)
+    public function addReport(\VoIP\PBX\CDRBundle\Entity\CDR $reports)
     {
-        $this->outGroup = $outGroup;
+        $this->reports[] = $reports;
 
         return $this;
     }
 
     /**
-     * Get outGroup
+     * Remove reports
      *
-     * @return \VoIP\Company\SubscriptionsBundle\Entity\OutGroup 
+     * @param \VoIP\PBX\CDRBundle\Entity\CDR $reports
      */
-    public function getOutGroup()
+    public function removeReport(\VoIP\PBX\CDRBundle\Entity\CDR $reports)
     {
-        return $this->outGroup;
+        $this->reports->removeElement($reports);
     }
 
     /**
-     * Set imageUrl
+     * Get reports
      *
-     * @param string $imageUrl
-     * @return Company
+     * @return \Doctrine\Common\Collections\Collection 
      */
-    public function setImageUrl($imageUrl)
+    public function getReports()
     {
-        $this->imageUrl = $imageUrl;
-
-        return $this;
-    }
-
-    /**
-     * Get imageUrl
-     *
-     * @return string 
-     */
-    public function getImageUrl()
-    {
-        return $this->imageUrl;
-    }
-
-    /**
-     * Set licenseSubscription
-     *
-     * @param float $licenseSubscription
-     * @return Company
-     */
-    public function setLicenseSubscription($licenseSubscription)
-    {
-        $this->licenseSubscription = $licenseSubscription;
-
-        return $this;
-    }
-
-    /**
-     * Get licenseSubscription
-     *
-     * @return float 
-     */
-    public function getLicenseSubscription()
-    {
-        return $this->licenseSubscription;
-    }
-
-    /**
-     * Set licenseEmployee
-     *
-     * @param float $licenseEmployee
-     * @return Company
-     */
-    public function setLicenseEmployee($licenseEmployee)
-    {
-        $this->licenseEmployee = $licenseEmployee;
-
-        return $this;
-    }
-
-    /**
-     * Get licenseEmployee
-     *
-     * @return float 
-     */
-    public function getLicenseEmployee()
-    {
-        return $this->licenseEmployee;
-    }
-
-    /**
-     * Set rateFactor
-     *
-     * @param float $rateFactor
-     * @return Company
-     */
-    public function setRateFactor($rateFactor)
-    {
-        $this->rateFactor = $rateFactor;
-
-        return $this;
-    }
-
-    /**
-     * Get rateFactor
-     *
-     * @return float 
-     */
-    public function getRateFactor()
-    {
-        return $this->rateFactor;
-    }
-
-    /**
-     * Set isTrial
-     *
-     * @param boolean $isTrial
-     * @return Company
-     */
-    public function setIsTrial($isTrial)
-    {
-        $this->isTrial = $isTrial;
-
-        return $this;
-    }
-
-    /**
-     * Get isTrial
-     *
-     * @return boolean 
-     */
-    public function getIsTrial()
-    {
-        return $this->isTrial;
-    }
-
-    /**
-     * Set licenseFirstEmployee
-     *
-     * @param float $licenseFirstEmployee
-     * @return Company
-     */
-    public function setLicenseFirstEmployee($licenseFirstEmployee)
-    {
-        $this->licenseFirstEmployee = $licenseFirstEmployee;
-
-        return $this;
-    }
-
-    /**
-     * Get licenseFirstEmployee
-     *
-     * @return float 
-     */
-    public function getLicenseFirstEmployee()
-    {
-        return $this->licenseFirstEmployee;
-    }
-
-    /**
-     * Set isMaster
-     *
-     * @param boolean $isMaster
-     * @return Company
-     */
-    public function setIsMaster($isMaster)
-    {
-        $this->isMaster = $isMaster;
-
-        return $this;
-    }
-
-    /**
-     * Get isMaster
-     *
-     * @return boolean 
-     */
-    public function getIsMaster()
-    {
-        return $this->isMaster;
+        return $this->reports;
     }
 
     /**
