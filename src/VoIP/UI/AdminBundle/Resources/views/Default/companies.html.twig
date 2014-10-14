@@ -1,0 +1,23 @@
+{% extends '::admin.html.twig' %}
+{% block container %}
+<table class="table table-condensed table-hover">
+	<tr>
+		<th>Name</th>
+		<th>Since</th>
+		<th>Buddies</th>
+		<th>Phones</th>
+		<th>Numbers</th>
+		<th></th>
+	</tr>
+	{% for company in companies %}
+	<tr>
+		<td>{{ company.name }}</td>
+		<td>{{ company.createdat|date('d/m/Y') }}</td>
+		<td>{{ company.employees|length }}</td>
+		<td>{{ company.phones|length }}</td>
+		<td>{{ company.subscriptions|length }}</td>
+		<td><a href="{{ path('admin_company', {'reference': company.hash}) }}">show</a></td>
+	</tr>
+	{% endfor %}
+</table>
+{% endblock %}

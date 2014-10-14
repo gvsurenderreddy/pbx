@@ -1,0 +1,6 @@
+{% if not ip %}
+<div class="alert alert-danger alert-dismissable alert-help flash-notice">
+	<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+	Your IP is not in the network. <a href="{{ path('ui_company_dynamic') }}">Add your IP.</a>
+</div>
+{% endif %}

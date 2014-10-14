@@ -1,0 +1,17 @@
+{% extends '::admin.html.twig' %}
+{% block container %}
+<table class="table table-condensed table-hover">
+	<tr>
+		<th>Date</th>
+		<th>IP</th>
+		<th>Title</th>
+	</tr>
+	{% for ip in ips %}
+	<tr>
+		<td>{{ ip.createdat|date('d/m/Y') }}</td>
+		<td>{{ ip.ip }}</td>
+		<td>{{ ip.title }}</td>
+	</tr>
+	{% endfor %}
+</table>
+{% endblock %}
