@@ -1,0 +1,89 @@
+<nav class="navbar navbar-default" role="navigation">
+	<div class="container-fluid">
+		<div class="navbar-header">
+			<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+				<span class="sr-only">Toggle navigation</span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+			</button>
+			<a class="navbar-brand" href="#">
+				{# <img src="{% if company.imageurl %}{{ company.imageurl }}{% else %}https://s3-ap-southeast-1.amazonaws.com/fortyeight/companies/images/3a1225ee_256.png{% endif %}" alt="{{ company.name }}" class="img-rounded" width="100"> #}
+				<img src="{{ asset('images/logo.png') }}" class="main-logo" width="180">
+			</a>
+		</div>
+		<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+			<ul class="nav navbar-nav">
+				<li class="{{ app.request.attributes.get('_route') == 'ui_company' ? 'active' }}">
+					<a href="{{ path('ui_company') }}">
+						<span class="nav-icon hidden-xs"><span class="glyphicon glyphicon-th"></span></span>
+						<span class="nav-label">Switchboard<span>
+					</a>
+				</li>
+				<li class="{{ app.request.attributes.get('_route') == 'ui_company_mailbox' ? 'active' }}">
+					<a href="{{ path('ui_company_mailbox') }}">
+						<span class="nav-icon hidden-xs"><i class="fa fa-envelope"></i></span>
+						<span class="nav-label">Mailbox</span>
+					</a>
+				</li>
+				<li class="{{ app.request.attributes.get('_route') == 'ui_company_cdr' ? 'active' }}">
+					<a href="{{ path('ui_company_cdr') }}">
+						<span class="nav-icon hidden-xs"><span class="glyphicon glyphicon-list"></span></span>
+						<span class="nav-label">Call details</span>
+					</a>
+				</li>
+				<li class="{{ (app.request.attributes.get('_route') == 'fos_user_change_password' or 'ui_company_parameters' in app.request.attributes.get('_route')) ? 'active' }}">
+					<a href="{{ path('ui_company_parameters_info') }}">
+						<span class="nav-icon hidden-xs"><span class="glyphicon glyphicon-cog"></span></span>
+						<span class="nav-label">Settings</span></span>
+					</a>
+				</li>
+				<li class="{{ (app.request.attributes.get('_route') == 'ui_company_dynamic' or 'ui_company_dynamic' in app.request.attributes.get('_route')) ? 'active' }}">
+					<a href="{{ path('ui_company_dynamic') }}">
+						<span class="nav-icon hidden-xs"><i class="fa fa-code-fork"></i></span>
+						<span class="nav-label">Network</span>
+					</a>
+				</li>
+				<li class="visible-xs visible-sm">
+					<a href="{{ path('fos_user_security_logout') }}">
+						<span class="nav-icon hidden-xs"><span class="glyphicon glyphicon-off"></span></span>
+						<span class="nav-label">Logout</span>
+					</a>
+				</li>
+				{# <li class="dropdown">
+					<a href="#" class="dropdown-toggle" data-toggle="dropdown">Dropdown <span class="caret"></span></a>
+					<ul class="dropdown-menu" role="menu">
+						<li><a href="#">Action</a></li>
+						<li><a href="#">Another action</a></li>
+						<li><a href="#">Something else here</a></li>
+						<li class="divider"></li>
+						<li><a href="#">Separated link</a></li>
+						<li class="divider"></li>
+						<li><a href="#">One more separated link</a></li>
+					</ul>
+				</li> #}
+			</ul>
+			<ul class="nav navbar-nav navbar-right">
+				<li class="hidden-xs hidden-sm">
+					<div class="profile">
+						<div class="username">Hi, {{ app.user.username }}</div>
+						<div class="logout"><a href="{{ path('fos_user_security_logout') }}"><span class="glyphicon glyphicon-off"></span> Logout</a></div>
+						<img src="{% if company.imageurl %}{{ company.imageurl }}{% else %}https://s3-ap-southeast-1.amazonaws.com/fortyeight/companies/images/3a1225ee_256.png{% endif %}" alt="{{ company.name }}" class="img-rounded company-image" width="55">
+					</div>
+					
+				</li>
+				{# <li><a href="#">Link</a></li>
+				<li class="dropdown">
+					<a href="#" class="dropdown-toggle" data-toggle="dropdown">Dropdown <span class="caret"></span></a>
+					<ul class="dropdown-menu" role="menu">
+						<li><a href="#">Action</a></li>
+						<li><a href="#">Another action</a></li>
+						<li><a href="#">Something else here</a></li>
+						<li class="divider"></li>
+						<li><a href="#">Separated link</a></li>
+					</ul>
+				</li> #}
+			</ul>
+		</div>
+	</div>
+</nav>

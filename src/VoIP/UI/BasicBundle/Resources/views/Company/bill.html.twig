@@ -2,7 +2,7 @@
 {% block title %}48 | {{ company.name }}{% endblock %}
 {% block headertitle %}Bill of {{ (month~'-01')|date('F Y') }} {% if month == ''|date('Y-m') %}<span class="label label-info">Current</span>{% endif %}{% endblock headertitle %}
 {% block container %}
-
+{{ parent() }}
 {% if not complete %}
 <div class="alert alert-warning">The bill of the current month will not be definitive and complete until the end of the month.</div>
 {% endif %}

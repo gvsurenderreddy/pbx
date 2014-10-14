@@ -2,6 +2,7 @@
 {% block title %}48 | Edit Phone Buddies{% endblock %}
 {% block headertitle %}Edit Phone Buddies{% endblock headertitle %}
 {% block container %}
+{{ parent() }}
 <div class="row">
 	<div class="col-md-offset-3 col-md-6">
 		<form class="form-horizontal" role="form" action="{{ path('ui_phone_employees', {'hash': phone.hash}) }}" method="POST">

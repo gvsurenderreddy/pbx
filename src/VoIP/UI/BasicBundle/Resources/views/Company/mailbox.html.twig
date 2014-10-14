@@ -2,6 +2,7 @@
 {% block title %}48 | {{ company.name }}{% endblock %}
 {% block headertitle %}Mailbox{% endblock headertitle %}
 {% block container %}
+{{ parent() }}
 <ul class="nav nav-tabs">
 	<li class="{{ not archive ? 'active' }}"><a href="{{ path('ui_company_mailbox', {'archive': 0}) }}">Inbox</a></li>
 	<li class="{{ archive ? 'active' }}"><a href="{{ path('ui_company_mailbox', {'archive': 1}) }}">Archive</a></li>

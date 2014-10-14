@@ -21,33 +21,33 @@
 	</div>
 </center> #}
 <ul class="nav nav-pills nav-stacked">
-	<li class="{{ route == 'ui_company' ? 'active' }}">
+	<li class="{{ app.request.attributes.get('_route') == 'ui_company' ? 'active' }}">
 		<a href="{{ path('ui_company') }}">
 			<span class="glyphicon glyphicon-th"></span>
 			Switchboard
 		</a>
 	</li>
-	<li class="{{ route == 'ui_company_mailbox' ? 'active' }}">
+	<li class="{{ app.request.attributes.get('_route') == 'ui_company_mailbox' ? 'active' }}">
 		<a href="{{ path('ui_company_mailbox') }}">
 			<i class="glyphicon fa fa-envelope"></i>
 			Mailbox
 			{% if newmessages %}<span class="badge pull-right">{{ newmessages }}</span>{% endif %}
 		</a>
 	</li>
-	<li class="{{ route == 'ui_company_cdr' ? 'active' }}">
+	<li class="{{ app.request.attributes.get('_route') == 'ui_company_cdr' ? 'active' }}">
 		<a href="{{ path('ui_company_cdr') }}">
 			<span class="glyphicon glyphicon-list"></span>
 			Call details
 		</a>
 	</li>
-	<li class="{{ (route == 'fos_user_change_password' or 'ui_company_parameters' in route) ? 'active' }}">
+	<li class="{{ (app.request.attributes.get('_route') == 'fos_user_change_password' or 'ui_company_parameters' in route) ? 'active' }}">
 		<a href="{{ path('ui_company_parameters_info') }}">
 			<span class="glyphicon glyphicon-cog"></span>
 			Settings
 		</a>
 	</li>
 	{# <li class="{{ route == 'ui_company_bill' ? 'active' }}"><a href="{{ path('ui_company_bill') }}"><span class="glyphicon glyphicon-usd"></span> My bill</a></li> #}
-	<li class="{{ (route == 'ui_company_dynamic' or 'ui_company_dynamic' in route) ? 'active' }}">
+	<li class="{{ (app.request.attributes.get('_route') == 'ui_company_dynamic' or 'ui_company_dynamic' in route) ? 'active' }}">
 		<a href="{{ path('ui_company_dynamic') }}">
 			<i class="glyphicon fa fa-code-fork"></i>
 			Network

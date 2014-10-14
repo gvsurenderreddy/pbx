@@ -2,6 +2,7 @@
 {% block title %}48 | Top up{% endblock %}
 {% block headertitle %}Top up{% endblock headertitle %}
 {% block container %}
+{{ parent() }}
 {% if app.request.get('url') %}
 <div class="alert alert-warning alert-dismissable">
 	<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>

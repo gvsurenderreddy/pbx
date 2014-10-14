@@ -1,6 +1,7 @@
 {% extends "VoIPUIBasicBundle::layout.html.twig" %}
 
 {% block container %}
+{{ parent() }}
 <ul class="nav nav-tabs">
 	<li class="{{ app.request.attributes.get('_route') == 'ui_company_parameters_info' ? 'active' }}"><a href="{{ path('ui_company_parameters_info') }}">Info</a></li>
 	<li class="{{ app.request.attributes.get('_route') == 'fos_user_change_password' ? 'active' }}"><a href="{{ path('fos_user_change_password') }}">Password</a></li>

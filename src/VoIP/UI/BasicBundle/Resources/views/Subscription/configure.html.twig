@@ -2,6 +2,7 @@
 {% block title %}48 | Configure Subscription{% endblock %}
 {% block headertitle %}Configure Subscription {{ subscription.name }}{% endblock headertitle %}
 {% block container %}
+{{ parent() }}
 <div class="row" ng-app="fortyeight" ng-controller="ConfigurationCtrl">
 	<div class="col-md-offset-3 col-md-6">
 		<form class="form-horizontal" role="form" name="form" action="{{ path('ui_subscription_setup', {'hash': subscription.hash}) }}" target="_blank">
