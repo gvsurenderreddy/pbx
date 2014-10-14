@@ -20,13 +20,6 @@ class DefaultController extends Controller
      */
     public function ipAction()
     {
-		$ip = $this->container->get('request')->getClientIp();
-		$em = $this->getDoctrine()->getManager();
-		$dynIP = $em->getRepository('VoIPCompanyDynIPBundle:DynIP')->findOneBy(array(
-			'ip' => $ip
-		));
-        return array(
-        	'ip' => $dynIP
-        );
+		
     }
 }

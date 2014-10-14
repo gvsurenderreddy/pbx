@@ -37,7 +37,16 @@ class CompanyController extends Controller
 		} elseif (!$user->getCompany()) {
 			return $this->render('VoIPUIBasicBundle:Company:new.html.twig');
 		}
-        return array();
+		
+		$ip = $this->container->get('request')->getClientIp();
+		$em = $this->getDoctrine()->getManager();
+		$dynIP = $em->getRepository('VoIPCompanyDynIPBundle:DynIP')->findOneBy(array(
+			'ip' => $ip
+		));
+		
+        return array(
+        	'ip' => $dynIP
+        );
     }
 	
     /**
