@@ -19,7 +19,34 @@ class DefaultController extends Controller
      */
     public function indexAction()
     {
-        return array();
+		$em = $this->getDoctrine()->getManager();
+		$query = $em->createQuery(
+		    'SELECT r
+		    FROM VoIPCompanySubscriptionsBundle:NumberRequest r
+		    ORDER BY r.createdAt ASC'
+		);
+		$requests = $query->getResult();
+        return array(
+        	'requests' => $requests
+        );
+    }
+	
+    /**
+     * @Route("/number-requests", name="admin_requests")
+     * @Template()
+     */
+    public function requestsAction()
+    {
+		$em = $this->getDoctrine()->getManager();
+		$query = $em->createQuery(
+		    'SELECT r
+		    FROM VoIPCompanySubscriptionsBundle:NumberRequest r
+		    ORDER BY r.createdAt ASC'
+		);
+		$requests = $query->getResult();
+        return array(
+        	'requests' => $requests
+        );
     }
 	
     /**
@@ -42,10 +69,10 @@ class DefaultController extends Controller
     }
 	
     /**
-     * @Route("/clients", name="admin_clients")
+     * @Route("/companies", name="admin_companies")
      * @Template()
      */
-    public function clientsAction()
+    public function companiesAction()
     {
 		$em = $this->getDoctrine()->getManager();
 		$query = $em->createQuery(
@@ -59,6 +86,45 @@ class DefaultController extends Controller
         	'companies' => $companies
         );
     }
+	
+    /**
+     * @Route("/clients", name="admin_clients")
+     * @Template()
+     */
+    public function clientsAction()
+    {
+		$em = $this->getDoctrine()->getManager();
+		$query = $em->createQuery(
+		    'SELECT u
+		    FROM ManagementSessionUserBundle:User u
+		    ORDER BY u.username ASC'
+		);
+
+		$users = $query->getResult();
+        return array(
+        	'users' => $users
+        );
+    }
+	
+    /**
+     * @Route("/network", name="admin_network")
+     * @Template()
+     */
+    public function networkAction()
+    {
+		$em = $this->getDoctrine()->getManager();
+		$query = $em->createQuery(
+		    'SELECT d
+		    FROM VoIPCompanyDynIPBundle:DynIP d
+		    ORDER BY d.createdAt ASC'
+		);
+
+		$ips = $query->getResult();
+        return array(
+        	'ips' => $ips
+        );
+    }
+	
     /**
      * @Route("/company/{reference}", name="admin_company")
      * @Template()

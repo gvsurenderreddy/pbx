@@ -1,4 +1,26 @@
 {% extends '::admin.html.twig' %}
 {% block container %}
-Admin
+<table class="table">
+	<tr>
+		<th>Hash</th>
+		<th>Date</th>
+		<th>Country</th>
+		<th>Comment</th>
+		<th>Status</th>
+		<th>Company</th>
+		<th>User</th>
+	</tr>
+	{% for request in requests %}
+		<tr>
+			<td>{{ request.hash }}</td>
+			<td>{{ request.createdat | date('d/m/Y') }}</td>
+			<td>{{ request.country }}</td>
+			<td>{{ request.comment }}</td>
+			<td>{{ request.status }}</td>
+			<td>{{ request.company.name }}</td>
+			<td>{{ request.requestedby.username }}</td>
+		</tr>
+	{% endfor %}
+	
+</table>
 {% endblock %}

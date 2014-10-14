@@ -12,6 +12,8 @@
 				<img src="{{ asset('images/logo.png') }}" class="main-logo" width="180">
 			</a>
 		</div>
+		{% if is_granted("IS_AUTHENTICATED_REMEMBERED") and app.user.company %}
+		{% set company = app.user.company %}
 		<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 			<ul class="nav navbar-nav">
 				<li class="{{ app.request.attributes.get('_route') == 'ui_company' ? 'active' }}">
@@ -85,5 +87,6 @@
 				</li> #}
 			</ul>
 		</div>
+		{% endif %}
 	</div>
 </nav>

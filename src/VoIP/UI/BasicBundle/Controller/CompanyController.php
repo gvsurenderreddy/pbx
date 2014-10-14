@@ -16,6 +16,7 @@ use VoIP\Company\VoicemailBundle\Entity\Voicemail;
 use VoIP\PBX\RealTimeBundle\Extra\Sync;
 use VoIP\UI\BasicBundle\Extra\Image;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use VoIP\Company\SubscriptionsBundle\Entity\NumberRequest;
 
 class CompanyController extends Controller
 {
@@ -61,10 +62,7 @@ class CompanyController extends Controller
 		
 		$em->flush();
 		
-		$this->get('session')->getFlashBag()->add(
-            'notice',
-            'Your changes were saved!'
-        );
+		$this->get('session')->getFlashBag()->add('notice','Your changes were saved!');
 		
         return $this->redirect($this->generateUrl('ui_company'));
     }
@@ -217,6 +215,16 @@ class CompanyController extends Controller
 		
 		$request = $this->getRequest();
 		$country = $request->get('country');
+		$comment = $request->get('comment');
+		
+		$number = new NumberRequest();
+		$number->setStatus('Request sent.');
+		$number->setCountry($country);
+		$number->setComment($comment);
+		$number->setCompany($company);
+		$number->setRequestedBy($user);
+		$em->persist($number);
+		$em->flush();
 		
 	    $message = \Swift_Message::newInstance()
 	        ->setSubject('We received your request for a new number.')
@@ -236,12 +244,9 @@ class CompanyController extends Controller
 	    ;
 	    $this->get('mailer')->send($message);
 		
-		$this->get('session')->getFlashBag()->add(
-            'notice',
-            'You request has been sent to our team. We will contact you in the next hours.'
-        );
+		$this->get('session')->getFlashBag()->add('notice', 'You request has been sent to our team. We will contact you in the next hours.');
 		
-		return $this->redirect($this->generateUrl('ui_company', array('m' => 'number')));
+		return $this->redirect($this->generateUrl('ui_company'));
     }
 	
     /**
@@ -483,7 +488,7 @@ class CompanyController extends Controller
     }
 	
     /**
-     * @Route("/conditions")
+     * @Route("/conditions", name="ui_company_conditions")
 	 * @Method("POST")
 	 * @Security("has_role('ROLE_USER')")
      */

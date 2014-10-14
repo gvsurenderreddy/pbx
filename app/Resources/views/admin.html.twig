@@ -30,6 +30,9 @@
 				<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 					<ul class="nav navbar-nav">
 						<li class="{{ app.request.attributes.get('_route') == 'admin_clients' ? 'active'}}"><a href="{{ path('admin_clients') }}">Clients</a></li>
+						<li class="{{ app.request.attributes.get('_route') == 'admin_companies' ? 'active'}}"><a href="{{ path('admin_companies') }}">Companies</a></li>
+						<li class="{{ app.request.attributes.get('_route') == 'admin_network' ? 'active'}}"><a href="{{ path('admin_network') }}">Network</a></li>
+						<li class="{{ app.request.attributes.get('_route') == 'admin_requests' ? 'active'}}"><a href="{{ path('admin_requests') }}">Requests</a></li>
 						<li class="dropdown">
 							<a href="#" class="dropdown-toggle" data-toggle="dropdown">Lines <b class="caret"></b></a>
 							<ul class="dropdown-menu">
@@ -59,7 +62,9 @@
 			</div>
 		</nav>
 		{% endblock navbar %}
-		{% block container %}{% endblock container %}
+		<div class="container">
+			{% block container %}{% endblock container %}
+		</div>
 		{% endblock %}
 		{% block modal %}<div id="modal" class="modal fade"></div>{% endblock modal %}
         {% block javascripts %}

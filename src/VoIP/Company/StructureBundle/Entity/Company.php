@@ -99,6 +99,12 @@ class Company
      */
     private $dynIPs;
 	
+	/**
+     * @ORM\OneToMany(targetEntity="\VoIP\Company\SubscriptionsBundle\Entity\NumberRequest", mappedBy="company")
+	 * @ORM\OrderBy({"createdAt" = "ASC"})
+     */
+    private $numberRequests;
+	
 	
 	/**
 	 * @ORM\PrePersist
@@ -486,5 +492,38 @@ class Company
     public function getDynIPs()
     {
         return $this->dynIPs;
+    }
+
+    /**
+     * Add numberRequests
+     *
+     * @param \VoIP\Company\SubscriptionsBundle\Entity\NumberRequest $numberRequests
+     * @return Company
+     */
+    public function addNumberRequest(\VoIP\Company\SubscriptionsBundle\Entity\NumberRequest $numberRequests)
+    {
+        $this->numberRequests[] = $numberRequests;
+
+        return $this;
+    }
+
+    /**
+     * Remove numberRequests
+     *
+     * @param \VoIP\Company\SubscriptionsBundle\Entity\NumberRequest $numberRequests
+     */
+    public function removeNumberRequest(\VoIP\Company\SubscriptionsBundle\Entity\NumberRequest $numberRequests)
+    {
+        $this->numberRequests->removeElement($numberRequests);
+    }
+
+    /**
+     * Get numberRequests
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getNumberRequests()
+    {
+        return $this->numberRequests;
     }
 }

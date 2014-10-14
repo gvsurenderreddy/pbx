@@ -13,5 +13,20 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 
 class DefaultController extends Controller
 {
-	
+    /**
+     * @Route("/check-ip", name="ui_ip")
+     * @Template()
+	 * @Method("GET")
+     */
+    public function ipAction()
+    {
+		$ip = $this->container->get('request')->getClientIp();
+		$em = $this->getDoctrine()->getManager();
+		$dynIP = $em->getRepository('VoIPCompanyDynIPBundle:DynIP')->findOneBy(array(
+			'ip' => $ip
+		));
+        return array(
+        	'ip' => $dynIP
+        );
+    }
 }

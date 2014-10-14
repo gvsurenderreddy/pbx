@@ -21,6 +21,11 @@ h1 {
 	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00547f', endColorstr='#002a40',GradientType=0 );
 	border-radius: 0;
 }
+@media (min-width: 768px) {
+  .navbar {
+	  min-height: 75px;
+  }
+}
 .navbar-brand {
 	padding: 10px 0px;
 }
