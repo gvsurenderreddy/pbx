@@ -27,7 +27,7 @@
 				<div class="col-sm-10">
 					<select class="form-control" id="phones" name="phones[]" multiple>
 						{% for phone in phones if phone.isactive %}
-						<option value="{{ phone.id }}" {% if phone in employee.phones %}selected{% endif %}>{{ phone.name }}</option>
+						<option value="{{ phone.id }}" {% if phone in employee.phones %}selected{% endif %}>{{ phone.phonename }}</option>
 						{% endfor %}
 					</select>
 				</div>
