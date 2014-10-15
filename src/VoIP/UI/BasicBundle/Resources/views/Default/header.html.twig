@@ -9,7 +9,8 @@
 			</button>
 			<a class="navbar-brand" href="#">
 				{# <img src="{% if company.imageurl %}{{ company.imageurl }}{% else %}https://s3-ap-southeast-1.amazonaws.com/fortyeight/companies/images/3a1225ee_256.png{% endif %}" alt="{{ company.name }}" class="img-rounded" width="100"> #}
-				<img src="{{ asset('images/logo.png') }}" class="main-logo" width="180">
+				<img src="{{ asset('images/logo.png') }}" class="main-logo hidden-sm" width="180">
+				<img src="{{ asset('images/logo-sm.png') }}" class="main-logo visible-sm" width="50">
 			</a>
 		</div>
 		{% if is_granted("IS_AUTHENTICATED_REMEMBERED") and app.user.company %}

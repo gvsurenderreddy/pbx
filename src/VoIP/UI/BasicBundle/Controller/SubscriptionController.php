@@ -47,132 +47,6 @@ class SubscriptionController extends Controller
     }
 	
     /**
-     * @Route("/{hash}/edit")
-     * @Template()
-	 * @Method("POST")
-	 * @Security("has_role('ROLE_USER')")
-     */
-    public function updateAction($hash)
-    {
-		$user = $this->getUser();
-		$em = $this->getDoctrine()->getManager();
-		$subscription = $em->getRepository('VoIPCompanySubscriptionsBundle:Subscription')->findOneBy(array(
-			'hash' => $hash
-		));
-        if (!$subscription) throw $this->createNotFoundException('Unable to find Subsciption entity.');
-		$company = $subscription->getCompany();
-		if ($user->getCompany()->getId() != $company->getId()) throw $this->createNotFoundException('No authorization.');
-		
-		$request = $this->getRequest();
-		$name = $request->get('name');
-		$type = $request->get('type');
-		$number = $request->get('number');
-		$username = $request->get('username');
-		$secret = $request->get('secret');
-		$host = 'siptrunk.hoiio.com';
-		
-		$subscription->setName($number);
-		$subscription->setType($type);
-		$subscription->setNumber($number);
-		$subscription->setUsername($username);
-		$subscription->setSecret($secret);
-		switch ($type) {
-			case 'hoiio':
-				$host = 'siptrunk.hoiio.com';
-				break;
-			default:
-				$host = 'dynamic';
-				break;
-		}
-		
-		$subscription->setCompany($company);
-		
-		$em->flush();
-		
-		$voicemail = $subscription->getVoicemail();
-		$em->persist($voicemail);
-		$em->flush();
-		
-		$sync = new Sync();
-		$astVoicemail = $sync->voicemailToVoicemail($voicemail);
-		$em->persist($astVoicemail);
-		$voicemail->setAstVoicemail($astVoicemail);
-		$em->flush();
-		
-		return $this->redirect($this->generateUrl('ui_company'));
-    }
-	
-    /**
-     * @Route("/{hash}/settings", name="ui_subscription_settings")
-     * @Template()
-	 * @Method("GET")
-	 * @Security("has_role('ROLE_USER')")
-     */
-    public function settingsAction($hash)
-    {
-		$user = $this->getUser();
-		$em = $this->getDoctrine()->getManager();
-		$subscription = $em->getRepository('VoIPCompanySubscriptionsBundle:Subscription')->findOneBy(array(
-			'hash' => $hash
-		));
-        if (!$subscription) throw $this->createNotFoundException('Unable to find Subsciption entity.');
-		$company = $subscription->getCompany();
-		if ($user->getCompany()->getId() != $company->getId()) throw $this->createNotFoundException('No authorization.');
-        return array(
-			'subscription' => $subscription,
-			'company' => $company
-		);
-    }
-	
-    /**
-     * @Route("/{hash}/settings")
-     * @Template()
-	 * @Method("POST")
-	 * @Security("has_role('ROLE_USER')")
-     */
-    public function updateSettingsAction($hash)
-    {
-		$user = $this->getUser();
-		$em = $this->getDoctrine()->getManager();
-		$subscription = $em->getRepository('VoIPCompanySubscriptionsBundle:Subscription')->findOneBy(array(
-			'hash' => $hash
-		));
-        if (!$subscription) throw $this->createNotFoundException('Unable to find Subsciption entity.');
-		$company = $subscription->getCompany();
-		if ($user->getCompany()->getId() != $company->getId()) throw $this->createNotFoundException('No authorization.');
-		
-		$request = $this->getRequest();
-		
-		$file = $request->files->get('announcement');
-		$record = $request->get('record');
-		$prefix = '' . $request->get('prefix');
-		
-		if ($file) {
-	        $fileName = hash('crc32b', uniqid(mt_rand(), true)).'.mp3';
-			$filePath = __DIR__.'/../../../../../web/tmp/';
-	        $file->move($filePath, $fileName);
-			$s3 = $this->container->get('aws_s3');
-			$s3->create_object('fortyeight', 'ging/'.$fileName, array(
-				'fileUpload' => $filePath.$fileName,
-				'acl' => \AmazonS3::ACL_PUBLIC,
-				'headers' => array(
-					'Cache-Control'    => 'max-age=8000000',
-					'Content-Language' => 'en-US',
-					'Expires'          => 'Tue, 01 Jan 2030 03:54:42 GMT',
-				)
-			));
-			$subscription->setVmFile($fileName);
-		}
-		
-		$subscription->setRecordVM($record);
-		$subscription->setPrefix($prefix);
-	
-		$em->flush();
-		
-		return $this->redirect($this->generateUrl('ui_company'));
-    }
-	
-    /**
      * @Route("/{hash}/buddies", name="ui_subscription_buddies")
      * @Template()
 	 * @Method("GET")
@@ -186,17 +60,9 @@ class SubscriptionController extends Controller
 			'hash' => $hash
 		));
         if (!$subscription) throw $this->createNotFoundException('Unable to find Subsciption entity.');
-		$company = $subscription->getCompany();
-		if ($user->getCompany()->getId() != $company->getId()) throw $this->createNotFoundException('No authorization.');
-		$employees = $em->getRepository('VoIPCompanyStructureBundle:Employee')->findBy(array(
-			'company' => $company,
-			'isActive' => true,
-		), array(
-			'name' => 'ASC'
-		));
         return array(
 			'subscription' => $subscription,
-			'employees' => $employees
+			'employees' => $user->getCompany()->getEmployees()
 		);
     }
 	

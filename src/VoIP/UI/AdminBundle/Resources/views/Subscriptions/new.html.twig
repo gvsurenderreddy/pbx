@@ -1,0 +1,22 @@
+{% extends '::admin.html.twig' %}
+{% block container %}
+<form role="form" action="{{ path('admin_subscriptions_new') }}" method="POST">
+	<div class="form-group">
+		<label for="inputDID">Name</label>
+		<input type="text" class="form-control" id="inputName" name="name">
+	</div>
+	<div class="form-group">
+		<label for="inputDID">DID</label>
+		<input type="text" class="form-control" id="inputDID" name="did">
+	</div>
+	<div class="form-group">
+		<label for="inputCompany">Company</label>
+		<select class="form-control" id="inputCompany" name="company">
+			{% for company in companies %}
+			<option value="{{ company.id }}">{{ company.name }}</option>
+			{% endfor %}
+		</select>
+	</div>
+	<button type="submit" class="btn btn-default">Create</button>
+</form>
+{% endblock %}

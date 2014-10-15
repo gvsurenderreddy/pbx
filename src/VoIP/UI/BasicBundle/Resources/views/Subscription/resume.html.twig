@@ -6,15 +6,12 @@
 <div class="switchboard-card switchboard-subscription {% for employee in subscription.employees %} emp{{ employee.hash }} {% for phone in employee.phones %} pho{{ phone.hash }}{% endfor %}{% endfor %}" data-hash="{{ subscription.hash }}">
 	<div class="contentbox">
 		<div>
-			{{ subscription.number }} {% if subscription.vmfile %} <span class="glyphicon glyphicon-music tooltip-flag" data-toggle="tooltip" data-placement="bottom" title="Personal voicemail"></span>{% endif %}{% if subscription.recordvm %} <span class="glyphicon glyphicon-record tooltip-flag" data-toggle="tooltip" data-placement="bottom" title="Record voicemail"></span>{% endif %}
+			{{ subscription.did }}
 		</div>
 		<div>
 			{% for employee in subscription.employees %}
 			<img src="{{ employee.thumburl ? employee.thumburl : 'https://s3-ap-southeast-1.amazonaws.com/fortyeight/buddies/images/7ee05724_64.png' }}" class="img-circle tooltip-flag" width="30" data-toggle="tooltip" data-placement="bottom" title="{{ employee.name }} ({{ employee.extension }})">
 			{% endfor %}
-		</div>
-		<div class="license">
-			License: S${{ subscription.license|number_format(2, '.', ',') }}
 		</div>
 	</div>
 	<div class="toolbox">
@@ -22,25 +19,9 @@
 			<div class="btn-group">
 				<a href="{{ path('ui_subscription_buddies', {'hash': subscription.hash}) }}" data-toggle="tooltip" data-placement="bottom" title="Buddies" class="tooltip-flag btn btn-default"><span class="glyphicon glyphicon-user"></span></a>
 			</div>
-			<div class="btn-group">
-				<a href="{{ path('ui_subscription_settings', {'hash': subscription.hash}) }}" data-toggle="tooltip" data-placement="bottom" title="Settings" class="tooltip-flag btn btn-default"><span class="glyphicon glyphicon-cog"></span></a>
-			</div>
-			{% if subscription.iseditable %}
-			<div class="btn-group">
-				<a href="{{ path('ui_subscription_edit', {'hash': subscription.hash}) }}" data-toggle="tooltip" data-placement="bottom" title="Configure" class="tooltip-flag btn btn-default"><span class="glyphicon glyphicon-wrench"></span></a>
-			</div>
-			<div class="btn-group">
-				<a href="{{ path('ui_subscription_delete', {'hash': subscription.hash}) }}" data-toggle="tooltip" data-placement="bottom" title="Delete" class="tooltip-flag btn btn-default btn-trash"><span class="glyphicon glyphicon-trash"></span></a>
-			</div>
-			{% endif %}
-			{% if subscription.type == 'spa3102' %}
-			<div class="btn-group">
-				<a href="{{ path('ui_subscription_configure', {'hash': subscription.hash}) }}" data-toggle="tooltip" data-placement="bottom" title="Configure" class="tooltip-flag btn btn-default"><span class="glyphicon glyphicon-wrench"></span></a>
-			</div>
-			{% endif %}
 		</div>
 	</div>
-	<div class="status status-{{ subscription.status }} tooltip-flag" data-toggle="tooltip" data-placement="bottom" title="Connected"></div>
+	<div class="status status-default tooltip-flag" data-toggle="tooltip" data-placement="bottom" title="Connected"></div>
 </div>
 {% else %}
 <div class="alert alert-warning alert-first"><a href="{{ path('ui_company_newrequestnumber') }}" class="alert-link">Add your first number</a></div>

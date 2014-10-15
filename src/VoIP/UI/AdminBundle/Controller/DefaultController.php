@@ -50,25 +50,6 @@ class DefaultController extends Controller
     }
 	
     /**
-     * @Route("/subscriptions", name="admin_subscriptions")
-     * @Template()
-     */
-    public function subscriptionsAction()
-    {
-		$em = $this->getDoctrine()->getManager();
-		$query = $em->createQuery(
-		    'SELECT s
-		    FROM VoIPCompanySubscriptionsBundle:Subscription s
-		    ORDER BY s.hash ASC'
-		);
-
-		$subscriptions = $query->getResult();
-        return array(
-        	'subscriptions' => $subscriptions
-        );
-    }
-	
-    /**
      * @Route("/companies", name="admin_companies")
      * @Template()
      */

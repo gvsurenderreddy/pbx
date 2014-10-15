@@ -35,13 +35,6 @@ class Subscription
      * @ORM\Column(name="updated_at", type="datetime")
      */
     private $updatedAt;
-	
-    /**
-     * @var \DateTime
-     *
-     * @ORM\Column(name="canceled_at", type="datetime", nullable=true)
-     */
-    private $canceledAt;
 
     /**
      * @var string
@@ -53,119 +46,22 @@ class Subscription
     /**
      * @var string
      *
-     * @ORM\Column(name="type", type="string", length=40)
+     * @ORM\Column(name="did", type="string", length=128)
      */
-    private $type;
+    private $did;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="username", type="string", length=128)
-     */
-    private $username;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="secret", type="string", length=255)
-     */
-    private $secret;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="number", type="string", length=128)
-     */
-    private $number;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="host", type="string", length=255)
-     */
-    private $host;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="hash", type="string", length=20)
+     * @ORM\Column(name="hash", type="string", length=8, unique=true)
      */
     private $hash;
-	
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="prefix", type="string", length=20)
-     */
-    private $prefix = '';
-	
-    /**
-     * @var boolean
-     *
-     * @ORM\Column(name="is_active", type="boolean")
-     */
-    private $isActive = true;
-	
-    /**
-     * @var boolean
-     *
-     * @ORM\Column(name="is_editable", type="boolean")
-     */
-    private $isEditable = true;
-	
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="vm_file", length=128, nullable=true)
-     */
-    private $vmFile;
-	
-    /**
-     * @var boolean
-     *
-     * @ORM\Column(name="record_vm", type="boolean")
-     */
-    private $recordVM = true;
-	
-    /**
-     * @var float
-     *
-     * @ORM\Column(name="rate_out", type="float")
-     */
-    private $rateOut = 0.01;
-	
-    /**
-     * @var float
-     *
-     * @ORM\Column(name="rate_out_operator", type="float")
-     */
-    private $rateOutOperator = 0.00;
-	
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="registration_code", type="string", length=255, nullable=true)
-     */
-    private $registrationCode;
-	
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="license", type="integer")
-     */
-    private $license = 15;
 	
 	/**
      * @ORM\ManyToOne(targetEntity="\VoIP\Company\StructureBundle\Entity\Company", inversedBy="subscriptions")
 	 * @ORM\JoinColumn(name="company_id", referencedColumnName="id", onDelete="CASCADE")
      */
     private $company;
-	
-	/**
-     * @ORM\OneToOne(targetEntity="\VoIP\Company\VoicemailBundle\Entity\Voicemail", inversedBy="subscription")
-	 * @ORM\JoinColumn(name="voicemail_id", referencedColumnName="id", onDelete="CASCADE")
-     */
-    private $voicemail;
 	
 	/**
 	 * @ORM\ManyToMany(targetEntity="\VoIP\Company\StructureBundle\Entity\Employee", inversedBy="subscriptions")
@@ -178,20 +74,13 @@ class Subscription
 	protected $employees;
 	
 	/**
-     * @ORM\OneToMany(targetEntity="\VoIP\Company\SubscriptionsBundle\Entity\SubscriptionPayment", mappedBy="subscription")
-	 * @ORM\OrderBy({"createdAt" = "ASC"})
-     */
-    private $payments;
-	
-	/**
 	 * @ORM\PrePersist
 	 */
 	public function prePersist()
 	{
-		$this->createdAt = new \DateTime();
-	    $this->updatedAt = new \DateTime();
-		if (!$this->hash) $this->generateHash();
-		$this->genRegistrationCode();
+		$this->setCreatedAt(new \DateTime());
+	    $this->setUpdatedAt(new \DateTime());
+		$this->setHash(hash('crc32b', uniqid('', true)));
 	}
 	
 	/**
@@ -199,45 +88,17 @@ class Subscription
 	 */
 	public function preUpdate()
 	{
-	    $this->updatedAt = new \DateTime();
-		if (!$this->hash) $this->generateHash();
-		$this->genRegistrationCode();
+	    $this->setUpdatedAt(new \DateTime());
 	}
 
-	public function generateHash()
-	{
-		$this->hash = hexdec(hash('crc32b', uniqid('', true)));
-	}
 	
-	public function genRegistrationCode()
-	{
-		switch ($this->type) {
-			case 'hoiio':
-				$this->setRegistrationCode($this->username.':'.$this->secret.'@'.$this->host.'/'.$this->hash);
-				break;
-			
-			default:
-				$this->setRegistrationCode($this->username.':'.$this->secret.'@'.$this->host.'/'.$this->hash);
-				break;
-		}
-	}
-	
-	public function getStatus()
-	{
-		// TEST HAS_PHONE
-		if (count($this->getEmployees()) == 0) {
-			return 'warning';
-		}
-		// TEST CONNECTED_EMPLOYEE
-		$test = false;
-		foreach ($this->getEmployees() as $employee) {
-			if ($employee->getIsActive() && count($employee->getPhones()) > 0) {
-				$test = true;
-			}
-		}
-		if (!$test) return 'warning';
-		return 'default';
-	}
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->employees = new \Doctrine\Common\Collections\ArrayCollection();
+    }
 
     /**
      * Get id
@@ -247,13 +108,6 @@ class Subscription
     public function getId()
     {
         return $this->id;
-    }
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->employees = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -326,118 +180,26 @@ class Subscription
     }
 
     /**
-     * Set type
+     * Set did
      *
-     * @param string $type
+     * @param string $did
      * @return Subscription
      */
-    public function setType($type)
+    public function setDid($did)
     {
-        $this->type = $type;
+        $this->did = $did;
 
         return $this;
     }
 
     /**
-     * Get type
+     * Get did
      *
      * @return string 
      */
-    public function getType()
+    public function getDid()
     {
-        return $this->type;
-    }
-
-    /**
-     * Set username
-     *
-     * @param string $username
-     * @return Subscription
-     */
-    public function setUsername($username)
-    {
-        $this->username = $username;
-
-        return $this;
-    }
-
-    /**
-     * Get username
-     *
-     * @return string 
-     */
-    public function getUsername()
-    {
-        return $this->username;
-    }
-
-    /**
-     * Set secret
-     *
-     * @param string $secret
-     * @return Subscription
-     */
-    public function setSecret($secret)
-    {
-        $this->secret = $secret;
-
-        return $this;
-    }
-
-    /**
-     * Get secret
-     *
-     * @return string 
-     */
-    public function getSecret()
-    {
-        return $this->secret;
-    }
-
-    /**
-     * Set number
-     *
-     * @param string $number
-     * @return Subscription
-     */
-    public function setNumber($number)
-    {
-        $this->number = $number;
-
-        return $this;
-    }
-
-    /**
-     * Get number
-     *
-     * @return string 
-     */
-    public function getNumber()
-    {
-        return $this->number;
-    }
-
-    /**
-     * Set host
-     *
-     * @param string $host
-     * @return Subscription
-     */
-    public function setHost($host)
-    {
-        $this->host = $host;
-
-        return $this;
-    }
-
-    /**
-     * Get host
-     *
-     * @return string 
-     */
-    public function getHost()
-    {
-        return $this->host;
+        return $this->did;
     }
 
     /**
@@ -464,121 +226,6 @@ class Subscription
     }
 
     /**
-     * Set isActive
-     *
-     * @param boolean $isActive
-     * @return Subscription
-     */
-    public function setIsActive($isActive)
-    {
-        $this->isActive = $isActive;
-
-        return $this;
-    }
-
-    /**
-     * Get isActive
-     *
-     * @return boolean 
-     */
-    public function getIsActive()
-    {
-        return $this->isActive;
-    }
-
-    /**
-     * Set isEditable
-     *
-     * @param boolean $isEditable
-     * @return Subscription
-     */
-    public function setIsEditable($isEditable)
-    {
-        $this->isEditable = $isEditable;
-
-        return $this;
-    }
-
-    /**
-     * Get isEditable
-     *
-     * @return boolean 
-     */
-    public function getIsEditable()
-    {
-        return $this->isEditable;
-    }
-
-    /**
-     * Set rateOut
-     *
-     * @param float $rateOut
-     * @return Subscription
-     */
-    public function setRateOut($rateOut)
-    {
-        $this->rateOut = $rateOut;
-
-        return $this;
-    }
-
-    /**
-     * Get rateOut
-     *
-     * @return float 
-     */
-    public function getRateOut()
-    {
-        return $this->rateOut;
-    }
-
-    /**
-     * Set rateOutOperator
-     *
-     * @param float $rateOutOperator
-     * @return Subscription
-     */
-    public function setRateOutOperator($rateOutOperator)
-    {
-        $this->rateOutOperator = $rateOutOperator;
-
-        return $this;
-    }
-
-    /**
-     * Get rateOutOperator
-     *
-     * @return float 
-     */
-    public function getRateOutOperator()
-    {
-        return $this->rateOutOperator;
-    }
-
-    /**
-     * Set registrationCode
-     *
-     * @param string $registrationCode
-     * @return Subscription
-     */
-    public function setRegistrationCode($registrationCode)
-    {
-        $this->registrationCode = $registrationCode;
-
-        return $this;
-    }
-
-    /**
-     * Get registrationCode
-     *
-     * @return string 
-     */
-    public function getRegistrationCode()
-    {
-        return $this->registrationCode;
-    }
-
-    /**
      * Set company
      *
      * @param \VoIP\Company\StructureBundle\Entity\Company $company
@@ -599,29 +246,6 @@ class Subscription
     public function getCompany()
     {
         return $this->company;
-    }
-
-    /**
-     * Set voicemail
-     *
-     * @param \VoIP\Company\VoicemailBundle\Entity\Voicemail $voicemail
-     * @return Subscription
-     */
-    public function setVoicemail(\VoIP\Company\VoicemailBundle\Entity\Voicemail $voicemail = null)
-    {
-        $this->voicemail = $voicemail;
-
-        return $this;
-    }
-
-    /**
-     * Get voicemail
-     *
-     * @return \VoIP\Company\VoicemailBundle\Entity\Voicemail 
-     */
-    public function getVoicemail()
-    {
-        return $this->voicemail;
     }
 
     /**
@@ -655,153 +279,5 @@ class Subscription
     public function getEmployees()
     {
         return $this->employees;
-    }
-
-    /**
-     * Set vmFile
-     *
-     * @param string $vmFile
-     * @return Subscription
-     */
-    public function setVmFile($vmFile)
-    {
-        $this->vmFile = $vmFile;
-
-        return $this;
-    }
-
-    /**
-     * Get vmFile
-     *
-     * @return string 
-     */
-    public function getVmFile()
-    {
-        return $this->vmFile;
-    }
-
-    /**
-     * Set recordVM
-     *
-     * @param boolean $recordVM
-     * @return Subscription
-     */
-    public function setRecordVM($recordVM)
-    {
-        $this->recordVM = $recordVM;
-
-        return $this;
-    }
-
-    /**
-     * Get recordVM
-     *
-     * @return boolean 
-     */
-    public function getRecordVM()
-    {
-        return $this->recordVM;
-    }
-
-    /**
-     * Set license
-     *
-     * @param integer $license
-     * @return Subscription
-     */
-    public function setLicense($license)
-    {
-        $this->license = $license;
-
-        return $this;
-    }
-
-    /**
-     * Get license
-     *
-     * @return integer 
-     */
-    public function getLicense()
-    {
-        return $this->license;
-    }
-
-    /**
-     * Set canceledAt
-     *
-     * @param \DateTime $canceledAt
-     * @return Subscription
-     */
-    public function setCanceledAt($canceledAt)
-    {
-        $this->canceledAt = $canceledAt;
-
-        return $this;
-    }
-
-    /**
-     * Get canceledAt
-     *
-     * @return \DateTime 
-     */
-    public function getCanceledAt()
-    {
-        return $this->canceledAt;
-    }
-
-    /**
-     * Add payments
-     *
-     * @param \VoIP\Company\SubscriptionsBundle\Entity\SubscriptionPayment $payments
-     * @return Subscription
-     */
-    public function addPayment(\VoIP\Company\SubscriptionsBundle\Entity\SubscriptionPayment $payments)
-    {
-        $this->payments[] = $payments;
-
-        return $this;
-    }
-
-    /**
-     * Remove payments
-     *
-     * @param \VoIP\Company\SubscriptionsBundle\Entity\SubscriptionPayment $payments
-     */
-    public function removePayment(\VoIP\Company\SubscriptionsBundle\Entity\SubscriptionPayment $payments)
-    {
-        $this->payments->removeElement($payments);
-    }
-
-    /**
-     * Get payments
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getPayments()
-    {
-        return $this->payments;
-    }
-
-    /**
-     * Set prefix
-     *
-     * @param string $prefix
-     * @return Subscription
-     */
-    public function setPrefix($prefix)
-    {
-        $this->prefix = $prefix;
-
-        return $this;
-    }
-
-    /**
-     * Get prefix
-     *
-     * @return string 
-     */
-    public function getPrefix()
-    {
-        return $this->prefix;
     }
 }
