@@ -101,7 +101,7 @@ class VoiceMessage
     /**
      * @var integer
      *
-     * @ORM\Column(name="mdg_id", type="integer", nullable=true)
+     * @ORM\Column(name="msg_id", type="integer", nullable=true)
      */
     private $msgId;
 
