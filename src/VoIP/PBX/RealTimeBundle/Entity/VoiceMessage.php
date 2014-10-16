@@ -113,4 +113,280 @@ class VoiceMessage
     {
         return $this->id;
     }
+
+    /**
+     * Set msgnum
+     *
+     * @param integer $msgnum
+     * @return VoiceMessage
+     */
+    public function setMsgnum($msgnum)
+    {
+        $this->msgnum = $msgnum;
+
+        return $this;
+    }
+
+    /**
+     * Get msgnum
+     *
+     * @return integer 
+     */
+    public function getMsgnum()
+    {
+        return $this->msgnum;
+    }
+
+    /**
+     * Set dir
+     *
+     * @param string $dir
+     * @return VoiceMessage
+     */
+    public function setDir($dir)
+    {
+        $this->dir = $dir;
+
+        return $this;
+    }
+
+    /**
+     * Get dir
+     *
+     * @return string 
+     */
+    public function getDir()
+    {
+        return $this->dir;
+    }
+
+    /**
+     * Set context
+     *
+     * @param string $context
+     * @return VoiceMessage
+     */
+    public function setContext($context)
+    {
+        $this->context = $context;
+
+        return $this;
+    }
+
+    /**
+     * Get context
+     *
+     * @return string 
+     */
+    public function getContext()
+    {
+        return $this->context;
+    }
+
+    /**
+     * Set macrocontext
+     *
+     * @param string $macrocontext
+     * @return VoiceMessage
+     */
+    public function setMacrocontext($macrocontext)
+    {
+        $this->macrocontext = $macrocontext;
+
+        return $this;
+    }
+
+    /**
+     * Get macrocontext
+     *
+     * @return string 
+     */
+    public function getMacrocontext()
+    {
+        return $this->macrocontext;
+    }
+
+    /**
+     * Set callerid
+     *
+     * @param string $callerid
+     * @return VoiceMessage
+     */
+    public function setCallerid($callerid)
+    {
+        $this->callerid = $callerid;
+
+        return $this;
+    }
+
+    /**
+     * Get callerid
+     *
+     * @return string 
+     */
+    public function getCallerid()
+    {
+        return $this->callerid;
+    }
+
+    /**
+     * Set origtime
+     *
+     * @param string $origtime
+     * @return VoiceMessage
+     */
+    public function setOrigtime($origtime)
+    {
+        $this->origtime = $origtime;
+
+        return $this;
+    }
+
+    /**
+     * Get origtime
+     *
+     * @return string 
+     */
+    public function getOrigtime()
+    {
+        return $this->origtime;
+    }
+
+    /**
+     * Set duration
+     *
+     * @param string $duration
+     * @return VoiceMessage
+     */
+    public function setDuration($duration)
+    {
+        $this->duration = $duration;
+
+        return $this;
+    }
+
+    /**
+     * Get duration
+     *
+     * @return string 
+     */
+    public function getDuration()
+    {
+        return $this->duration;
+    }
+
+    /**
+     * Set mailboxcontext
+     *
+     * @param string $mailboxcontext
+     * @return VoiceMessage
+     */
+    public function setMailboxcontext($mailboxcontext)
+    {
+        $this->mailboxcontext = $mailboxcontext;
+
+        return $this;
+    }
+
+    /**
+     * Get mailboxcontext
+     *
+     * @return string 
+     */
+    public function getMailboxcontext()
+    {
+        return $this->mailboxcontext;
+    }
+
+    /**
+     * Set recording
+     *
+     * @param string $recording
+     * @return VoiceMessage
+     */
+    public function setRecording($recording)
+    {
+        $this->recording = $recording;
+
+        return $this;
+    }
+
+    /**
+     * Get recording
+     *
+     * @return string 
+     */
+    public function getRecording()
+    {
+        return $this->recording;
+    }
+
+    /**
+     * Set flag
+     *
+     * @param string $flag
+     * @return VoiceMessage
+     */
+    public function setFlag($flag)
+    {
+        $this->flag = $flag;
+
+        return $this;
+    }
+
+    /**
+     * Get flag
+     *
+     * @return string 
+     */
+    public function getFlag()
+    {
+        return $this->flag;
+    }
+
+    /**
+     * Set msgId
+     *
+     * @param integer $msgId
+     * @return VoiceMessage
+     */
+    public function setMsgId($msgId)
+    {
+        $this->msgId = $msgId;
+
+        return $this;
+    }
+
+    /**
+     * Get msgId
+     *
+     * @return integer 
+     */
+    public function getMsgId()
+    {
+        return $this->msgId;
+    }
+
+    /**
+     * Set company
+     *
+     * @param \VoIP\Company\StructureBundle\Entity\Company $company
+     * @return VoiceMessage
+     */
+    public function setCompany(\VoIP\Company\StructureBundle\Entity\Company $company = null)
+    {
+        $this->company = $company;
+
+        return $this;
+    }
+
+    /**
+     * Get company
+     *
+     * @return \VoIP\Company\StructureBundle\Entity\Company 
+     */
+    public function getCompany()
+    {
+        return $this->company;
+    }
 }
