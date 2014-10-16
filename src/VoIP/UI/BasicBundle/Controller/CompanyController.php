@@ -278,7 +278,6 @@ class CompanyController extends Controller
 		$query = $em->createQuery(
 		    'SELECT m
 		    FROM VoIPPBXRealTimeBundle:VoiceMessage m
-			WHERE m.company = :company
 			ORDER BY m.origtime DESC'
 		)->setParameters(array(
 			'company' => $company
