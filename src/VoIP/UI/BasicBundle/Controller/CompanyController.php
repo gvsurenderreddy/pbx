@@ -283,7 +283,8 @@ class CompanyController extends Controller
 		    'SELECT m
 		    FROM VoIPPBXRealTimeBundle:VoiceMessage m
 			LEFT JOIN m.voicemail v
-			WHERE v.company = :company
+			LEFT JOIN v.company c
+			WHERE c = :company
 			ORDER BY m.origtime DESC'
 		)->setParameters(array(
 			'company' => $company
