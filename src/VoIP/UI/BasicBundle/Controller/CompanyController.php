@@ -12,7 +12,7 @@ use VoIP\Company\StructureBundle\Entity\Company;
 use VoIP\Company\StructureBundle\Entity\Phone;
 use VoIP\Company\StructureBundle\Entity\Employee;
 use VoIP\Company\SubscriptionsBundle\Entity\Subscription;
-use VoIP\PBX\RealTimeBundle\Entity\Voicemail;
+use VoIP\PBX\RealTimeBundle\Entity\VoiceMail;
 use VoIP\PBX\RealTimeBundle\Extra\Sync;
 use VoIP\UI\BasicBundle\Extra\Image;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -63,7 +63,7 @@ class CompanyController extends Controller
 		
 		$name = $request->get('name');
 		
-		$voicemail = new Voicemail();
+		$voicemail = new VoiceMail();
 		$em->persist($voicemail);
 		
 		$company = new Company();
@@ -282,6 +282,7 @@ class CompanyController extends Controller
 		$query = $em->createQuery(
 		    'SELECT m
 		    FROM VoIPPBXRealTimeBundle:VoiceMessage m
+			LEFT JOIN m.voicemail v
 			ORDER BY m.origtime DESC'
 		)->setMaxResults($card)->setFirstResult(($page - 1) * $card);
 		$messages = $query->getResult();

@@ -13,11 +13,6 @@ vo_ippbx_bill:
     type:     annotation
     prefix:   /
 
-vo_ip_company_voicemail:
-    resource: "@VoIPCompanyVoicemailBundle/Controller/"
-    type:     annotation
-    prefix:   /
-
 vo_ippbxcdr:
     resource: "@VoIPPBXCDRBundle/Controller/"
     type:     annotation

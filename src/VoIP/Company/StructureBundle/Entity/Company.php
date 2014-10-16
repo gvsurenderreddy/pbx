@@ -100,7 +100,7 @@ class Company
     private $messages;
 	
 	/**
-     * @ORM\OneToOne(targetEntity="\VoIP\PBX\RealTimeBundle\Entity\Voicemail", inversedBy="company")
+     * @ORM\OneToOne(targetEntity="\VoIP\PBX\RealTimeBundle\Entity\VoiceMail", inversedBy="company")
 	 * @ORM\JoinColumn(name="voicemail_id", referencedColumnName="mailbox", onDelete="CASCADE")
      */
     private $voicemail;
@@ -635,7 +635,7 @@ class Company
     /**
      * Set voicemail
      *
-     * @param \VoIP\PBX\RealTimeBundle\Entity\Voicemail $voicemail
+     * @param \VoIP\PBX\RealTimeBundle\Entity\VoiceMail $voicemail
      * @return Company
      */
     public function setVoicemail(\VoIP\PBX\RealTimeBundle\Entity\Voicemail $voicemail = null)
@@ -648,7 +648,7 @@ class Company
     /**
      * Get voicemail
      *
-     * @return \VoIP\PBX\RealTimeBundle\Entity\Voicemail 
+     * @return \VoIP\PBX\RealTimeBundle\Entity\VoiceMail 
      */
     public function getVoicemail()
     {
