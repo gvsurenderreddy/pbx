@@ -30,7 +30,7 @@ class MessageController extends Controller
     {
 		$user = $this->getUser();
 		$em = $this->getDoctrine()->getManager();
-		$message = $em->getRepository('VoIPPBXRealTimeBundle:VoiceMessage')->find('id' => $id);
+		$message = $em->getRepository('VoIPPBXRealTimeBundle:VoiceMessage')->find($id);
         if (!$message) throw $this->createNotFoundException('Unable to find Message entity.');
 		
 		$response = new Response();
