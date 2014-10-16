@@ -70,7 +70,10 @@ class VoiceMessage
      */
     private $duration;
 
-
+	/**
+     * @ORM\ManyToOne(targetEntity="\VoIP\Company\StructureBundle\Entity\Company", inversedBy="messages")
+	 * @ORM\JoinColumn(name="mailboxuser", referencedColumnName="mailbox", onDelete="CASCADE")
+     */
     private $company;
  
     /**
