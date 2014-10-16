@@ -730,6 +730,11 @@ class CompanyController extends Controller
 	            'notice',
 	            'Your changes were saved!'
 	        );
+		} else {
+			$this->get('session')->getFlashBag()->add(
+	            'notice',
+	            'Your cannot update this entry with an existing IP'
+	        );
 		}
 			
 		return $this->redirect($this->generateUrl('ui_company_dynamic'));
