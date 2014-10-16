@@ -15,10 +15,18 @@ class VoiceMessage
     /**
      * @var integer
      *
-     * @ORM\Column(name="msg_id", type="integer")
+     * @ORM\Column(name="id", type="integer")
      * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
+	
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="msg_id", type="integer")
+     */
+    private $msgId;
 	
     /**
      * @var integer
@@ -371,5 +379,28 @@ class VoiceMessage
     public function getVoicemail()
     {
         return $this->voicemail;
+    }
+
+    /**
+     * Set msgId
+     *
+     * @param integer $msgId
+     * @return VoiceMessage
+     */
+    public function setMsgId($msgId)
+    {
+        $this->msgId = $msgId;
+
+        return $this;
+    }
+
+    /**
+     * Get msgId
+     *
+     * @return integer 
+     */
+    public function getMsgId()
+    {
+        return $this->msgId;
     }
 }
