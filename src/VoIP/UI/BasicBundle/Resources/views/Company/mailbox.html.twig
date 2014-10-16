@@ -10,34 +10,15 @@
 {% if messages|length > 0 %}
 <table class="table table-hover">
 	<tr>
-		<th></th>
 		<th>Date</th>
 		<th>From</th>
 		<th>Duration</th>
-		<th>Message</th>
-		<th></th>
-		<th></th>
 	</tr>
 	{% for message in messages %}
-	<tr class="message-row-{{ message.hash }}">
-		<td>
-			<span class="label label-info message-labelnew-{{ message.hash }} {{ message.readat ? 'hidden' }}">New</span>
-		</td>
-		<td>{{ message.createdat|date('d/m/Y H:i:s') }}</td>
-		<td></td>
-		<td></td>
-		<td>
-			<audio controls="controls" class="message" data-hash="{{ message.hash }}">
-				Your browser does not support the <code>audio</code> element.
-				<source src="https://s3-ap-southeast-1.amazonaws.com/fortyeight/vm/{{ message.filepath }}" type="audio/ogg">
-			</audio>
-		</td>
-		<td>
-			<a href="{{ path('ui_message_unread', {'hash': message.hash}) }}" class="message-unreadlink-{{ message.hash }} {{ not message.readat ? 'hidden' }}">mark as unread</a
-		</td>
-		<td>
-			<a href="{{ path('ui_message_archive', {'hash': message.hash}) }}">archive</a>
-		</td>
+	<tr class="message-row-{{ message.id }}">
+		<td>{{ message.origtime }}</td>
+		<td>{{ message.id }}</td>
+		<td>{{ message.duration }}</td>
 	</tr>
 	{% endfor %}
 </table>
