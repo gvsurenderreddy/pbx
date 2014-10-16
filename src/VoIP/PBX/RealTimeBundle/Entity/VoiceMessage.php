@@ -85,9 +85,9 @@ class VoiceMessage
     private $mailboxcontext;
 	
     /**
-     * @var text
+     * @var blob
      *
-     * @ORM\Column(name="recording", type="text", nullable=true)
+     * @ORM\Column(name="recording", type="blob", nullable=true)
      */
     private $recording;
 
@@ -321,30 +321,7 @@ class VoiceMessage
     {
         return $this->mailboxcontext;
     }
-
-    /**
-     * Set recording
-     *
-     * @param string $recording
-     * @return VoiceMessage
-     */
-    public function setRecording($recording)
-    {
-        $this->recording = $recording;
-
-        return $this;
-    }
-
-    /**
-     * Get recording
-     *
-     * @return string 
-     */
-    public function getRecording()
-    {
-        return $this->recording;
-    }
-
+	
     /**
      * Set flag
      *
@@ -389,5 +366,28 @@ class VoiceMessage
     public function getMsgId()
     {
         return $this->msgId;
+    }
+
+    /**
+     * Set recording
+     *
+     * @param string $recording
+     * @return VoiceMessage
+     */
+    public function setRecording($recording)
+    {
+        $this->recording = $recording;
+
+        return $this;
+    }
+
+    /**
+     * Get recording
+     *
+     * @return string 
+     */
+    public function getRecording()
+    {
+        return $this->recording;
     }
 }
