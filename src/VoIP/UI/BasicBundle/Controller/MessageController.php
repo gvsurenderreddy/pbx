@@ -12,13 +12,36 @@ use VoIP\Company\StructureBundle\Entity\Office;
 use VoIP\Company\StructureBundle\Entity\Phone;
 use VoIP\PBX\RealTimeBundle\Extra\Sync;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
- * @Route("/m")
+ * @Route("/messages")
  */
 
 class MessageController extends Controller
 {	
+    /**
+     * @Route("/dl/{id}.wav", name="ui_message_dl")
+     * @Template()
+	 * @Method("GET")
+	 * @Security("has_role('ROLE_USER')")
+     */
+    public function dlAction($id)
+    {
+		$user = $this->getUser();
+		$em = $this->getDoctrine()->getManager();
+		$message = $em->getRepository('VoIPPBXRealTimeBundle:VoiceMessage')->findOneBy(array(
+			'id' => $id
+		));
+        if (!$message) throw $this->createNotFoundException('Unable to find Message entity.');
+		
+		$response = new Response();
+		$response->headers->set('Content-Type', 'audio/wav');
+		$response->headers->set('Content-Disposition', 'attachment');
+		$response->setContent(stream_get_contents($message->getRecording()));
+		return $response;
+    }
+	
 	
     /**
      * @Route("/{hash}/read", name="ui_message_read")
