@@ -24,7 +24,6 @@ class AppKernel extends Kernel
             new VoIP\UI\BasicBundle\VoIPUIBasicBundle(),
             new VoIP\Company\SubscriptionsBundle\VoIPCompanySubscriptionsBundle(),
             new VoIP\PBX\CDRBundle\VoIPPBXCDRBundle(),
-            new VoIP\Company\VoicemailBundle\VoIPCompanyVoicemailBundle(),
             new VoIP\PBX\BillBundle\VoIPPBXBillBundle(),
             new VoIP\UI\AdminBundle\VoIPUIAdminBundle(),
             new VoIP\Company\DynIPBundle\VoIPCompanyDynIPBundle(),

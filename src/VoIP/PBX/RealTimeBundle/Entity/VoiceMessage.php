@@ -15,9 +15,8 @@ class VoiceMessage
     /**
      * @var integer
      *
-     * @ORM\Column(name="id", type="integer")
+     * @ORM\Column(name="msg_id", type="integer")
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
 	
@@ -69,12 +68,6 @@ class VoiceMessage
      * @ORM\Column(name="duration", type="string", length=20, nullable=true)
      */
     private $duration;
-
-	/**
-     * @ORM\ManyToOne(targetEntity="\VoIP\Company\StructureBundle\Entity\Company", inversedBy="messages")
-	 * @ORM\JoinColumn(name="mailboxuser", referencedColumnName="mailbox", onDelete="CASCADE")
-     */
-    private $company;
  
     /**
      * @var string
@@ -97,12 +90,11 @@ class VoiceMessage
      */
     private $flag;
 	
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="msg_id", type="integer", nullable=true)
+	/**
+     * @ORM\ManyToOne(targetEntity="\VoIP\PBX\RealTimeBundle\Entity\VoiceMail", inversedBy="messages")
+	 * @ORM\JoinColumn(name="mailboxuser", referencedColumnName="mailbox", onDelete="CASCADE")
      */
-    private $msgId;
+    private $voicemail;
 
     /**
      * Get id
@@ -112,6 +104,20 @@ class VoiceMessage
     public function getId()
     {
         return $this->id;
+    }
+
+
+    /**
+     * Set id
+     *
+     * @param integer $id
+     * @return VoiceMessage
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+
+        return $this;
     }
 
     /**
@@ -345,48 +351,25 @@ class VoiceMessage
     }
 
     /**
-     * Set msgId
+     * Set voicemail
      *
-     * @param integer $msgId
+     * @param \VoIP\PBX\RealTimeBundle\Entity\VoiceMail $voicemail
      * @return VoiceMessage
      */
-    public function setMsgId($msgId)
+    public function setVoicemail(\VoIP\PBX\RealTimeBundle\Entity\VoiceMail $voicemail = null)
     {
-        $this->msgId = $msgId;
+        $this->voicemail = $voicemail;
 
         return $this;
     }
 
     /**
-     * Get msgId
+     * Get voicemail
      *
-     * @return integer 
+     * @return \VoIP\PBX\RealTimeBundle\Entity\VoiceMail 
      */
-    public function getMsgId()
+    public function getVoicemail()
     {
-        return $this->msgId;
-    }
-
-    /**
-     * Set company
-     *
-     * @param \VoIP\Company\StructureBundle\Entity\Company $company
-     * @return VoiceMessage
-     */
-    public function setCompany(\VoIP\Company\StructureBundle\Entity\Company $company = null)
-    {
-        $this->company = $company;
-
-        return $this;
-    }
-
-    /**
-     * Get company
-     *
-     * @return \VoIP\Company\StructureBundle\Entity\Company 
-     */
-    public function getCompany()
-    {
-        return $this->company;
+        return $this->voicemail;
     }
 }

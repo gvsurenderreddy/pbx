@@ -12,7 +12,7 @@ use VoIP\Company\StructureBundle\Entity\Company;
 use VoIP\Company\StructureBundle\Entity\Phone;
 use VoIP\Company\StructureBundle\Entity\Employee;
 use VoIP\Company\SubscriptionsBundle\Entity\Subscription;
-use VoIP\Company\VoicemailBundle\Entity\Voicemail;
+use VoIP\PBX\RealTimeBundle\Entity\Voicemail;
 use VoIP\PBX\RealTimeBundle\Extra\Sync;
 use VoIP\UI\BasicBundle\Extra\Image;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -63,8 +63,12 @@ class CompanyController extends Controller
 		
 		$name = $request->get('name');
 		
+		$voicemail = new Voicemail();
+		$em->persist($voicemail);
+		
 		$company = new Company();
 		$company->setName($name);
+		$company->setVoicemail($voicemail);
 		$em->persist($company);
 		
 		$user->setCompany($company);

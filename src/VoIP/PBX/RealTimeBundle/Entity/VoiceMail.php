@@ -7,40 +7,33 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * VoiceMail
  *
- * @ORM\Table(name="ast_voicemails")
+ * @ORM\Table(name="voicemail")
  * @ORM\Entity
+ * @ORM\HasLifecycleCallbacks()
  */
 class VoiceMail
 {
     /**
-     * @var integer
+     * @var string
      *
-     * @ORM\Column(name="id", type="integer")
+     * @ORM\Column(name="mailbox", type="string", length=8, unique=true)
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
-
+	
     /**
      * @var string
      *
      * @ORM\Column(name="context", type="string", length=40)
      */
-    private $context;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="mailbox", type="string", length=40, unique=true)
-     */
-    private $mailbox;
+    private $context = 'internal';
 
     /**
      * @var integer
      *
      * @ORM\Column(name="password", type="integer")
      */
-    private $password;
+    private $password = '1234';
 
     /**
      * @var string
@@ -62,11 +55,37 @@ class VoiceMail
      * @ORM\Column(name="pager", type="string", length=128, nullable=true)
      */
     private $pager;
+	
+	/**
+     * @ORM\OneToOne(targetEntity="\VoIP\Company\StructureBundle\Entity\Company", mappedBy="voicemail")
+     */
+    private $company;
+	
+	/**
+	 * @ORM\PrePersist
+	 */
+	public function prePersist()
+	{
+		$this->setId(hash('crc32b', uniqid('', true)));
+	}
+
+    /**
+     * Set id
+     *
+     * @param string $id
+     * @return VoiceMail
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+
+        return $this;
+    }
 
     /**
      * Get id
      *
-     * @return integer 
+     * @return string 
      */
     public function getId()
     {
@@ -94,29 +113,6 @@ class VoiceMail
     public function getContext()
     {
         return $this->context;
-    }
-
-    /**
-     * Set mailbox
-     *
-     * @param string $mailbox
-     * @return VoiceMail
-     */
-    public function setMailbox($mailbox)
-    {
-        $this->mailbox = $mailbox;
-
-        return $this;
-    }
-
-    /**
-     * Get mailbox
-     *
-     * @return string 
-     */
-    public function getMailbox()
-    {
-        return $this->mailbox;
     }
 
     /**
@@ -209,5 +205,28 @@ class VoiceMail
     public function getPager()
     {
         return $this->pager;
+    }
+
+    /**
+     * Set company
+     *
+     * @param \VoIP\Company\StructureBundle\Entity\Company $company
+     * @return VoiceMail
+     */
+    public function setCompany(\VoIP\Company\StructureBundle\Entity\Company $company = null)
+    {
+        $this->company = $company;
+
+        return $this;
+    }
+
+    /**
+     * Get company
+     *
+     * @return \VoIP\Company\StructureBundle\Entity\Company 
+     */
+    public function getCompany()
+    {
+        return $this->company;
     }
 }

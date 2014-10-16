@@ -57,48 +57,6 @@ class Company
      */
     private $imageUrl;
 	
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="context", type="string", length=40)
-     */
-    private $context = 'internal';
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="mailbox", type="string", length=8, unique=true)
-     */
-    private $mailbox;
-
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="password", type="integer")
-     */
-    private $password = '1234';
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="fullname", type="string", length=50, nullable=true)
-     */
-    private $fullname;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="email", type="string", length=50, nullable=true)
-     */
-    private $email;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="pager", type="string", length=50, nullable=true)
-     */
-    private $pager;
-	
 	/**
      * @ORM\OneToMany(targetEntity="\VoIP\Company\StructureBundle\Entity\Phone", mappedBy="company")
 	 * @ORM\OrderBy({"name" = "ASC"})
@@ -140,6 +98,12 @@ class Company
 	 * @ORM\OrderBy({"origtime" = "ASC"})
      */
     private $messages;
+	
+	/**
+     * @ORM\OneToOne(targetEntity="\VoIP\PBX\RealTimeBundle\Entity\Voicemail", inversedBy="company")
+	 * @ORM\JoinColumn(name="voicemail_id", referencedColumnName="mailbox", onDelete="CASCADE")
+     */
+    private $voicemail;
 	
 	
 	/**
@@ -666,5 +630,28 @@ class Company
     public function getMessages()
     {
         return $this->messages;
+    }
+
+    /**
+     * Set voicemail
+     *
+     * @param \VoIP\PBX\RealTimeBundle\Entity\Voicemail $voicemail
+     * @return Company
+     */
+    public function setVoicemail(\VoIP\PBX\RealTimeBundle\Entity\Voicemail $voicemail = null)
+    {
+        $this->voicemail = $voicemail;
+
+        return $this;
+    }
+
+    /**
+     * Get voicemail
+     *
+     * @return \VoIP\PBX\RealTimeBundle\Entity\Voicemail 
+     */
+    public function getVoicemail()
+    {
+        return $this->voicemail;
     }
 }
