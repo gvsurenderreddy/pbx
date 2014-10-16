@@ -64,6 +64,8 @@ class CompanyController extends Controller
 		$name = $request->get('name');
 		
 		$voicemail = new VoiceMail();
+		$voicemail->setFullname($name);
+		$voicemail->setEmail($user->getEmail());
 		$em->persist($voicemail);
 		
 		$company = new Company();
@@ -525,8 +527,11 @@ class CompanyController extends Controller
 		$request = $this->getRequest();
 		
 		$name = $request->get('name');
+		$email = $request->get('email');
 		
 		$company->setName($name);
+		$company->getVoicemail()->setFullname($name);
+		$company->getVoicemail()->setEmail($email);
 		
 		$em->flush();
 		
