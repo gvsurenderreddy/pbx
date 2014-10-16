@@ -749,38 +749,37 @@ class CompanyController extends Controller
 		$dynIP = $em->getRepository('VoIPCompanyDynIPBundle:DynIP')->findOneBy(array(
 			'token' => $token
 		));
+
+		$ip = $this->container->get('request')->getClientIp();
+		
+		$dynIP2 = $em->getRepository('VoIPCompanyDynIPBundle:DynIP')->findOneBy(array(
+			'ip' => $ip
+		));
+		
 		$response = new JsonResponse();
-		if ($dynIP) {
+		if ($dynIP && !$dynIP2) {
 			
-			$newip = $query->get('ip');
-	
-			if (!$newip) $newip = $this->container->get('request')->getClientIp();
-	
-			if ($newip == '::1') $newip = '182.19.255.8';
-			
-			if ($newip != $dynIP->getIp()) {
-				$ip = $dynIP->getIp();
-			
-				$revokeResp = $this->firewallRemoveIP($ip, 'sg-8d9c5de8');
-				$revokeResp = $this->firewallRemoveIP($ip, 'sg-2f4a8b7a');
+			if ($ip != $dynIP->getIp()) {
+				$revokeResp = $this->firewallRemoveIP($dynIP->getIp(), 'sg-8d9c5de8');
+				$revokeResp = $this->firewallRemoveIP($dynIP->getIp(), 'sg-2f4a8b7a');
 			
 				$dynIP->setIp($newip);
 				$em->flush();
 			
-				$authorizeResp = $this->firewallAddIP($newip, 'sg-8d9c5de8');
-				$authorizeResp = $this->firewallAddIP($newip, 'sg-2f4a8b7a');
+				$authorizeResp = $this->firewallAddIP($ip, 'sg-8d9c5de8');
+				$authorizeResp = $this->firewallAddIP($ip, 'sg-2f4a8b7a');
 			
 				$response->setData(array(
 				    'auth' => $authorizeResp->isOK() ? true : false,
 					'rev' => $revokeResp->isOK() ? true : false,
 					'previp' => $ip,
-					'newip' => $newip
+					'newip' => $ip
 				));
 			} else {
 				$response->setData(array(
 				    'auth' => 'no change',
 					'rev' => 'no change',
-					'ip' => $newip
+					'ip' => $ip
 				));
 			}
 			
