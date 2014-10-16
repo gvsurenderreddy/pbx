@@ -786,7 +786,7 @@ class CompanyController extends Controller
 			
 		} else {
 			$response->setData(array(
-			    'dyn-ip' => 'not found'
+			    'dyn-ip' => !$dynIP ? 'not found' : 'already in list'
 			));
 		}
 		return $response;
