@@ -709,29 +709,28 @@ class CompanyController extends Controller
 			'hash' => $hash,
 			'company' => $company
 		));
-		if ($dynIP) {
-			$ip = $dynIP->getIp();
-
-			$revokeResp = $this->firewallRemoveIP($ip, 'sg-8d9c5de8');
-			$revokeResp = $this->firewallRemoveIP($ip, 'sg-2f4a8b7a');
 		
-			$ip = $query->get('ip');
+		$ip = $query->get('ip');
+		if (!$ip) $ip = $this->container->get('request')->getClientIp();
 		
-			if (!$ip) $ip = $this->container->get('request')->getClientIp();
-		
-			if ($ip == '::1') $ip = '182.19.255.8';
+		$dynIP2 = $em->getRepository('VoIPCompanyDynIPBundle:DynIP')->findOneBy(array(
+			'ip' => $ip
+		));
+		if ($dynIP && !$dynIP) {
+			$revokeResp = $this->firewallRemoveIP($dynIP->getIp(), 'sg-8d9c5de8');
+			$revokeResp = $this->firewallRemoveIP($dynIP->getIp(), 'sg-2f4a8b7a');
 			
 			$dynIP->setIp($ip);
 			$em->flush();
 			
 			$authorizeResp = $this->firewallAddIP($ip, 'sg-8d9c5de8');
 			$authorizeResp = $this->firewallAddIP($ip, 'sg-2f4a8b7a');
+			
+			$this->get('session')->getFlashBag()->add(
+	            'notice',
+	            'Your changes were saved!'
+	        );
 		}
-		
-		$this->get('session')->getFlashBag()->add(
-            'notice',
-            'Your changes were saved!'
-        );
 			
 		return $this->redirect($this->generateUrl('ui_company_dynamic'));
     }
