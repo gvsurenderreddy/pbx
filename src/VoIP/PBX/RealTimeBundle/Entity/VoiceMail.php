@@ -31,7 +31,7 @@ class VoiceMail
     /**
      * @var string
      *
-     * @ORM\Column(name="mailbox", type="string", length=40)
+     * @ORM\Column(name="mailbox", type="string", length=40, unique=true)
      */
     private $mailbox;
 
@@ -62,11 +62,6 @@ class VoiceMail
      * @ORM\Column(name="pager", type="string", length=128, nullable=true)
      */
     private $pager;
-
-	/**
-     * @ORM\OneToOne(targetEntity="\VoIP\Company\VoicemailBundle\Entity\Voicemail", mappedBy="astVoicemail")
-     */
-    private $voicemail;
 
     /**
      * Get id
@@ -214,28 +209,5 @@ class VoiceMail
     public function getPager()
     {
         return $this->pager;
-    }
-
-    /**
-     * Set voicemail
-     *
-     * @param \VoIP\Company\VoicemailBundle\Entity\Voicemail $voicemail
-     * @return VoiceMail
-     */
-    public function setVoicemail(\VoIP\Company\VoicemailBundle\Entity\Voicemail $voicemail = null)
-    {
-        $this->voicemail = $voicemail;
-
-        return $this;
-    }
-
-    /**
-     * Get voicemail
-     *
-     * @return \VoIP\Company\VoicemailBundle\Entity\Voicemail 
-     */
-    public function getVoicemail()
-    {
-        return $this->voicemail;
     }
 }
