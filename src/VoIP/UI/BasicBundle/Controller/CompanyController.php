@@ -283,8 +283,11 @@ class CompanyController extends Controller
 		    'SELECT m
 		    FROM VoIPPBXRealTimeBundle:VoiceMessage m
 			LEFT JOIN m.voicemail v
+			WHERE v.company = :company
 			ORDER BY m.origtime DESC'
-		)->setMaxResults($card)->setFirstResult(($page - 1) * $card);
+		)->setParameters(array(
+			'company' => $company
+		))->setMaxResults($card)->setFirstResult(($page - 1) * $card);
 		$messages = $query->getResult();
 		
 		$messages = $query->getResult();
