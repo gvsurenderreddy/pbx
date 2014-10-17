@@ -67,7 +67,7 @@ class Phone
     /**
      * @var string
      *
-     * @ORM\Column(name="name", type="string", length=8)
+     * @ORM\Column(name="name", type="string", length=20)
      */
     private $name;
 	
