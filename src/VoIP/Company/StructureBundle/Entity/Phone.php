@@ -179,7 +179,7 @@ class Phone
     /**
      * @var string
      *
-     * @ORM\Column(name="defaultuser", type="string", length=8, nullable=true)
+     * @ORM\Column(name="defaultuser", type="string", length=20, nullable=true)
      */
     private $defaultuser;
 	
