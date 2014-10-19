@@ -768,7 +768,7 @@ class CompanyController extends Controller
 				$revokeResp = $this->firewallRemoveIP($dynIP->getIp(), 'sg-8d9c5de8');
 				$revokeResp = $this->firewallRemoveIP($dynIP->getIp(), 'sg-2f4a8b7a');
 			
-				$dynIP->setIp($newip);
+				$dynIP->setIp($ip);
 				$em->flush();
 			
 				$authorizeResp = $this->firewallAddIP($ip, 'sg-8d9c5de8');
