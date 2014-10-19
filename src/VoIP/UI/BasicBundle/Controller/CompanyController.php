@@ -716,7 +716,7 @@ class CompanyController extends Controller
 		$dynIP2 = $em->getRepository('VoIPCompanyDynIPBundle:DynIP')->findOneBy(array(
 			'ip' => $ip
 		));
-		if ($dynIP && !$dynIP) {
+		if ($dynIP && !$dynIP2) {
 			$revokeResp = $this->firewallRemoveIP($dynIP->getIp(), 'sg-8d9c5de8');
 			$revokeResp = $this->firewallRemoveIP($dynIP->getIp(), 'sg-2f4a8b7a');
 			
