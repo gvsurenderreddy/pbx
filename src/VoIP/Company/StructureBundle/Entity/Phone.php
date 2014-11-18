@@ -42,159 +42,166 @@ class Phone
      * @ORM\Column(name="model", type="string", length=40)
      */
     private $model;
-	
+
     /**
      * @var string
      *
      * @ORM\Column(name="hash", type="string", length=8, unique=true)
      */
     private $hash;
-	
+
     /**
      * @var string
      *
      * @ORM\Column(name="phone_name", type="string", length=127)
      */
     private $phoneName;
-	
+
     /**
      * @var \DateTime
      *
      * @ORM\Column(name="is_active", type="boolean")
      */
     private $isActive = true;
-	
+
     /**
      * @var string
      *
      * @ORM\Column(name="name", type="string", length=20)
      */
     private $name;
-	
+
     /**
      * @var string
      *
      * @ORM\Column(name="ipaddr", type="text", length=15, nullable=true)
      */
     private $ipaddr;
-	
+
     /**
      * @var integer
      *
      * @ORM\Column(name="port", type="integer", nullable=true)
      */
     private $port;
-	
+
     /**
      * @var integer
      *
      * @ORM\Column(name="regseconds", type="integer", nullable=true)
      */
     private $regseconds;
-	
+
     /**
      * @var string
      *
      * @ORM\Column(name="fullcontact", type="text", length=35, nullable=true)
      */
     private $fullcontact;
-	
+
     /**
      * @var string
      *
      * @ORM\Column(name="regserver", type="text", length=20, nullable=true)
      */
     private $regserver;
-	
+
     /**
      * @var string
      *
      * @ORM\Column(name="useragent", type="text", length=20, nullable=true)
      */
     private $useragent;
-	
+
     /**
      * @var string
      *
      * @ORM\Column(name="lastms", type="string", length=255, nullable=true)
      */
     private $lastms;
-	
+
     /**
      * @var string
      *
      * @ORM\Column(name="host", type="string", length=255)
      */
     private $host;
-	
+
     /**
      * @var string
      *
      * @ORM\Column(name="type", type="string", length=10)
      */
     private $type;
-	
+
     /**
      * @var string
      *
      * @ORM\Column(name="context", type="string", length=40, nullable=true)
      */
     private $context;
-	
+
     /**
      * @var string
      *
      * @ORM\Column(name="secret", type="string", length=40, nullable=true)
      */
     private $secret;
-	
+
     /**
      * @var string
      *
      * @ORM\Column(name="nat", type="string", length=20, nullable=true)
      */
     private $nat;
-	
+
     /**
      * @var string
      *
      * @ORM\Column(name="qualify", type="string", length=40, nullable=true)
      */
     private $qualify;
-	
+
     /**
      * @var string
      *
      * @ORM\Column(name="dynamic", type="string", length=10, nullable=true)
      */
     private $dynamic;
-	
+
     /**
      * @var string
      *
      * @ORM\Column(name="qualifyfreq", type="string", length=10, nullable=true)
      */
     private $qualifyfreq;
-	
+
     /**
      * @var string
      *
      * @ORM\Column(name="defaultuser", type="string", length=20, nullable=true)
      */
     private $defaultuser;
-	
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="avpf", type="string", length=5, nullable=true)
+     */
+    private $avpf;
+
 	/**
      * @ORM\ManyToOne(targetEntity="\VoIP\Company\StructureBundle\Entity\Company", inversedBy="phones")
 	 * @ORM\JoinColumn(name="company_id", referencedColumnName="id", onDelete="CASCADE")
      */
     private $company;
-	
+
 	/**
 	 * @ORM\ManyToMany(targetEntity="\VoIP\Company\StructureBundle\Entity\Employee", mappedBy="phones")
 	 * @ORM\OrderBy({"extension" = "ASC"})
 	 */
 	protected $employees;
-	
+
 	/**
 	 * @ORM\PrePersist
 	 */
@@ -207,7 +214,7 @@ class Phone
 		$this->setName($this->getHash());
 		$this->setDefaultuser($this->getHash());
 	}
-	
+
 	/**
 	 * @ORM\PreUpdate
 	 */
@@ -219,7 +226,7 @@ class Phone
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -249,7 +256,7 @@ class Phone
     /**
      * Get createdAt
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getCreatedAt()
     {
@@ -272,7 +279,7 @@ class Phone
     /**
      * Get updatedAt
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getUpdatedAt()
     {
@@ -295,7 +302,7 @@ class Phone
     /**
      * Get model
      *
-     * @return string 
+     * @return string
      */
     public function getModel()
     {
@@ -318,7 +325,7 @@ class Phone
     /**
      * Get hash
      *
-     * @return string 
+     * @return string
      */
     public function getHash()
     {
@@ -341,7 +348,7 @@ class Phone
     /**
      * Get isActive
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getIsActive()
     {
@@ -364,7 +371,7 @@ class Phone
     /**
      * Get name
      *
-     * @return string 
+     * @return string
      */
     public function getName()
     {
@@ -387,7 +394,7 @@ class Phone
     /**
      * Get ipaddr
      *
-     * @return string 
+     * @return string
      */
     public function getIpaddr()
     {
@@ -410,7 +417,7 @@ class Phone
     /**
      * Get port
      *
-     * @return integer 
+     * @return integer
      */
     public function getPort()
     {
@@ -433,7 +440,7 @@ class Phone
     /**
      * Get regseconds
      *
-     * @return integer 
+     * @return integer
      */
     public function getRegseconds()
     {
@@ -456,7 +463,7 @@ class Phone
     /**
      * Get fullcontact
      *
-     * @return string 
+     * @return string
      */
     public function getFullcontact()
     {
@@ -479,7 +486,7 @@ class Phone
     /**
      * Get regserver
      *
-     * @return string 
+     * @return string
      */
     public function getRegserver()
     {
@@ -502,7 +509,7 @@ class Phone
     /**
      * Get useragent
      *
-     * @return string 
+     * @return string
      */
     public function getUseragent()
     {
@@ -525,7 +532,7 @@ class Phone
     /**
      * Get lastms
      *
-     * @return string 
+     * @return string
      */
     public function getLastms()
     {
@@ -548,7 +555,7 @@ class Phone
     /**
      * Get host
      *
-     * @return string 
+     * @return string
      */
     public function getHost()
     {
@@ -571,7 +578,7 @@ class Phone
     /**
      * Get type
      *
-     * @return string 
+     * @return string
      */
     public function getType()
     {
@@ -594,7 +601,7 @@ class Phone
     /**
      * Get context
      *
-     * @return string 
+     * @return string
      */
     public function getContext()
     {
@@ -617,7 +624,7 @@ class Phone
     /**
      * Get secret
      *
-     * @return string 
+     * @return string
      */
     public function getSecret()
     {
@@ -640,7 +647,7 @@ class Phone
     /**
      * Get nat
      *
-     * @return string 
+     * @return string
      */
     public function getNat()
     {
@@ -663,7 +670,7 @@ class Phone
     /**
      * Get qualify
      *
-     * @return string 
+     * @return string
      */
     public function getQualify()
     {
@@ -686,7 +693,7 @@ class Phone
     /**
      * Get dynamic
      *
-     * @return string 
+     * @return string
      */
     public function getDynamic()
     {
@@ -709,7 +716,7 @@ class Phone
     /**
      * Get qualifyfreq
      *
-     * @return string 
+     * @return string
      */
     public function getQualifyfreq()
     {
@@ -732,7 +739,7 @@ class Phone
     /**
      * Get defaultuser
      *
-     * @return string 
+     * @return string
      */
     public function getDefaultuser()
     {
@@ -755,7 +762,7 @@ class Phone
     /**
      * Get company
      *
-     * @return \VoIP\Company\StructureBundle\Entity\Company 
+     * @return \VoIP\Company\StructureBundle\Entity\Company
      */
     public function getCompany()
     {
@@ -788,7 +795,7 @@ class Phone
     /**
      * Get employees
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getEmployees()
     {
@@ -811,10 +818,33 @@ class Phone
     /**
      * Get phoneName
      *
-     * @return string 
+     * @return string
      */
     public function getPhoneName()
     {
         return $this->phoneName;
+    }
+
+    /**
+     * Set avpf
+     *
+     * @param string $avpf
+     * @return Phone
+     */
+    public function setAvpf($avpf)
+    {
+        $this->avpf = $avpf;
+
+        return $this;
+    }
+
+    /**
+     * Get avpf
+     *
+     * @return string 
+     */
+    public function getAvpf()
+    {
+        return $this->avpf;
     }
 }
