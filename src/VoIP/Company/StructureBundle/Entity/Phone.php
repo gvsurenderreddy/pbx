@@ -186,9 +186,79 @@ class Phone
     /**
      * @var string
      *
+     * @ORM\Column(name="encryption", type="string", length=5, nullable=true)
+     */
+    private $encryption;
+
+    /**
+     * @var string
+     *
      * @ORM\Column(name="avpf", type="string", length=5, nullable=true)
      */
     private $avpf;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="icesupport", type="string", length=5, nullable=true)
+     */
+    private $icesupport;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="directmedia", type="string", length=5, nullable=true)
+     */
+    private $directmedia;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="transport", type="string", length=20, nullable=true)
+     */
+    private $transport;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="force_avp", type="string", length=5, nullable=true)
+     */
+    private $force_avp;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="dtlsenable", type="string", length=5, nullable=true)
+     */
+    private $dtlsenable;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="dtlsverify", type="string", length=5, nullable=true)
+     */
+    private $dtlsverify;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="dtlscertfile", type="string", length=128, nullable=true)
+     */
+    private $dtlscertfile;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="dtlsprivatekey", type="string", length=128, nullable=true)
+     */
+    private $dtlsprivatekey;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="dtlssetup", type="string", length=20, nullable=true)
+     */
+    private $dtlssetup;
 
 	/**
      * @ORM\ManyToOne(targetEntity="\VoIP\Company\StructureBundle\Entity\Company", inversedBy="phones")
@@ -841,10 +911,240 @@ class Phone
     /**
      * Get avpf
      *
-     * @return string 
+     * @return string
      */
     public function getAvpf()
     {
         return $this->avpf;
+    }
+
+    /**
+     * Set encryption
+     *
+     * @param string $encryption
+     * @return Phone
+     */
+    public function setEncryption($encryption)
+    {
+        $this->encryption = $encryption;
+
+        return $this;
+    }
+
+    /**
+     * Get encryption
+     *
+     * @return string 
+     */
+    public function getEncryption()
+    {
+        return $this->encryption;
+    }
+
+    /**
+     * Set icesupport
+     *
+     * @param string $icesupport
+     * @return Phone
+     */
+    public function setIcesupport($icesupport)
+    {
+        $this->icesupport = $icesupport;
+
+        return $this;
+    }
+
+    /**
+     * Get icesupport
+     *
+     * @return string 
+     */
+    public function getIcesupport()
+    {
+        return $this->icesupport;
+    }
+
+    /**
+     * Set directmedia
+     *
+     * @param string $directmedia
+     * @return Phone
+     */
+    public function setDirectmedia($directmedia)
+    {
+        $this->directmedia = $directmedia;
+
+        return $this;
+    }
+
+    /**
+     * Get directmedia
+     *
+     * @return string 
+     */
+    public function getDirectmedia()
+    {
+        return $this->directmedia;
+    }
+
+    /**
+     * Set transport
+     *
+     * @param string $transport
+     * @return Phone
+     */
+    public function setTransport($transport)
+    {
+        $this->transport = $transport;
+
+        return $this;
+    }
+
+    /**
+     * Get transport
+     *
+     * @return string 
+     */
+    public function getTransport()
+    {
+        return $this->transport;
+    }
+
+    /**
+     * Set force_avp
+     *
+     * @param string $forceAvp
+     * @return Phone
+     */
+    public function setForceAvp($forceAvp)
+    {
+        $this->force_avp = $forceAvp;
+
+        return $this;
+    }
+
+    /**
+     * Get force_avp
+     *
+     * @return string 
+     */
+    public function getForceAvp()
+    {
+        return $this->force_avp;
+    }
+
+    /**
+     * Set dtlsenable
+     *
+     * @param string $dtlsenable
+     * @return Phone
+     */
+    public function setDtlsenable($dtlsenable)
+    {
+        $this->dtlsenable = $dtlsenable;
+
+        return $this;
+    }
+
+    /**
+     * Get dtlsenable
+     *
+     * @return string 
+     */
+    public function getDtlsenable()
+    {
+        return $this->dtlsenable;
+    }
+
+    /**
+     * Set dtlsverify
+     *
+     * @param string $dtlsverify
+     * @return Phone
+     */
+    public function setDtlsverify($dtlsverify)
+    {
+        $this->dtlsverify = $dtlsverify;
+
+        return $this;
+    }
+
+    /**
+     * Get dtlsverify
+     *
+     * @return string 
+     */
+    public function getDtlsverify()
+    {
+        return $this->dtlsverify;
+    }
+
+    /**
+     * Set dtlscertfile
+     *
+     * @param string $dtlscertfile
+     * @return Phone
+     */
+    public function setDtlscertfile($dtlscertfile)
+    {
+        $this->dtlscertfile = $dtlscertfile;
+
+        return $this;
+    }
+
+    /**
+     * Get dtlscertfile
+     *
+     * @return string 
+     */
+    public function getDtlscertfile()
+    {
+        return $this->dtlscertfile;
+    }
+
+    /**
+     * Set dtlsprivatekey
+     *
+     * @param string $dtlsprivatekey
+     * @return Phone
+     */
+    public function setDtlsprivatekey($dtlsprivatekey)
+    {
+        $this->dtlsprivatekey = $dtlsprivatekey;
+
+        return $this;
+    }
+
+    /**
+     * Get dtlsprivatekey
+     *
+     * @return string 
+     */
+    public function getDtlsprivatekey()
+    {
+        return $this->dtlsprivatekey;
+    }
+
+    /**
+     * Set dtlssetup
+     *
+     * @param string $dtlssetup
+     * @return Phone
+     */
+    public function setDtlssetup($dtlssetup)
+    {
+        $this->dtlssetup = $dtlssetup;
+
+        return $this;
+    }
+
+    /**
+     * Get dtlssetup
+     *
+     * @return string 
+     */
+    public function getDtlssetup()
+    {
+        return $this->dtlssetup;
     }
 }
