@@ -306,7 +306,7 @@ class Phone
       $this->setDtlsprivatekey('/etc/asterisk/keys/asterisk.pem');
       $this->setDtlscertfile('/etc/asterisk/keys/asterisk.pem');
       $this->setDtlsverify('no');
-      $this->setTransport('udp,ws');
+      $this->setTransport('udp,ws,wss');
       $this->setDirectmedia('no');
       $this->setIcesupport('yes');
 
