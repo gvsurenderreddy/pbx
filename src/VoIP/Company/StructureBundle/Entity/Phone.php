@@ -223,7 +223,7 @@ class Phone
      *
      * @ORM\Column(name="force_avp", type="string", length=5, nullable=true)
      */
-    private $force_avp;
+    private $forceAvp;
 
     /**
      * @var string
@@ -278,7 +278,6 @@ class Phone
 	public function prePersist()
 	{
 		$this->setCreatedAt(new \DateTime());
-	    $this->setUpdatedAt(new \DateTime());
 		$this->setHash(hash('crc32b', uniqid('', true)));
 		$this->setSecret(hash('sha1', uniqid('', true)));
 		$this->setName($this->getHash());
@@ -287,10 +286,30 @@ class Phone
 
 	/**
 	 * @ORM\PreUpdate
+   * @ORM\PrePersist
 	 */
 	public function preUpdate()
 	{
 	    $this->setUpdatedAt(new \DateTime());
+      if ($this->getModel() == 'html') {
+        $this->setDtlsenable('yes');
+        $this->setForceAvp('yes');
+        $this->setAvpf('yes');
+        $this->setEncryption('yes');
+      } else {
+        $this->setDtlsenable('no');
+        $this->setForceAvp('no');
+        $this->setAvpf('no');
+        $this->setEncryption('no');
+      }
+      $this->setDtlssetup('actpass');
+      $this->setDtlsprivatekey('/etc/asterisk/keys/asterisk.pem');
+      $this->setDtlscertfile('/etc/asterisk/keys/asterisk.pem');
+      $this->setDtlsverify('no');
+      $this->setTransport('udp,ws');
+      $this->setDirectmedia('no');
+      $this->setIcesupport('yes');
+
 	}
 
     /**
@@ -934,7 +953,7 @@ class Phone
     /**
      * Get encryption
      *
-     * @return string 
+     * @return string
      */
     public function getEncryption()
     {
@@ -957,7 +976,7 @@ class Phone
     /**
      * Get icesupport
      *
-     * @return string 
+     * @return string
      */
     public function getIcesupport()
     {
@@ -980,7 +999,7 @@ class Phone
     /**
      * Get directmedia
      *
-     * @return string 
+     * @return string
      */
     public function getDirectmedia()
     {
@@ -1003,7 +1022,7 @@ class Phone
     /**
      * Get transport
      *
-     * @return string 
+     * @return string
      */
     public function getTransport()
     {
@@ -1011,26 +1030,26 @@ class Phone
     }
 
     /**
-     * Set force_avp
+     * Set forceAvp
      *
      * @param string $forceAvp
      * @return Phone
      */
     public function setForceAvp($forceAvp)
     {
-        $this->force_avp = $forceAvp;
+        $this->forceAvp = $forceAvp;
 
         return $this;
     }
 
     /**
-     * Get force_avp
+     * Get forceAvp
      *
-     * @return string 
+     * @return string
      */
     public function getForceAvp()
     {
-        return $this->force_avp;
+        return $this->forceAvp;
     }
 
     /**
@@ -1049,7 +1068,7 @@ class Phone
     /**
      * Get dtlsenable
      *
-     * @return string 
+     * @return string
      */
     public function getDtlsenable()
     {
@@ -1072,7 +1091,7 @@ class Phone
     /**
      * Get dtlsverify
      *
-     * @return string 
+     * @return string
      */
     public function getDtlsverify()
     {
@@ -1095,7 +1114,7 @@ class Phone
     /**
      * Get dtlscertfile
      *
-     * @return string 
+     * @return string
      */
     public function getDtlscertfile()
     {
@@ -1118,7 +1137,7 @@ class Phone
     /**
      * Get dtlsprivatekey
      *
-     * @return string 
+     * @return string
      */
     public function getDtlsprivatekey()
     {
@@ -1141,7 +1160,7 @@ class Phone
     /**
      * Get dtlssetup
      *
-     * @return string 
+     * @return string
      */
     public function getDtlssetup()
     {
