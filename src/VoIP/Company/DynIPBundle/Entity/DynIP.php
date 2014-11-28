@@ -37,6 +37,20 @@ class DynIP
     private $updatedAt;
 
     /**
+    * @var \DateTime
+    *
+    * @ORM\Column(name="refreshed_at", type="datetime", nullable=true)
+    */
+    private $refreshedAt;
+
+    /**
+    * @var \DateTime
+    *
+    * @ORM\Column(name="ping_at", type="datetime", nullable=true)
+    */
+    private $pingAt;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="title", type="string", length=127, nullable=true)
@@ -63,13 +77,13 @@ class DynIP
      * @ORM\Column(name="token", type="string", length=32, unique=true)
      */
     private $token;
-	
+
 	/**
      * @ORM\ManyToOne(targetEntity="\VoIP\Company\StructureBundle\Entity\Company", inversedBy="dynIPs")
 	 * @ORM\JoinColumn(name="company_id", referencedColumnName="id", onDelete="CASCADE")
      */
     private $company;
-	
+
 	/**
 	 * @ORM\PrePersist
 	 */
@@ -80,7 +94,7 @@ class DynIP
 		$this->setHash(hash('crc32b', uniqid()));
 	    $this->setToken(hash('md5', uniqid()));
 	}
-	
+
 	/**
 	 * @ORM\PreUpdate
 	 */
@@ -93,7 +107,7 @@ class DynIP
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -116,7 +130,7 @@ class DynIP
     /**
      * Get createdAt
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getCreatedAt()
     {
@@ -139,7 +153,7 @@ class DynIP
     /**
      * Get updatedAt
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getUpdatedAt()
     {
@@ -162,7 +176,7 @@ class DynIP
     /**
      * Get hash
      *
-     * @return string 
+     * @return string
      */
     public function getHash()
     {
@@ -185,7 +199,7 @@ class DynIP
     /**
      * Get ip
      *
-     * @return string 
+     * @return string
      */
     public function getIp()
     {
@@ -208,7 +222,7 @@ class DynIP
     /**
      * Get token
      *
-     * @return string 
+     * @return string
      */
     public function getToken()
     {
@@ -231,7 +245,7 @@ class DynIP
     /**
      * Get company
      *
-     * @return \VoIP\Company\StructureBundle\Entity\Company 
+     * @return \VoIP\Company\StructureBundle\Entity\Company
      */
     public function getCompany()
     {
@@ -254,10 +268,56 @@ class DynIP
     /**
      * Get title
      *
-     * @return string 
+     * @return string
      */
     public function getTitle()
     {
         return $this->title;
+    }
+
+    /**
+     * Set refreshedAt
+     *
+     * @param \DateTime $refreshedAt
+     * @return DynIP
+     */
+    public function setRefreshedAt($refreshedAt)
+    {
+        $this->refreshedAt = $refreshedAt;
+
+        return $this;
+    }
+
+    /**
+     * Get refreshedAt
+     *
+     * @return \DateTime
+     */
+    public function getRefreshedAt()
+    {
+        return $this->refreshedAt;
+    }
+
+    /**
+     * Set pingAt
+     *
+     * @param \DateTime $pingAt
+     * @return DynIP
+     */
+    public function setPingAt($pingAt)
+    {
+        $this->pingAt = $pingAt;
+
+        return $this;
+    }
+
+    /**
+     * Get pingAt
+     *
+     * @return \DateTime 
+     */
+    public function getPingAt()
+    {
+        return $this->pingAt;
     }
 }
