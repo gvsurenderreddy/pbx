@@ -769,8 +769,8 @@ public function dynamicIPAction($token)
 			$revokeResp = $this->firewallRemoveIP($dynIP->getIp(), 'sg-2f4a8b7a');
 
 			$dynIP->setIp($ip);
-			$dynIP->refreshedAt(new \DateTime());
-			$dynIP->pingAt(new \DateTime());
+			$dynIP->setRefreshedAt(new \DateTime());
+			$dynIP->setPingAt(new \DateTime());
 			$em->flush();
 
 			$authorizeResp = $this->firewallAddIP($ip, 'sg-8d9c5de8');
@@ -783,7 +783,7 @@ public function dynamicIPAction($token)
 				'newip' => $ip
 			));
 		} else {
-			$dynIP->pingAt(new \DateTime());
+			$dynIP->setPingAt(new \DateTime());
 			$em->flush();
 			$response->setData(array(
 				'auth' => 'no change',
@@ -794,13 +794,13 @@ public function dynamicIPAction($token)
 
 
 	} else {
-		$dynIP->pingAt(new \DateTime());
+		$dynIP->setPingAt(new \DateTime());
 		$em->flush();
 		$response->setData(array(
 			'dyn-ip' => !$dynIP ? 'not found' : 'already in list'
 		));
 	}
-	$dynIP->pingAt(new \DateTime());
+	$dynIP->setPingAt(new \DateTime());
 	$em->flush();
 	return $response;
 }
