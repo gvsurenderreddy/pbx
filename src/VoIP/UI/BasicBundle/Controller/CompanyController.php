@@ -644,8 +644,8 @@ public function dynamicAddIPAction()
 		$em->persist($dynIP);
 		$em->flush();
 
-		$authorizeResp = $this->firewallAddIP($ip, 'sg-8d9c5de8');
-		$authorizeResp = $this->firewallAddIP($ip, 'sg-2f4a8b7a');
+		//$authorizeResp = $this->firewallAddIP($ip, 'sg-8d9c5de8');
+		//$authorizeResp = $this->firewallAddIP($ip, 'sg-2f4a8b7a');
 	}
 
 	$this->get('session')->getFlashBag()->add(
@@ -678,8 +678,8 @@ public function dynamicRemoveIPAction($hash)
 		$em->remove($dynIP);
 		$em->flush();
 
-		$revokeResp = $this->firewallRemoveIP($ip, 'sg-8d9c5de8');
-		$revokeResp = $this->firewallRemoveIP($ip, 'sg-2f4a8b7a');
+		//$revokeResp = $this->firewallRemoveIP($ip, 'sg-8d9c5de8');
+		//$revokeResp = $this->firewallRemoveIP($ip, 'sg-2f4a8b7a');
 
 	}
 
@@ -723,8 +723,8 @@ public function dynamicUpdateIPAction($hash)
 		$dynIP->setIp($ip);
 		$em->flush();
 
-		$authorizeResp = $this->firewallAddIP($ip, 'sg-8d9c5de8');
-		$authorizeResp = $this->firewallAddIP($ip, 'sg-2f4a8b7a');
+		//$authorizeResp = $this->firewallAddIP($ip, 'sg-8d9c5de8');
+		//$authorizeResp = $this->firewallAddIP($ip, 'sg-2f4a8b7a');
 
 		$this->get('session')->getFlashBag()->add(
 		'notice',
@@ -773,8 +773,8 @@ public function dynamicIPAction($token)
 			$dynIP->setPingAt(new \DateTime());
 			$em->flush();
 
-			$authorizeResp = $this->firewallAddIP($ip, 'sg-8d9c5de8');
-			$authorizeResp = $this->firewallAddIP($ip, 'sg-2f4a8b7a');
+			//$authorizeResp = $this->firewallAddIP($ip, 'sg-8d9c5de8');
+			//$authorizeResp = $this->firewallAddIP($ip, 'sg-2f4a8b7a');
 
 			$response->setData(array(
 				'auth' => $authorizeResp->isOK() ? true : false,
@@ -805,7 +805,7 @@ public function dynamicIPAction($token)
 	return $response;
 }
 
-public function firewallAddIP($ip, $groupId = 'sg-8d9c5de8')
+public function firewallAddIP($ip, $groupId)
 {
 	$ec2 = $this->container->get('aws_ec2');
 	$ec2->set_region(\AmazonEC2::REGION_SINGAPORE);
@@ -831,7 +831,7 @@ public function firewallAddIP($ip, $groupId = 'sg-8d9c5de8')
 		)
 	));
 }
-public function firewallRemoveIP($ip, $groupId = 'sg-8d9c5de8')
+public function firewallRemoveIP($ip, $groupId)
 {
 	$ec2 = $this->container->get('aws_ec2');
 	$ec2->set_region(\AmazonEC2::REGION_SINGAPORE);
