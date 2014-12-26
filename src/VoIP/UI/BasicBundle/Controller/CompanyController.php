@@ -17,6 +17,8 @@ use VoIP\PBX\RealTimeBundle\Extra\Sync;
 use VoIP\UI\BasicBundle\Extra\Image;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use VoIP\Company\SubscriptionsBundle\Entity\NumberRequest;
+use Aws\Common\Aws;
+use Aws\S3\Exception\S3Exception;
 
 class CompanyController extends Controller
 {
@@ -42,11 +44,11 @@ class CompanyController extends Controller
 		$em = $this->getDoctrine()->getManager();
 		$dynIP = $em->getRepository('VoIPCompanyDynIPBundle:DynIP')->findOneBy(array(
 			'ip' => $ip
-		));
+			));
 
 		return array(
 			'ip' => $dynIP
-		);
+			);
 	}
 
 	/**
@@ -103,11 +105,11 @@ class CompanyController extends Controller
 		'companyId' => $company->getId()
 	));
 
-	$newMessages = $query->getSingleScalarResult();*/
-	return array(
-		'company' => $company,
-		'newmessages' => 0,
-		'route' => $route
+$newMessages = $query->getSingleScalarResult();*/
+return array(
+	'company' => $company,
+	'newmessages' => 0,
+	'route' => $route
 	);
 }
 
@@ -136,7 +138,7 @@ return array(
 	'company' => $company,
 	'newmessages' => 0,//$newMessages,
 	'route' => $route
-);
+	);
 }
 
 /**
@@ -158,7 +160,7 @@ public function newEmployeeAction()
 		'company' => $company,
 		'phones' => $phones,
 		'extensions' => array_values($extensions),
-	);
+		);
 }
 
 /**
@@ -192,11 +194,11 @@ public function createEmployeeAction()
 	$em->flush();
 
 	$this->get('session')->getFlashBag()->add(
-	'notice',
-	'Your changes were saved!'
-);
+		'notice',
+		'Your changes were saved!'
+		);
 
-return $this->redirect($this->generateUrl('ui_company'));
+	return $this->redirect($this->generateUrl('ui_company'));
 }
 
 /**
@@ -211,8 +213,8 @@ public function newRequestNumberAction()
 		'countries' => array(
 			'france' => 'France (+33)',
 			'singapore' => 'Singapore (+65)'
-		)
-	);
+			)
+		);
 }
 
 /**
@@ -247,22 +249,22 @@ public function createRequestNumberAction()
 	->setTo($user->getEmail())
 	->setBcc('adrien@fortyeight.co')
 	->setBody(
-	$this->renderView(
-	'VoIPUIBasicBundle:Mails:request.html.twig',
-	array(
-		'name' => $user->getUsername(),
-		'country' => $country
+		$this->renderView(
+			'VoIPUIBasicBundle:Mails:request.html.twig',
+			array(
+				'name' => $user->getUsername(),
+				'country' => $country
+				)
+			)
 		)
-		)
-		)
-		->setContentType("text/html")
-		;
-		$this->get('mailer')->send($message);
+	->setContentType("text/html")
+	;
+	$this->get('mailer')->send($message);
 
-		$this->get('session')->getFlashBag()->add('notice', 'You request has been sent to our team. We will contact you in the next hours.');
+	$this->get('session')->getFlashBag()->add('notice', 'You request has been sent to our team. We will contact you in the next hours.');
 
-		return $this->redirect($this->generateUrl('ui_company'));
-	}
+	return $this->redirect($this->generateUrl('ui_company'));
+}
 
 	/**
 	* @Route("/mailbox", name="ui_company_mailbox")
@@ -282,24 +284,24 @@ public function createRequestNumberAction()
 		$em = $this->getDoctrine()->getManager();
 
 		$query = $em->createQuery(
-		'SELECT m
-		FROM VoIPPBXRealTimeBundle:VoiceMessage m
-		LEFT JOIN m.voicemail v
-		LEFT JOIN v.company c
-		WHERE c = :company
-		ORDER BY m.origtime DESC'
-		)->setParameters(array(
-			'company' => $company
-		))->setMaxResults($card)->setFirstResult(($page - 1) * $card);
-		$messages = $query->getResult();
+			'SELECT m
+			FROM VoIPPBXRealTimeBundle:VoiceMessage m
+			LEFT JOIN m.voicemail v
+			LEFT JOIN v.company c
+			WHERE c = :company
+			ORDER BY m.origtime DESC'
+			)->setParameters(array(
+				'company' => $company
+				))->setMaxResults($card)->setFirstResult(($page - 1) * $card);
+			$messages = $query->getResult();
 
-		$messages = $query->getResult();
-		return array(
-			'messages' => $messages
-		);
+			$messages = $query->getResult();
+			return array(
+				'messages' => $messages
+				);
 
 
-	}
+		}
 
 	/**
 	* @Route("/reports", name="ui_company_cdr")
@@ -320,14 +322,14 @@ public function createRequestNumberAction()
 		$em = $this->getDoctrine()->getManager();
 
 		$query = $em->createQuery(
-		'SELECT cdr
-		FROM VoIPPBXCDRBundle:CDR cdr
-		LEFT JOIN cdr.company c
-		WHERE c.id = :companyId
-		ORDER BY cdr.end DESC'
-		)->setParameters(array(
-			'companyId' => $company->getId()
-			))->setMaxResults($card)->setFirstResult(($page - 1) * $card);
+			'SELECT cdr
+			FROM VoIPPBXCDRBundle:CDR cdr
+			LEFT JOIN cdr.company c
+			WHERE c.id = :companyId
+			ORDER BY cdr.end DESC'
+			)->setParameters(array(
+				'companyId' => $company->getId()
+				))->setMaxResults($card)->setFirstResult(($page - 1) * $card);
 
 			$cdrs = $query->getResult();
 
@@ -335,7 +337,7 @@ public function createRequestNumberAction()
 				'company' => $company,
 				'cdrs' => $cdrs,
 				'page' => $page
-			);
+				);
 		}
 
 		/**
@@ -368,87 +370,87 @@ public function createRequestNumberAction()
 			$em = $this->getDoctrine()->getManager();
 
 			$query = $em->createQuery(
-			'SELECT cdr
-			FROM VoIPPBXCDRBundle:CDR cdr
-			LEFT JOIN cdr.company c
-			WHERE c.id = :companyId AND cdr.end >= :start AND cdr.end < :end'
-			)->setParameters(array(
-				'companyId' => $company->getId(),
-				'start' => $start,
-				'end' => $end
-			));
+				'SELECT cdr
+				FROM VoIPPBXCDRBundle:CDR cdr
+				LEFT JOIN cdr.company c
+				WHERE c.id = :companyId AND cdr.end >= :start AND cdr.end < :end'
+				)->setParameters(array(
+					'companyId' => $company->getId(),
+					'start' => $start,
+					'end' => $end
+					));
 
-			$cdrs = $query->getResult();
+				$cdrs = $query->getResult();
 
-			$commumication = 0;
-			foreach ($cdrs as $cdr) {
-				$commumication += $cdr->getPrice();
-			}
+				$commumication = 0;
+				foreach ($cdrs as $cdr) {
+					$commumication += $cdr->getPrice();
+				}
 
-			$query = $em->createQuery(
-			'SELECT p
-			FROM VoIPCompanyStructureBundle:EmployeePayment p
-			LEFT JOIN p.employee e
-			LEFT JOIN e.company c
-			WHERE c.id = :companyId AND p.createdAt < :end AND p.createdAt >= :start'
-			)->setParameters(array(
-				'companyId' => $company->getId(),
-				'start' => $start,
-				'end' => $end
-			));
+				$query = $em->createQuery(
+					'SELECT p
+					FROM VoIPCompanyStructureBundle:EmployeePayment p
+					LEFT JOIN p.employee e
+					LEFT JOIN e.company c
+					WHERE c.id = :companyId AND p.createdAt < :end AND p.createdAt >= :start'
+					)->setParameters(array(
+						'companyId' => $company->getId(),
+						'start' => $start,
+						'end' => $end
+						));
 
-			$ps = $query->getResult();
+					$ps = $query->getResult();
 
-			$subEmployees = 0;
-			foreach ($ps as $p) $subEmployees += $p->getPrice();
+					$subEmployees = 0;
+					foreach ($ps as $p) $subEmployees += $p->getPrice();
 
-			$query = $em->createQuery(
-			'SELECT p
-			FROM VoIPCompanySubscriptionsBundle:SubscriptionPayment p
-			LEFT JOIN p.subscription s
-			LEFT JOIN s.company c
-			WHERE c.id = :companyId AND p.createdAt < :end AND p.createdAt >= :start'
-			)->setParameters(array(
-				'companyId' => $company->getId(),
-				'start' => $start,
-				'end' => $end
-			));
+					$query = $em->createQuery(
+						'SELECT p
+						FROM VoIPCompanySubscriptionsBundle:SubscriptionPayment p
+						LEFT JOIN p.subscription s
+						LEFT JOIN s.company c
+						WHERE c.id = :companyId AND p.createdAt < :end AND p.createdAt >= :start'
+						)->setParameters(array(
+							'companyId' => $company->getId(),
+							'start' => $start,
+							'end' => $end
+							));
 
-			$ps = $query->getResult();
+						$ps = $query->getResult();
 
-			$subSubcriptions = 0;
-			foreach ($ps as $p) $subSubcriptions += $p->getPrice();
+						$subSubcriptions = 0;
+						foreach ($ps as $p) $subSubcriptions += $p->getPrice();
 
-			$months = array();
+						$months = array();
 
-			$tmpM = new \DateTime($now->format('Y-m-01'));
-			$months[] = array(
-				'name' => $tmpM->format('F Y'),
-				'value' => $tmpM->format('Y-m')
-			);
-			while ($company->getCreatedAt() < $tmpM) {
-				$tmpM->modify('-1 month');
-				$months[] = array(
-					'name' => $tmpM->format('F Y'),
-					'value' => $tmpM->format('Y-m')
-				);
-			}
+						$tmpM = new \DateTime($now->format('Y-m-01'));
+						$months[] = array(
+							'name' => $tmpM->format('F Y'),
+							'value' => $tmpM->format('Y-m')
+							);
+						while ($company->getCreatedAt() < $tmpM) {
+							$tmpM->modify('-1 month');
+							$months[] = array(
+								'name' => $tmpM->format('F Y'),
+								'value' => $tmpM->format('Y-m')
+								);
+						}
 
-			$total = $commumication + $subEmployees + $subSubcriptions;
+						$total = $commumication + $subEmployees + $subSubcriptions;
 
 
 
-			return array(
-				'company' => $company,
-				'communication' => $commumication,
-				'employees' => $subEmployees,
-				'subscriptions' => $subSubcriptions,
-				'months' => $months,
-				'month' => $month,
-				'complete' => $complete,
-				'total' => $total
-			);
-		}
+						return array(
+							'company' => $company,
+							'communication' => $commumication,
+							'employees' => $subEmployees,
+							'subscriptions' => $subSubcriptions,
+							'months' => $months,
+							'month' => $month,
+							'complete' => $complete,
+							'total' => $total
+							);
+					}
 
 		/**
 		* @Route("/top-up", name="ui_company_topup")
@@ -510,7 +512,7 @@ public function createRequestNumberAction()
 			$company = $this->getUser()->getCompany();
 			return array(
 				'company' => $company,
-			);
+				);
 		}
 
 		/**
@@ -536,12 +538,12 @@ public function createRequestNumberAction()
 			$em->flush();
 
 			$this->get('session')->getFlashBag()->add(
-			'notice',
-			'Your changes were saved!'
-		);
+				'notice',
+				'Your changes were saved!'
+				);
 
-		return $this->redirect($this->generateUrl('ui_company'));
-	}
+			return $this->redirect($this->generateUrl('ui_company'));
+		}
 
 	/**
 	* @Route("/settings/image", name="ui_company_parameters_image")
@@ -555,7 +557,7 @@ public function createRequestNumberAction()
 		$company = $this->getUser()->getCompany();
 		return array(
 			'company' => $company,
-		);
+			);
 	}
 
 	/**
@@ -579,12 +581,12 @@ public function createRequestNumberAction()
 		$em->flush();
 
 		$this->get('session')->getFlashBag()->add(
-		'notice',
-		'Your changes were saved!'
-	);
+			'notice',
+			'Your changes were saved!'
+			);
 
-	return $this->redirect($this->generateUrl('ui_company'));
-}
+		return $this->redirect($this->generateUrl('ui_company'));
+	}
 
 /**
 * @Route("/dynamic-network", name="ui_company_dynamic")
@@ -602,13 +604,13 @@ public function dynamicAction()
 	$em = $this->getDoctrine()->getManager();
 	$dynIP = $em->getRepository('VoIPCompanyDynIPBundle:DynIP')->findOneBy(array(
 		'ip' => $ip
-	));
+		));
 	if ($dynIP) $ip = null;
 
 	return array(
 		'company' => $company,
 		'ip' => $ip
-	);
+		);
 }
 
 /**
@@ -635,7 +637,7 @@ public function dynamicAddIPAction()
 	$em = $this->getDoctrine()->getManager();
 	$dynIP = $em->getRepository('VoIPCompanyDynIPBundle:DynIP')->findOneBy(array(
 		'ip' => $ip
-	));
+		));
 	if (!$dynIP) {
 		$dynIP = new DynIP();
 		$dynIP->setCompany($company);
@@ -644,16 +646,15 @@ public function dynamicAddIPAction()
 		$em->persist($dynIP);
 		$em->flush();
 
-		//$authorizeResp = $this->firewallAddIP($ip, 'sg-8d9c5de8');
-		//$authorizeResp = $this->firewallAddIP($ip, 'sg-2f4a8b7a');
+		$authorizeResp = $this->firewallAddIP($ip);
 	}
 
 	$this->get('session')->getFlashBag()->add(
-	'notice',
-	'Your changes were saved!'
-);
+		'notice',
+		'Your changes were saved!'
+		);
 
-return $this->redirect($this->generateUrl('ui_company_dynamic'));
+	return $this->redirect($this->generateUrl('ui_company_dynamic'));
 }
 
 /**
@@ -671,24 +672,23 @@ public function dynamicRemoveIPAction($hash)
 	$dynIP = $em->getRepository('VoIPCompanyDynIPBundle:DynIP')->findOneBy(array(
 		'hash' => $hash,
 		'company' => $company
-	));
+		));
 	if ($dynIP) {
 		$ip = $dynIP->getIp();
 
 		$em->remove($dynIP);
 		$em->flush();
 
-		//$revokeResp = $this->firewallRemoveIP($ip, 'sg-8d9c5de8');
-		//$revokeResp = $this->firewallRemoveIP($ip, 'sg-2f4a8b7a');
+		$revokeResp = $this->firewallRemoveIP($ip);
 
 	}
 
 	$this->get('session')->getFlashBag()->add(
-	'notice',
-	'Your changes were saved!'
-);
+		'notice',
+		'Your changes were saved!'
+		);
 
-return $this->redirect($this->generateUrl('ui_company_dynamic'));
+	return $this->redirect($this->generateUrl('ui_company_dynamic'));
 }
 
 /**
@@ -708,36 +708,34 @@ public function dynamicUpdateIPAction($hash)
 	$dynIP = $em->getRepository('VoIPCompanyDynIPBundle:DynIP')->findOneBy(array(
 		'hash' => $hash,
 		'company' => $company
-	));
+		));
 
 	$ip = $query->get('ip');
 	if (!$ip) $ip = $this->container->get('request')->getClientIp();
 
 	$dynIP2 = $em->getRepository('VoIPCompanyDynIPBundle:DynIP')->findOneBy(array(
 		'ip' => $ip
-	));
+		));
 	if ($dynIP && !$dynIP2) {
-		$revokeResp = $this->firewallRemoveIP($dynIP->getIp(), 'sg-8d9c5de8');
-		$revokeResp = $this->firewallRemoveIP($dynIP->getIp(), 'sg-2f4a8b7a');
+		$revokeResp = $this->firewallRemoveIP($dynIP->getIp());
 
 		$dynIP->setIp($ip);
 		$em->flush();
 
-		//$authorizeResp = $this->firewallAddIP($ip, 'sg-8d9c5de8');
-		//$authorizeResp = $this->firewallAddIP($ip, 'sg-2f4a8b7a');
+		$authorizeResp = $this->firewallAddIP($ip);
 
 		$this->get('session')->getFlashBag()->add(
-		'notice',
-		'Your changes were saved!'
-	);
-} else {
-	$this->get('session')->getFlashBag()->add(
-	'notice',
-	'Your cannot update this entry with an existing IP'
-);
-}
+			'notice',
+			'Your changes were saved!'
+			);
+	} else {
+		$this->get('session')->getFlashBag()->add(
+			'notice',
+			'Your cannot update this entry with an existing IP'
+			);
+	}
 
-return $this->redirect($this->generateUrl('ui_company_dynamic'));
+	return $this->redirect($this->generateUrl('ui_company_dynamic'));
 }
 
 /**
@@ -753,35 +751,33 @@ public function dynamicIPAction($token)
 	$em = $this->getDoctrine()->getManager();
 	$dynIP = $em->getRepository('VoIPCompanyDynIPBundle:DynIP')->findOneBy(array(
 		'token' => $token
-	));
+		));
 
 	$ip = $this->container->get('request')->getClientIp();
 
 	$dynIP2 = $em->getRepository('VoIPCompanyDynIPBundle:DynIP')->findOneBy(array(
 		'ip' => $ip
-	));
+		));
 
 	$response = new JsonResponse();
 	if ($dynIP && !$dynIP2) {
 
 		if ($ip != $dynIP->getIp()) {
-			$revokeResp = $this->firewallRemoveIP($dynIP->getIp(), 'sg-8d9c5de8');
-			$revokeResp = $this->firewallRemoveIP($dynIP->getIp(), 'sg-2f4a8b7a');
+			$revokeResp = $this->firewallRemoveIP($dynIP->getIp());
 
 			$dynIP->setIp($ip);
 			$dynIP->setRefreshedAt(new \DateTime());
 			$dynIP->setPingAt(new \DateTime());
 			$em->flush();
 
-			//$authorizeResp = $this->firewallAddIP($ip, 'sg-8d9c5de8');
-			//$authorizeResp = $this->firewallAddIP($ip, 'sg-2f4a8b7a');
+			$authorizeResp = $this->firewallAddIP($ip);
 
 			$response->setData(array(
-				'auth' => $authorizeResp->isOK() ? true : false,
-				'rev' => $revokeResp->isOK() ? true : false,
+				'auth' => true,
+				'rev' => true,
 				'previp' => $ip,
 				'newip' => $ip
-			));
+				));
 		} else {
 			$dynIP->setPingAt(new \DateTime());
 			$em->flush();
@@ -789,7 +785,7 @@ public function dynamicIPAction($token)
 				'auth' => 'no change',
 				'rev' => 'no change',
 				'ip' => $ip
-			));
+				));
 		}
 
 
@@ -798,64 +794,74 @@ public function dynamicIPAction($token)
 		$em->flush();
 		$response->setData(array(
 			'dyn-ip' => !$dynIP ? 'not found' : 'already in list'
-		));
+			));
 	}
 	$dynIP->setPingAt(new \DateTime());
 	$em->flush();
 	return $response;
 }
 
-public function firewallAddIP($ip, $groupId)
-{
-	$ec2 = $this->container->get('aws_ec2');
-	$ec2->set_region(\AmazonEC2::REGION_SINGAPORE);
-	return $ec2->authorize_security_group_ingress(array(
-		'GroupId' => $groupId,
-		'IpPermissions' => array(
-			array(
-				'IpProtocol' => 'udp',
-				'FromPort' => '5060',
-				'ToPort' => '5060',
-				'IpRanges' => array(
-					array('CidrIp' => $ip.'/32'),
+	public function firewallAddIP($ip)
+	{
+		$groupId = $this->container->getParameter('aws_group_id');
+		
+		$aws = Aws::factory(array(
+			'key'    => $this->container->getParameter('aws_key'),
+			'secret' => $this->container->getParameter('aws_secret'),
+			'region' => 'ap-southeast-1'
+			));
+		return $aws->get('ec2')->authorizeSecurityGroupIngress(array(
+			'GroupId' => $groupId,
+			'IpPermissions' => array(
+				array(
+					'IpProtocol' => 'udp',
+					'FromPort' => '5060',
+					'ToPort' => '5060',
+					'IpRanges' => array(
+						array('CidrIp' => $ip.'/32'),
+						)
+					),
+				array(
+					'IpProtocol' => 'udp',
+					'FromPort' => '10000',
+					'ToPort' => '30000',
+					'IpRanges' => array(
+						array('CidrIp' => $ip.'/32'),
+						)
+					)
 				)
-			),
-			array(
-				'IpProtocol' => 'udp',
-				'FromPort' => '10000',
-				'ToPort' => '30000',
-				'IpRanges' => array(
-					array('CidrIp' => $ip.'/32'),
+			));
+	}
+	public function firewallRemoveIP($ip)
+	{
+		$groupId = $this->container->getParameter('aws_group_id');
+		$aws = Aws::factory(array(
+			'key'    => $this->container->getParameter('aws_key'),
+			'secret' => $this->container->getParameter('aws_secret'),
+			'region' => 'ap-southeast-1'
+			));
+		$ec2 = $aws->get('ec2')->revokeSecurityGroupIngress(array(
+			'GroupId' => $groupId,
+			'IpPermissions' => array(
+				array(
+					'IpProtocol' => 'udp',
+					'FromPort' => '5060',
+					'ToPort' => '5060',
+					'IpRanges' => array(
+						array('CidrIp' => $ip.'/32'),
+						)
+					),
+				array(
+					'IpProtocol' => 'udp',
+					'FromPort' => '10000',
+					'ToPort' => '30000',
+					'IpRanges' => array(
+						array('CidrIp' => $ip.'/32'),
+						)
+					)
 				)
-			)
-		)
-	));
-}
-public function firewallRemoveIP($ip, $groupId)
-{
-	$ec2 = $this->container->get('aws_ec2');
-	$ec2->set_region(\AmazonEC2::REGION_SINGAPORE);
-	return $ec2->revoke_security_group_ingress(array(
-		'GroupId' => $groupId,
-		'IpPermissions' => array(
-			array(
-				'IpProtocol' => 'udp',
-				'FromPort' => '5060',
-				'ToPort' => '5060',
-				'IpRanges' => array(
-					array('CidrIp' => $ip.'/32'),
-				)
-			),
-			array(
-				'IpProtocol' => 'udp',
-				'FromPort' => '10000',
-				'ToPort' => '30000',
-				'IpRanges' => array(
-					array('CidrIp' => $ip.'/32'),
-				)
-			)
-		)
-	));
-}
+			));
+		return $ec2; 
+	}
 
 }

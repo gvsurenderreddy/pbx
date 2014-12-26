@@ -21,7 +21,8 @@
         "incenteev/composer-parameter-handler": "~2.0",
 		"amazonwebservices/aws-sdk-for-php": "*",
 		"cybernox/amazon-webservices-bundle": ">=1.5.4",
-		"friendsofsymfony/user-bundle": "~2.0@dev"
+		"friendsofsymfony/user-bundle": "~2.0@dev",
+        "aws/aws-sdk-php": "2.x"
     },
     "scripts": {
         "post-install-cmd": [
