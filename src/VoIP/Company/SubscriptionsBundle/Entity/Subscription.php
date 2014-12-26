@@ -56,6 +56,13 @@ class Subscription
      * @ORM\Column(name="hash", type="string", length=8, unique=true)
      */
     private $hash;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="voicemail", type="boolean")
+     */
+    private $voicemail;
 	
 	/**
      * @ORM\ManyToOne(targetEntity="\VoIP\Company\StructureBundle\Entity\Company", inversedBy="subscriptions")
@@ -91,6 +98,7 @@ class Subscription
 		$this->setCreatedAt(new \DateTime());
 	    $this->setUpdatedAt(new \DateTime());
 		$this->setHash(hash('crc32b', uniqid('', true)));
+        $this->setVoicemail(false);
 	}
 	
 	/**
@@ -322,5 +330,28 @@ class Subscription
     public function getCountries()
     {
         return $this->countries;
+    }
+
+    /**
+     * Set voicemail
+     *
+     * @param boolean $voicemail
+     * @return Subscription
+     */
+    public function setVoicemail($voicemail)
+    {
+        $this->voicemail = $voicemail;
+
+        return $this;
+    }
+
+    /**
+     * Get voicemail
+     *
+     * @return boolean 
+     */
+    public function getVoicemail()
+    {
+        return $this->voicemail;
     }
 }

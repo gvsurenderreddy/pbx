@@ -15,6 +15,8 @@ use VoIP\Company\SubscriptionsBundle\Entity\DialPlanItem;
 use VoIP\PBX\RealTimeBundle\Extra\Sync;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
+use Aws\Common\Aws;
+use Aws\S3\Exception\S3Exception;
 
 /**
  * @Route("/s")
@@ -230,6 +232,65 @@ class SubscriptionController extends Controller
 				$subscription->addCountry($country);
 			}
 		}
+
+		$em->flush();
+		
+		return $this->redirect($this->generateUrl('ui_company'));
+    }
+
+    /**
+     * @Route("/{hash}/voicemail", name="ui_subscription_voicemail")
+     * @Template()
+	 * @Method("GET")
+	 * @Security("has_role('ROLE_USER')")
+     */
+    public function voicemailAction($hash)
+    {
+		$user = $this->getUser();
+		$em = $this->getDoctrine()->getManager();
+		$subscription = $em->getRepository('VoIPCompanySubscriptionsBundle:Subscription')->findOneBy(array(
+			'hash' => $hash
+		));
+        if (!$subscription) throw $this->createNotFoundException('Unable to find Subsciption entity.');
+        return array(
+			'subscription' => $subscription
+		);
+    }
+
+    /**
+     * @Route("/{hash}/voicemail")
+	 * @Method("POST")
+	 * @Security("has_role('ROLE_USER')")
+     */
+    public function updateVoicemailAction($hash)
+    {
+		$user = $this->getUser();
+		$em = $this->getDoctrine()->getManager();
+		$subscription = $em->getRepository('VoIPCompanySubscriptionsBundle:Subscription')->findOneBy(array(
+			'hash' => $hash
+		));
+        if (!$subscription) throw $this->createNotFoundException('Unable to find Subsciption entity.');
+		$company = $subscription->getCompany();
+		if ($user->getCompany()->getId() != $company->getId()) throw $this->createNotFoundException('No authorization.');
+		
+		$request = $this->getRequest();
+		$file = $request->files->get('file');
+
+		$aws = Aws::factory(array(
+			'key'    => $this->container->getParameter('aws_key'),
+	        'secret' => $this->container->getParameter('aws_secret'),
+	        'region' => 'ap-southeast-1'
+		));
+
+		$s3 = $aws->get('s3')->putObject(array(
+			'Bucket' => 'vf-fortyeight',
+			'Key' => 'ging/'.$subscription->getHash().'.mp3',
+			'ContentType' => $file->getMimeType(),
+			'Body' => file_get_contents($file->getPathname()),
+			'ACL' => 'public-read',
+		));
+		
+		$subscription->setVoicemail(true);
 
 		$em->flush();
 		
