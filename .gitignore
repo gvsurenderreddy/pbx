@@ -3,6 +3,7 @@
 /app/bootstrap.php.cache
 /app/cache/*
 /app/config/parameters.yml
+/app/config/parameters_extra.yml
 /app/logs/*
 !app/cache/.gitkeep
 !app/logs/.gitkeep
@@ -10,6 +11,5 @@
 /vendor/
 /bin/
 /composer.phar
-/nodejs/node_modules
-/nodejs/parameters.json
 /web/uploads/
+
