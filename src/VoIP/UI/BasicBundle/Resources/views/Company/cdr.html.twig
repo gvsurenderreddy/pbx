@@ -5,6 +5,7 @@
 {{ parent() }}
 <table class="table table-hover">
 	<tr>
+		<th></th>
 		<th>Date</th>
 		<th>Dialer</th>
 		<th>Receiver</th>
@@ -15,6 +16,15 @@
 	</tr>
 	{% for cdr in cdrs %}
 	<tr>
+		<td>
+			{% if cdr.type == 'ii' %}
+			<span class="glyphicon glyphicon-arrow-right"></span>
+			{% elseif cdr.type == 'io' %}
+			<span class="glyphicon glyphicon-arrow-up"></span>
+			{% else %}
+			<span class="glyphicon glyphicon-arrow-down"></span>
+			{% endif %}
+		</td>
 		<td>{{ cdr.end|date('d/m/Y H:i:s') }}</td>
 		<td>{{ cdr.dialerphone ? cdr.dialerphone.phonename : cdr.dialer }}</td>
 		<td>{{ cdr.receiveremployee ? cdr.receiveremployee.name : cdr.receiver }}</td>
