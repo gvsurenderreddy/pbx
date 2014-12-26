@@ -10,6 +10,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use VoIP\Company\StructureBundle\Entity\Company;
 use VoIP\Company\StructureBundle\Entity\Office;
 use VoIP\Company\StructureBundle\Entity\Phone;
+use VoIP\Company\SubscriptionsBundle\Entity\Subscription;
 use VoIP\Company\SubscriptionsBundle\Entity\DialPlanItem;
 use VoIP\PBX\RealTimeBundle\Extra\Sync;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -21,7 +22,78 @@ use Symfony\Component\HttpFoundation\Response;
 
 class SubscriptionController extends Controller
 {	
-	
+	/**
+     * @Route("/new", name="ui_subscription_new")
+     * @Template()
+	 * @Method("GET")
+	 * @Security("has_role('ROLE_USER')")
+     */
+    public function newAction()
+    {
+		$user = $this->getUser();
+		$em = $this->getDoctrine()->getManager();
+		$countries = $em->getRepository('VoIPCompanySubscriptionsBundle:Country')->findBy(array(), array(
+			'name' => 'ASC'
+		));
+		$employees = $em->getRepository('VoIPCompanyStructureBundle:Employee')->findBy(array(
+			'company' => $this->getUser()->getCompany()
+		), array(
+			'name' => 'ASC'
+		));
+        return array(
+			'countries' => $countries,
+			'employees' => $employees
+		);
+    }
+
+    /**
+     * @Route("/new")
+	 * @Method("POST")
+	 * @Security("has_role('ROLE_USER')")
+     */
+    public function createAction()
+    {
+		$user = $this->getUser();
+		$company = $user->getCompany();
+		$em = $this->getDoctrine()->getManager();
+		$request = $this->getRequest();
+		$requestBag = $request->request;
+		$name = $requestBag->get('name');
+		$did = $requestBag->get('number');
+		$countries = $requestBag->get('countries');
+		$employees = $requestBag->get('employees');
+
+		$subscription = new Subscription();
+		$subscription->setName($name);
+		$subscription->setDid($did);
+		$subscription->setCompany($company);
+
+		if ($countries) {
+			foreach ($countries as $id) {
+				$country = $em->getRepository('VoIPCompanySubscriptionsBundle:Country')->find($id);
+				$subscriptions = $country->getSubscriptions()->filter(function($subscription) use ($company){
+					return $subscription->getCompany() == $company;
+				});
+				foreach ($subscriptions as $s) {
+					$s->removeCountry($country);
+				}
+				$subscription->addCountry($country);
+			}
+		}
+		
+		if ($employees) {
+			foreach ($employees as $id) {
+				$employee = $em->getRepository('VoIPCompanyStructureBundle:Employee')->find($id);
+				$subscription->addEmployee($employee);
+			}
+		}
+		
+		
+		$em->persist($subscription);
+		$em->flush();
+        return $this->redirect($this->generateUrl('ui_company'));
+    }
+
     /**
      * @Route("/{hash}/edit", name="ui_subscription_edit")
      * @Template()
@@ -96,6 +168,66 @@ class SubscriptionController extends Controller
 				if (!$employee) throw $this->createNotFoundException('Unable to find Employee entity.');
 				$subscription->addEmployee($employee);
 				$employee->addSubscription($subscription);
+			}
+		}
+
+		$em->flush();
+		
+		return $this->redirect($this->generateUrl('ui_company'));
+    }
+
+    /**
+     * @Route("/{hash}/countries", name="ui_subscription_countries")
+     * @Template()
+	 * @Method("GET")
+	 * @Security("has_role('ROLE_USER')")
+     */
+    public function countriesAction($hash)
+    {
+		$user = $this->getUser();
+		$em = $this->getDoctrine()->getManager();
+		$subscription = $em->getRepository('VoIPCompanySubscriptionsBundle:Subscription')->findOneBy(array(
+			'hash' => $hash
+		));
+        if (!$subscription) throw $this->createNotFoundException('Unable to find Subsciption entity.');
+        $countries = $em->getRepository('VoIPCompanySubscriptionsBundle:Country')->findBy(array(), array(
+			'name' => 'ASC'
+		));
+        return array(
+			'subscription' => $subscription,
+			'countries' => $countries
+		);
+    }
+	
+    /**
+     * @Route("/{hash}/countries")
+	 * @Method("POST")
+	 * @Security("has_role('ROLE_USER')")
+     */
+    public function updateCountriesAction($hash)
+    {
+		$user = $this->getUser();
+		$em = $this->getDoctrine()->getManager();
+		$subscription = $em->getRepository('VoIPCompanySubscriptionsBundle:Subscription')->findOneBy(array(
+			'hash' => $hash
+		));
+        if (!$subscription) throw $this->createNotFoundException('Unable to find Subsciption entity.');
+		$company = $subscription->getCompany();
+		if ($user->getCompany()->getId() != $company->getId()) throw $this->createNotFoundException('No authorization.');
+		
+		$request = $this->getRequest();
+		$countries = $request->get('countries');
+		
+		if ($countries) {
+			foreach ($countries as $id) {
+				$country = $em->getRepository('VoIPCompanySubscriptionsBundle:Country')->find($id);
+				$subscriptions = $country->getSubscriptions()->filter(function($subscription) use ($company){
+					return $subscription->getCompany() == $company;
+				});
+				foreach ($subscriptions as $s) {
+					$s->removeCountry($country);
+				}
+				$subscription->addCountry($country);
 			}
 		}
 

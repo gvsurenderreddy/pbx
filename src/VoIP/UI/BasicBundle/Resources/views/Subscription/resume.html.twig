@@ -1,12 +1,12 @@
 <h2 class="title-switchboard">
-	<a class="pull-right btn btn-danger" href="{{ path('ui_company_newrequestnumber') }}">New number</a>
+	<a class="pull-right btn btn-danger" href="{{ path('ui_subscription_new') }}">New number</a>
 	{{ company.subscriptions | length }} Numbers
 </h2>
 {% for subscription in company.subscriptions %}
 <div class="switchboard-card switchboard-subscription {% for employee in subscription.employees %} emp{{ employee.hash }} {% for phone in employee.phones %} pho{{ phone.hash }}{% endfor %}{% endfor %}" data-hash="{{ subscription.hash }}">
 	<div class="contentbox">
 		<div>
-			{{ subscription.did }}
+			{{ subscription.name }} ({{ subscription.did }})
 		</div>
 		<div>
 			{% for employee in subscription.employees %}
@@ -18,7 +18,13 @@
 		<div class="btn-group btn-group-justified">
 			<div class="btn-group">
 				<a href="{{ path('ui_subscription_buddies', {'hash': subscription.hash}) }}" data-toggle="tooltip" data-placement="bottom" title="Buddies" class="tooltip-flag btn btn-default"><span class="glyphicon glyphicon-user"></span></a>
+
+				
 			</div>
+			<div class="btn-group">
+				<a href="{{ path('ui_subscription_countries', {'hash': subscription.hash}) }}" data-toggle="tooltip" data-placement="bottom" title="Countries" class="tooltip-flag btn btn-default"><span class="glyphicon glyphicon-map-marker"></span></a>
+			</div>
+			
 		</div>
 	</div>
 	<div class="status status-default tooltip-flag" data-toggle="tooltip" data-placement="bottom" title="Connected"></div>
