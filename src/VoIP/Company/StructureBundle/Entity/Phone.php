@@ -267,6 +267,13 @@ class Phone
      */
     private $insecure;
 
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="callbackextension", type="string", length=255, nullable=true)
+     */
+    private $callbackextension;
+
 	/**
      * @ORM\ManyToOne(targetEntity="\VoIP\Company\StructureBundle\Entity\Company", inversedBy="phones")
 	 * @ORM\JoinColumn(name="company_id", referencedColumnName="id", onDelete="CASCADE")
@@ -1195,5 +1202,28 @@ class Phone
     public function getInsecure()
     {
         return $this->insecure;
+    }
+
+    /**
+     * Set callbackextension
+     *
+     * @param string $callbackextension
+     * @return Phone
+     */
+    public function setCallbackextension($callbackextension)
+    {
+        $this->callbackextension = $callbackextension;
+
+        return $this;
+    }
+
+    /**
+     * Get callbackextension
+     *
+     * @return string 
+     */
+    public function getCallbackextension()
+    {
+        return $this->callbackextension;
     }
 }
