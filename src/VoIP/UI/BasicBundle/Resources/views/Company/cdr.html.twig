@@ -18,11 +18,11 @@
 	<tr>
 		<td>
 			{% if cdr.type == 'ii' %}
-			<span class="glyphicon glyphicon-arrow-right"></span>
+			<span class="glyphicon glyphicon-arrow-right blue"></span>
 			{% elseif cdr.type == 'io' %}
-			<span class="glyphicon glyphicon-arrow-up"></span>
+			<span class="glyphicon glyphicon-arrow-up red"></span>
 			{% else %}
-			<span class="glyphicon glyphicon-arrow-down"></span>
+			<span class="glyphicon glyphicon-arrow-down green"></span>
 			{% endif %}
 		</td>
 		<td>{{ cdr.end|date('d/m/Y H:i:s') }}</td>

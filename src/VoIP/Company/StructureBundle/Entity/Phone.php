@@ -260,6 +260,13 @@ class Phone
      */
     private $dtlssetup;
 
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="insecure", type="string", length=4, nullable=true)
+     */
+    private $insecure;
+
 	/**
      * @ORM\ManyToOne(targetEntity="\VoIP\Company\StructureBundle\Entity\Company", inversedBy="phones")
 	 * @ORM\JoinColumn(name="company_id", referencedColumnName="id", onDelete="CASCADE")
@@ -1165,5 +1172,28 @@ class Phone
     public function getDtlssetup()
     {
         return $this->dtlssetup;
+    }
+
+    /**
+     * Set insecure
+     *
+     * @param string $insecure
+     * @return Phone
+     */
+    public function setInsecure($insecure)
+    {
+        $this->insecure = $insecure;
+
+        return $this;
+    }
+
+    /**
+     * Get insecure
+     *
+     * @return string 
+     */
+    public function getInsecure()
+    {
+        return $this->insecure;
     }
 }
