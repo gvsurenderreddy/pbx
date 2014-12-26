@@ -285,7 +285,7 @@ class SubscriptionController extends Controller
 		$s3 = $aws->get('s3')->putObject(array(
 			'Bucket' => 'vf-fortyeight',
 			'Key' => 'ging/'.$subscription->getHash().'.mp3',
-			'ContentType' => $file->getMimeType(),
+			'ContentType' => 'audio/mpeg',
 			'Body' => file_get_contents($file->getPathname()),
 			'ACL' => 'public-read',
 		));
