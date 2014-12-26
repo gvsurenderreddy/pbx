@@ -6,7 +6,7 @@
 <div class="switchboard-card switchboard-subscription {% for employee in subscription.employees %} emp{{ employee.hash }} {% for phone in employee.phones %} pho{{ phone.hash }}{% endfor %}{% endfor %}" data-hash="{{ subscription.hash }}">
 	<div class="contentbox">
 		<div>
-			{{ subscription.name }} ({{ subscription.did }})
+			{{ subscription.name }} ({{ subscription.did }}) {% if subscription.voicemail %}<span class="glyphicon glyphicon-envelope"></span>{% endif %}
 		</div>
 		<div>
 			{% for employee in subscription.employees %}
@@ -25,7 +25,7 @@
 				<a href="{{ path('ui_subscription_countries', {'hash': subscription.hash}) }}" data-toggle="tooltip" data-placement="bottom" title="Countries" class="tooltip-flag btn btn-default"><span class="glyphicon glyphicon-map-marker"></span></a>
 			</div>
 			<div class="btn-group">
-				<a href="{{ path('ui_subscription_voicemail', {'hash': subscription.hash}) }}" data-toggle="tooltip" data-placement="bottom" title="Voicemail" class="tooltip-flag btn btn-default"><span class="glyphicon glyphicon-map-marker"></span></a>
+				<a href="{{ path('ui_subscription_voicemail', {'hash': subscription.hash}) }}" data-toggle="tooltip" data-placement="bottom" title="Voicemail" class="tooltip-flag btn btn-default"><span class="glyphicon glyphicon-envelope"></span></a>
 			</div>
 			
 		</div>
