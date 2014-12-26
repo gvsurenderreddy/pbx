@@ -16,7 +16,7 @@
 	</tr>
 	{% for message in messages %}
 	<tr class="message-row-{{ message.id }}">
-		<td>{{ message.origtime }}</td>
+		<td>{{ message.origtime | date('d/m/Y H:i:s') }}</td>
 		<td>{{ message.duration }}</td>
 		<td><a href="{{ path('ui_message_dl', {'id': message.id }) }}"><i class="fa fa-download"></i></a></td>
 	</tr>
