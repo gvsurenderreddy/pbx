@@ -2,6 +2,9 @@
 
 namespace VoIP\UI\BasicBundle\Extra;
 
+use Aws\Common\Aws;
+use Aws\S3\Exception\S3Exception;
+
 class Image {
 	private $file;
 	private $dimensions;
@@ -38,17 +41,23 @@ class Image {
 	
 	private function toS3($absolutePath, $destinationPath)
     {
-		$s3 = $this->container->get('aws_s3');
-		$s3->create_object('fortyeight', $destinationPath, array(
-			'fileUpload' => $absolutePath,
-			'acl' => \AmazonS3::ACL_PUBLIC,
-			'headers' => array(
+    	$aws = Aws::factory(array(
+			'key'    => $this->container->getParameter('aws_key'),
+			'secret' => $this->container->getParameter('aws_secret'),
+			'region' => 'ap-southeast-1'
+			));
+    	$s3 = $aws->get('s3')->putObject(array(
+			'Body' => file_get_contents($absolutePath),
+			'Bucket' => 'vf-fortyeight',
+			'Key' => $destinationPath,
+			'ACL' => \AmazonS3::ACL_PUBLIC,
+			'Metadata' => array(
 				'Cache-Control'    => 'max-age=8000000',
 				'Content-Language' => 'en-US',
 				'Expires'          => 'Tue, 01 Jan 2030 03:54:42 GMT',
 			)
 		));
-		return 'https://s3-ap-southeast-1.amazonaws.com/fortyeight/' . $destinationPath;
+		return $s3['ObjectURL'];
     }
 	
 	private function resizeImage( $tmpname, $size, $save_dir, $save_name )
