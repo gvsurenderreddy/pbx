@@ -802,7 +802,7 @@ public function dynamicIPAction($token)
 		}
 		$dynIP->setPingAt(new \DateTime());
 	} else {
-		$response->setData(false;
+		$response->setData(false);
 	}
 	
 	$ping = new Ping();
