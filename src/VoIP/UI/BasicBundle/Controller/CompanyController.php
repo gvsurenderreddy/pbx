@@ -11,6 +11,7 @@ use VoIP\Company\DynIPBundle\Entity\DynIP;
 use VoIP\Company\StructureBundle\Entity\Company;
 use VoIP\Company\StructureBundle\Entity\Phone;
 use VoIP\Company\StructureBundle\Entity\Employee;
+use VoIP\Company\StructureBundle\Entity\Ping;
 use VoIP\Company\SubscriptionsBundle\Entity\Subscription;
 use VoIP\PBX\RealTimeBundle\Entity\VoiceMail;
 use VoIP\PBX\RealTimeBundle\Extra\Sync;
@@ -739,7 +740,7 @@ public function dynamicUpdateIPAction($hash)
 }
 
 /**
-* @Route("/dynamic-ip/{token}", name="dynamicip")
+* @Route("/public/{token}", name="dynamicip")
 * @Template()
 * @Method("GET")
 */
@@ -797,6 +798,9 @@ public function dynamicIPAction($token)
 			));
 	}
 	$dynIP->setPingAt(new \DateTime());
+	$ping = new Ping();
+	$ping->setIp($ip);
+	$em->persist($ping);
 	$em->flush();
 	return $response;
 }
