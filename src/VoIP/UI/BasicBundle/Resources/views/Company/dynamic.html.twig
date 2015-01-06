@@ -7,12 +7,14 @@
 	<tr>
 		<th>IP</th>
 		<th>Title</th>
+		<th>Token</th>
 		<th>Actions</th>
 	</tr>
 	{% for ip in company.dynips %}
 	<tr>
 		<td>{{ ip.ip }}</td>
 		<td>{{ ip.title }}</td>
+		<td>{{ ip.token }}</td>
 		<td>
 			<a href="{{ path('ui_company_dynamic_removeip', {'hash': ip.hash}) }}"><span class="glyphicon glyphicon-trash"></span></a>
 			<a href="{{ path('ui_company_dynamic_updateip', {'hash': ip.hash}) }}"><span class="glyphicon glyphicon-refresh"></span></a>
