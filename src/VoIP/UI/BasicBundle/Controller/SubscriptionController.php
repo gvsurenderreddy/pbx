@@ -282,15 +282,17 @@ class SubscriptionController extends Controller
 	        'region' => 'ap-southeast-1'
 		));
 
+		$hash = hash('crc32b', uniqid('', true));
+
 		$s3 = $aws->get('s3')->putObject(array(
 			'Bucket' => 'vf-fortyeight',
-			'Key' => 'ging/'.$subscription->getHash().'.mp3',
+			'Key' => 'ging/'.$hash.'.mp3',
 			'ContentType' => 'audio/mpeg',
 			'Body' => file_get_contents($file->getPathname()),
 			'ACL' => 'public-read',
 		));
 		
-		$subscription->setVoicemail(true);
+		$subscription->setVoicemail($hash);
 
 		$em->flush();
 		

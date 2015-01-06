@@ -58,9 +58,9 @@ class Subscription
     private $hash;
 
     /**
-     * @var boolean
+     * @var string
      *
-     * @ORM\Column(name="voicemail", type="boolean")
+     * @ORM\Column(name="voicemail", type="string", length=8)
      */
     private $voicemail;
 	
@@ -332,10 +332,12 @@ class Subscription
         return $this->countries;
     }
 
+
+
     /**
      * Set voicemail
      *
-     * @param boolean $voicemail
+     * @param string $voicemail
      * @return Subscription
      */
     public function setVoicemail($voicemail)
@@ -348,7 +350,7 @@ class Subscription
     /**
      * Get voicemail
      *
-     * @return boolean 
+     * @return string 
      */
     public function getVoicemail()
     {
