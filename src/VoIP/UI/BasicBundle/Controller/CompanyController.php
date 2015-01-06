@@ -749,58 +749,66 @@ public function dynamicIPAction($token)
 	$request = $this->getRequest();
 	$query = $request->query;
 
+	$ip = $this->container->get('request')->getClientIp();
+
+	$response = new JsonResponse();
+
 	$em = $this->getDoctrine()->getManager();
 	$dynIP = $em->getRepository('VoIPCompanyDynIPBundle:DynIP')->findOneBy(array(
 		'token' => $token
+	));
+
+	if ($dynIP) {
+		$dynIP2 = $em->getRepository('VoIPCompanyDynIPBundle:DynIP')->findOneBy(array(
+			'ip' => $ip
 		));
 
-	$ip = $this->container->get('request')->getClientIp();
+		
+		if ($dynIP && !$dynIP2) {
 
-	$dynIP2 = $em->getRepository('VoIPCompanyDynIPBundle:DynIP')->findOneBy(array(
-		'ip' => $ip
-		));
+			if ($ip != $dynIP->getIp()) {
+				$revokeResp = $this->firewallRemoveIP($dynIP->getIp());
 
-	$response = new JsonResponse();
-	if ($dynIP && !$dynIP2) {
+				$dynIP->setIp($ip);
+				$dynIP->setRefreshedAt(new \DateTime());
+				$dynIP->setPingAt(new \DateTime());
+				$em->flush();
 
-		if ($ip != $dynIP->getIp()) {
-			$revokeResp = $this->firewallRemoveIP($dynIP->getIp());
+				$authorizeResp = $this->firewallAddIP($ip);
 
-			$dynIP->setIp($ip);
-			$dynIP->setRefreshedAt(new \DateTime());
-			$dynIP->setPingAt(new \DateTime());
-			$em->flush();
+				$response->setData(array(
+					'auth' => true,
+					'rev' => true,
+					'previp' => $ip,
+					'newip' => $ip
+					));
+			} else {
+				$dynIP->setPingAt(new \DateTime());
+				$em->flush();
+				$response->setData(array(
+					'auth' => 'no change',
+					'rev' => 'no change',
+					'ip' => $ip
+					));
+			}
 
-			$authorizeResp = $this->firewallAddIP($ip);
 
-			$response->setData(array(
-				'auth' => true,
-				'rev' => true,
-				'previp' => $ip,
-				'newip' => $ip
-				));
 		} else {
 			$dynIP->setPingAt(new \DateTime());
 			$em->flush();
 			$response->setData(array(
-				'auth' => 'no change',
-				'rev' => 'no change',
-				'ip' => $ip
-				));
-		}
-
-
-	} else {
-		$dynIP->setPingAt(new \DateTime());
-		$em->flush();
-		$response->setData(array(
-			'dyn-ip' => !$dynIP ? 'not found' : 'already in list'
+				'dyn-ip' => !$dynIP ? 'not found' : 'already in list'
 			));
+		}
+		$dynIP->setPingAt(new \DateTime());
+	} else {
+		$response->setData(false;
 	}
-	$dynIP->setPingAt(new \DateTime());
+	
 	$ping = new Ping();
 	$ping->setIp($ip);
 	$em->persist($ping);
+
 	$em->flush();
 	return $response;
 }
