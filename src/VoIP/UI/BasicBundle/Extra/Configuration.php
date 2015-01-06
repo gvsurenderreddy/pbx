@@ -4,7 +4,7 @@ namespace VoIP\UI\BasicBundle\Extra;
 
 class Configuration {
 	private $reference = '';
-	private $host = 'pbx.fortyeight.co';
+	private $host = 'fortyeight.villa-finder.com';
 	private $data = array();
 	private $url = '';
 	private $ip;
