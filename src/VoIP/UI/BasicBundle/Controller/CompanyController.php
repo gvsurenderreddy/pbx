@@ -31,7 +31,7 @@ class CompanyController extends Controller
 	public function companyAction()
 	{
 		if (false === $this->get('security.context')->isGranted('ROLE_USER')) {
-			return $this->redirect('http://fortyeight.co/');
+			return $this->redirect($this->generateUrl('fos_user_security_login'));
 		}
 		$user = $this->getUser();
 		if (!$user->getConditionsAccepted()) {

@@ -307,32 +307,4 @@ class PhoneController extends Controller
 			'company' => $company
 		);
     }
-    /**
-     * @Route("/phone/{hash}/configure.js", name="ui_phone_configure_js")
-	 * @Method("GET")
-	 * @Security("has_role('ROLE_USER')")
-     */
-    public function configureJSAction($hash)
-    {
-		$request = $this->getRequest();
-		$ip = $request->get('ip');
-		$user = $this->getUser();
-		$em = $this->getDoctrine()->getManager();
-		$phone = $em->getRepository('VoIPCompanyStructureBundle:Phone')->findOneBy(array(
-			'hash' => $hash
-		));
-        if (!$phone) throw $this->createNotFoundException('Unable to find Phone entity.');
-		$company = $phone->getCompany();
-		if ($user->getCompany()->getId() != $company->getId()) throw $this->createNotFoundException('No authorization.');
-		
-		$response = new Response($this->renderView(
-		    'VoIPUIBasicBundle:Phone:configure.js.twig',
-		    array(
-				'phone' => $phone,
-				'company' => $company
-			)
-		));
-		$response->headers->set('Content-Type', 'text/javascript');
-		return $response;
-    }
 }
