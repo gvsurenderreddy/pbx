@@ -375,25 +375,25 @@ public function createRequestNumberAction()
             $response->headers->set('Pragma', 'no-cache');
             $response->headers->set('Expires', '0');
 
-            $aws = Aws::factory(array(
-				'key'    => $this->container->getParameter('aws_key'),
-				'secret' => $this->container->getParameter('aws_secret'),
-				'region' => 'ap-southeast-1'
-			));
-	    	$s3 = $aws->get('s3')->putObject(array(
-				'Body' => $response->getContent(),
-				'Bucket' => 'vf-fortyeight',
-				'Key' => 'cdr.csv',
-				'ACL' => \AmazonS3::ACL_PUBLIC,
-				'Metadata' => array(
-					'Cache-Control'    => 'max-age=8000000',
-					'Content-Language' => 'en-US',
-					'Expires'          => 'Tue, 01 Jan 2030 03:54:42 GMT',
-					'Content-Type'     => 'text/csv',
-				)
-			));
-			return new Response($s3['ObjectURL']);
-            //return $response;
+//            $aws = Aws::factory(array(
+//				'key'    => $this->container->getParameter('aws_key'),
+//				'secret' => $this->container->getParameter('aws_secret'),
+//				'region' => 'ap-southeast-1'
+//			));
+//	    	$s3 = $aws->get('s3')->putObject(array(
+//				'Body' => $response->getContent(),
+//				'Bucket' => 'vf-fortyeight',
+//				'Key' => 'cdr.csv',
+//				'ACL' => \AmazonS3::ACL_PUBLIC,
+//				'Metadata' => array(
+//					'Cache-Control'    => 'max-age=8000000',
+//					'Content-Language' => 'en-US',
+//					'Expires'          => 'Tue, 01 Jan 2030 03:54:42 GMT',
+//					'Content-Type'     => 'text/csv',
+//				)
+//			));
+//			return new Response($s3['ObjectURL']);
+            return $response;
 		}
 
 		/**
