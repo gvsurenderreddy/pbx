@@ -36,6 +36,7 @@
 	{% endfor %}
 </table>
 <ul class="pager">
+  <li class="dl"><a href="{{ path('ui_company_cdr_dl') }}">Download</a></li>
   {% if page != 1 %}<li class="previous"><a href="{{ path('ui_company_cdr', {'page': page - 1}) }}">&larr; Newer</a></li>{% endif %}
   {% if cdrs|length == 20 %}<li class="next"><a href="{{ path('ui_company_cdr', {'page': page + 1}) }}">Older &rarr;</a></li>{% endif %}
 </ul>

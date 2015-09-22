@@ -1,0 +1,4 @@
+"Type", "Date Time", "From", "To", "Duration"
+{% for cdr in cdrs %}
+{{ cdr.type }}, {{ cdr.end|date('d/m/Y H:i:s') }}, {{ cdr.dialerphone ? cdr.dialerphone.phonename : cdr.dialer }}, {{ cdr.receiveremployee ? cdr.receiveremployee.name : cdr.receiver }}, {{ cdr.writtentime }}
+{% endfor %}

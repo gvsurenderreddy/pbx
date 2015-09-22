@@ -341,6 +341,41 @@ public function createRequestNumberAction()
 				);
 		}
 
+   /**
+	* @Route("/reports/download", name="ui_company_cdr_dl")
+	* @Method("GET")
+	* @Security("has_role('ROLE_USER')")
+	*/
+	public function cdrDlAction()
+	{
+		$user = $this->getUser();
+		$company = $user->getCompany();
+
+		$em = $this->getDoctrine()->getManager();
+
+		$query = $em->createQuery(
+			'SELECT cdr
+			FROM VoIPPBXCDRBundle:CDR cdr
+			LEFT JOIN cdr.company c
+			WHERE c.id = :companyId
+			ORDER BY cdr.end ASC'
+			)->setParameters(array(
+				'companyId' => $company->getId()
+			));
+
+			$cdrs = $query->getResult();
+
+			$response = $this->render('VoIPUIBasicBundle:Company:cdr.csv.twig', array('cdrs' => $cdrs));
+            $response->setStatusCode(200);
+            $response->headers->set('Content-Type', 'text/csv');
+            $response->headers->set('Content-Description', 'Submissions Export');
+            $response->headers->set('Content-Disposition', 'attachment; filename=cdr_export.csv');
+            $response->headers->set('Content-Transfer-Encoding', 'binary');
+            $response->headers->set('Pragma', 'no-cache');
+            $response->headers->set('Expires', '0');
+            return $response;
+		}
+
 		/**
 		* @Route("/bill", name="ui_company_bill")
 		* @Template()
