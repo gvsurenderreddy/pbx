@@ -362,7 +362,7 @@ public function createRequestNumberAction()
 			ORDER BY cdr.end ASC'
 			)->setParameters(array(
 				'companyId' => $company->getId()
-			));
+			))->setMaxResults(10);
 
 			$cdrs = $query->getResult();
 
